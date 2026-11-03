@@ -4,7 +4,7 @@
   "topic": "tree-traversal",
   "difficulty": "medium",
   "track": "dsa",
-  "statement_md": "Given a binary tree represented as nested dictionaries with keys `'val'`, `'left'`, and `'right'` (or `None` for empty nodes), return the level order traversal of its nodes' values (i.e., from left to right, level by level).\n\nExample tree node: `{'val': 3, 'left': None, 'right': None}`.",
+  "statement_md": "Given a binary tree represented as nested dictionaries with keys `'val'`, `'left'`, and `'right'` (or `None` for empty nodes), return the level order traversal of its nodes' values (i.e., from left to right, level by level).\n\nExample tree node: `{'val': 3, 'left': None, 'right': None}`.\n\n### Function Signature\n```python\ndef level_order_traversal(root: dict | None) -> list[list[int]]:\n```\n**Inputs**:\n- `root` (`dict` or `None`): Root of binary tree with keys `'val'`, `'left'`, `'right'`.\n\n**Output**:\n- `list[list[int]]`: Level-by-level node values from top to bottom.",
   "function_name": "level_order_traversal",
   "starter_code": "def level_order_traversal(root: dict | None) -> list:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

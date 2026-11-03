@@ -4,7 +4,7 @@
   "topic": "two-pointers",
   "difficulty": "easy",
   "track": "dsa",
-  "statement_md": "Write a function that reverses a list of elements in-place and returns the reversed list.\n\nSimulate two-pointer swap traversal without using `list.reverse()` or `[::-1]`.",
+  "statement_md": "Write a function that reverses a list of elements in-place and returns the reversed list.\n\nSimulate two-pointer swap traversal without using `list.reverse()` or `[::-1]`.\n\n### Function Signature\n```python\ndef reverse_sequence(items: list) -> list:\n```\n**Inputs**:\n- `items` (`list`): List of elements to reverse in place.\n\n**Output**:\n- `list`: The same list reversed in place.",
   "function_name": "reverse_sequence",
   "starter_code": "def reverse_sequence(items: list) -> list:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

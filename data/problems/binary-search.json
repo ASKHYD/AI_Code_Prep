@@ -4,7 +4,7 @@
   "topic": "binary-search",
   "difficulty": "easy",
   "track": "dsa",
-  "statement_md": "Given an array of integers `nums` sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.\n\nYour algorithm must run in O(log n) runtime complexity.",
+  "statement_md": "Given an array of integers `nums` sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.\n\nYour algorithm must run in O(log n) runtime complexity.\n\n### Function Signature\n```python\ndef binary_search(nums: list[int], target: int) -> int:\n```\n**Inputs**:\n- `nums` (`list[int]`): Sorted array of integers in ascending order.\n- `target` (`int`): Integer value to search for.\n\n**Output**:\n- `int`: Index of `target` in `nums`, or `-1` if not found.",
   "function_name": "binary_search",
   "starter_code": "def binary_search(nums: list, target: int) -> int:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

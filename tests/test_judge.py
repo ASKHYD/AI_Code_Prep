@@ -109,3 +109,29 @@ def two_sum(nums, target):
     assert result["status"] == "error"
     assert "FileNotFoundError" in result["stderr"] or "secret_flag" in result["stderr"]
 
+
+def test_regression_longest_substring_fixture_mock_path():
+    """
+    Lane J Step 1 Reproduction:
+    Submits the owner's exact REGRESSION FIXTURE through the Mock Interview UI path.
+    Must reproduce the defect (fail on current code before fix).
+    """
+    from coach.problems import load_problem
+
+    problem = load_problem("longest-substring-without-repeating").model_dump()
+    fixture_code = """def longest_substring(s: str) -> int:
+    char_set = set()
+    left = 0
+    max_length = 0
+    for right in range(len(s)):
+        while s[right] in char_set:
+            char_set.remove(s[left])
+            left += 1
+        char_set.add(s[right])
+        max_length = max(max_length, right - left + 1)
+    return max_length
+"""
+    result = run_solution(fixture_code, problem)
+    assert result["status"] == "pass", f"Failed with: {result}"
+
+

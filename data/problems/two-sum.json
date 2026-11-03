@@ -4,7 +4,7 @@
   "topic": "arrays",
   "difficulty": "easy",
   "track": "dsa",
-  "statement_md": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have at most one solution, and you may not use the same element twice. If no solution exists, return `[]`.",
+  "statement_md": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have at most one solution, and you may not use the same element twice. If no solution exists, return `[]`.\n\n### Function Signature\n```python\ndef two_sum(nums: list[int], target: int) -> list[int]:\n```\n**Inputs**:\n- `nums` (`list[int]`): Array of integers.\n- `target` (`int`): Target sum integer.\n\n**Output**:\n- `list[int]`: 0-based indices `[i, j]` such that `nums[i] + nums[j] == target`, or `[]`.",
   "function_name": "two_sum",
   "starter_code": "def two_sum(nums: list, target: int) -> list:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

@@ -4,7 +4,7 @@
   "topic": "dict-processing",
   "difficulty": "medium",
   "track": "python",
-  "statement_md": "Write a function `flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict` that flattens an arbitrarily deep dictionary into a single-level dictionary with compound keys joined by `sep`.\n\nExample: `{'a': 1, 'b': {'c': 2}}` -> `{'a': 1, 'b.c': 2}`.",
+  "statement_md": "Write a function `flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict` that flattens an arbitrarily deep dictionary into a single-level dictionary with compound keys joined by `sep`.\n\nExample: `{'a': 1, 'b': {'c': 2}}` -> `{'a': 1, 'b.c': 2}`.\n\n### Function Signature\n```python\ndef flatten_dict(nested: dict, prefix: str = \"\", sep: str = \".\") -> dict:\n```\n**Inputs**:\n- `nested` (`dict`): Arbitrarily nested dictionary.\n- `prefix` (`str`, optional): Prefix for keys (default `\"\"`).\n- `sep` (`str`, optional): Separator character (default `\".\"`).\n\n**Output**:\n- `dict`: Single-level flattened dictionary with compound keys.",
   "function_name": "flatten_dict",
   "starter_code": "def flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

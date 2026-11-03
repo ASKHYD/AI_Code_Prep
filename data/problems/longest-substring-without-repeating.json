@@ -4,9 +4,9 @@
   "topic": "strings",
   "difficulty": "medium",
   "track": "dsa",
-  "statement_md": "Given a string `s`, find the length of the longest substring without repeating characters.",
-  "function_name": "length_of_longest_substring",
-  "starter_code": "def length_of_longest_substring(s: str) -> int:\n    # Write your solution here\n    pass\n",
+  "statement_md": "Given a string `s`, find the length of the longest substring without repeating characters.\n\n### Function Signature\n```python\ndef longest_substring(s: str) -> int:\n```\n**Inputs**:\n- `s` (`str`): An input string.\n\n**Output**:\n- `int`: Length of the longest substring without repeating characters.",
+  "function_name": "longest_substring",
+  "starter_code": "def longest_substring(s: str) -> int:\n    # Write your solution here\n    pass\n",
   "visible_tests": [
     {
       "input_args": [
@@ -64,6 +64,6 @@
     "Maintain the last seen index of each character in a dictionary.",
     "As `right` advances, if `s[right]` was seen at index >= `left`, advance `left` to `last_seen[s[right]] + 1`. Update max length at each step."
   ],
-  "reference_solution": "def length_of_longest_substring(s: str) -> int:\n    last_seen = {}\n    left = 0\n    max_len = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len\n",
+  "reference_solution": "def longest_substring(s: str) -> int:\n    last_seen = {}\n    left = 0\n    max_len = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len\n",
   "time_limit_sec": 3.0
 }

@@ -4,7 +4,7 @@
   "topic": "string-parsing",
   "difficulty": "medium",
   "track": "python",
-  "statement_md": "Given a list of log lines formatted as `\"YYYY-MM-DD HH:MM:SS [LEVEL] Message\"`, write a function `filter_log_events(log_lines: list, start_time: str, end_time: str) -> list` that filters and returns only the log lines where the timestamp falls between `start_time` and `end_time` (both formatted as `\"YYYY-MM-DD HH:MM:SS\"`, inclusive).\n\nLines with malformed timestamps should be excluded.",
+  "statement_md": "Given a list of log lines formatted as `\"YYYY-MM-DD HH:MM:SS [LEVEL] Message\"`, write a function `filter_log_events(log_lines: list, start_time: str, end_time: str) -> list` that filters and returns only the log lines where the timestamp falls between `start_time` and `end_time` (both formatted as `\"YYYY-MM-DD HH:MM:SS\"`, inclusive).\n\nLines with malformed timestamps should be excluded.\n\n### Function Signature\n```python\ndef filter_log_events(log_lines: list[str], start_time: str, end_time: str) -> list[str]:\n```\n**Inputs**:\n- `log_lines` (`list[str]`): List of log lines formatted as `\"YYYY-MM-DD HH:MM:SS [LEVEL] Message\"`.\n- `start_time` (`str`): Start timestamp threshold (`\"YYYY-MM-DD HH:MM:SS\"`).\n- `end_time` (`str`): End timestamp threshold (`\"YYYY-MM-DD HH:MM:SS\"`).\n\n**Output**:\n- `list[str]`: Matching log lines within the timestamp window (inclusive).",
   "function_name": "filter_log_events",
   "starter_code": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

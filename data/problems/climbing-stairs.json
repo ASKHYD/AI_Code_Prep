@@ -4,7 +4,7 @@
   "topic": "dp",
   "difficulty": "easy",
   "track": "dsa",
-  "statement_md": "You are climbing a staircase. It takes `n` steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+  "statement_md": "You are climbing a staircase. It takes `n` steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?\n\n### Function Signature\n```python\ndef climb_stairs(n: int) -> int:\n```\n**Inputs**:\n- `n` (`int`): Total number of stairs to reach the top ($n \\ge 1$).\n\n**Output**:\n- `int`: Number of distinct ways to climb to the top taking 1 or 2 steps.",
   "function_name": "climb_stairs",
   "starter_code": "def climb_stairs(n: int) -> int:\n    # Write your solution here\n    pass\n",
   "visible_tests": [

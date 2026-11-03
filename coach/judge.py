@@ -28,11 +28,34 @@ import copy
 tests = json.loads({json.dumps(tests_json)})
 fn_name = {json.dumps(function_name)}
 
-if fn_name not in globals():
-    sys.stderr.write(f"Function '{{fn_name}}' was not defined in the submitted code.\\n")
-    sys.exit(1)
+# Identify user-defined callable functions in __main__
+builtin_keys = {{"json", "sys", "copy", "traceback"}}
+user_funcs = {{
+    k: v for k, v in list(globals().items())
+    if callable(v) and getattr(v, "__module__", "") == "__main__" and not k.startswith("_") and k not in builtin_keys
+}}
 
-func = globals()[fn_name]
+func = None
+if fn_name in globals() and callable(globals()[fn_name]):
+    func = globals()[fn_name]
+elif len(user_funcs) == 1:
+    actual_name = next(iter(user_funcs.keys()))
+    func = user_funcs[actual_name]
+    sys.stderr.write(f"Note: Resolved candidate function '{{actual_name}}' for expected '{{fn_name}}'.\\n")
+else:
+    found_names = list(user_funcs.keys())
+    err_msg = f"Function '{{fn_name}}' was not defined in the submitted code. Expected: '{{fn_name}}', Found: {{found_names}}\\n"
+    sys.stderr.write(err_msg)
+    print(json.dumps({{
+        "status": "error",
+        "passed": 0,
+        "total": len(tests),
+        "failed_cases": [],
+        "expected_function": fn_name,
+        "found_functions": found_names,
+        "error_message": err_msg.strip()
+    }}))
+    sys.exit(0)
 failed_cases = []
 passed = 0
 
