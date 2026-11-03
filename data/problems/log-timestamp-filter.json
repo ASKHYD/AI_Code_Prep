@@ -1,0 +1,105 @@
+{
+  "id": "log-timestamp-filter",
+  "title": "Log Timestamp Filter",
+  "topic": "string-parsing",
+  "difficulty": "medium",
+  "track": "python",
+  "statement_md": "Given a list of log lines formatted as `\"YYYY-MM-DD HH:MM:SS [LEVEL] Message\"`, write a function `filter_log_events(log_lines: list, start_time: str, end_time: str) -> list` that filters and returns only the log lines where the timestamp falls between `start_time` and `end_time` (both formatted as `\"YYYY-MM-DD HH:MM:SS\"`, inclusive).\n\nLines with malformed timestamps should be excluded.",
+  "function_name": "filter_log_events",
+  "starter_code": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        [
+          "2026-11-04 10:00:00 [INFO] System boot",
+          "2026-11-04 10:15:30 [WARN] High memory",
+          "2026-11-04 11:00:00 [ERROR] Out of memory"
+        ],
+        "2026-11-04 10:10:00",
+        "2026-11-04 10:30:00"
+      ],
+      "expected": [
+        "2026-11-04 10:15:30 [WARN] High memory"
+      ]
+    },
+    {
+      "input_args": [
+        [
+          "2026-01-01 00:00:00 [INFO] New year"
+        ],
+        "2026-01-01 00:00:00",
+        "2026-01-01 00:00:00"
+      ],
+      "expected": [
+        "2026-01-01 00:00:00 [INFO] New year"
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        [],
+        "2026-01-01 00:00:00",
+        "2026-01-02 00:00:00"
+      ],
+      "expected": []
+    },
+    {
+      "input_args": [
+        [
+          "invalid log format without timestamp",
+          "2026-11-04 12:00:00 [INFO] Valid"
+        ],
+        "2026-11-04 11:00:00",
+        "2026-11-04 13:00:00"
+      ],
+      "expected": [
+        "2026-11-04 12:00:00 [INFO] Valid"
+      ]
+    },
+    {
+      "input_args": [
+        [
+          "2026-11-04 09:00:00 [INFO] Early",
+          "2026-11-04 14:00:00 [INFO] Late"
+        ],
+        "2026-11-04 10:00:00",
+        "2026-11-04 11:00:00"
+      ],
+      "expected": []
+    },
+    {
+      "input_args": [
+        [
+          "2026-11-04 08:00:00 [DEBUG] Start",
+          "2026-11-04 09:00:00 [INFO] Step 1",
+          "2026-11-04 10:00:00 [INFO] Step 2"
+        ],
+        "2026-11-04 08:00:00",
+        "2026-11-04 10:00:00"
+      ],
+      "expected": [
+        "2026-11-04 08:00:00 [DEBUG] Start",
+        "2026-11-04 09:00:00 [INFO] Step 1",
+        "2026-11-04 10:00:00 [INFO] Step 2"
+      ]
+    },
+    {
+      "input_args": [
+        [
+          "2026-11-04 10:00:00 [ERROR] Fail"
+        ],
+        "2026-11-04 10:00:01",
+        "2026-11-04 11:00:00"
+      ],
+      "expected": []
+    }
+  ],
+  "hints": [
+    "ISO date-time formats `YYYY-MM-DD HH:MM:SS` can be compared lexicographically, or parsed using `datetime.strptime`.",
+    "Extract the first 19 characters of each log line and verify they represent a valid datetime.",
+    "Check `start_time <= ts <= end_time` and retain matching lines in their original order."
+  ],
+  "reference_solution": "from datetime import datetime\ndef filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:\n    date_fmt = '%Y-%m-%d %H:%M:%S'\n    try:\n        start_dt = datetime.strptime(start_time, date_fmt)\n        end_dt = datetime.strptime(end_time, date_fmt)\n    except ValueError:\n        return []\n    result = []\n    for line in log_lines:\n        if len(line) < 19:\n            continue\n        ts_str = line[:19]\n        try:\n            ts_dt = datetime.strptime(ts_str, date_fmt)\n            if start_dt <= ts_dt <= end_dt:\n                result.append(line)\n        except ValueError:\n            continue\n    return result\n",
+  "time_limit_sec": 3.0
+}

@@ -1,0 +1,209 @@
+{
+  "id": "tree-level-order",
+  "title": "Binary Tree Level Order Traversal",
+  "topic": "tree-traversal",
+  "difficulty": "medium",
+  "track": "dsa",
+  "statement_md": "Given a binary tree represented as nested dictionaries with keys `'val'`, `'left'`, and `'right'` (or `None` for empty nodes), return the level order traversal of its nodes' values (i.e., from left to right, level by level).\n\nExample tree node: `{'val': 3, 'left': None, 'right': None}`.",
+  "function_name": "level_order_traversal",
+  "starter_code": "def level_order_traversal(root: dict | None) -> list:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        {
+          "val": 3,
+          "left": {
+            "val": 9,
+            "left": null,
+            "right": null
+          },
+          "right": {
+            "val": 20,
+            "left": {
+              "val": 15,
+              "left": null,
+              "right": null
+            },
+            "right": {
+              "val": 7,
+              "left": null,
+              "right": null
+            }
+          }
+        }
+      ],
+      "expected": [
+        [
+          3
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          15,
+          7
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        null
+      ],
+      "expected": []
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": null,
+          "right": null
+        }
+      ],
+      "expected": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": {
+            "val": 2,
+            "left": {
+              "val": 3,
+              "left": null,
+              "right": null
+            },
+            "right": null
+          },
+          "right": null
+        }
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        {
+          "val": 10,
+          "left": null,
+          "right": {
+            "val": 20,
+            "left": null,
+            "right": {
+              "val": 30,
+              "left": null,
+              "right": null
+            }
+          }
+        }
+      ],
+      "expected": [
+        [
+          10
+        ],
+        [
+          20
+        ],
+        [
+          30
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        {
+          "val": -1,
+          "left": {
+            "val": -2,
+            "left": null,
+            "right": null
+          },
+          "right": {
+            "val": -3,
+            "left": null,
+            "right": null
+          }
+        }
+      ],
+      "expected": [
+        [
+          -1
+        ],
+        [
+          -2,
+          -3
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        {
+          "val": 5,
+          "left": {
+            "val": 3,
+            "left": {
+              "val": 2,
+              "left": null,
+              "right": null
+            },
+            "right": {
+              "val": 4,
+              "left": null,
+              "right": null
+            }
+          },
+          "right": {
+            "val": 7,
+            "left": {
+              "val": 6,
+              "left": null,
+              "right": null
+            },
+            "right": {
+              "val": 8,
+              "left": null,
+              "right": null
+            }
+          }
+        }
+      ],
+      "expected": [
+        [
+          5
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          2,
+          4,
+          6,
+          8
+        ]
+      ]
+    }
+  ],
+  "hints": [
+    "Use Breadth-First Search (BFS) with a queue.",
+    "Process the queue level by level by recording `level_size = len(queue)` before popping nodes for the current level.",
+    "For each node at the current level, record `node['val']`, then append `node['left']` and `node['right']` (if not None) to the queue."
+  ],
+  "reference_solution": "def level_order_traversal(root: dict | None) -> list:\n    if not root:\n        return []\n    from collections import deque\n    queue = deque([root])\n    result = []\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            level.append(node['val'])\n            if node.get('left'):\n                queue.append(node['left'])\n            if node.get('right'):\n                queue.append(node['right'])\n        result.append(level)\n    return result\n",
+  "time_limit_sec": 3.0
+}

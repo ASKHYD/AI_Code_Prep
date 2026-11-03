@@ -1,0 +1,133 @@
+{
+  "id": "two-sum",
+  "title": "Two Sum",
+  "topic": "arrays",
+  "difficulty": "easy",
+  "track": "dsa",
+  "statement_md": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have at most one solution, and you may not use the same element twice. If no solution exists, return `[]`.",
+  "function_name": "two_sum",
+  "starter_code": "def two_sum(nums: list, target: int) -> list:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        [
+          2,
+          7,
+          11,
+          15
+        ],
+        9
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "input_args": [
+        [
+          3,
+          2,
+          4
+        ],
+        6
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        [
+          3,
+          3
+        ],
+        6
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "input_args": [
+        [
+          -1,
+          -2,
+          -3,
+          -4,
+          -5
+        ],
+        -8
+      ],
+      "expected": [
+        2,
+        4
+      ]
+    },
+    {
+      "input_args": [
+        [
+          0,
+          4,
+          3,
+          0
+        ],
+        0
+      ],
+      "expected": [
+        0,
+        3
+      ]
+    },
+    {
+      "input_args": [
+        [
+          5
+        ],
+        5
+      ],
+      "expected": []
+    },
+    {
+      "input_args": [
+        [
+          1,
+          2,
+          3,
+          9
+        ],
+        10
+      ],
+      "expected": [
+        0,
+        3
+      ]
+    },
+    {
+      "input_args": [
+        [
+          -10,
+          20,
+          35,
+          50
+        ],
+        40
+      ],
+      "expected": [
+        0,
+        3
+      ]
+    }
+  ],
+  "hints": [
+    "Consider what value you need to find for each element `x`: `target - x`.",
+    "Can you use a hash map to store elements you have already seen along with their indices in O(N) time?",
+    "Iterate through `nums`. For each number, check if `target - num` is already in your hash map. If so, return `[seen[target - num], current_index]`. Otherwise, store `seen[num] = current_index`."
+  ],
+  "reference_solution": "def two_sum(nums: list, target: int) -> list:\n    seen = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in seen:\n            return [seen[diff], i]\n        seen[num] = i\n    return []\n",
+  "time_limit_sec": 3.0
+}

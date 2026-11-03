@@ -1,0 +1,100 @@
+{
+  "id": "csv-column-summary",
+  "title": "CSV Column Summarizer",
+  "topic": "data-transformation",
+  "difficulty": "medium",
+  "track": "python",
+  "statement_md": "Write a function `summarize_csv_column(csv_text: str, column_name: str) -> dict` that parses an in-memory CSV string and computes numerical summary statistics for the specified column.\n\nThe returned dictionary must have the following keys:\n- `'count'`: number of valid numeric entries (int)\n- `'sum'`: sum of values rounded to 2 decimal places (float)\n- `'mean'`: mean rounded to 2 decimal places (float)\n- `'min'`: minimum value (float)\n- `'max'`: maximum value (float)\n\nIf the CSV is empty, the column does not exist, or has no valid numeric rows, return an empty dict `{}`.",
+  "function_name": "summarize_csv_column",
+  "starter_code": "def summarize_csv_column(csv_text: str, column_name: str) -> dict:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        "name,age,salary\nAlice,30,70000\nBob,25,50000\nCharlie,35,90000",
+        "salary"
+      ],
+      "expected": {
+        "count": 3,
+        "sum": 210000.0,
+        "mean": 70000.0,
+        "min": 50000.0,
+        "max": 90000.0
+      }
+    },
+    {
+      "input_args": [
+        "product,score\nA,4.5\nB,3.5\nC,5.0",
+        "score"
+      ],
+      "expected": {
+        "count": 3,
+        "sum": 13.0,
+        "mean": 4.33,
+        "min": 3.5,
+        "max": 5.0
+      }
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        "",
+        "score"
+      ],
+      "expected": {}
+    },
+    {
+      "input_args": [
+        "name,age\nAlice,30",
+        "missing_col"
+      ],
+      "expected": {}
+    },
+    {
+      "input_args": [
+        "id,delta\n1,-10.5\n2,20.5\n3,0.0",
+        "delta"
+      ],
+      "expected": {
+        "count": 3,
+        "sum": 10.0,
+        "mean": 3.33,
+        "min": -10.5,
+        "max": 20.5
+      }
+    },
+    {
+      "input_args": [
+        "val\n100",
+        "val"
+      ],
+      "expected": {
+        "count": 1,
+        "sum": 100.0,
+        "mean": 100.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    },
+    {
+      "input_args": [
+        "name,score\nAlice,invalid\nBob,50",
+        "score"
+      ],
+      "expected": {
+        "count": 1,
+        "sum": 50.0,
+        "mean": 50.0,
+        "min": 50.0,
+        "max": 50.0
+      }
+    }
+  ],
+  "hints": [
+    "Use the standard library `csv` module with `io.StringIO`.",
+    "Use `csv.DictReader` to easily access fields by column name.",
+    "Filter for values that can be parsed with `float(val)`. Compute count, sum, mean, min, max, and round sum/mean to 2 decimal places."
+  ],
+  "reference_solution": "import csv\nimport io\ndef summarize_csv_column(csv_text: str, column_name: str) -> dict:\n    if not csv_text or not csv_text.strip():\n        return {}\n    reader = csv.DictReader(io.StringIO(csv_text.strip()))\n    values = []\n    for row in reader:\n        if column_name in row and row[column_name] is not None:\n            try:\n                values.append(float(row[column_name]))\n            except ValueError:\n                continue\n    if not values:\n        return {}\n    total = sum(values)\n    count = len(values)\n    return {\n        'count': count,\n        'sum': round(total, 2),\n        'mean': round(total / count, 2),\n        'min': min(values),\n        'max': max(values)\n    }\n",
+  "time_limit_sec": 3.0
+}

@@ -1,0 +1,117 @@
+{
+  "id": "flatten-nested-dict",
+  "title": "Flatten Nested Dictionary",
+  "topic": "dict-processing",
+  "difficulty": "medium",
+  "track": "python",
+  "statement_md": "Write a function `flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict` that flattens an arbitrarily deep dictionary into a single-level dictionary with compound keys joined by `sep`.\n\nExample: `{'a': 1, 'b': {'c': 2}}` -> `{'a': 1, 'b.c': 2}`.",
+  "function_name": "flatten_dict",
+  "starter_code": "def flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        {
+          "a": 1,
+          "b": {
+            "c": 2
+          }
+        }
+      ],
+      "expected": {
+        "a": 1,
+        "b.c": 2
+      }
+    },
+    {
+      "input_args": [
+        {
+          "user": {
+            "profile": {
+              "name": "Alex",
+              "age": 28
+            }
+          }
+        }
+      ],
+      "expected": {
+        "user.profile.name": "Alex",
+        "user.profile.age": 28
+      }
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        {}
+      ],
+      "expected": {}
+    },
+    {
+      "input_args": [
+        {
+          "simple": "flat",
+          "number": 42
+        }
+      ],
+      "expected": {
+        "simple": "flat",
+        "number": 42
+      }
+    },
+    {
+      "input_args": [
+        {
+          "config": {
+            "database": {
+              "host": "localhost",
+              "port": 5432
+            },
+            "debug": true
+          }
+        }
+      ],
+      "expected": {
+        "config.database.host": "localhost",
+        "config.database.port": 5432,
+        "config.debug": true
+      }
+    },
+    {
+      "input_args": [
+        {
+          "a": {
+            "b": {
+              "c": {
+                "d": 99
+              }
+            }
+          }
+        }
+      ],
+      "expected": {
+        "a.b.c.d": 99
+      }
+    },
+    {
+      "input_args": [
+        {
+          "x": {
+            "y": null,
+            "z": false
+          }
+        }
+      ],
+      "expected": {
+        "x.y": null,
+        "x.z": false
+      }
+    }
+  ],
+  "hints": [
+    "Use recursion or an iterative stack to traverse the dictionary keys.",
+    "For each key-value pair, if the value is an instance of `dict` (and not empty), recursively flatten it with new prefix `prefix + sep + key` if prefix exists else `key`.",
+    "If the value is not a dict, add it directly to the output dictionary: `output[compound_key] = value`."
+  ],
+  "reference_solution": "def flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict:\n    output = {}\n    for k, v in nested.items():\n        new_key = f'{prefix}{sep}{k}' if prefix else str(k)\n        if isinstance(v, dict) and v:\n            output.update(flatten_dict(v, prefix=new_key, sep=sep))\n        else:\n            output[new_key] = v\n    return output\n",
+  "time_limit_sec": 3.0
+}

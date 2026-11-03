@@ -1,0 +1,107 @@
+{
+  "id": "binary-search",
+  "title": "Binary Search",
+  "topic": "binary-search",
+  "difficulty": "easy",
+  "track": "dsa",
+  "statement_md": "Given an array of integers `nums` sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.\n\nYour algorithm must run in O(log n) runtime complexity.",
+  "function_name": "binary_search",
+  "starter_code": "def binary_search(nums: list, target: int) -> int:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        9
+      ],
+      "expected": 4
+    },
+    {
+      "input_args": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        2
+      ],
+      "expected": -1
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        [],
+        5
+      ],
+      "expected": -1
+    },
+    {
+      "input_args": [
+        [
+          5
+        ],
+        5
+      ],
+      "expected": 0
+    },
+    {
+      "input_args": [
+        [
+          5
+        ],
+        2
+      ],
+      "expected": -1
+    },
+    {
+      "input_args": [
+        [
+          2,
+          5
+        ],
+        5
+      ],
+      "expected": 1
+    },
+    {
+      "input_args": [
+        [
+          2,
+          5
+        ],
+        2
+      ],
+      "expected": 0
+    },
+    {
+      "input_args": [
+        [
+          -10,
+          -5,
+          0,
+          3,
+          7
+        ],
+        -10
+      ],
+      "expected": 0
+    }
+  ],
+  "hints": [
+    "Maintain search boundaries `low = 0` and `high = len(nums) - 1`.",
+    "Calculate `mid = (low + high) // 2`. Compare `nums[mid]` to target.",
+    "If `nums[mid] == target`, return `mid`. If `nums[mid] < target`, search right (`low = mid + 1`). Otherwise search left (`high = mid - 1`)."
+  ],
+  "reference_solution": "def binary_search(nums: list, target: int) -> int:\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n",
+  "time_limit_sec": 3.0
+}

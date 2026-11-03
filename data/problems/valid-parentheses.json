@@ -1,0 +1,69 @@
+{
+  "id": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "topic": "stack",
+  "difficulty": "easy",
+  "track": "dsa",
+  "statement_md": "Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
+  "function_name": "is_valid_parentheses",
+  "starter_code": "def is_valid_parentheses(s: str) -> bool:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        "()"
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        "()[]{}"
+      ],
+      "expected": true
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        "(]"
+      ],
+      "expected": false
+    },
+    {
+      "input_args": [
+        "([)]"
+      ],
+      "expected": false
+    },
+    {
+      "input_args": [
+        "{[]}"
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        ""
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        ")("
+      ],
+      "expected": false
+    },
+    {
+      "input_args": [
+        "((("
+      ],
+      "expected": false
+    }
+  ],
+  "hints": [
+    "A Last-In-First-Out (LIFO) data structure works well when matching pairs that must close in reverse order.",
+    "Push opening brackets onto a stack. When encountering a closing bracket, check if it matches the top of the stack.",
+    "Use a mapping dictionary `{')': '(', '}': '{', ']': '['}`. If closing and stack empty or top doesn't match, return False. At the end, return `len(stack) == 0`."
+  ],
+  "reference_solution": "def is_valid_parentheses(s: str) -> bool:\n    pairs = {')': '(', '}': '{', ']': '['}\n    stack = []\n    for ch in s:\n        if ch in pairs.values():\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n        else:\n            return False\n    return len(stack) == 0\n",
+  "time_limit_sec": 3.0
+}

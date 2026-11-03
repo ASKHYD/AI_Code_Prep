@@ -1,0 +1,8 @@
+# Pinned requirements based on actual imports in coach/ and app.py
+streamlit==1.66.1
+streamlit-code-editor==0.1.22
+pydantic==2.14.2
+ollama==0.6.3
+plotly==7.1.0
+pytest==9.2.0
+ruff==0.17.3

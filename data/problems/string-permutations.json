@@ -1,0 +1,90 @@
+{
+  "id": "string-permutations",
+  "title": "String Permutations",
+  "topic": "recursion",
+  "difficulty": "medium",
+  "track": "dsa",
+  "statement_md": "Given a string `s`, return all unique permutations of the characters in `s` sorted in lexicographical order.\n\nIf `s` is empty, return `['']`.",
+  "function_name": "get_permutations",
+  "starter_code": "def get_permutations(s: str) -> list:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        "ab"
+      ],
+      "expected": [
+        "ab",
+        "ba"
+      ]
+    },
+    {
+      "input_args": [
+        "a"
+      ],
+      "expected": [
+        "a"
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        ""
+      ],
+      "expected": [
+        ""
+      ]
+    },
+    {
+      "input_args": [
+        "abc"
+      ],
+      "expected": [
+        "abc",
+        "acb",
+        "bac",
+        "bca",
+        "cab",
+        "cba"
+      ]
+    },
+    {
+      "input_args": [
+        "aab"
+      ],
+      "expected": [
+        "aab",
+        "aba",
+        "baa"
+      ]
+    },
+    {
+      "input_args": [
+        "xyz"
+      ],
+      "expected": [
+        "xyz",
+        "xzy",
+        "yxz",
+        "yzx",
+        "zxy",
+        "zyx"
+      ]
+    },
+    {
+      "input_args": [
+        "aa"
+      ],
+      "expected": [
+        "aa"
+      ]
+    }
+  ],
+  "hints": [
+    "Use recursion or backtracking, selecting each unused character at the current position.",
+    "Handle duplicate characters by sorting the characters first or using a set to store unique permutations.",
+    "Return the sorted list of distinct permutation strings."
+  ],
+  "reference_solution": "def get_permutations(s: str) -> list:\n    if not s:\n        return ['']\n    chars = sorted(list(s))\n    result = set()\n    used = [False] * len(chars)\n    \n    def backtrack(path):\n        if len(path) == len(chars):\n            result.add(''.join(path))\n            return\n        for i in range(len(chars)):\n            if not used[i]:\n                used[i] = True\n                path.append(chars[i])\n                backtrack(path)\n                path.pop()\n                used[i] = False\n    backtrack([])\n    return sorted(list(result))\n",
+  "time_limit_sec": 3.0
+}

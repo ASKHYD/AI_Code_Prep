@@ -1,0 +1,69 @@
+{
+  "id": "longest-substring-without-repeating",
+  "title": "Longest Substring Without Repeating Characters",
+  "topic": "strings",
+  "difficulty": "medium",
+  "track": "dsa",
+  "statement_md": "Given a string `s`, find the length of the longest substring without repeating characters.",
+  "function_name": "length_of_longest_substring",
+  "starter_code": "def length_of_longest_substring(s: str) -> int:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        "abcabcbb"
+      ],
+      "expected": 3
+    },
+    {
+      "input_args": [
+        "bbbbb"
+      ],
+      "expected": 1
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        "pwwkew"
+      ],
+      "expected": 3
+    },
+    {
+      "input_args": [
+        ""
+      ],
+      "expected": 0
+    },
+    {
+      "input_args": [
+        " "
+      ],
+      "expected": 1
+    },
+    {
+      "input_args": [
+        "au"
+      ],
+      "expected": 2
+    },
+    {
+      "input_args": [
+        "dvdf"
+      ],
+      "expected": 3
+    },
+    {
+      "input_args": [
+        "abba"
+      ],
+      "expected": 2
+    }
+  ],
+  "hints": [
+    "Use a sliding window defined by two pointers `left` and `right`.",
+    "Maintain the last seen index of each character in a dictionary.",
+    "As `right` advances, if `s[right]` was seen at index >= `left`, advance `left` to `last_seen[s[right]] + 1`. Update max length at each step."
+  ],
+  "reference_solution": "def length_of_longest_substring(s: str) -> int:\n    last_seen = {}\n    left = 0\n    max_len = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len\n",
+  "time_limit_sec": 3.0
+}
