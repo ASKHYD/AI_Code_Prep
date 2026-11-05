@@ -2,14 +2,15 @@
 scratch/capture_screen.py
 
 Captures real application screenshots of the Streamlit app at:
-  - 1920x1080 -> docs/screenshots/r3/home_real_1920x1080.png
-  - 1600x1000 -> docs/screenshots/r3/home_real_1600x1000.png
+  - 1920x1080 -> docs/screenshots/r3/{screen}_real_1920x1080.png
+  - 1600x1000 -> docs/screenshots/r3/{screen}_real_1600x1000.png
 
 Uses Chrome DevTools Protocol over WebSockets and headless Chrome.
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import base64
 import json
@@ -17,6 +18,7 @@ import os
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 import urllib.request
@@ -25,7 +27,7 @@ import websockets
 WORKSPACE_ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS_DIR = WORKSPACE_ROOT / "docs" / "screenshots" / "r3"
 BRAIN_DIR = pathlib.Path(
-    r"C:\Users\MS Computer\.gemini\antigravity\brain\3c018350-20b2-4d32-aa73-73961416c4ca\screenshots\r3"
+    r"C:\Users\MS Computer\.gemini\antigravity\brain\2a609fd9-9a02-4521-a182-3a1389f8099d\screenshots\r3"
 )
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 STREAMLIT_PORT = 8501
@@ -75,9 +77,9 @@ def start_streamlit() -> subprocess.Popen | None:
     raise RuntimeError("Failed to start Streamlit server within 20 seconds.")
 
 
-async def capture_screenshots():
+async def capture_screenshots(screen: str = "practice"):
     st_proc = start_streamlit()
-    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_home_")
+    profile_dir = tempfile.mkdtemp(prefix=f"chrome_cdp_{screen}_")
 
     chrome_proc = subprocess.Popen(
         [
@@ -128,20 +130,32 @@ async def capture_screenshots():
 
             await send_cmd("Page.enable")
 
-            # Navigate to Home screen
-            target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen=home"
+            # Determine target URL and output names based on screen
+            if screen == "practice":
+                target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen=practice&problem=longest-substring&demo_fail=true"
+                targets = [
+                    ("practice_real_1920x1080.png", 1920, 1080),
+                    ("practice_real_1600x1000.png", 1600, 1000),
+                ]
+            elif screen == "home":
+                target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen=home"
+                targets = [
+                    ("home_real_1920x1080.png", 1920, 1080),
+                    ("home_real_1600x1000.png", 1600, 1000),
+                ]
+            else:
+                target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen={screen}"
+                targets = [
+                    (f"{screen}_real_1920x1080.png", 1920, 1080),
+                    (f"{screen}_real_1600x1000.png", 1600, 1000),
+                ]
+
             print(f"[CDP] Navigating to {target_url}...", flush=True)
             await send_cmd("Page.navigate", {"url": target_url})
 
-            # Wait for Streamlit to render components and fonts
+            # Wait for Streamlit to render components and execution to complete
             print("[CDP] Waiting for Streamlit page elements to settle...", flush=True)
-            await asyncio.sleep(4.0)
-
-            # Targets to capture
-            targets = [
-                ("home_real_1920x1080.png", 1920, 1080),
-                ("home_real_1600x1000.png", 1600, 1000),
-            ]
+            await asyncio.sleep(6.0)
 
             DOCS_DIR.mkdir(parents=True, exist_ok=True)
             if BRAIN_DIR.parent.exists():
@@ -158,7 +172,7 @@ async def capture_screenshots():
                         "mobile": False,
                     },
                 )
-                await asyncio.sleep(1.0)
+                await asyncio.sleep(1.5)
 
                 print(f"[CDP] Capturing screenshot: {filename}...", flush=True)
                 res = await send_cmd("Page.captureScreenshot", {"format": "png"})
@@ -194,8 +208,12 @@ async def capture_screenshots():
 
 
 def main():
-    print("Capturing Direction A Home real app screenshots...", flush=True)
-    asyncio.run(capture_screenshots())
+    parser = argparse.ArgumentParser(description="Capture Streamlit screen screenshots.")
+    parser.add_argument("--screen", default="practice", help="Screen to capture (default: practice)")
+    args = parser.parse_args()
+
+    print(f"Capturing Direction A {args.screen} real app screenshots...", flush=True)
+    asyncio.run(capture_screenshots(screen=args.screen))
     print("Capture complete!", flush=True)
 
 
