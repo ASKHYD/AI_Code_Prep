@@ -7,6 +7,7 @@ The judge is CODE, not AI.
 from __future__ import annotations
 
 import base64
+import re
 import time
 from datetime import date, datetime
 from functools import lru_cache
@@ -30,6 +31,7 @@ st.set_page_config(
 )
 
 FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
+ICONS_DIR = Path(__file__).parent / "assets" / "icons"
 
 FONT_DEFINITIONS = [
     ("Fraunces", "normal", 500, "fraunces-latin-500-normal.woff2"),
@@ -132,6 +134,36 @@ def get_global_css() -> str:
 
 
 st.html(get_global_css())
+
+
+@lru_cache(maxsize=128)
+def get_svg_icon(
+    name: str,
+    width: int = 18,
+    height: int = 18,
+    stroke: str | None = None,
+    stroke_width: float | None = None,
+    extra_class: str = "",
+) -> str:
+    """
+    Loads an SVG icon from assets/icons/ and returns inline SVG markup.
+    Allows overriding width, height, stroke color, and stroke-width.
+    """
+    filename = name if name.endswith(".svg") else f"{name}.svg"
+    icon_path = ICONS_DIR / filename
+    if not icon_path.exists():
+        return ""
+    svg = icon_path.read_text(encoding="utf-8").strip()
+    svg = re.sub(r'width="[^"]*"', f'width="{width}"', svg, count=1)
+    svg = re.sub(r'height="[^"]*"', f'height="{height}"', svg, count=1)
+    if stroke:
+        svg = re.sub(r'stroke="[^"]*"', f'stroke="{stroke}"', svg, count=1)
+    if stroke_width is not None:
+        svg = re.sub(r'stroke-width="[^"]*"', f'stroke-width="{stroke_width}"', svg, count=1)
+    if extra_class:
+        svg = re.sub(r'<svg\b', f'<svg class="{extra_class}"', svg, count=1)
+    return svg
+
 
 # Initialize database store
 @st.cache_resource
