@@ -190,6 +190,128 @@ def get_global_css() -> str:
         color: #171712 !important;
         font-size: 20px !important;
     }
+
+    /* Direction A Keyed Tinted Stat Cards (Home Screen) */
+    div.st-key-home_card_streak:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-home_card_due:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-home_card_library:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .st-key-home_card_streak,
+    .st-key-home_card_streak [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DFF3E4 !important;
+        border: 1px solid rgba(22, 123, 72, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    .st-key-home_card_due,
+    .st-key-home_card_due [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DCEBFF !important;
+        border: 1px solid rgba(29, 94, 194, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    .st-key-home_card_library,
+    .st-key-home_card_library [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(154, 52, 18, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    /* Stat Cards Shared Styling */
+    .stat-icon-tile {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .tile-green {
+        background-color: #1F9D63 !important;
+    }
+    .tile-blue {
+        background-color: #2273E6 !important;
+    }
+    .tile-amber {
+        background-color: #B45309 !important;
+    }
+    .tile-violet {
+        background-color: #6C4CF1 !important;
+    }
+    .tile-coral {
+        background-color: #E4572E !important;
+    }
+
+    .stat-badge {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        padding: 4px 12px !important;
+        border-radius: 999px !important;
+        display: inline-flex;
+        align-items: center;
+        letter-spacing: 0.02em;
+    }
+    .badge-mint {
+        background-color: rgba(22, 123, 72, 0.15) !important;
+        color: #167B48 !important;
+    }
+    .badge-sky {
+        background-color: rgba(29, 94, 194, 0.15) !important;
+        color: #1D5EC2 !important;
+    }
+    .badge-butter {
+        background-color: rgba(180, 83, 9, 0.15) !important;
+        color: #9A3412 !important;
+    }
+    .badge-rose {
+        background-color: rgba(197, 34, 31, 0.15) !important;
+        color: #C5221F !important;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+    }
+    .stat-label {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #66635A !important;
+        display: block;
+    }
+    .stat-numeral {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 36px !important;
+        font-weight: 600 !important;
+        color: #171712 !important;
+        line-height: 1.15 !important;
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+        font-variant-numeric: tabular-nums !important;
+        letter-spacing: -0.025em !important;
+        display: block;
+    }
+    .stat-caption {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13px !important;
+        color: #66635A !important;
+        display: block;
+        line-height: 1.4 !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -358,23 +480,94 @@ with st.sidebar.container(border=True, key="sidebar_summary_card"):
 # SCREEN 1: HOME / DUE REVIEW
 # ==============================================================================
 if nav_choice == "Home":
-    with st.container(border=True):
-        st.subheader("Daily Review and Practice Queue")
-        st.caption(
-            "Problems are scheduled using an interview-targeted spaced repetition schedule "
-            "(1 / 1 / 3 / 7 / 21 days) based strictly on objective test\u00A0results."
+    # Header banner with Fraunces serif heading and Start Practice primary CTA pill
+    col_head, col_btn = st.columns([4, 1], vertical_alignment="center")
+    with col_head:
+        st.markdown(
+            """<div style="margin-bottom: 8px;">
+                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
+                    Daily Review and Practice Queue
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
+                    Interview-targeted spaced repetition schedule (1 / 1 / 3 / 7 / 21 days) based strictly on objective test results.
+                </p>
+            </div>""",
+            unsafe_allow_html=True,
         )
+    with col_btn:
+        if st.button("Start Practice", type="primary", key="home_start_practice_btn", use_container_width=True):
+            st.session_state["nav_sidebar_radio"] = "Practice Arena"
+            st.query_params["screen"] = "practice"
+            st.session_state["last_screen_param"] = "practice"
+            st.rerun()
 
+    # Three category-tinted stat cards
     c1, c2, c3 = st.columns(3)
     with c1:
-        with st.container(border=True):
-            st.metric("Active Streak", f"{streak_count} days")
+        with st.container(border=True, key="home_card_streak"):
+            flame_svg = get_svg_icon("flame", width=22, height=22, stroke="#FFFFFF")
+            streak_unit = "day" if streak_count == 1 else "days"
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-green">
+                            {flame_svg}
+                        </div>
+                        <span class="stat-badge badge-mint">Active</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Active Streak</span>
+                        <span class="stat-numeral">{streak_count} {streak_unit}</span>
+                        <span class="stat-caption">Practice tomorrow to reach a {streak_count + 1}-day streak.</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+
     with c2:
-        with st.container(border=True):
-            st.metric("Problems Due Today", f"{len(due_list)} problems")
+        with st.container(border=True, key="home_card_due"):
+            calendar_svg = get_svg_icon("calendar", width=22, height=22, stroke="#FFFFFF")
+            due_count = len(due_list)
+            due_numeral = f"{due_count} due"
+            due_badge = "On Schedule" if due_count == 0 else "Review Ready"
+            due_caption = "All scheduled reviews are completely caught up." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-blue">
+                            {calendar_svg}
+                        </div>
+                        <span class="stat-badge badge-sky">{due_badge}</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Problems Due Today</span>
+                        <span class="stat-numeral">{due_numeral}</span>
+                        <span class="stat-caption">{due_caption}</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+
     with c3:
-        with st.container(border=True):
-            st.metric("Total Library", f"{len(all_problems)} problems")
+        with st.container(border=True, key="home_card_library"):
+            book_svg = get_svg_icon("book-open", width=22, height=22, stroke="#FFFFFF")
+            total_count = len(all_problems)
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-amber">
+                            {book_svg}
+                        </div>
+                        <span class="stat-badge badge-butter">Library</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Total Problem Bank</span>
+                        <span class="stat-numeral">{total_count} problems</span>
+                        <span class="stat-caption">Curated across DSA, Strings, and Practical Python.</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
     with st.container(border=True):
         st.subheader("Due for Review Today")
