@@ -162,5 +162,26 @@ To guarantee offline-readiness and eliminate runtime Google Fonts CDN requests w
 
 ---
 
+### [DECISION-007] Metric Numeral Typography Selection: Variant B (Inter SemiBold 600 Tabular)
+
+**Date**: 2026-11-05  
+**Status**: Accepted  
+
+#### Context
+As required by Phase 1 Directive 3, the Home stat row numerals were evaluated empirically in dual variants (Variant A: Fraunces Display 700 vs Variant B: Inter SemiBold 600 with tabular figures) via a 1920×1080 headless Chrome screenshot (`docs/screenshots/r3/metrics_ab_eval.png`). In Variant A, the Fraunces circular zero glyph in "0 due" read ambiguously as a lowercase "o".
+
+#### Decision
+Project owner explicitly selected **Variant B (Inter SemiBold 600 with tabular figures)** for all primary metric numeral values across the application:
+- Home stat cards (`Active Streak`, `Problems Due Today`, `Total Problem Bank`)
+- Dashboard stat cards (`Solved Problems`, `Practice Sessions`, `Average Hints Used`)
+- Sidebar summary mini-card (`Active Streak`, `Due for Review`)
+
+#### Typography Rules:
+- Metric numerals: `font-family: 'Inter', sans-serif !important; font-weight: 600 !important; font-variant-numeric: tabular-nums !important; letter-spacing: -0.025em;`
+- Headings and card title labels: strictly retain **`Fraunces`**.
+- Unchosen variant CSS (Variant A metric styling): deleted from all stylesheets (no dead CSS).
+
+---
+
 *Last updated: 2026-11-05*
 
