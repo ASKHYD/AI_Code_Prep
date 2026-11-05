@@ -200,9 +200,9 @@ Every screen must be explicitly partitioned into cards using `st.container(borde
 
 ---
 
-## Direction A — PROPOSED, awaiting owner approval
+## 3. Direction A Detailed Specifications (Approved 2026-11-05)
 
-> **Status:** Proposed design language for Round 3 (Mockup approval gate). The R2 OLED Dark workbench specification above remains active for current app implementation until the owner formally approves Direction A.
+> **Status:** Approved governing design language for Phase 2 implementation.
 
 ### 1. Vision & Design Philosophy
 

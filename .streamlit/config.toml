@@ -4,51 +4,9 @@ port = 8501
 address = "127.0.0.1"
 
 [theme]
-base = "dark"
-primaryColor = "#22C55E"
-backgroundColor = "#0F172A"
-secondaryBackgroundColor = "#1E293B"
-textColor = "#F8FAFC"
-borderColor = "#475569"
-
+base = "light"
+primaryColor = "#15803D"
+backgroundColor = "#FBFAF7"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#171712"
 font = "sans serif"
-headingFont = "monospace"
-codeFont = "monospace"
-baseFontSize = 16
-
-baseRadius = 8
-buttonRadius = 8
-showWidgetBorder = true
-showSidebarBorder = true
-
-blueColor = "#38BDF8"
-blueBackgroundColor = "#1E293B"
-blueTextColor = "#38BDF8"
-
-greenColor = "#22C55E"
-greenBackgroundColor = "#14532D"
-greenTextColor = "#22C55E"
-
-redColor = "#EF4444"
-redBackgroundColor = "#7F1D1D"
-redTextColor = "#EF4444"
-
-yellowColor = "#F59E0B"
-yellowBackgroundColor = "#78350F"
-yellowTextColor = "#F59E0B"
-
-codeBackgroundColor = "#1B2336"
-codeTextColor = "#F8FAFC"
-linkColor = "#38BDF8"
-
-dataframeBorderColor = "#475569"
-dataframeHeaderBackgroundColor = "#1E293B"
-dataframeHeaderTextColor = "#F8FAFC"
-
-chartCategoricalColors = [
-  "#22C55E",
-  "#38BDF8",
-  "#F59E0B",
-  "#EF4444",
-  "#A855F7"
-]
