@@ -26,6 +26,11 @@ updated: 2026-11-05
 **Objective**: Build pixel-perfect static HTML/CSS mockups of Home, Practice, Mock, and Dashboard along with a design token sheet implementing Direction A (Brilliant-style). Capture screenshots and obtain owner sign-off with NO changes to application code.  
 **Requirements**: REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, NFR-01  
 
+**Plans:**
+- [ ] Plan 1.1: Design Tokens Foundation & Home Screen Mockup (wave 1)
+- [ ] Plan 1.2: Core Workspace Mockups - Practice Arena & Mock Interview (wave 2)
+- [ ] Plan 1.3: Analytics Dashboard Mockup, Dual-Resolution Capture & Visual Finish Gate (wave 3)
+
 ---
 
 ### Phase 2: Streamlit UI Implementation
@@ -40,7 +45,7 @@ updated: 2026-11-05
 
 | Phase | Status | Plans | Complete |
 |-------|--------|-------|----------|
-| 1 | ⬜ Not Started | 0/2 | — |
+| 1 | ⬜ Not Started | 0/3 | — |
 | 2 | ⬜ Not Started | 0/2 | — |
 
 ---
@@ -51,3 +56,4 @@ updated: 2026-11-05
 |-------|---------|-----------|----------|
 | 1 | — | — | — |
 | 2 | — | — | — |
+

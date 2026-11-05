@@ -8,23 +8,24 @@ updated: 2026-11-05
 
 **Milestone:** Milestone 1 — UI Redesign  
 **Phase:** Phase 1 - Static HTML Mockups & Design Tokens  
-**Status:** ready-to-plan  
-**Plan:** None  
+**Status:** ready-for-execution  
+**Plan:** 01-PLAN.md, 02-PLAN.md, 03-PLAN.md  
 
 ## Last Action
 
-Completed `/discuss-phase 1` scope alignment:
-- Locked Phase 1 to visual mockups only (Home, Practice, Mock, Dashboard + Token sheet)
-- Enforced strict code freeze on `app.py`, `config.toml`, `coach/*`, `data/problems/*`, `tests/*`
-- Specified authentic app content requirements (1 day streak, 0 due, 12 problems, Binary Search PASS 178ms, Longest Substring signature, timer 44:41)
-- Set dual-resolution screenshot requirement (`1600x1000` and `1920x1080`)
-- Defined finish gate: explicit owner screenshot approval
+Completed `/plan 1` planning:
+- Generated 3 atomic plans (`01-PLAN.md`, `02-PLAN.md`, `03-PLAN.md`) across 3 sequential dependency waves
+- Verified plan-checker passed with zero defects
+- Audited all plans for strict code quarantine: ZERO edits to `app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, or `tests/*`
+- Enforced exclusive Lucide SVG iconography from `agent-resources/lucide/icons`
+- Grounded all mockups with authentic data (1 day streak, 0 due, 12 problems, Binary Search PASS 178ms, Longest Substring signature, 44:41 timer)
 
 ## Next Steps
 
-1. Run `/plan 1` — user will provide the R3 handoff specification for Direction A
-2. Generate Phase 1 PLAN.md files with atomic tasks
-3. Execute mockups and capture screenshots at 1600x1000 and 1920x1080 for owner review
+1. Run `/execute 1` (or inline execution of Wave 1: Plan 1.1)
+2. Execute Plan 1.1 (`mockups/style.css`, `mockups/tokens.html`, `mockups/home.html`)
+3. Execute Plan 1.2 (`mockups/practice.html`, `mockups/mock.html`)
+4. Execute Plan 1.3 (`mockups/dashboard.html`, dual-resolution screenshot capture, owner sign-off)
 
 ## Active Decisions
 
