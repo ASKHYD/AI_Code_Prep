@@ -7,22 +7,21 @@ updated: 2026-11-05
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 2: Streamlit UI Implementation (Discussed & Shell Gate Passed)  
-**Status:** Scope Clarified & Shell Gate Feasibility Confirmed (Awaiting User Go-Ahead to Plan)  
-**Plan:** None active (Phase 1 complete; Phase 2 pending `/plan 2`)  
+**Phase:** Phase 2: Streamlit UI Implementation (Planned & Ready for Execution)  
+**Status:** Planned across 8 waves (0 through 7)  
+**Plan:** `.gsd/phases/2/` (00-PLAN.md through 07-PLAN.md)  
 
 ## Last Action
 
-Phase 2 Scope & Shell Gate Discussion completed:
-- Evaluated the 4 load-bearing UI elements against Streamlit 1.66.1: all 4 tagged feasible with `[config token]`, `[bordered container]`, and `[keyed CSS]`. 0 elements are `[impossible in Streamlit]`.
-- Retained default Streamlit shell (`app.py`); NiceGUI port eliminated.
-- Locked 7 core constraints into `.gsd/DECISIONS.md`: Shell Gate, Backend Freeze, Frozen Tokens, Offline Self-Hosted Fonts, Lucide-Only Icons, 4 Phase 1 Directives, CSS Budget & Resource Map.
-- Verified backend test suite clean: 26/26 tests passing before any UI implementation.
+Phase 2 planning completed following owner approval of Fontsource offline extraction:
+- Extracted and verified 12 offline `.woff2` font files into `assets/fonts/` matching `mockups/style.css` weights exactly; logged in `DECISIONS.md` under [DECISION-006].
+- Authored 8 atomic execution plans in `.gsd/phases/2/` across Waves 0–7 adhering to the single named mechanism per element per screen constraint.
+- Zero quarantine violations: `coach/*.py`, `data/problems/*.json`, and `tests/*` untouched.
+- 26/26 backend tests passing.
 
 ## Next Steps
 
-1. Await user go-ahead to begin Phase 2 planning (`/plan 2`)
-2. Generate atomic Phase 2 execution plans incorporating UI resource map, self-hosted fonts, A/B metric numeral screenshot task, and computed-font verification proof.
+1. `/execute 2` — Run Phase 2 execution waves starting with Wave 0 (Regression guard & Metric-numerals A/B evaluation)
 
 ## Active Decisions
 

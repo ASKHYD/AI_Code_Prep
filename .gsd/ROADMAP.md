@@ -34,10 +34,20 @@ updated: 2026-11-05
 ---
 
 ### Phase 2: Streamlit UI Implementation
-**Status**: ⬜ Not Started  
+**Status**: ⬜ Planned (Ready for Execution)  
 **Objective**: Translate the approved Direction A mockups and tokens into the Streamlit application (`.streamlit/config.toml`, `app.py`, custom CSS/components) while keeping the backend (`coach/*.py`) and problem bank (`data/problems/*.json`) strictly frozen.  
 **Depends on**: Phase 1 approval (Completed)  
 **Requirements**: REQ-07, REQ-08, REQ-09, NFR-02, NFR-03  
+
+**Plans:**
+- [ ] Plan 2.0: Regression Guard & Metric-Numerals A/B Evaluation (Wave 0)
+- [ ] Plan 2.1: Base Theme Configuration, Offline @font-face & Computed-Font Proof (Wave 1)
+- [ ] Plan 2.2: Lucide Icon Pipeline & Direction A Sidebar Implementation (Wave 2)
+- [ ] Plan 2.3: Home Screen Redesign & Direction A Implementation (Wave 3)
+- [ ] Plan 2.4: Practice Arena Redesign & Direction A Implementation (Wave 4)
+- [ ] Plan 2.5: Mock Interview Redesign & Direction A Implementation (Wave 5)
+- [ ] Plan 2.6: Analytics Dashboard Redesign & Direction A Implementation (Wave 6)
+- [ ] Plan 2.7: Quality Gates, Impeccable Audit & §5 Return Handoff (Wave 7)
 
 ---
 
@@ -46,7 +56,7 @@ updated: 2026-11-05
 | Phase | Status | Plans | Complete |
 |-------|--------|-------|----------|
 | 1 | ✅ Complete | 3/3 | 100% |
-| 2 | ⬜ Not Started | 0/2 | — |
+| 2 | ⬜ Planned | 0/8 | 0% |
 
 ---
 
