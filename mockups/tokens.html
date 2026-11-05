@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direction A — Design Tokens Sheet | AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .token-section { margin-bottom: var(--space-10); }
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); margin-top: var(--space-4); }
+    .token-box { padding: var(--space-6); border-radius: var(--radius-card); border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: var(--space-2); }
+    .swatch { height: 72px; border-radius: var(--radius-tile); border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+    .proof-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; background: #DFF3E4; color: #167B48; width: fit-content; }
+  </style>
+</head>
+<body>
+  <div style="max-width: 1300px; margin: 0 auto; padding: var(--space-10);">
+    
+    <header style="margin-bottom: var(--space-10); border-bottom: 1px solid var(--hairline); padding-bottom: var(--space-6);">
+      <span class="badge badge-lilac" style="margin-bottom: var(--space-3);">Direction A · Proposed Design System</span>
+      <h1 style="font-family: var(--font-display); font-size: 42px; font-weight: 700; color: var(--ink); margin-bottom: var(--space-2);">
+        Brilliant-Style Learning Tokens
+      </h1>
+      <p style="font-size: 17px; color: var(--muted); max-width: 800px;">
+        Warm paper foundation, ink-black text, generous soft-radius cards, hairline borders, and an authoritative flat tint system where color acts as structure rather than arbitrary decoration.
+      </p>
+    </header>
+
+    <!-- SECTION 1: Paper & Ink Foundation -->
+    <section class="token-section">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">1. Paper & Ink Foundation</h2>
+      <div class="token-grid">
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #FBFAF7; color: #171712;">#FBFAF7</div>
+          <strong style="font-size: 16px;">App Canvas Paper</strong>
+          <span style="color: var(--muted); font-size: 13px;">Warm paper background, zero glare, high comfort</span>
+        </div>
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #FFFFFF; color: #171712;">#FFFFFF</div>
+          <strong style="font-size: 16px;">Surface Card</strong>
+          <span style="color: var(--muted); font-size: 13px;">Clean white foreground cards with soft shadows</span>
+        </div>
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #171712; color: #FFFFFF;">#171712</div>
+          <strong style="font-size: 16px;">Deep Ink Text</strong>
+          <span class="proof-badge">17.23:1 on Paper (AAA)</span>
+          <span style="color: var(--muted); font-size: 13px;">Warm near-black for primary display and body copy</span>
+        </div>
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #66635A; color: #FFFFFF;">#66635A</div>
+          <strong style="font-size: 16px;">Muted Warm Grey</strong>
+          <span class="proof-badge">5.75:1 on Paper (AA)</span>
+          <span style="color: var(--muted); font-size: 13px;">Captions, metadata tags, secondary descriptions</span>
+        </div>
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #E7E1D6; color: #171712;">#E7E1D6</div>
+          <strong style="font-size: 16px;">Hairline Border</strong>
+          <span style="color: var(--muted); font-size: 13px;">1px subtle warm dividing border lines</span>
+        </div>
+        <div class="token-box" style="background: var(--surface);">
+          <div class="swatch" style="background: #15803D; color: #FFFFFF;">#15803D</div>
+          <strong style="font-size: 16px;">Primary Action CTA</strong>
+          <span class="proof-badge">5.02:1 with White (AA)</span>
+          <span style="color: var(--muted); font-size: 13px;">Saturated emerald green pill button for Run & Submit</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Tint System -->
+    <section class="token-section">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">2. Six-Part Structure Tint System</h2>
+      <p style="color: var(--muted); margin-bottom: var(--space-4);">
+        Each functional zone pairs a pale surface wash with a saturated partner color. Saturated partner text achieves &ge; 4.5:1 contrast against the wash.
+      </p>
+      <div class="token-grid">
+        
+        <!-- Mint / Green -->
+        <div class="token-box" style="background: var(--wash-mint); border-color: rgba(22, 123, 72, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #DFF3E4; color: #167B48;">Wash #DFF3E4</div>
+            <div class="swatch" style="flex: 1; background: #1F9D63; color: #171712;">Fill #1F9D63</div>
+          </div>
+          <strong style="font-size: 17px; color: #167B48;">Mint & Green (Streak / PASS)</strong>
+          <span class="proof-badge">Text #167B48: 4.56:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Streak counter, successful test verdicts, completed exercises.</p>
+        </div>
+
+        <!-- Butter / Amber -->
+        <div class="token-box" style="background: var(--wash-butter); border-color: rgba(180, 83, 9, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #FFF0C4; color: #9A3412;">Wash #FFF0C4</div>
+            <div class="swatch" style="flex: 1; background: #B45309; color: #FFFFFF;">Fill #B45309</div>
+          </div>
+          <strong style="font-size: 17px; color: #9A3412;">Butter & Amber (Library / TIMEOUT)</strong>
+          <span class="proof-badge">Text #9A3412: 6.44:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Total library volume, execution timeout alerts, review notices.</p>
+        </div>
+
+        <!-- Sky / Blue -->
+        <div class="token-box" style="background: var(--wash-sky); border-color: rgba(29, 94, 194, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #DCEBFF; color: #1D5EC2;">Wash #DCEBFF</div>
+            <div class="swatch" style="flex: 1; background: #2273E6; color: #FFFFFF;">Fill #2273E6</div>
+          </div>
+          <strong style="font-size: 17px; color: #1D5EC2;">Sky & Blue (Due / Queue / Dashboard)</strong>
+          <span class="proof-badge">Text #1D5EC2: 5.06:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Spaced repetition due cards, queue notices, analytics highlights.</p>
+        </div>
+
+        <!-- Lilac / Violet -->
+        <div class="token-box" style="background: var(--wash-lilac); border-color: rgba(89, 50, 234, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #E8E2FF; color: #5932EA;">Wash #E8E2FF</div>
+            <div class="swatch" style="flex: 1; background: #6C4CF1; color: #FFFFFF;">Fill #6C4CF1</div>
+          </div>
+          <strong style="font-size: 17px; color: #5932EA;">Lilac & Violet (Practice Area)</strong>
+          <span class="proof-badge">Text #5932EA: 5.46:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Practice arena active navigation, code editor header bar, topic chips.</p>
+        </div>
+
+        <!-- Peach / Coral -->
+        <div class="token-box" style="background: var(--wash-peach); border-color: rgba(185, 56, 21, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #FFE8D1; color: #B93815;">Wash #FFE8D1</div>
+            <div class="swatch" style="flex: 1; background: #E4572E; color: #171712;">Fill #E4572E</div>
+          </div>
+          <strong style="font-size: 17px; color: #B93815;">Peach & Coral (Mock Interview)</strong>
+          <span class="proof-badge">Text #B93815: 4.87:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Mock round header, countdown timer capsule pill, active session tabs.</p>
+        </div>
+
+        <!-- Rose / Red -->
+        <div class="token-box" style="background: var(--wash-rose); border-color: rgba(197, 34, 31, 0.2);">
+          <div style="display: flex; gap: var(--space-2);">
+            <div class="swatch" style="flex: 1; background: #FFE0E0; color: #C5221F;">Wash #FFE0E0</div>
+            <div class="swatch" style="flex: 1; background: #D92D20; color: #FFFFFF;">Fill #D92D20</div>
+          </div>
+          <strong style="font-size: 17px; color: #C5221F;">Rose & Red (FAIL / Errors)</strong>
+          <span class="proof-badge">Text #C5221F: 4.69:1</span>
+          <p style="font-size: 13px; color: var(--ink);">Failed test case result banners, syntax & runtime error containers.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: Code Inset & Editor -->
+    <section class="token-section">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">3. Code Inset Anchor</h2>
+      <p style="color: var(--muted); margin-bottom: var(--space-4);">
+        Dark anchors in exactly one place: the solution editor, framed by an area-tinted header strip inside a white rounded card.
+      </p>
+      <div class="editor-card" style="max-width: 700px;">
+        <div class="editor-header-strip">
+          <span class="editor-strip-title">Solution Editor · Python 3.12</span>
+          <span class="badge badge-mint">Sandbox Ready</span>
+        </div>
+        <div class="editor-inset" style="min-height: 160px;">
+          <div class="code-line"><span class="code-num">1</span><span class="code-text"><span class="syn-kw">def</span> <span class="syn-fn">longest_substring</span>(s: str) -&gt; int:</span></div>
+          <div class="code-line"><span class="code-num">2</span><span class="code-text">    <span class="syn-cm"># Standard sliding-window algorithm</span></span></div>
+          <div class="code-line"><span class="code-num">3</span><span class="code-text">    char_map = {}</span></div>
+          <div class="code-line"><span class="code-num">4</span><span class="code-text">    left = max_len = 0</span></div>
+          <div class="code-line"><span class="code-num">5</span><span class="code-text">    <span class="syn-kw">return</span> max_len</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Typography & Shape Hierarchy -->
+    <section class="token-section">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">4. Typography & Shape Discipline</h2>
+      <div class="card" style="margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4);">
+        <div>
+          <span class="stat-label">Headline Font</span>
+          <h3 style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--ink);">
+            Fraunces — Character, Presence, Editorial Warmth
+          </h3>
+        </div>
+        <div>
+          <span class="stat-label">Body & UI Font</span>
+          <p style="font-size: 16px; color: var(--ink); line-height: 1.6;">
+            Inter — Humanist clarity, geometric precision, accessible micro-details at every scale.
+          </p>
+        </div>
+        <div>
+          <span class="stat-label">Metrics Ban Enforcement</span>
+          <div style="font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums;">
+            1 day <span style="font-size: 16px; color: var(--muted); font-family: var(--font-body); font-weight: 500;">(Display Serif + Tabular Figures, NEVER Typewriter Mono)</span>
+          </div>
+        </div>
+        <div>
+          <span class="stat-label">Code & Timer Mono</span>
+          <div style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--partner-coral); background: var(--wash-peach); padding: 8px 18px; border-radius: var(--radius-pill); display: inline-block;">
+            TIME: 44:41
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

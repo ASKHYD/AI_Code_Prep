@@ -73,3 +73,13 @@ flowchart TD
 
 > **A local practice tool, not a proctored exam system.**
 > This coach is designed for personal skill development, deterministic self-testing, and retention reinforcement. It does not provide proctoring, webcam monitoring, user accounts, or cloud credential verification.
+
+---
+
+## 📸 Application Screenshots (R2 Pro Max UI)
+
+- **Home Screen & Daily Queue**: `docs/screenshots/01_home_screen.png`
+- **Practice Arena & Sandboxed Execution**: `docs/screenshots/02_practice_screen.png`
+- **Mock Interview Real-Time Timer**: `docs/screenshots/03_mock_timer_t1.png` and `docs/screenshots/04_mock_timer_t2.png`
+- **Mock Interview Scorecard**: `docs/screenshots/04_mock_scorecard.png`
+- **Analytics Dashboard**: `docs/screenshots/05_dashboard_screen.png`
