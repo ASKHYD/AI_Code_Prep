@@ -8,9 +8,10 @@
   <style>
     .token-section { margin-bottom: var(--space-10); }
     .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); margin-top: var(--space-4); }
-    .token-box { padding: var(--space-6); border-radius: var(--radius-card); border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: var(--space-2); }
+    .token-box { padding: var(--space-6); border-radius: var(--radius-card); border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: var(--space-3); }
     .swatch { height: 72px; border-radius: var(--radius-tile); border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
-    .proof-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; background: #DFF3E4; color: #167B48; width: fit-content; }
+    .proof-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; background: #DFF3E4; color: #167B48; width: fit-content; }
+    .icon-tile-sm { width: 32px; height: 32px; border-radius: var(--radius-tile); display: inline-flex; align-items: center; justify-content: center; color: var(--surface); }
   </style>
 </head>
 <body>
@@ -33,40 +34,55 @@
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #FBFAF7; color: #171712;">#FBFAF7</div>
           <strong style="font-size: 16px;">App Canvas Paper</strong>
-          <span style="color: var(--muted); font-size: 13px;">Warm paper background, zero glare, high comfort</span>
+          <span style="color: var(--muted); font-size: 13px;">Warm paper background, zero glare, high visual comfort</span>
         </div>
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #FFFFFF; color: #171712;">#FFFFFF</div>
           <strong style="font-size: 16px;">Surface Card</strong>
-          <span style="color: var(--muted); font-size: 13px;">Clean white foreground cards with soft shadows</span>
+          <span style="color: var(--muted); font-size: 13px;">Clean white foreground cards with soft shadows (24px radius)</span>
         </div>
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #171712; color: #FFFFFF;">#171712</div>
           <strong style="font-size: 16px;">Deep Ink Text</strong>
-          <span class="proof-badge">17.23:1 on Paper (AAA)</span>
-          <span style="color: var(--muted); font-size: 13px;">Warm near-black for primary display and body copy</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            17.23:1 on Paper (AAA)
+          </span>
+          <span style="color: var(--muted); font-size: 13px;">Warm near-black for primary display headings and body copy</span>
         </div>
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #66635A; color: #FFFFFF;">#66635A</div>
           <strong style="font-size: 16px;">Muted Warm Grey</strong>
-          <span class="proof-badge">5.75:1 on Paper (AA)</span>
-          <span style="color: var(--muted); font-size: 13px;">Captions, metadata tags, secondary descriptions</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            5.75:1 on Paper (AA)
+          </span>
+          <span style="color: var(--muted); font-size: 13px;">Captions, metadata tags, secondary descriptions, and outlines</span>
         </div>
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #E7E1D6; color: #171712;">#E7E1D6</div>
           <strong style="font-size: 16px;">Hairline Border</strong>
-          <span style="color: var(--muted); font-size: 13px;">1px subtle warm dividing border lines</span>
+          <span style="color: var(--muted); font-size: 13px;">1px subtle warm dividing borders and containment lines</span>
         </div>
         <div class="token-box" style="background: var(--surface);">
           <div class="swatch" style="background: #15803D; color: #FFFFFF;">#15803D</div>
-          <strong style="font-size: 16px;">Primary Action CTA</strong>
-          <span class="proof-badge">5.02:1 with White (AA)</span>
-          <span style="color: var(--muted); font-size: 13px;">Saturated emerald green pill button for Run & Submit</span>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 16px;">Primary Action CTA</strong>
+            <button class="btn btn-primary" style="padding: 6px 16px; font-size: 12px; pointer-events: none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg>
+              Run Code
+            </button>
+          </div>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            5.02:1 with White (AA)
+          </span>
+          <span style="color: var(--muted); font-size: 13px;">Saturated emerald green pill button for Run, Submit, and Start</span>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 2: Tint System -->
+    <!-- SECTION 2: Six-Part Tint System -->
     <section class="token-section">
       <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">2. Six-Part Structure Tint System</h2>
       <p style="color: var(--muted); margin-bottom: var(--space-4);">
@@ -77,66 +93,96 @@
         <!-- Mint / Green -->
         <div class="token-box" style="background: var(--wash-mint); border-color: rgba(22, 123, 72, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #DFF3E4; color: #167B48;">Wash #DFF3E4</div>
-            <div class="swatch" style="flex: 1; background: #1F9D63; color: #171712;">Fill #1F9D63</div>
+            <div class="swatch" style="flex: 2; background: #DFF3E4; color: #167B48;">Wash #DFF3E4</div>
+            <div class="swatch" style="flex: 1; background: #1F9D63; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 0 0-2.474-1.561l-9 9A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l9-9A1.5 1.5 0 0 0 18.5 10h-3.997a.5.5 0 0 1-.472-.667z"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #167B48;">Mint & Green (Streak / PASS)</strong>
-          <span class="proof-badge">Text #167B48: 4.56:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #167B48: 4.56:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Streak counter, successful test verdicts, completed exercises.</p>
         </div>
 
         <!-- Butter / Amber -->
         <div class="token-box" style="background: var(--wash-butter); border-color: rgba(180, 83, 9, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #FFF0C4; color: #9A3412;">Wash #FFF0C4</div>
-            <div class="swatch" style="flex: 1; background: #B45309; color: #FFFFFF;">Fill #B45309</div>
+            <div class="swatch" style="flex: 2; background: #FFF0C4; color: #9A3412;">Wash #FFF0C4</div>
+            <div class="swatch" style="flex: 1; background: #B45309; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #9A3412;">Butter & Amber (Library / TIMEOUT)</strong>
-          <span class="proof-badge">Text #9A3412: 6.44:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #9A3412: 6.44:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Total library volume, execution timeout alerts, review notices.</p>
         </div>
 
         <!-- Sky / Blue -->
         <div class="token-box" style="background: var(--wash-sky); border-color: rgba(29, 94, 194, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #DCEBFF; color: #1D5EC2;">Wash #DCEBFF</div>
-            <div class="swatch" style="flex: 1; background: #2273E6; color: #FFFFFF;">Fill #2273E6</div>
+            <div class="swatch" style="flex: 2; background: #DCEBFF; color: #1D5EC2;">Wash #DCEBFF</div>
+            <div class="swatch" style="flex: 1; background: #2273E6; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #1D5EC2;">Sky & Blue (Due / Queue / Dashboard)</strong>
-          <span class="proof-badge">Text #1D5EC2: 5.06:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #1D5EC2: 5.06:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Spaced repetition due cards, queue notices, analytics highlights.</p>
         </div>
 
         <!-- Lilac / Violet -->
         <div class="token-box" style="background: var(--wash-lilac); border-color: rgba(89, 50, 234, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #E8E2FF; color: #5932EA;">Wash #E8E2FF</div>
-            <div class="swatch" style="flex: 1; background: #6C4CF1; color: #FFFFFF;">Fill #6C4CF1</div>
+            <div class="swatch" style="flex: 2; background: #E8E2FF; color: #5932EA;">Wash #E8E2FF</div>
+            <div class="swatch" style="flex: 1; background: #6C4CF1; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #5932EA;">Lilac & Violet (Practice Area)</strong>
-          <span class="proof-badge">Text #5932EA: 5.46:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #5932EA: 5.46:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Practice arena active navigation, code editor header bar, topic chips.</p>
         </div>
 
         <!-- Peach / Coral -->
         <div class="token-box" style="background: var(--wash-peach); border-color: rgba(185, 56, 21, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #FFE8D1; color: #B93815;">Wash #FFE8D1</div>
-            <div class="swatch" style="flex: 1; background: #E4572E; color: #171712;">Fill #E4572E</div>
+            <div class="swatch" style="flex: 2; background: #FFE8D1; color: #B93815;">Wash #FFE8D1</div>
+            <div class="swatch" style="flex: 1; background: #E4572E; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #B93815;">Peach & Coral (Mock Interview)</strong>
-          <span class="proof-badge">Text #B93815: 4.87:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #B93815: 4.87:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Mock round header, countdown timer capsule pill, active session tabs.</p>
         </div>
 
         <!-- Rose / Red -->
         <div class="token-box" style="background: var(--wash-rose); border-color: rgba(197, 34, 31, 0.2);">
           <div style="display: flex; gap: var(--space-2);">
-            <div class="swatch" style="flex: 1; background: #FFE0E0; color: #C5221F;">Wash #FFE0E0</div>
-            <div class="swatch" style="flex: 1; background: #D92D20; color: #FFFFFF;">Fill #D92D20</div>
+            <div class="swatch" style="flex: 2; background: #FFE0E0; color: #C5221F;">Wash #FFE0E0</div>
+            <div class="swatch" style="flex: 1; background: #D92D20; color: #FFFFFF;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            </div>
           </div>
           <strong style="font-size: 17px; color: #C5221F;">Rose & Red (FAIL / Errors)</strong>
-          <span class="proof-badge">Text #C5221F: 4.69:1</span>
+          <span class="proof-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Text #C5221F: 4.69:1
+          </span>
           <p style="font-size: 13px; color: var(--ink);">Failed test case result banners, syntax & runtime error containers.</p>
         </div>
 
@@ -152,7 +198,10 @@
       <div class="editor-card" style="max-width: 700px;">
         <div class="editor-header-strip">
           <span class="editor-strip-title">Solution Editor · Python 3.12</span>
-          <span class="badge badge-mint">Sandbox Ready</span>
+          <span class="badge badge-mint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>
+            Sandbox Ready
+          </span>
         </div>
         <div class="editor-inset" style="min-height: 160px;">
           <div class="code-line"><span class="code-num">1</span><span class="code-text"><span class="syn-kw">def</span> <span class="syn-fn">longest_substring</span>(s: str) -&gt; int:</span></div>
@@ -167,18 +216,20 @@
     <!-- SECTION 4: Typography & Shape Hierarchy -->
     <section class="token-section">
       <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">4. Typography & Shape Discipline</h2>
-      <div class="card" style="margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4);">
+      <div class="card" style="margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-6);">
         <div>
           <span class="stat-label">Headline Font</span>
           <h3 style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--ink);">
             Fraunces — Character, Presence, Editorial Warmth
           </h3>
+          <p style="font-size: 14px; color: var(--muted); margin-top: 4px;">Used for all page titles, card numerals, and section headings.</p>
         </div>
         <div>
           <span class="stat-label">Body & UI Font</span>
           <p style="font-size: 16px; color: var(--ink); line-height: 1.6;">
             Inter — Humanist clarity, geometric precision, accessible micro-details at every scale.
           </p>
+          <p style="font-size: 14px; color: var(--muted); margin-top: 4px;">Used for all button labels, navigation items, prose, and table metadata.</p>
         </div>
         <div>
           <span class="stat-label">Metrics Ban Enforcement</span>
@@ -188,9 +239,47 @@
         </div>
         <div>
           <span class="stat-label">Code & Timer Mono</span>
-          <div style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--partner-coral); background: var(--wash-peach); padding: 8px 18px; border-radius: var(--radius-pill); display: inline-block;">
-            TIME: 44:41
+          <div style="display: flex; gap: var(--space-3); align-items: center; margin-top: 6px;">
+            <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--partner-coral); background: var(--wash-peach); padding: 8px 18px; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+              TIME: 44:41
+            </div>
+            <span style="font-size: 13px; color: var(--muted);">JetBrains Mono reserved exclusively for code editor insets, diffs, and countdown clocks</span>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Iconography System -->
+    <section class="token-section">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink);">5. Lucide Iconography Standard</h2>
+      <p style="color: var(--muted); margin-bottom: var(--space-4);">
+        Strictly drawn from agent-resources/lucide/icons. Zero emoji icons, zero icon fonts, clean vector strokes matching the 2px hairline aesthetic.
+      </p>
+      <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-green);"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">house</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-violet);"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">code</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-coral);"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">timer</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-blue);"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">chart-column</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-green);"><path d="M15.914 4a1.5 1.5 0 0 0-2.474-1.561l-9 9A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l9-9A1.5 1.5 0 0 0 18.5 10h-3.997a.5.5 0 0 1-.472-.667z"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">zap</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--paper); border-radius: var(--radius-tile);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-amber);"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg>
+          <span style="font-size: 13px; font-weight: 600;">book-open</span>
         </div>
       </div>
     </section>
