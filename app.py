@@ -116,17 +116,79 @@ def get_global_css() -> str:
         border-color: #167B48 !important;
     }
 
-    /* Sidebar navigation radio active indicator in accent token #15803D */
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] {
-        border-color: #15803D !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] div {
-        background-color: #15803D !important;
-    }
-
     /* Sidebar border separation against canvas (#E7E1D6) */
     div[data-testid="stSidebar"] {
         border-right: 1px solid #E7E1D6 !important;
+        background-color: #FAF8F5 !important;
+    }
+
+    /* Direction A Sidebar Navigation: Keyed Radio Pills */
+    .st-key-nav_sidebar_radio div[role="radiogroup"] {
+        gap: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label {
+        border-radius: 999px !important;
+        padding: 10px 18px !important;
+        margin: 4px 0 !important;
+        cursor: pointer !important;
+        transition: background-color 150ms ease, color 150ms ease !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        border: 1px solid transparent !important;
+        background-color: transparent !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label p,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label span {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #66635A !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover {
+        background-color: #EFECE6 !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover p,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover span {
+        color: #171712 !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked),
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) {
+        background-color: #DFF3E4 !important;
+        color: #167B48 !important;
+        font-weight: 600 !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) p,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) span,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) p,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) span {
+        color: #167B48 !important;
+        font-weight: 600 !important;
+    }
+    /* Hide the default radio circle indicator */
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label > div:first-child,
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label > div > div:first-child:not([data-testid="stMarkdownContainer"]) {
+        display: none !important;
+    }
+
+    /* Metric mini-card keyed container */
+    .st-key-sidebar_summary_card,
+    .st-key-sidebar_summary_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 16px !important;
+        background-color: #FFFFFF !important;
+        padding: 16px !important;
+    }
+    .st-key-sidebar_summary_card [data-testid="stMetricLabel"] p,
+    .st-key-sidebar_summary_card [data-testid="stMetricLabel"] span {
+        color: #66635A !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+    }
+    .st-key-sidebar_summary_card [data-testid="stMetricValue"] {
+        color: #171712 !important;
+        font-size: 20px !important;
     }
     """
 
@@ -231,29 +293,63 @@ def render_editor(code: str, key: str, height: int = 440) -> str:
 streak_count = store.current_streak()
 due_list = store.due_problems()
 
-# Sidebar Navigation (Clean text logo, no emoji)
-qp_screen = st.query_params.get("screen", "").lower()
+# Screen options and two-way query parameter sync
 nav_options = ["Home", "Practice Arena", "Mock Interview", "Dashboard"]
-default_nav_idx = 0
-if qp_screen == "practice":
-    default_nav_idx = 1
-elif qp_screen == "mock":
-    default_nav_idx = 2
-elif qp_screen == "dashboard":
-    default_nav_idx = 3
+screen_to_nav = {
+    "home": "Home",
+    "practice": "Practice Arena",
+    "mock": "Mock Interview",
+    "dashboard": "Dashboard",
+}
+nav_to_screen = {v: k for k, v in screen_to_nav.items()}
 
-st.sidebar.markdown("## AI Coding Prep Coach")
-st.sidebar.caption("Zero Cost • Code-Judged • Offline-Ready")
+# Sidebar Header: Fraunces serif wordmark and Inter quiet tagline
+st.sidebar.html(
+    """
+    <div style="margin-bottom: 24px; padding: 4px 0 0 0;">
+        <div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; line-height: 1.25; letter-spacing: -0.02em;">AI Coding Prep Coach</div>
+        <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: #66635A; margin-top: 4px;">Zero Cost • Code-Judged • Offline-Ready</div>
+    </div>
+    """
+)
 
+# Query parameter sync with session state
+qp_screen = st.query_params.get("screen", "").lower()
+if "last_screen_param" not in st.session_state:
+    st.session_state["last_screen_param"] = qp_screen
+    if qp_screen in screen_to_nav:
+        st.session_state["nav_sidebar_radio"] = screen_to_nav[qp_screen]
+elif qp_screen != st.session_state["last_screen_param"]:
+    st.session_state["last_screen_param"] = qp_screen
+    if qp_screen in screen_to_nav:
+        st.session_state["nav_sidebar_radio"] = screen_to_nav[qp_screen]
+
+# Determine default index
+current_idx = 0
+current_nav = st.session_state.get("nav_sidebar_radio")
+if current_nav in nav_options:
+    current_idx = nav_options.index(current_nav)
+elif qp_screen in screen_to_nav:
+    current_idx = nav_options.index(screen_to_nav[qp_screen])
+
+# Navigation mechanism: Keyed CSS radio pill
 nav_choice = st.sidebar.radio(
     "Navigation",
     nav_options,
-    index=default_nav_idx,
-    key="nav_sidebar_radio"
+    index=current_idx,
+    key="nav_sidebar_radio",
+    label_visibility="collapsed",
 )
 
-st.sidebar.markdown("---")
-with st.sidebar.container(border=True):
+# Keep query params in sync with user's selection
+target_screen = nav_to_screen.get(nav_choice, "home")
+if st.query_params.get("screen", "").lower() != target_screen:
+    st.query_params["screen"] = target_screen
+    st.session_state["last_screen_param"] = target_screen
+
+# Metric mini-card with keyed container
+st.sidebar.html('<div style="height: 16px;"></div>')
+with st.sidebar.container(border=True, key="sidebar_summary_card"):
     st.metric("Active Streak", f"{streak_count} days")
     st.metric("Due for Review", f"{len(due_list)} problems")
 
