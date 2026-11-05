@@ -49,3 +49,4 @@ Requirements derived from SPEC.md for Milestone 1 (UI Redesign: Direction A).
 | REQ-07 | Phase 2 | Config / CSS inspection | Pending |
 | REQ-08 | Phase 2 | Visual / Screenshot | Pending |
 | REQ-09 | Phase 2 | pytest runner (26 tests) | Pending |
+
