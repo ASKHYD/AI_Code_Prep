@@ -138,15 +138,15 @@ Load for context:
 
 <verification>
 After all tasks complete, verify:
-- [ ] `mockups/dashboard.html` displays authentic metrics and category bars
-- [ ] All 10 PNG screenshots exist in `docs/screenshots/r3/` (both 1600x1000 and 1920x1080)
-- [ ] Code quarantine check passes (zero edits to app.py, config.toml, coach/*, data/problems/*, tests/*)
-- [ ] Project owner visual sign-off confirmed
+- [x] `mockups/dashboard.html` displays authentic metrics and category bars
+- [x] All 10 PNG screenshots exist in `docs/screenshots/r3/` (both 1600x1000 and 1920x1080)
+- [x] Code quarantine check passes (zero edits to app.py, config.toml, coach/*, data/problems/*, tests/*)
+- [x] Project owner visual sign-off confirmed (Token sheet, Home, Practice, Mock, Dashboard approved)
 </verification>
 
 <success_criteria>
-- [ ] All tasks verified passing
-- [ ] Must-haves confirmed
-- [ ] Owner visual sign-off completed
-- [ ] Zero app code modified
+- [x] All tasks verified passing
+- [x] Must-haves confirmed
+- [x] Owner visual sign-off completed
+- [x] Zero app code modified
 </success_criteria>

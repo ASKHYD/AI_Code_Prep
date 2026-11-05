@@ -79,9 +79,24 @@ Ensures zero regression in working judge and evaluation functionality while focu
 - **Dual-Resolution Evidence Capture**: Screen captures rendered and captured at both `1600x1000` (compact desktop) and `1920x1080` (full HD) for owner verification.
 
 ### Constraints & Finish Gate
-- **Deliverable Gate**: Phase 1 is complete ONLY when the owner explicitly reviews and approves the rendered mockup screenshots.
+- **Deliverable Gate**: Phase 1 is complete ONLY when the owner explicitly reviews and approves the rendered mockup screenshots. (PASSED: Approved by owner on 2026-11-05).
 - **Zero Implementation**: No Streamlit code or application CSS is written until Phase 2 is unlocked following Phase 1 approval.
-- **Phase 2 Implementation Note (Button Styling)**: In Phase 2, action buttons (especially Run Code / Submit Solution pills) must enforce `white-space: nowrap` and sufficient horizontal padding to prevent text wrapping on narrower container widths.
+
+---
+
+### [DECISION-004] Phase 1 Owner Acceptance & Phase 2 Directives
+
+**Date**: 2026-11-05  
+**Status**: Accepted  
+
+#### Context
+Owner completed live browser and dual-resolution screenshot inspection of the Direction A mockups (`mockups/` on port 8085, `docs/screenshots/r3/`) and officially approved Phase 1.
+
+#### Directives for Phase 2 Implementation:
+1. **Unattempted Topic Mastery Bars**: Dashboard mastery bars must use `"NOT STARTED"` for unattempted topics (matching the table), never `"0% (0/0)"`.
+2. **Mock Screen Timer Redundancy**: The Mock view shows the countdown timer three times in various places — consolidate and reduce to two placements.
+3. **Metric Numeral Typography**: The Fraunces zero glyph reads like a lowercase "o" in large metric values (e.g. `"0 problems"`) — evaluate Inter or tabular monospace figures for primary metric numerals during Streamlit implementation.
+4. **Button Whitespace Handling**: All button elements must strictly enforce `white-space: nowrap` with adequate horizontal padding to ensure labels never wrap unexpectedly on compact layouts.
 
 ---
 

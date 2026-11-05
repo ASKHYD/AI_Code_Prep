@@ -7,25 +7,25 @@ updated: 2026-11-05
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 1 - Static HTML Mockups & Design Tokens  
-**Status:** ready-for-execution  
-**Plan:** 01-PLAN.md, 02-PLAN.md, 03-PLAN.md  
+**Phase:** Phase 1 - Static HTML Mockups & Design Tokens (Complete) $\rightarrow$ Phase 2: Streamlit UI Implementation  
+**Status:** Phase 1 Complete & Verified (Awaiting User Go-Ahead for Phase 2)  
+**Plan:** None active (Phase 1 plans 1.1, 1.2, 1.3 all completed)  
 
 ## Last Action
 
-Completed `/plan 1` planning:
-- Generated 3 atomic plans (`01-PLAN.md`, `02-PLAN.md`, `03-PLAN.md`) across 3 sequential dependency waves
-- Verified plan-checker passed with zero defects
-- Audited all plans for strict code quarantine: ZERO edits to `app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, or `tests/*`
-- Enforced exclusive Lucide SVG iconography from `agent-resources/lucide/icons`
-- Grounded all mockups with authentic data (1 day streak, 0 due, 12 problems, Binary Search PASS 178ms, Longest Substring signature, 44:41 timer)
+Phase 1 executed, verified, and approved by project owner:
+- Executed Wave 1 ([01-PLAN.md](file:///e:/resume_project/.gsd/phases/1/01-PLAN.md)), Wave 2 ([02-PLAN.md](file:///e:/resume_project/.gsd/phases/1/02-PLAN.md)), and Wave 3 ([03-PLAN.md](file:///e:/resume_project/.gsd/phases/1/03-PLAN.md)).
+- Delivered Direction A token specification sheet and 4 core static HTML mockups.
+- Verified dual-resolution headless Chrome screenshots in `docs/screenshots/r3/` at both 1600x1000 and 1920x1080.
+- Preserved strict code quarantine: zero modifications to `app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, or `tests/*`.
+- Verified 26/26 backend pytest tests passing.
+- Owner formally approved Phase 1 mockups. Checkpoint closed.
+- Recorded 4 owner directives for Phase 2 implementation.
 
 ## Next Steps
 
-1. Run `/execute 1` (or inline execution of Wave 1: Plan 1.1)
-2. Execute Plan 1.1 (`mockups/style.css`, `mockups/tokens.html`, `mockups/home.html`)
-3. Execute Plan 1.2 (`mockups/practice.html`, `mockups/mock.html`)
-4. Execute Plan 1.3 (`mockups/dashboard.html`, dual-resolution screenshot capture, owner sign-off)
+1. Await user go-ahead to plan Phase 2 (`/plan 2`)
+2. Phase 2: Streamlit theme and UI implementation matching approved Direction A mockups + incorporating the 4 recorded directives
 
 ## Active Decisions
 
@@ -36,7 +36,11 @@ Decisions made that affect current work:
 | [DECISION-001] Design Direction | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | All UI phases |
 | [DECISION-002] Two-Phase Redesign Gate | Phase 1 mockups only with screenshot sign-off; Phase 2 Streamlit implementation | 2026-11-05 | Phases 1 & 2 |
 | [DECISION-003] Backend & Data Freeze | `coach/*.py` and `data/problems/*.json` are strictly frozen | 2026-11-05 | Entire project |
-| [NOTE-001] Phase 2 Button Nowrap | Implementation buttons must have `white-space: nowrap` and proper padding (prevent Run Code pill text wrapping) | 2026-11-05 | Phase 2 implementation |
+| [DECISION-004] Phase 1 Owner Acceptance | Mockup screenshots approved; Phase 1 closed; 4 implementation directives established | 2026-11-05 | Phase 2 implementation |
+| [NOTE-001] Phase 2 Mastery Bars | Dashboard mastery bars must use "NOT STARTED" for unattempted topics, never "0% (0/0)" | 2026-11-05 | Phase 2 Dashboard |
+| [NOTE-002] Phase 2 Timer Redundancy | Mock screen timer display reduced from three placements to two | 2026-11-05 | Phase 2 Mock View |
+| [NOTE-003] Phase 2 Metric Zero Glyph | Evaluate Inter / tabular figures for metric numerals to avoid Fraunces zero looking like 'o' | 2026-11-05 | Phase 2 Metrics |
+| [NOTE-004] Phase 2 Button Nowrap | All action buttons must enforce `white-space: nowrap` and proper padding | 2026-11-05 | Phase 2 Global CSS |
 
 ## Blockers
 
