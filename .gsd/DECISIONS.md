@@ -59,4 +59,30 @@ Ensures zero regression in working judge and evaluation functionality while focu
 
 ---
 
+## Phase 1 Decisions
+
+**Date:** 2026-11-05
+
+### Scope
+- **Visual Mockups Only**: Deliver static HTML mockups for Home, Practice, Mock, and Dashboard plus a Direction A Token Sheet.
+- **Strict Code Quarantine**: Zero edits to `app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, or `tests/`.
+- **R3 Specification Integration**: Full Direction A tokens, area tint palette, typography rules (Fraunces/Inter/JetBrains Mono), and anti-slop rules will be injected directly from the owner's R3 handoff at planning.
+
+### Approach
+- **Authentic Content Grounding**: Mockups must display actual app data and signatures:
+  - Daily streak: "1 day"
+  - Spaced repetition queue: "0 due"
+  - Total problem inventory: 12 problems
+  - Solved problem: Binary Search PASS (178ms)
+  - Active unsolved problem: Longest Substring Without Repeating Characters with genuine starter signature (`lengthOfLongestSubstring(s: str) -> int`)
+  - Mock countdown timer state: "44:41"
+- **Dual-Resolution Evidence Capture**: Screen captures rendered and captured at both `1600x1000` (compact desktop) and `1920x1080` (full HD) for owner verification.
+
+### Constraints & Finish Gate
+- **Deliverable Gate**: Phase 1 is complete ONLY when the owner explicitly reviews and approves the rendered mockup screenshots.
+- **Zero Implementation**: No Streamlit code or application CSS is written until Phase 2 is unlocked following Phase 1 approval.
+
+---
+
 *Last updated: 2026-11-05*
+

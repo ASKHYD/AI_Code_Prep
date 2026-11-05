@@ -8,22 +8,23 @@ updated: 2026-11-05
 
 **Milestone:** Milestone 1 — UI Redesign  
 **Phase:** Phase 1 - Static HTML Mockups & Design Tokens  
-**Status:** planning  
+**Status:** ready-to-plan  
 **Plan:** None  
 
 ## Last Action
 
-Initialized GSD project structure and specification from existing codebase mapping and owner requirements:
-- Codebase architecture mapped into `.gsd/ARCHITECTURE.md` and `.gsd/STACK.md`
-- Direction A defined in `.gsd/SPEC.md`
-- Requirements tracked in `.gsd/REQUIREMENTS.md`
-- Roadmap established in `.gsd/ROADMAP.md`
+Completed `/discuss-phase 1` scope alignment:
+- Locked Phase 1 to visual mockups only (Home, Practice, Mock, Dashboard + Token sheet)
+- Enforced strict code freeze on `app.py`, `config.toml`, `coach/*`, `data/problems/*`, `tests/*`
+- Specified authentic app content requirements (1 day streak, 0 due, 12 problems, Binary Search PASS 178ms, Longest Substring signature, timer 44:41)
+- Set dual-resolution screenshot requirement (`1600x1000` and `1920x1080`)
+- Defined finish gate: explicit owner screenshot approval
 
 ## Next Steps
 
-1. Run `/plan 1` to create execution plans for Phase 1 (Design Tokens & Static HTML Mockups)
-2. Execute Phase 1 plans (build token sheet + 4 static HTML mockups)
-3. Capture screenshots for owner visual review and sign-off
+1. Run `/plan 1` — user will provide the R3 handoff specification for Direction A
+2. Generate Phase 1 PLAN.md files with atomic tasks
+3. Execute mockups and capture screenshots at 1600x1000 and 1920x1080 for owner review
 
 ## Active Decisions
 
@@ -47,3 +48,4 @@ None.
 ## Session Context
 
 Brownfield codebase initialized under GSD. 26/26 pytest tests passing on frozen backend. Working directory: `e:\resume_project`.
+
