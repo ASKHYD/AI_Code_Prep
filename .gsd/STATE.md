@@ -36,6 +36,7 @@ Decisions made that affect current work:
 | [DECISION-001] Design Direction | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | All UI phases |
 | [DECISION-002] Two-Phase Redesign Gate | Phase 1 mockups only with screenshot sign-off; Phase 2 Streamlit implementation | 2026-11-05 | Phases 1 & 2 |
 | [DECISION-003] Backend & Data Freeze | `coach/*.py` and `data/problems/*.json` are strictly frozen | 2026-11-05 | Entire project |
+| [NOTE-001] Phase 2 Button Nowrap | Implementation buttons must have `white-space: nowrap` and proper padding (prevent Run Code pill text wrapping) | 2026-11-05 | Phase 2 implementation |
 
 ## Blockers
 

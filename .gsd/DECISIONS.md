@@ -81,6 +81,7 @@ Ensures zero regression in working judge and evaluation functionality while focu
 ### Constraints & Finish Gate
 - **Deliverable Gate**: Phase 1 is complete ONLY when the owner explicitly reviews and approves the rendered mockup screenshots.
 - **Zero Implementation**: No Streamlit code or application CSS is written until Phase 2 is unlocked following Phase 1 approval.
+- **Phase 2 Implementation Note (Button Styling)**: In Phase 2, action buttons (especially Run Code / Submit Solution pills) must enforce `white-space: nowrap` and sufficient horizontal padding to prevent text wrapping on narrower container widths.
 
 ---
 
