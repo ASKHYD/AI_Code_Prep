@@ -29,6 +29,9 @@ DOCS_DIR = WORKSPACE_ROOT / "docs" / "screenshots" / "r3"
 BRAIN_DIR = pathlib.Path(
     r"C:\Users\MS Computer\.gemini\antigravity\brain\2a609fd9-9a02-4521-a182-3a1389f8099d\screenshots\r3"
 )
+CURRENT_BRAIN_DIR = pathlib.Path(
+    r"C:\Users\MS Computer\.gemini\antigravity\brain\d44988ce-2f18-46d8-a231-b7f0666ec30e\screenshots\r3"
+)
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 STREAMLIT_PORT = 8501
 CDP_PORT = 9226
@@ -143,6 +146,12 @@ async def capture_screenshots(screen: str = "practice"):
                     ("home_real_1920x1080.png", 1920, 1080),
                     ("home_real_1600x1000.png", 1600, 1000),
                 ]
+            elif screen == "mock":
+                target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen=mock&mock_state=running"
+                targets = [
+                    ("mock_real_1920x1080.png", 1920, 1080),
+                    ("mock_real_1600x1000.png", 1600, 1000),
+                ]
             else:
                 target_url = f"http://127.0.0.1:{STREAMLIT_PORT}/?screen={screen}"
                 targets = [
@@ -160,6 +169,7 @@ async def capture_screenshots(screen: str = "practice"):
             DOCS_DIR.mkdir(parents=True, exist_ok=True)
             if BRAIN_DIR.parent.exists():
                 BRAIN_DIR.mkdir(parents=True, exist_ok=True)
+            CURRENT_BRAIN_DIR.mkdir(parents=True, exist_ok=True)
 
             for filename, width, height in targets:
                 print(f"[CDP] Setting viewport to {width}x{height}...", flush=True)
@@ -189,6 +199,11 @@ async def capture_screenshots(screen: str = "practice"):
                     brain_file = BRAIN_DIR / filename
                     brain_file.write_bytes(img_bytes)
                     print(f"[CDP] Mirrored to {brain_file}", flush=True)
+
+                if CURRENT_BRAIN_DIR.exists():
+                    curr_brain_file = CURRENT_BRAIN_DIR / filename
+                    curr_brain_file.write_bytes(img_bytes)
+                    print(f"[CDP] Mirrored to current brain {curr_brain_file}", flush=True)
 
     finally:
         try:

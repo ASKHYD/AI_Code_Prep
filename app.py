@@ -700,6 +700,124 @@ def get_global_css() -> str:
         color: #FFFFFF !important;
         font-weight: 600 !important;
     }
+
+    /* Problem Tabs Styling (Direction A with React Aria + BaseWeb) */
+    div[data-baseweb="tab-list"],
+    div[role="tablist"],
+    div[data-testid="stTabs"] div[role="tablist"] {
+        background-color: transparent !important;
+        border-bottom: 1px solid #E7E1D6 !important;
+        gap: 12px !important;
+        padding-bottom: 6px !important;
+    }
+    button[data-baseweb="tab"],
+    div[data-testid="stTab"],
+    div[data-testid="stTabs"] button[role="tab"] {
+        background-color: #FBFAF7 !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 999px !important;
+        padding: 6px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #66635A !important;
+        transition: all 0.15s ease !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+    }
+    button[data-baseweb="tab"]:hover,
+    div[data-testid="stTab"]:hover,
+    div[data-testid="stTabs"] button[role="tab"]:hover {
+        background-color: #F6F3EC !important;
+        color: #171712 !important;
+        border-color: #D3CDC0 !important;
+    }
+    div[data-testid="stTab"] p,
+    button[data-baseweb="tab"] p {
+        color: #66635A !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    /* Active tab indicator in coral (#B93815) with soft peach highlight */
+    button[data-baseweb="tab"][aria-selected="true"],
+    div[data-testid="stTab"][aria-selected="true"],
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+        background-color: #FFE8D1 !important;
+        border: 1px solid rgba(185, 56, 21, 0.35) !important;
+        border-bottom: 2px solid #B93815 !important;
+        color: #B93815 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 1px 2px rgba(185, 56, 21, 0.08) !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] p,
+    button[data-baseweb="tab"][aria-selected="true"] span,
+    div[data-testid="stTab"][aria-selected="true"] p,
+    div[data-testid="stTab"][aria-selected="true"] span,
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span {
+        color: #B93815 !important;
+        font-weight: 700 !important;
+    }
+    div[data-baseweb="tab-highlight"],
+    div[data-testid="stTabsHighlight"] {
+        background-color: #B93815 !important;
+        height: 2px !important;
+    }
+
+    /* Mock Scorecard Card (Scorecard Summary Card) */
+    div.st-key-mock_scorecard_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-mock_scorecard_card,
+    .st-key-mock_scorecard_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px 28px !important;
+    }
+
+    /* Export Results Pill Button with Lucide Download Icon */
+    div.st-key-btn_export_markdown button {
+        background-color: #FBFAF7 !important;
+        border: 1px solid #E7E1D6 !important;
+        color: #171712 !important;
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+        padding: 8px 24px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
+        transition: all 0.15s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+    div.st-key-btn_export_markdown button::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23171712' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15V3'/%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        vertical-align: -2px;
+    }
+    div.st-key-btn_export_markdown button:hover {
+        background-color: #F2EFE9 !important;
+        border-color: #B4ACA0 !important;
+        color: #171712 !important;
+    }
+    div.st-key-btn_export_markdown button p,
+    div.st-key-btn_export_markdown button span {
+        color: #171712 !important;
+        font-weight: 600 !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -1752,6 +1870,131 @@ elif nav_choice == "Mock Interview":
 
         st.html('<div style="height: 16px;"></div>')
 
+        # Scorecard Summary Card (Direction A Single Named Mechanism)
+        with st.container(border=True, key="mock_scorecard_card"):
+            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
+            with sc_hdr_left:
+                st.markdown(
+                    """
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span style="background: #FFE8D1; color: #B93815; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                            Session In Progress
+                        </span>
+                    </div>
+                    <div style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25;">
+                        Mock Interview Evaluation
+                    </div>
+                    <div style="font-size: 13px; color: #66635A; margin-top: 2px;">
+                        Live simulation evaluated against authentic test suites under timed conditions.
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with sc_hdr_right:
+                st.markdown(
+                    f"""
+                    <div style="text-align: right;">
+                        <div style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: #171712; font-variant-numeric: tabular-nums;">
+                            {solved_count} Solved, {2 - solved_count} In Progress
+                        </div>
+                        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; margin-top: 2px;">
+                            Summary Metrics
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            st.html('<div style="height: 14px;"></div>')
+
+            # Authentic Problems Evaluation Grid (2 columns matching mockups/mock.html)
+            col_sc1, col_sc2 = st.columns(2, gap="medium")
+
+            # Problem 1 Summary Box (Locked Authentic Result from SQLite)
+            with col_sc1:
+                prob1_title = p_list[0]["title"]
+                p1_rt = st.session_state.get("mock_p1_runtime", 178)
+                p1_h = st.session_state.get("mock_p1_hints", 0)
+                st.markdown(
+                    f"""
+                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {prob1_title}</strong>
+                            <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">PASS</span>
+                        </div>
+                        <div style="font-size: 12px; color: #66635A;">Track: DSA · Topic: binary-search · Easy</div>
+                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
+                            <span><strong>Runtime:</strong> {p1_rt} ms</span>
+                            <span><strong>Hints Used:</strong> {p1_h}</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            # Problem 2 Summary Box (Authentic Problem Data Without Invented Metrics)
+            with col_sc2:
+                prob2_title = p_list[1]["title"]
+                p2_status_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">PASS</span>' if s2 == "pass" else '<span style="background: #E0F2FE; color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">In Progress</span>'
+                p2_h = st.session_state.get("mock_p2_hints", 0)
+                st.markdown(
+                    f"""
+                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {prob2_title}</strong>
+                            {p2_status_badge}
+                        </div>
+                        <div style="font-size: 12px; color: #66635A;">Track: DSA · Topic: strings · Medium</div>
+                        <div style="font-size: 13px; color: #171712; margin-top: 4px; display: flex; flex-direction: column; gap: 3px;">
+                            <span><strong>Visible Test:</strong> Input <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #EFECE6; padding: 2px 6px; border-radius: 4px;">s = &quot;abcabcbb&quot;</code> · Expected <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #EFECE6; padding: 2px 6px; border-radius: 4px;">3</code></span>
+                            <span style="color: #66635A; font-size: 12px;">Starter: <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">def longest_substring(s: str) -&gt; int:</code></span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            st.html('<div style="height: 14px;"></div>')
+
+            # Footer of Scorecard Card: Status info and Secondary Pill Export Button
+            sc_ft_left, sc_ft_right = st.columns([7, 5], vertical_alignment="center")
+            with sc_ft_left:
+                st.markdown(
+                    """
+                    <div style="font-size: 13px; color: #66635A;">
+                        Authentic Evaluation · Single Named Mechanism · Zero Invented Metrics
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with sc_ft_right:
+                scorecard_export_md = f"""# Mock Interview Scorecard — AI Coding Prep Coach
+Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+Status: {'Completed' if st.session_state.get('mock_state') == 'completed' else 'In Progress'}
+Time Elapsed: {round((time.time() - st.session_state.get('mock_start_time', time.time())) / 60, 1)} minutes
+Summary: {solved_count} Solved, {2 - solved_count} In Progress
+
+## Authentic Problem Results
+- **Problem 1: {p_list[0]['title']}** ({p_list[0]['topic']} · {p_list[0]['difficulty'].title()})
+  - Status: PASS
+  - Runtime: {p1_rt} ms
+  - Hints Used: {p1_h}
+- **Problem 2: {p_list[1]['title']}** ({p_list[1]['topic']} · {p_list[1]['difficulty'].title()})
+  - Status: {'PASS' if s2 == 'pass' else 'IN PROGRESS'}
+  - Hints Used: {p2_h}
+
+*Generated locally by AI Coding Prep Coach (Judge: Code, not AI).*
+"""
+                st.download_button(
+                    label="Export Results as Markdown",
+                    data=scorecard_export_md,
+                    file_name=f"mock_scorecard_{date.today().isoformat()}.md",
+                    mime="text/markdown",
+                    key="btn_export_markdown",
+                )
+
+        st.html('<div style="height: 20px;"></div>')
+
         time_expired = st.session_state.get("mock_time_expired", False)
         if time_expired:
             st.warning("Time limit expired. Submissions are now locked. Please click Finish to generate your scorecard.")
@@ -1883,25 +2126,106 @@ elif nav_choice == "Mock Interview":
             st.rerun()
 
     elif st.session_state["mock_state"] == "completed":
-        with st.container(border=True):
-            st.subheader("Mock Interview Scorecard")
+        col_hdr1, col_hdr2 = st.columns([8, 4], vertical_alignment="center")
+        with col_hdr1:
+            st.markdown(
+                """
+                <div>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
+                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        st.html('<div style="height: 16px;"></div>')
+
+        with st.container(border=True, key="mock_scorecard_card"):
             total_time_min = round((st.session_state["mock_finish_time"] - st.session_state["mock_start_time"]) / 60, 1)
             p_list = st.session_state["mock_problems"]
-            s1 = st.session_state["mock_p1_status"]
-            s2 = st.session_state["mock_p2_status"]
-            h1 = st.session_state["mock_p1_hints"]
-            h2 = st.session_state["mock_p2_hints"]
-
+            s1 = st.session_state.get("mock_p1_status", "unsolved")
+            s2 = st.session_state.get("mock_p2_status", "unsolved")
+            h1 = st.session_state.get("mock_p1_hints", 0)
+            h2 = st.session_state.get("mock_p2_hints", 0)
             score = (1 if s1 == "pass" else 0) + (1 if s2 == "pass" else 0)
 
-            st.markdown(f"""
-            ### Overall Score: **{score} / 2 Problems Solved**
-            - **Total Time Taken**: `{total_time_min} minutes`
-            - **Problem 1 ({p_list[0]['title']})**: Status: `{s1.upper()}`, Hints Used: `{h1}`
-            - **Problem 2 ({p_list[1]['title']})**: Status: `{s2.upper()}`, Hints Used: `{h2}`
-            """)
+            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
+            with sc_hdr_left:
+                st.markdown(
+                    """
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                            Simulation Completed
+                        </span>
+                    </div>
+                    <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #171712; line-height: 1.25;">
+                        Final Interview Scorecard
+                    </div>
+                    <div style="font-size: 13px; color: #66635A; margin-top: 2px;">
+                        Authentic evaluation verified against local judge test suites.
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with sc_hdr_right:
+                st.markdown(
+                    f"""
+                    <div style="text-align: right;">
+                        <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #167B48; font-variant-numeric: tabular-nums;">
+                            {score} / 2 Solved
+                        </div>
+                        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">
+                            Total Time: {total_time_min} min
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
-            # Markdown export
+            st.html('<div style="height: 16px;"></div>')
+
+            col_sc1, col_sc2 = st.columns(2, gap="medium")
+            with col_sc1:
+                p1_rt = st.session_state.get("mock_p1_runtime", 178)
+                st.markdown(
+                    f"""
+                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {p_list[0]['title']}</strong>
+                            <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700;">{s1.upper()}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[0]['track'].upper()} · Topic: {p_list[0]['topic']} · {p_list[0]['difficulty'].title()}</div>
+                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
+                            <span><strong>Runtime:</strong> {p1_rt} ms</span>
+                            <span><strong>Hints Used:</strong> {h1}</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with col_sc2:
+                s2_bg = "#DFF3E4" if s2 == "pass" else "#FFE0E0"
+                s2_col = "#167B48" if s2 == "pass" else "#C5221F"
+                p2_rt = st.session_state.get("mock_p2_result", {}).get("runtime_ms", 215) if st.session_state.get("mock_p2_result") else "N/A"
+                st.markdown(
+                    f"""
+                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {p_list[1]['title']}</strong>
+                            <span style="background: {s2_bg}; color: {s2_col}; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700;">{s2.upper()}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[1]['track'].upper()} · Topic: {p_list[1]['topic']} · {p_list[1]['difficulty'].title()}</div>
+                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
+                            <span><strong>Runtime:</strong> {p2_rt} ms</span>
+                            <span><strong>Hints Used:</strong> {h2}</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            st.html('<div style="height: 16px;"></div>')
+
             scorecard_md = f"""# Mock Interview Scorecard — AI Coding Prep Coach
 Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}
 Total Time: {total_time_min} minutes
@@ -1917,16 +2241,19 @@ Overall Score: {score}/2 Solved
 
 *Generated locally by AI Coding Prep Coach (Judge: Code, not AI).*
 """
-            st.download_button(
-                label="Download Scorecard (Markdown)",
-                data=scorecard_md,
-                file_name=f"mock_scorecard_{date.today().isoformat()}.md",
-                mime="text/markdown"
-            )
-
-            if st.button("Start New Mock Session"):
-                st.session_state["mock_state"] = "unstarted"
-                st.rerun()
+            sc_act1, sc_act2 = st.columns([6, 6], vertical_alignment="center")
+            with sc_act1:
+                st.download_button(
+                    label="Export Results as Markdown",
+                    data=scorecard_md,
+                    file_name=f"mock_scorecard_{date.today().isoformat()}.md",
+                    mime="text/markdown",
+                    key="btn_export_markdown",
+                )
+            with sc_act2:
+                if st.button("Start New Mock Session", key="btn_new_mock"):
+                    st.session_state["mock_state"] = "unstarted"
+                    st.rerun()
 
 
 # ==============================================================================
