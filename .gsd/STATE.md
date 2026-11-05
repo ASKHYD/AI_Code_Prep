@@ -7,21 +7,22 @@ updated: 2026-11-05
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 2: Streamlit UI Implementation (Planned & Ready for Execution)  
-**Status:** Planned across 8 waves (0 through 7)  
-**Plan:** `.gsd/phases/2/` (00-PLAN.md through 07-PLAN.md)  
+**Phase:** Phase 2: Streamlit UI Implementation  
+**Status:** Wave 6 Completed (Dashboard Redesign & Directive 1 Enforcement)  
+**Plan:** `.gsd/phases/2/` (06-PLAN.md complete; next: 07-PLAN.md)  
 
 ## Last Action
 
-Phase 2 planning completed following owner approval of Fontsource offline extraction:
-- Extracted and verified 12 offline `.woff2` font files into `assets/fonts/` matching `mockups/style.css` weights exactly; logged in `DECISIONS.md` under [DECISION-006].
-- Authored 8 atomic execution plans in `.gsd/phases/2/` across Waves 0–7 adhering to the single named mechanism per element per screen constraint.
-- Zero quarantine violations: `coach/*.py`, `data/problems/*.json`, and `tests/*` untouched.
-- 26/26 backend tests passing.
+Phase 2 Wave 6 completed:
+- Implemented three category-tinted Dashboard metric cards in wash-mint (`dash_card_solved`), wash-sky (`dash_card_sessions`), and wash-butter (`dash_card_hints`) with Inter 600 tabular figures and Lucide icons.
+- Restyled Plotly mastery chart to transparent canvas, hairline gridlines, saturated Direction A tint palette, and strict Directive 1 enforcement (`NOT STARTED` for unattempted topics without 0% bars).
+- Implemented Topic Breakdown Table in white 24px card container (`dashboard_table_card`) with track chips, tabular ratios, mastery progress bars, and status chips.
+- Captured dual-resolution screenshots (`docs/screenshots/r3/dashboard_real_1920x1080.png` and `dashboard_real_1600x1000.png`).
+- 26/26 backend tests passing; zero quarantine violations.
 
 ## Next Steps
 
-1. `/execute 2` — Run Phase 2 execution waves starting with Wave 0 (Regression guard & Metric-numerals A/B evaluation)
+1. Execute Wave 7 (`07-PLAN.md`): Final Visual Gate, computed font proof verification across all screens, and Phase 2 sign-off.
 
 ## Active Decisions
 
