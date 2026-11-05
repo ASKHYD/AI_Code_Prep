@@ -818,6 +818,65 @@ def get_global_css() -> str:
         color: #171712 !important;
         font-weight: 600 !important;
     }
+
+    /* Direction A Keyed Tinted Stat Cards & Containers (Dashboard Screen) */
+    div.st-key-dash_card_solved:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-dash_card_sessions:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-dash_card_hints:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-dashboard_chart_card:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-dashboard_table_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .st-key-dash_card_solved,
+    .st-key-dash_card_solved [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DFF3E4 !important;
+        border: 1px solid rgba(22, 123, 72, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    .st-key-dash_card_sessions,
+    .st-key-dash_card_sessions [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DCEBFF !important;
+        border: 1px solid rgba(29, 94, 194, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    .st-key-dash_card_hints,
+    .st-key-dash_card_hints [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(154, 52, 18, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    .st-key-dash_card_solved .stat-label {
+        color: #167B48 !important;
+    }
+    .st-key-dash_card_sessions .stat-label {
+        color: #1D5EC2 !important;
+    }
+    .st-key-dash_card_hints .stat-label {
+        color: #9A3412 !important;
+    }
+
+    .st-key-dashboard_chart_card,
+    .st-key-dashboard_chart_card [data-testid="stVerticalBlockBorderWrapper"] > div,
+    .st-key-dashboard_table_card,
+    .st-key-dashboard_table_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px 28px !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -2260,62 +2319,191 @@ Overall Score: {score}/2 Solved
 # SCREEN 4: DASHBOARD
 # ==============================================================================
 elif nav_choice == "Dashboard":
-    with st.container(border=True):
-        st.subheader("Performance and Analytics")
-        st.caption("All metrics computed strictly from SQLite history. Zero invented metrics.")
+    col_dash_head, col_dash_badge = st.columns([8, 4], vertical_alignment="center")
+    with col_dash_head:
+        st.markdown(
+            """<div style="margin-bottom: 8px;">
+                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
+                    Performance and Analytics
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
+                    Real-time mastery and pass rates derived objectively from SQLite attempts. Zero invented metrics.
+                </p>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    with col_dash_badge:
+        st.markdown(
+            """<div style="text-align: right;">
+                <span class="stat-badge badge-sky" style="font-size: 13px; padding: 6px 14px;">Zero Invented Metrics</span>
+            </div>""",
+            unsafe_allow_html=True,
+        )
 
+    # SQLite metrics query
+    with store._get_connection() as conn:
+        cur = conn.execute("SELECT COUNT(DISTINCT problem_id) FROM attempts WHERE status = 'pass'")
+        solved_count = cur.fetchone()[0] or 0
+        cur = conn.execute("SELECT COUNT(*) FROM attempts")
+        total_sessions = cur.fetchone()[0] or 0
+        cur = conn.execute("SELECT AVG(hints_used) FROM attempts")
+        avg_hints_raw = cur.fetchone()[0]
+        avg_hints = round(avg_hints_raw, 1) if avg_hints_raw is not None else 0.0
+
+    # Three category-tinted stat cards
     col1, col2, col3 = st.columns(3)
     with col1:
-        with st.container(border=True):
-            st.metric("Current Streak", f"{streak_count} Days")
+        with st.container(border=True, key="dash_card_solved"):
+            check_svg = get_svg_icon("check", width=22, height=22, stroke="#FFFFFF")
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-green">
+                            {check_svg}
+                        </div>
+                        <span class="stat-badge badge-mint">{solved_count} / {len(all_problems)}</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Solved Problems</span>
+                        <span class="stat-numeral">{solved_count}</span>
+                        <span class="stat-caption">{solved_count} of {len(all_problems)} curriculum problems solved.</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+
     with col2:
-        with st.container(border=True):
-            st.metric("Due for Review", f"{len(due_list)} Problems")
+        with st.container(border=True, key="dash_card_sessions"):
+            chart_svg = get_svg_icon("bar-chart-3", width=22, height=22, stroke="#FFFFFF")
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-blue">
+                            {chart_svg}
+                        </div>
+                        <span class="stat-badge badge-sky">Recorded</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Practice Sessions</span>
+                        <span class="stat-numeral">{total_sessions}</span>
+                        <span class="stat-caption">Total code-judged runs recorded in SQLite.</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
-    stats = store.topic_stats()
-    total_attempts = sum(s["attempts"] for s in stats.values())
-    total_passed = sum(s["passed"] for s in stats.values())
-    overall_rate = round((total_passed / total_attempts) * 100, 1) if total_attempts > 0 else 0.0
     with col3:
-        with st.container(border=True):
-            st.metric("Overall Pass Rate", f"{overall_rate}% ({total_passed}/{total_attempts})")
+        with st.container(border=True, key="dash_card_hints"):
+            sparkles_svg = get_svg_icon("sparkles", width=22, height=22, stroke="#FFFFFF")
+            hints_badge = "Zero Hints" if avg_hints == 0 else f"{avg_hints} Avg"
+            st.markdown(
+                f"""<div class="stat-card-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div class="stat-icon-tile tile-amber">
+                            {sparkles_svg}
+                        </div>
+                        <span class="stat-badge badge-butter">{hints_badge}</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Average Hints Used</span>
+                        <span class="stat-numeral">{avg_hints:.1f}</span>
+                        <span class="stat-caption">Average hints revealed per problem attempt.</span>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
-    with st.container(border=True):
-        st.subheader("Topic Mastery and Pass Rates")
+    st.html('<div style="height: 16px;"></div>')
 
-        if not stats:
-            st.info("No practice data available yet. Solve problems in Practice Arena to populate your dashboard!")
-        else:
-            try:
-                import plotly.graph_objects as go
-                topics_list = list(stats.keys())
-                pass_rates = [stats[t]["pass_rate"] for t in topics_list]
+    # Topic Mastery Chart Card
+    with st.container(border=True, key="dashboard_chart_card"):
+        st.markdown(
+            """<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div>
+                    <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                        Topic Mastery &amp; Pass Rates
+                    </h3>
+                    <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                        Per-category accuracy across DSA and Python tracks with topic-tinted bars.
+                    </p>
+                </div>
+                <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #66635A;">Target Threshold: 80%</span>
+            </div>""",
+            unsafe_allow_html=True,
+        )
 
-                fig = go.Figure(data=[
+        stats = store.topic_stats()
+        all_curriculum_topics = sorted(list({p.get("topic") for p in all_problems if p.get("topic")}))
+        # Sort attempted topics first, then unattempted alphabetically
+        topics_list = sorted(
+            all_curriculum_topics,
+            key=lambda t: (0 if t in stats and stats[t]["attempts"] > 0 else 1, t),
+        )
+
+        tint_palette = ["#1F9D63", "#2273E6", "#B45309", "#6C4CF1", "#E4572E"]
+        bar_colors = []
+        y_vals = []
+        bar_texts = []
+        text_colors = []
+
+        for i, t in enumerate(topics_list):
+            d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
+            color = tint_palette[i % len(tint_palette)]
+            bar_colors.append(color)
+            if d["attempts"] > 0:
+                y_vals.append(d["pass_rate"])
+                bar_texts.append(f"{d['pass_rate']}% ({d['passed']}/{d['attempts']})")
+                text_colors.append("#171712")
+            else:
+                y_vals.append(0)
+                bar_texts.append("NOT STARTED")
+                text_colors.append("#66635A")
+
+        try:
+            import plotly.graph_objects as go
+
+            fig = go.Figure(
+                data=[
                     go.Bar(
                         x=topics_list,
-                        y=pass_rates,
-                        text=[f"{rate}% ({stats[t]['passed']}/{stats[t]['attempts']})" for t, rate in zip(topics_list, pass_rates)],
-                        textposition="auto",
-                        marker_color="#22C55E"
+                        y=y_vals,
+                        text=bar_texts,
+                        textposition="outside",
+                        textfont=dict(family="Inter, sans-serif", size=11, color=text_colors),
+                        marker_color=bar_colors,
+                        cliponaxis=False,
                     )
-                ])
-                fig.update_layout(
-                    title="Pass Rate by Topic (%)",
-                    xaxis_title="Topic",
-                    yaxis_title="Pass Rate (%)",
-                    yaxis={"range": [0, 105], "gridcolor": "#334155"},
-                    xaxis={"gridcolor": "#334155"},
-                    margin={"l": 40, "r": 40, "t": 40, "b": 40},
-                    height=400,
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    font={"color": "#F8FAFC"}
-                )
-                st.plotly_chart(fig, use_container_width=True)
-            except Exception:
-                chart_data = {t: stats[t]["pass_rate"] for t in stats}
-                st.bar_chart(chart_data)
+                ]
+            )
+            fig.update_layout(
+                xaxis=dict(
+                    title=dict(text="Topic", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
+                    gridcolor="#E7E1D6",
+                    showline=True,
+                    linecolor="#E7E1D6",
+                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                    tickangle=-25,
+                ),
+                yaxis=dict(
+                    title=dict(text="Pass Rate (%)", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
+                    range=[0, 115],
+                    gridcolor="#E7E1D6",
+                    showline=True,
+                    linecolor="#E7E1D6",
+                    zeroline=True,
+                    zerolinecolor="#E7E1D6",
+                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                ),
+                margin=dict(l=40, r=40, t=30, b=60),
+                height=380,
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="Inter, sans-serif", color="#171712"),
+            )
+            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+        except Exception:
+            chart_data = {t: y for t, y in zip(topics_list, y_vals)}
+            st.bar_chart(chart_data)
 
     st.subheader("Topic Breakdown Table")
     if stats:
