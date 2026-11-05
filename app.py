@@ -640,6 +640,66 @@ def get_global_css() -> str:
         color: #5932EA !important;
         font-weight: 600 !important;
     }
+
+    /* Mock Timer Card (Setup & Session Control Card) */
+    div.st-key-mock_timer_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-mock_timer_card,
+    .st-key-mock_timer_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFE8D1 !important;
+        border: 1px solid rgba(185, 56, 21, 0.25) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.04) !important;
+        padding: 20px 24px !important;
+    }
+
+    /* Danger Pill Button: End Interview Early */
+    div.st-key-btn_end_mock button {
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(185, 56, 21, 0.35) !important;
+        color: #B93815 !important;
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+        padding: 8px 22px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
+        transition: all 0.15s ease !important;
+    }
+    div.st-key-btn_end_mock button:hover {
+        background-color: #FEE4E2 !important;
+        border-color: #B93815 !important;
+        color: #991B1B !important;
+    }
+    div.st-key-btn_end_mock button p,
+    div.st-key-btn_end_mock button span {
+        color: #B93815 !important;
+        font-weight: 600 !important;
+    }
+
+    /* Primary Pill Button: Start Mock Interview */
+    div.st-key-btn_start_mock button {
+        background-color: #167B48 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+        padding: 10px 28px !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
+    }
+    div.st-key-btn_start_mock button:hover {
+        background-color: #116038 !important;
+    }
+    div.st-key-btn_start_mock button p,
+    div.st-key-btn_start_mock button span {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -1485,8 +1545,6 @@ elif nav_choice == "Practice Arena":
 # SCREEN 3: MOCK INTERVIEW ARENA (LANE T & U5)
 # ==============================================================================
 elif nav_choice == "Mock Interview":
-    st.header("Mock Interview Arena")
-
     # Mock interview session state
     if "mock_state" not in st.session_state:
         st.session_state["mock_state"] = "unstarted"  # unstarted | running | completed
@@ -1496,84 +1554,203 @@ elif nav_choice == "Mock Interview":
         if "mock_start_time" not in st.session_state:
             st.session_state["mock_start_time"] = time.time() - 25 * 60
             st.session_state["mock_finish_time"] = time.time()
-            st.session_state["mock_problems"] = [problems_by_id["two-sum"], problems_by_id["flatten-nested-dict"]]
+            st.session_state["mock_problems"] = [
+                problems_by_id.get("binary-search", all_problems[0]),
+                problems_by_id.get("longest-substring-without-repeating", all_problems[1]),
+            ]
             st.session_state["mock_p1_status"] = "pass"
             st.session_state["mock_p2_status"] = "pass"
-            st.session_state["mock_p1_hints"] = 1
+            st.session_state["mock_p1_hints"] = 0
             st.session_state["mock_p2_hints"] = 0
 
     if st.query_params.get("mock_state", "").lower() == "running":
         st.session_state["mock_state"] = "running"
         if "mock_start_time" not in st.session_state:
-            st.session_state["mock_start_time"] = time.time()
+            st.session_state["mock_start_time"] = time.time() - 19
             st.session_state["mock_duration_sec"] = 45 * 60
-            medium_dsas = [p for p in all_problems if p["track"] == "dsa" and p["difficulty"] == "medium"]
-            practicals = [p for p in all_problems if p["track"] == "python"]
-            p1 = medium_dsas[0] if medium_dsas else all_problems[0]
-            p2 = practicals[0] if practicals else all_problems[1]
+            p1 = problems_by_id.get("binary-search", all_problems[0])
+            p2 = problems_by_id.get("longest-substring-without-repeating", all_problems[1])
             st.session_state["mock_problems"] = [p1, p2]
-            st.session_state["mock_p1_status"] = "unsolved"
-            st.session_state["mock_p2_status"] = "unsolved"
+            st.session_state["mock_p1_status"] = "pass"
+            st.session_state["mock_p1_runtime"] = 178
             st.session_state["mock_p1_hints"] = 0
+            st.session_state["mock_p2_status"] = "unsolved"
             st.session_state["mock_p2_hints"] = 0
+            st.session_state["mock_p1_result"] = {
+                "status": "pass",
+                "passed": len(p1.get("test_cases", [])),
+                "total": len(p1.get("test_cases", [])),
+                "runtime_ms": 178,
+                "stdout": "",
+                "stderr": "",
+            }
 
     if st.session_state["mock_state"] == "unstarted":
-        st.write(
-            "A 45-minute timed simulation of a technical coding round consisting of 2 problems. "
-            "The timer ticks down automatically in real time. Hints and time taken are tracked on your scorecard."
-        )
-        if st.button("Start 45-Minute Mock Interview", type="primary"):
-            medium_dsas = [p for p in all_problems if p["track"] == "dsa" and p["difficulty"] == "medium"]
-            practicals = [p for p in all_problems if p["track"] == "python"]
+        col_hdr1, col_hdr2 = st.columns([8, 4], vertical_alignment="center")
+        with col_hdr1:
+            st.markdown(
+                """
+                <div>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
+                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-            p1 = medium_dsas[0] if medium_dsas else all_problems[0]
-            p2 = practicals[0] if practicals else all_problems[1]
+        st.html('<div style="height: 16px;"></div>')
 
-            st.session_state["mock_state"] = "running"
-            st.session_state["mock_start_time"] = time.time()
-            st.session_state["mock_duration_sec"] = 45 * 60
-            st.session_state["mock_problems"] = [p1, p2]
-            st.session_state["mock_p1_status"] = "unsolved"
-            st.session_state["mock_p2_status"] = "unsolved"
-            st.session_state["mock_p1_hints"] = 0
-            st.session_state["mock_p2_hints"] = 0
-            st.session_state["mock_p1_result"] = None
-            st.session_state["mock_p2_result"] = None
-            st.rerun()
+        with st.container(border=True, key="mock_timer_card"):
+            st.markdown(
+                """
+                <div style="font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: #171712; margin-bottom: 6px;">
+                    Ready to Begin Simulation?
+                </div>
+                <div style="font-size: 14px; color: #66635A; line-height: 1.5; margin-bottom: 20px;">
+                    A 45-minute timed simulation of a technical coding round consisting of 2 curated problems.
+                    The timer ticks down automatically in real time across two synchronized indicators.
+                    Hints and execution metrics are tracked on your authentic scorecard.
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if st.button("Start 45-Minute Mock Interview", type="primary", key="btn_start_mock"):
+                p1 = problems_by_id.get("binary-search", all_problems[0])
+                p2 = problems_by_id.get("longest-substring-without-repeating", all_problems[1])
+                st.session_state["mock_state"] = "running"
+                st.session_state["mock_start_time"] = time.time()
+                st.session_state["mock_duration_sec"] = 45 * 60
+                st.session_state["mock_problems"] = [p1, p2]
+                st.session_state["mock_p1_status"] = "unsolved"
+                st.session_state["mock_p2_status"] = "unsolved"
+                st.session_state["mock_p1_hints"] = 0
+                st.session_state["mock_p2_hints"] = 0
+                st.session_state["mock_p1_result"] = None
+                st.session_state["mock_p2_result"] = None
+                st.rerun()
 
     elif st.session_state["mock_state"] == "running":
         p_list = st.session_state["mock_problems"]
 
-        # Header Row: Title on left, Autorefresh Timer Fragment on right
-        col_hdr1, col_hdr2 = st.columns([7, 3])
+        # Header Row: Direction A Title on left, Display 1 (Autorefresh Timer Fragment) on right
+        col_hdr1, col_hdr2 = st.columns([7, 5], vertical_alignment="center")
         with col_hdr1:
-            st.subheader("Technical Round in Progress")
-            st.caption("Complete both problems before the timer expires.")
+            st.markdown(
+                """
+                <div>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
+                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-        # Native Streamlit fragment updating every 1 second (Lane T)
+        # Display 1: Header capsule in wash-peach #FFE8D1, text #B93815, 999px radius, Lucide timer icon, ticking mm:ss
         @st.fragment(run_every=1.0)
-        def render_live_timer():
+        def render_header_timer():
             start = st.session_state.get("mock_start_time", time.time())
             duration = st.session_state.get("mock_duration_sec", 45 * 60)
             mins, secs, is_expired = calculate_remaining_time(start, duration, time.time())
+            timer_icon = get_svg_icon("timer", width=20, height=20, stroke="#B93815", stroke_width=2)
             if is_expired:
                 st.session_state["mock_time_expired"] = True
                 st.markdown(
-                    "<div style='font-family: monospace; font-size: 1.85rem; font-weight: 700; text-align: right; color: #EF4444;'>"
-                    "00:00 (EXPIRED)</div>",
-                    unsafe_allow_html=True
+                    f"""
+                    <div style="display: flex; justify-content: flex-end; align-items: center;">
+                      <div style="background: #FFE8D1; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 10px 22px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05);">
+                        {timer_icon}
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #C5221F; font-variant-numeric: tabular-nums;">
+                          00:00
+                        </span>
+                        <span style="background: #FFFFFF; border: 1px solid rgba(185, 56, 21, 0.25); color: #C5221F; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 12px;">Expired</span>
+                      </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
-                    f"<div style='font-family: monospace; font-size: 1.85rem; font-weight: 700; text-align: right; color: #F8FAFC;'>"
-                    f"TIME: {mins:02d}:{secs:02d}</div>",
-                    unsafe_allow_html=True
+                    f"""
+                    <div style="display: flex; justify-content: flex-end; align-items: center;">
+                      <div style="background: #FFE8D1; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 10px 22px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05);">
+                        {timer_icon}
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #171712; font-variant-numeric: tabular-nums;">
+                          {mins:02d}:{secs:02d}
+                        </span>
+                        <span style="background: #FFFFFF; border: 1px solid rgba(185, 56, 21, 0.25); color: #B93815; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 12px;">Ticking Live</span>
+                      </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
                 )
 
         with col_hdr2:
-            render_live_timer()
+            render_header_timer()
 
-        st.markdown("---")
+        st.html('<div style="height: 12px;"></div>')
+
+        # Display 2 & Setup & Session Control Card: st.container(border=True, key="mock_timer_card")
+        with st.container(border=True, key="mock_timer_card"):
+            c_time, c_progress, c_action = st.columns([4, 4, 3], vertical_alignment="center")
+
+            with c_time:
+                @st.fragment(run_every=1.0)
+                def render_card_timer():
+                    start = st.session_state.get("mock_start_time", time.time())
+                    duration = st.session_state.get("mock_duration_sec", 45 * 60)
+                    mins, secs, is_expired = calculate_remaining_time(start, duration, time.time())
+                    disp = "00:00" if is_expired else f"{mins:02d}:{secs:02d}"
+                    st.markdown(
+                        f"""
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9A3412;">
+                                Time Remaining
+                            </div>
+                            <div style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #B93815; font-variant-numeric: tabular-nums; line-height: 1.2; margin-top: 2px;">
+                                {disp}
+                            </div>
+                            <div style="font-size: 12px; color: #9A3412; margin-top: 2px;">
+                                45:00 strict countdown constraint
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                render_card_timer()
+
+            with c_progress:
+                s1 = st.session_state.get("mock_p1_status", "unsolved")
+                s2 = st.session_state.get("mock_p2_status", "unsolved")
+                solved_count = (1 if s1 == "pass" else 0) + (1 if s2 == "pass" else 0)
+                p1_badge = "PASS" if s1 == "pass" else "In Progress"
+                p2_badge = "PASS" if s2 == "pass" else "In Progress"
+                st.markdown(
+                    f"""
+                    <div>
+                        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">
+                            Session Progress
+                        </div>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 600; color: #171712; font-variant-numeric: tabular-nums; line-height: 1.2; margin-top: 2px;">
+                            {solved_count} of 2 Solved
+                        </div>
+                        <div style="font-size: 12px; color: #66635A; margin-top: 2px;">
+                            P1: {p1_badge} · P2: {p2_badge}
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            with c_action:
+                st.markdown("<div style='text-align: right;'>", unsafe_allow_html=True)
+                if st.button("End Interview Early", key="btn_end_mock", help="Conclude simulation and generate final scorecard"):
+                    st.session_state["mock_state"] = "completed"
+                    st.session_state["mock_finish_time"] = time.time()
+                    st.rerun()
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        st.html('<div style="height: 16px;"></div>')
 
         time_expired = st.session_state.get("mock_time_expired", False)
         if time_expired:
