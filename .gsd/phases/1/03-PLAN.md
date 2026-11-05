@@ -52,40 +52,36 @@ Load for context:
 <tasks>
 
 <task type="auto">
-  <name>Refine Analytics Dashboard Mockup with Authentic Topic Mastery Bars</name>
+  <name>Refine Analytics Dashboard Mockup with Authentic Topic Mastery</name>
   <files>
     mockups/dashboard.html
   </files>
   <action>
-    Refine `mockups/dashboard.html` with Direction A styling and authentic analytics content:
+    Refine `mockups/dashboard.html` with Direction A styling and strictly authentic analytics data from SQLite:
     1. Page Header & Stat Grid:
        - Fraunces title "Performance and Analytics", subtitle referencing real-time SQLite attempt data.
        - Stat card 1 (Mint): Current Streak "1 day", badge "Retained".
        - Stat card 2 (Sky): Due for Review "0 problems", badge "0 Due".
        - Stat card 3 (Butter): Overall Pass Rate "100.0%", badge "100% Rate", caption "1 attempt passed of 1 total recorded attempt."
-    2. Topic Mastery Flat Saturated Bar Chart:
-       - Chart container displaying category mastery using flat saturated fills from the six-part tint system:
+    2. Topic Mastery Flat Saturated Bar Chart (Zero Invented Metrics):
+       - Chart container displaying category mastery strictly reflecting the real attempt data in SQLite:
          * binary-search: 100% (1/1) with `--fill-green` (`#1F9D63`)
-         * strings: 87.5% (7/8) with `--fill-blue` (`#2273E6`)
-         * arrays: 100% (2/2) with `--fill-green` (`#1F9D63`)
-         * dynamic-prog: 75% (3/4) with `--fill-violet` (`#6C4CF1`)
-         * trees-graphs: 66.7% (2/3) with `--fill-coral` (`#E4572E`)
-         * recursion: 100% (1/1) with `--fill-amber` (`#B45309`)
-       - Tabular numeral labels and track styling on warm paper.
+       - Other curriculum categories (strings, arrays, recursion, etc.) shown as unattempted (0 attempts), with ZERO invented attempt counts or invented pass rates (no "87.5% (7/8)", no "75% (3/4)", no "66.7% (2/3)").
     3. Topic Breakdown Table:
-       - Clean table with columns: Topic, Track, Attempts, Passed, Pass Rate, Action.
-       - Table rows for each topic with category badges and "Practice" links.
+       - Table columns: Topic, Track, Attempts, Passed, Pass Rate, Action.
+       - Reflects real SQLite `topic_stats()`: `binary-search` (1 attempt, 1 passed, 100.0% pass rate) with authentic link to review.
     4. Iconography:
        - Verify all inline SVGs are Lucide SVGs exclusively from `agent-resources/lucide/icons`.
 
-    AVOID: Modifying any application files or creating artificial metric charts.
-    USE: Direction A card radius (24px), soft shadows, and clean tabular typography.
+    AVOID: Modifying any application files or fabricating attempt numbers/pass rates.
+    AVOID: Invented attempt counts (e.g. 7/8, 2/2, 3/4) or invented percentages (e.g. 87.5%).
+    USE: Direction A card radius (24px), soft shadows, and strictly authentic SQLite metrics.
   </action>
   <verify>
-    python -c "dash=open('mockups/dashboard.html', encoding='utf-8').read(); assert '1 day' in dash; assert '0 problems' in dash; assert 'Topic Mastery' in dash; assert 'binary-search' in dash; print('PASS: Dashboard mockup verified')"
+    python -c "dash=open('mockups/dashboard.html', encoding='utf-8').read(); assert '1 day' in dash; assert '0 problems' in dash; assert 'Topic Mastery' in dash; assert 'binary-search' in dash; assert '100.0%' in dash; print('PASS: Dashboard mockup verified without invented numbers')"
   </verify>
   <done>
-    `mockups/dashboard.html` renders authentic mastery metrics and category bar charts in full Direction A styling.
+    `mockups/dashboard.html` renders authentic mastery metrics and category data strictly derived from SQLite without invented numbers.
   </done>
 </task>
 
@@ -127,7 +123,7 @@ Load for context:
     Present the captured dual-resolution screenshots (`docs/screenshots/r3/*.png`) to the project owner for formal visual inspection and approval:
     1. Verify Direction A visual language: warm paper canvas (#FBFAF7), 24px rounded surface cards with soft shadow, deep ink text (#171712), hairline borders (#E7E1D6), and saturated emerald green pill buttons (#15803D).
     2. Verify typography pairing: Fraunces display serif headings, Inter body copy, and JetBrains Mono code/metrics.
-    3. Verify authentic data grounding: 1 day streak, 0 due, 12 problems library, Binary Search PASS 178ms, starter signature `def lengthOfLongestSubstring(s: str) -> int:`, live countdown timer 44:41.
+    3. Verify authentic data grounding: 1 day streak, 0 due, 12 problems library, Binary Search PASS 178ms, starter signature `def longest_substring(s: str) -> int:`, live countdown timer 44:41.
     4. Confirm strict code quarantine: verify git diff shows zero edits to application code (`app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, `tests/*`).
   </action>
   <verify>

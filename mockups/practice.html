@@ -191,19 +191,19 @@
               <div style="display: flex; align-items: center; gap: var(--space-3);">
                 <span class="badge badge-rose">FAIL</span>
                 <strong style="font-size: 16px; color: var(--partner-red);">
-                  7 / 8 Hidden Tests Passed (142 ms)
+                  Visible Test Case 1 Failed
                 </strong>
               </div>
-              <span style="font-size: 13px; color: var(--partner-red); font-weight: 600;">1 Regression Case Failed</span>
+              <span style="font-size: 13px; color: var(--partner-red); font-weight: 600;">Visible Test Mismatch</span>
             </div>
             
             <p style="font-size: 14px; color: var(--ink); margin-bottom: var(--space-3);">
-              Your solution failed on edge case with internal duplicate characters:
+              Your solution failed on visible test case:
             </p>
 
             <div class="code-block-light" style="background: rgba(255, 255, 255, 0.85); border-color: rgba(197, 34, 31, 0.25);">
-              <strong>Input:</strong> s = "dvdf"<br>
-              <strong>Expected:</strong> 3 (substring "vdf")<br>
+              <strong>Input:</strong> s = "abcabcbb"<br>
+              <strong>Expected:</strong> 3<br>
               <strong>Got:</strong> 2
             </div>
           </div>

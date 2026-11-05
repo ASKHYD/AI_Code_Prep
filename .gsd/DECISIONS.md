@@ -74,7 +74,7 @@ Ensures zero regression in working judge and evaluation functionality while focu
   - Spaced repetition queue: "0 due"
   - Total problem inventory: 12 problems
   - Solved problem: Binary Search PASS (178ms)
-  - Active unsolved problem: Longest Substring Without Repeating Characters with genuine starter signature (`lengthOfLongestSubstring(s: str) -> int`)
+  - Active unsolved problem: Longest Substring Without Repeating Characters with genuine starter signature (`longest_substring(s: str) -> int`)
   - Mock countdown timer state: "44:41"
 - **Dual-Resolution Evidence Capture**: Screen captures rendered and captured at both `1600x1000` (compact desktop) and `1920x1080` (full HD) for owner verification.
 
