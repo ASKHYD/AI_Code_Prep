@@ -279,6 +279,10 @@ def get_global_css() -> str:
         background-color: rgba(197, 34, 31, 0.15) !important;
         color: #C5221F !important;
     }
+    .badge-lilac {
+        background-color: rgba(89, 50, 234, 0.15) !important;
+        color: #5932EA !important;
+    }
 
     .stat-content {
         display: flex;
@@ -398,6 +402,244 @@ def get_global_css() -> str:
         border-radius: 16px;
         margin-bottom: 8px;
     }
+
+    /* Monospace Light Code Block */
+    .code-block-light {
+        background-color: #F4F1EA !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 13px !important;
+        color: #171712 !important;
+        line-height: 1.5 !important;
+    }
+
+    /* =========================================================================
+       DIRECTION A: PRACTICE ARENA STYLING
+       ========================================================================= */
+
+    /* Filter Card */
+    div.st-key-practice_filter_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-practice_filter_card,
+    .st-key-practice_filter_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 20px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 16px 24px !important;
+    }
+    .st-key-practice_filter_card div[data-baseweb="select"] > div {
+        border-radius: 999px !important;
+        border: 1px solid #E7E1D6 !important;
+        background-color: #FBFAF7 !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+    }
+    .st-key-practice_filter_card label p {
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #66635A !important;
+    }
+
+    /* Problem Statement Card (Single Named Mechanism) */
+    div.st-key-practice_statement_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-practice_statement_card,
+    .st-key-practice_statement_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+    .st-key-practice_statement_card h2,
+    .st-key-practice_statement_card .problem-title {
+        font-family: 'Fraunces', serif !important;
+        font-size: 26px !important;
+        font-weight: 700 !important;
+        color: #171712 !important;
+        line-height: 1.25 !important;
+        margin-top: 4px !important;
+        margin-bottom: 12px !important;
+    }
+    .st-key-practice_statement_card code,
+    .st-key-practice_statement_card pre {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Editor Card (Single Named Mechanism) */
+    div.st-key-practice_editor_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-practice_editor_card,
+    .st-key-practice_editor_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+        overflow: hidden !important;
+    }
+    .st-key-practice_editor_card iframe {
+        background-color: #14161A !important;
+        border-radius: 12px !important;
+    }
+    .st-key-practice_editor_card textarea {
+        background-color: #14161A !important;
+        color: #F2F2ED !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        border-radius: 12px !important;
+    }
+
+    /* Hint Ladder Card */
+    div.st-key-practice_hint_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-practice_hint_card,
+    .st-key-practice_hint_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(180, 83, 9, 0.25) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
+        padding: 20px 24px !important;
+    }
+
+    /* Visible Test Case Cards */
+    div[class*="st-key-visible_test_card"]:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    div[class*="st-key-visible_test_card"],
+    div[class*="st-key-visible_test_card"] [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
+        padding: 16px 20px !important;
+    }
+
+    /* Verdict Banners */
+    div.st-key-verdict_pass_card:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-verdict_fail_card:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-verdict_timeout_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-verdict_pass_card,
+    .st-key-verdict_pass_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DFF3E4 !important;
+        border: 1px solid rgba(22, 123, 72, 0.25) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
+        padding: 18px 24px !important;
+    }
+    .st-key-verdict_fail_card,
+    .st-key-verdict_fail_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFE0E0 !important;
+        border: 1px solid rgba(197, 34, 31, 0.25) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
+        padding: 18px 24px !important;
+    }
+    .st-key-verdict_timeout_card,
+    .st-key-verdict_timeout_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(180, 83, 9, 0.25) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
+        padding: 18px 24px !important;
+    }
+
+    /* Failed Case Card (Single Named Mechanism) */
+    div.st-key-failed_case_card:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div[class*="st-key-failed_case_card"]:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-failed_case_card,
+    .st-key-failed_case_card [data-testid="stVerticalBlockBorderWrapper"] > div,
+    div[class*="st-key-failed_case_card"],
+    div[class*="st-key-failed_case_card"] [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFE0E0 !important;
+        border: 1px solid rgba(197, 34, 31, 0.25) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 22px 24px !important;
+    }
+
+    /* Ruff Code Quality Card & Post Pass Card */
+    div.st-key-ruff_quality_card:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-post_pass_review_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    .st-key-ruff_quality_card,
+    .st-key-ruff_quality_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
+        padding: 20px 24px !important;
+    }
+    .st-key-post_pass_review_card,
+    .st-key-post_pass_review_card [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #E8E2FF !important;
+        border: 1px solid rgba(89, 50, 234, 0.25) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
+        padding: 20px 24px !important;
+    }
+
+    /* Lilac secondary action buttons */
+    div[class*="st-key-btn_hint"] button,
+    div[class*="st-key-btn_ai_hint"] button,
+    div[class*="st-key-btn_code_review"] button,
+    div[class*="st-key-btn_reveal"] button {
+        background-color: #E8E2FF !important;
+        border: 1px solid rgba(89, 50, 234, 0.25) !important;
+        color: #5932EA !important;
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+        padding: 8px 20px !important;
+        font-weight: 600 !important;
+    }
+    div[class*="st-key-btn_hint"] button:hover,
+    div[class*="st-key-btn_ai_hint"] button:hover,
+    div[class*="st-key-btn_code_review"] button:hover,
+    div[class*="st-key-btn_reveal"] button:hover {
+        background-color: #DDD6FE !important;
+        border-color: #5932EA !important;
+        color: #4C1D95 !important;
+    }
+    div[class*="st-key-btn_hint"] button p,
+    div[class*="st-key-btn_ai_hint"] button p,
+    div[class*="st-key-btn_code_review"] button p,
+    div[class*="st-key-btn_reveal"] button p,
+    div[class*="st-key-btn_hint"] button span,
+    div[class*="st-key-btn_ai_hint"] button span,
+    div[class*="st-key-btn_code_review"] button span,
+    div[class*="st-key-btn_reveal"] button span {
+        color: #5932EA !important;
+        font-weight: 600 !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -472,14 +714,16 @@ def render_editor(code: str, key: str, height: int = 440) -> str:
                 "style": {"top": "0.4rem", "right": "0.4rem"}
             }
         ]
+        effective_height = max(height, 440)
         editor_response = code_editor(
             code,
             lang="python",
-            theme="dark",
-            height=height,
+            theme="one_dark",
+            height=effective_height,
             key=key,
             buttons=editor_custom_btns,
             options={"wrap": True, "showLineNumbers": True},
+            props={"style": {"backgroundColor": "#14161A", "color": "#F2F2ED", "borderRadius": "8px"}},
             response_mode="debounce",
         )
         if isinstance(editor_response, dict) and editor_response.get("text", "").strip():
@@ -488,10 +732,11 @@ def render_editor(code: str, key: str, height: int = 440) -> str:
             return editor_response
         return code
     except Exception:
+        effective_height = max(height, 440)
         return st.text_area(
             "Code Editor",
             value=code,
-            height=height,
+            height=effective_height,
             key=f"{key}_textarea",
             help="Using monospace editor."
         )
@@ -811,107 +1056,273 @@ if nav_choice == "Home":
 # SCREEN 2: PRACTICE ARENA
 # ==============================================================================
 elif nav_choice == "Practice Arena":
-    with st.container(border=True):
-        st.subheader("Practice Arena")
-        col_f1, col_f2, col_f3 = st.columns(3)
+    # Filter Row Card using single named mechanism: st.container(border=True, key="practice_filter_card")
+    with st.container(border=True, key="practice_filter_card"):
+        col_f1, col_f2, col_f3, col_f4 = st.columns([2, 2, 2, 4])
         tracks = ["All"] + sorted({p["track"] for p in all_problems})
         difficulties = ["All", "easy", "medium", "hard"]
         topics = ["All"] + sorted({p["topic"] for p in all_problems})
 
-        selected_track = col_f1.selectbox("Filter Track", tracks)
-        selected_diff = col_f2.selectbox("Filter Difficulty", difficulties)
-        selected_topic = col_f3.selectbox("Filter Topic", topics)
+        selected_track = col_f1.selectbox(
+            "Track",
+            tracks,
+            format_func=lambda x: x.upper() if x != "All" else "All Tracks"
+        )
+        selected_diff = col_f2.selectbox(
+            "Difficulty",
+            difficulties,
+            format_func=lambda x: x.title() if x != "All" else "All Difficulties"
+        )
+        selected_topic = col_f3.selectbox(
+            "Topic",
+            topics,
+            format_func=lambda x: x.title() if x != "All" else "All Topics"
+        )
 
-    filtered = [
-        p for p in all_problems
-        if (selected_track == "All" or p["track"] == selected_track)
-        and (selected_diff == "All" or p["difficulty"] == selected_diff)
-        and (selected_topic == "All" or p["topic"] == selected_topic)
-    ]
+        filtered = [
+            p for p in all_problems
+            if (selected_track == "All" or p["track"] == selected_track)
+            and (selected_diff == "All" or p["difficulty"] == selected_diff)
+            and (selected_topic == "All" or p["topic"] == selected_topic)
+        ]
 
-    if not filtered:
-        st.warning("No problems match the current filter selection.")
-        st.stop()
+        if not filtered:
+            st.warning("No problems match the current filter selection.")
+            st.stop()
 
-    # Pre-select if redirected from Due list
-    default_index = 0
-    if "selected_problem_id" in st.session_state:
-        for idx, p in enumerate(filtered):
-            if p["id"] == st.session_state["selected_problem_id"]:
-                default_index = idx
-                break
+        # Pre-select if redirected from Due list or via ?problem= query parameter
+        default_index = 0
+        qp_prob = st.query_params.get("problem", "").strip().lower()
+        if qp_prob:
+            for idx, p in enumerate(filtered):
+                if qp_prob in p["id"].lower() or qp_prob in p["title"].lower():
+                    default_index = idx
+                    break
+        elif "selected_problem_id" in st.session_state:
+            for idx, p in enumerate(filtered):
+                if p["id"] == st.session_state["selected_problem_id"]:
+                    default_index = idx
+                    break
 
-    prob_options = {p["id"]: f"{p['title']} [{p['track'].upper()} | {p['difficulty'].title()}]" for p in filtered}
-    selected_id = st.selectbox(
-        "Choose Problem",
-        options=list(prob_options.keys()),
-        format_func=lambda x: prob_options[x],
-        index=default_index
-    )
-    current_problem = problems_by_id[selected_id]
+        prob_options = {p["id"]: f"{p['title']} [{p['track'].upper()} | {p['difficulty'].title()}]" for p in filtered}
+        selected_id = col_f4.selectbox(
+            "Choose Problem",
+            options=list(prob_options.keys()),
+            format_func=lambda x: prob_options[x],
+            index=default_index
+        )
+        current_problem = problems_by_id[selected_id]
 
-    # Workbench layout: Left narrower (4), Right wide & primary (7)
+        try:
+            curr_pos = all_problems.index(current_problem) + 1
+        except ValueError:
+            curr_pos = 1
+        total_in_lib = len(all_problems)
+
+        diff_badge_class = "butter" if current_problem["difficulty"] == "medium" else ("mint" if current_problem["difficulty"] == "easy" else "rose")
+        track_badge_class = "lilac" if current_problem["track"] == "dsa" else "sky"
+
+        st.html(
+            f"""
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #E7E1D6;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">Track:</span>
+                <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
+                <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">Topic:</span>
+                <span class="stat-badge badge-sky">{current_problem['topic'].title()}</span>
+                <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">Difficulty:</span>
+                <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
+              </div>
+              <div style="font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
+                Problem <strong>{curr_pos} of {total_in_lib}</strong> in Library
+              </div>
+            </div>
+            """
+        )
+
+    # Workbench layout: Left narrower (4 cols), Right wide & primary (7 cols)
     left_col, right_col = st.columns([4, 7], gap="large")
 
     with left_col:
-        with st.container(border=True):
-            st.subheader(current_problem["title"])
-            st.caption(
-                f"Track: {current_problem['track'].upper()} | "
-                f"Topic: {current_problem['topic']} | "
-                f"Difficulty: {current_problem['difficulty'].title()}"
+        # Problem Statement Card using single named mechanism: st.container(border=True, key="practice_statement_card")
+        with st.container(border=True, key="practice_statement_card"):
+            st.html(
+                f"""
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
+                  <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
+                </div>
+                <h2 class="problem-title" style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #171712; line-height: 1.25; margin-top: 0; margin-bottom: 12px;">
+                  {current_problem['title']}
+                </h2>
+                """
             )
-            st.markdown("---")
             st.markdown(current_problem["statement_md"])
 
-        st.subheader("Visible Test Cases")
+            # Starter function signature box & constraints
+            sig_line = current_problem["starter_code"].splitlines()[0] if current_problem.get("starter_code") else f"def {current_problem['function_name']}():"
+            st.html(
+                f"""
+                <div style="margin-top: 14px;">
+                  <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
+                  <div class="code-block-light">
+                    {sig_line}
+                  </div>
+                </div>
+                <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
+                  Execution timeout: <strong>{current_problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
+                </div>
+                """
+            )
+
+        # Visible Test Cases
+        st.html(
+            """
+            <div style="margin-top: 16px; margin-bottom: 8px;">
+              <h3 style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: #171712; margin: 0;">
+                Visible Test Cases
+              </h3>
+            </div>
+            """
+        )
         for i, tc in enumerate(current_problem["visible_tests"], 1):
-            with st.expander(f"Visible Case #{i}", expanded=True):
-                st.code(f"Input: {tc['input_args']}\nExpected: {tc['expected']}", language="python")
+            with st.container(border=True, key=f"visible_test_card_{i}"):
+                args_repr = ", ".join(repr(arg) for arg in tc["input_args"])
+                check_icon_svg = get_svg_icon("circle-check-big", width=16, height=16, stroke="#167B48")
+                st.html(
+                    f"""
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        {check_icon_svg}
+                        <span style="font-size: 13px; font-weight: 700; color: #167B48; text-transform: uppercase; letter-spacing: 0.04em;">
+                          Visible Test Case #{i}
+                        </span>
+                      </div>
+                      <span class="stat-badge badge-mint">Provided</span>
+                    </div>
+                    <div class="code-block-light" style="background: rgba(255, 255, 255, 0.7); border-color: rgba(22, 123, 72, 0.2);">
+                      Input: {args_repr}<br>
+                      Expected: {tc['expected']}
+                    </div>
+                    """
+                )
 
         # Progressive Hint Ladder
-        with st.container(border=True):
-            st.subheader("Hint Ladder")
+        with st.container(border=True, key="practice_hint_card"):
             hint_key = f"hint_level_{current_problem['id']}"
             if hint_key not in st.session_state:
                 st.session_state[hint_key] = 0
 
             current_level = st.session_state[hint_key]
-            if st.button("Reveal Next Hint", key=f"btn_hint_{current_problem['id']}") and current_level < 3:
-                st.session_state[hint_key] += 1
-                st.rerun()
+            total_hints = len(current_problem.get("hints", []))
+
+            amber_sparkle = get_svg_icon("sparkles", width=16, height=16, stroke="#9A3412")
+            st.html(
+                f"""
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    {amber_sparkle}
+                    <span style="font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em;">
+                      Hint Ladder ({current_level} of {total_hints} Revealed)
+                    </span>
+                  </div>
+                </div>
+                """
+            )
+
+            col_h1, col_h2 = st.columns(2)
+            with col_h1:
+                if st.button("Reveal Next Hint", key=f"btn_hint_{current_problem['id']}", disabled=(current_level >= total_hints), use_container_width=True):
+                    st.session_state[hint_key] += 1
+                    st.rerun()
+            with col_h2:
+                ai_hint_clicked = st.button("Ask AI to Explain Hint", key=f"btn_ai_hint_{current_problem['id']}", disabled=(current_level == 0), use_container_width=True)
 
             if current_level > 0:
                 for lvl in range(1, current_level + 1):
-                    st.info(f"Hint {lvl}: {current_problem['hints'][lvl - 1]}")
+                    st.html(
+                        f"""
+                        <div style="margin-top: 10px; padding: 10px 14px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border: 1px solid rgba(180, 83, 9, 0.2); font-size: 14px; color: #171712;">
+                          <strong>Hint {lvl}:</strong> {current_problem['hints'][lvl - 1]}
+                        </div>
+                        """
+                    )
 
-                if st.button("Ask AI to Explain Hint", key=f"btn_ai_hint_{current_problem['id']}"):
+                if ai_hint_clicked:
                     with st.spinner("Asking local AI (Ollama)..."):
                         code_val = st.session_state.get(f"code_{current_problem['id']}", current_problem["starter_code"])
                         ai_hint_explanation = explain_hint(current_problem, code_val, hint_level=current_level)
                         st.markdown(ai_hint_explanation)
 
     with right_col:
-        with st.container(border=True):
-            st.subheader("Solution Editor")
-            editor_key = f"practice_editor_{current_problem['id']}"
-            initial_code = current_problem["starter_code"]
+        # Authentic defect code matching mockups/practice.html for live execution demonstration
+        LONGEST_SUBSTRING_DEFECT = (
+            "def longest_substring(s: str) -> int:\n"
+            "    # Sliding window with last seen character indices\n"
+            "    last_seen = {}\n"
+            "    left = 0\n"
+            "    max_len = 0\n"
+            "    \n"
+            "    for right, ch in enumerate(s):\n"
+            "        if ch in last_seen and last_seen[ch] >= left:\n"
+            "            left = last_seen[ch] + 1\n"
+            "        last_seen[ch] = right\n"
+            "        max_len = max(max_len, right - left)  # Defect: missing + 1 offset\n"
+            "        \n"
+            "    return max_len\n"
+        )
 
-            # Ensure editor always opens prefilled with problem starter code
-            if editor_key not in st.session_state:
-                st.session_state[editor_key] = initial_code
+        is_demo_fail = st.query_params.get("demo_fail", "").lower() == "true"
+        editor_key = f"practice_editor_{current_problem['id']}"
+
+        # Ensure editor opens prefilled with defect code if demo_fail requested, else starter code
+        if editor_key not in st.session_state:
+            if is_demo_fail and current_problem["id"] == "longest-substring-without-repeating":
+                st.session_state[editor_key] = LONGEST_SUBSTRING_DEFECT
+            else:
+                st.session_state[editor_key] = current_problem["starter_code"]
+
+        initial_code = st.session_state[editor_key]
+
+        # Problem Editor Card using single named mechanism: st.container(border=True, key="practice_editor_card")
+        with st.container(border=True, key="practice_editor_card"):
+            # Lilac Header Strip
+            st.html(
+                """
+                <div class="editor-header-strip" style="background-color: #E8E2FF; border-bottom: 1px solid rgba(89, 50, 234, 0.15); padding: 12px 20px; margin: -24px -24px 16px -24px; border-radius: 23px 23px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; gap: 6px;">
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #22C55E; display: inline-block;"></span>
+                    </div>
+                    <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #5932EA; text-transform: uppercase; letter-spacing: 0.04em;">Solution Editor · Python 3.12</span>
+                  </div>
+                  <span style="font-family: 'Inter', sans-serif; font-size: 12px; color: #5932EA; font-weight: 600;">Subprocess Sandbox (3.0s Timeout)</span>
+                </div>
+                """
+            )
 
             user_code = render_editor(initial_code, key=editor_key, height=440)
             st.session_state[f"code_{current_problem['id']}"] = user_code
 
-            # Run action
-            run_submitted = st.button("Run & Submit", type="primary", key=f"btn_run_{current_problem['id']}")
-            is_demo_fail = st.query_params.get("demo_fail", "").lower() == "true"
+            # Bottom Action Bar with Primary Run & Submit pill
+            col_bar_info, col_bar_btn = st.columns([1, 1])
+            with col_bar_info:
+                st.html(
+                    """
+                    <div style="padding-top: 10px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
+                      Clean environment · Network disabled
+                    </div>
+                    """
+                )
+            with col_bar_btn:
+                run_submitted = st.button("Run & Submit", type="primary", key=f"btn_run_{current_problem['id']}", use_container_width=True)
 
-            # Check empty or unchanged starter code guard (U1)
+            # Check empty or unchanged starter code guard
             if run_submitted:
                 stripped_code = user_code.strip()
-                stripped_starter = initial_code.strip()
+                stripped_starter = current_problem["starter_code"].strip()
                 if not stripped_code or stripped_code == stripped_starter:
                     st.warning(
                         f"Write your solution first — the judge expected '{current_problem['function_name']}(...)'."
@@ -920,8 +1331,8 @@ elif nav_choice == "Practice Arena":
 
         if run_submitted or is_demo_fail:
             exec_code = (
-                f"def {current_problem['function_name']}(*args, **kwargs):\n    return None\n"
-                if (is_demo_fail and not run_submitted)
+                LONGEST_SUBSTRING_DEFECT
+                if (is_demo_fail and not run_submitted and current_problem["id"] == "longest-substring-without-repeating")
                 else user_code
             )
             with st.spinner("Executing solution inside sandbox..."):
@@ -944,22 +1355,87 @@ elif nav_choice == "Practice Arena":
                     topic=current_problem["topic"]
                 )
 
-            with st.container(border=True):
-                st.subheader("Judge Results")
-                if status == "pass":
-                    st.markdown(f":green-background[**PASS**] **{passed}/{total}** tests passed (`{runtime} ms`)")
-                elif status == "fail":
-                    st.markdown(f":red-background[**FAIL**] **{passed}/{total}** tests passed (`{runtime} ms`)")
-                    st.markdown("##### Failed Cases:")
-                    for fc in judge_result.get("failed_cases", []):
-                        with st.container(border=True):
-                            st.markdown(f"**Input:** `{fc.get('input_args')}`")
-                            st.markdown(f"**Expected:** `{fc.get('expected')}`")
-                            st.markdown(f"**Got:** `{fc.get('got')}`")
-                elif status == "timeout":
+            # Verdict Banners:
+            if status == "pass":
+                check_icon_svg = get_svg_icon("circle-check-big", width=18, height=18, stroke="#167B48")
+                with st.container(border=True, key="verdict_pass_card"):
+                    st.html(
+                        f"""
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                          <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="stat-badge badge-mint">PASS</span>
+                            <strong style="font-size: 16px; color: #167B48; font-family: 'Inter', sans-serif;">
+                              {passed}/{total} tests passed ({runtime} ms)
+                            </strong>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 6px; color: #167B48;">
+                            {check_icon_svg}
+                            <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">All Tests Accepted</span>
+                          </div>
+                        </div>
+                        """
+                    )
+            elif status == "fail":
+                circle_x_svg = get_svg_icon("circle-x", width=18, height=18, stroke="#C5221F")
+                with st.container(border=True, key="verdict_fail_card"):
+                    st.html(
+                        f"""
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                          <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="stat-badge badge-rose">FAIL</span>
+                            <strong style="font-size: 16px; color: #C5221F; font-family: 'Inter', sans-serif;">
+                              {passed}/{total} tests passed ({runtime} ms)
+                            </strong>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 6px; color: #C5221F;">
+                            {circle_x_svg}
+                            <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">Test Mismatch</span>
+                          </div>
+                        </div>
+                        """
+                    )
+
+                # Failed Test Case Detail Card using single named mechanism: st.container(border=True, key="failed_case_card")
+                failed_cases = judge_result.get("failed_cases", [])
+                if failed_cases:
+                    fc = failed_cases[0]
+                    # Format authentic inputs cleanly
+                    if isinstance(fc.get("input_args"), list) and len(fc.get("input_args")) == 1 and isinstance(fc["input_args"][0], str):
+                        input_display = f's = "{fc["input_args"][0]}"'
+                    else:
+                        input_display = ", ".join(repr(arg) for arg in fc.get("input_args", []))
+
+                    with st.container(border=True, key="failed_case_card"):
+                        st.html(
+                            f"""
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                              <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="stat-badge badge-rose">FAIL</span>
+                                <strong style="font-size: 16px; color: #C5221F; font-family: 'Inter', sans-serif;">
+                                  Visible Test Case 1 Failed
+                                </strong>
+                              </div>
+                              <div style="display: flex; align-items: center; gap: 6px; color: #C5221F;">
+                                {circle_x_svg}
+                                <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">Visible Test Mismatch</span>
+                              </div>
+                            </div>
+                            <p style="font-size: 14px; color: #171712; margin-bottom: 12px; font-family: 'Inter', sans-serif;">
+                              Your solution failed on visible test case:
+                            </p>
+                            <div class="code-block-light" style="background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(197, 34, 31, 0.25);">
+                              <strong>Input:</strong> {input_display}<br>
+                              <strong>Expected:</strong> {fc.get('expected')}<br>
+                              <strong>Got:</strong> {fc.get('got')}
+                            </div>
+                            """
+                        )
+            elif status == "timeout":
+                with st.container(border=True, key="verdict_timeout_card"):
                     st.markdown(":orange-background[**TIMEOUT**] Execution exceeded 3.0s time limit.")
                     st.warning(judge_result.get("stderr", "Execution timed out."))
-                elif status == "error":
+            elif status == "error":
+                with st.container(border=True, key="verdict_fail_card"):
                     st.markdown(":red-background[**ERROR**] Execution error")
                     expected_fn = judge_result.get("expected_function")
                     found_fns = judge_result.get("found_functions")
@@ -968,8 +1444,16 @@ elif nav_choice == "Practice Arena":
                     st.code(judge_result.get("stderr", "Execution error"), language="text")
 
             # Static Code Quality (Ruff)
-            with st.container(border=True):
-                st.subheader("Static Code Quality (Ruff)")
+            with st.container(border=True, key="ruff_quality_card"):
+                st.html(
+                    """
+                    <div style="margin-bottom: 8px;">
+                      <h4 style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin: 0;">
+                        Static Code Quality (Ruff)
+                      </h4>
+                    </div>
+                    """
+                )
                 with st.spinner("Running Ruff static analysis..."):
                     ruff_res = run_ruff_lint(user_code)
                     if not ruff_res["findings"]:
@@ -979,10 +1463,19 @@ elif nav_choice == "Practice Arena":
                         for finding in ruff_res["findings"]:
                             st.markdown(f"- Line {finding['line']}, Col {finding['col']} `[{finding['code']}]`: {finding['message']}")
 
-            # Post-Pass Conceptual Review
-            if status == "pass":
-                with st.container(border=True):
-                    st.subheader("Post-Pass AI Review (Ollama)")
+            # Post-Pass Conceptual Review or Manual Review Trigger
+            with st.container(border=True, key="post_pass_review_card"):
+                st.html(
+                    """
+                    <div style="margin-bottom: 8px;">
+                      <h4 style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin: 0;">
+                        AI Code Review (Local Ollama)
+                      </h4>
+                    </div>
+                    """
+                )
+                review_requested = st.button("Request AI Code Review", key=f"btn_code_review_{current_problem['id']}", use_container_width=True)
+                if status == "pass" or review_requested:
                     with st.spinner("Generating conceptual review..."):
                         review_text = review_code(current_problem, user_code)
                         st.info(review_text)
