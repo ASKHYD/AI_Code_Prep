@@ -6,8 +6,11 @@ The judge is CODE, not AI.
 
 from __future__ import annotations
 
+import base64
 import time
 from datetime import date, datetime
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 import streamlit as st
@@ -26,49 +29,109 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Optional single CSS block strictly adhering to R2 rules:
-# Max 2 justified data-testid selectors + .st-key-<key> selectors only.
-# All hex values strictly sourced from DESIGN.md tokens.
-st.html("""
-<style>
-    /* Keyed selector: sidebar navigation radio active indicator in accent token #22C55E */
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] {
-        border-color: #22C55E !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] div {
-        background-color: #22C55E !important;
+FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
+
+FONT_DEFINITIONS = [
+    ("Fraunces", "normal", 500, "fraunces-latin-500-normal.woff2"),
+    ("Fraunces", "normal", 600, "fraunces-latin-600-normal.woff2"),
+    ("Fraunces", "normal", 700, "fraunces-latin-700-normal.woff2"),
+    ("Fraunces", "normal", 800, "fraunces-latin-800-normal.woff2"),
+    ("Inter", "normal", 400, "inter-latin-400-normal.woff2"),
+    ("Inter", "normal", 500, "inter-latin-500-normal.woff2"),
+    ("Inter", "normal", 600, "inter-latin-600-normal.woff2"),
+    ("Inter", "normal", 700, "inter-latin-700-normal.woff2"),
+    ("JetBrains Mono", "normal", 400, "jetbrains-mono-latin-400-normal.woff2"),
+    ("JetBrains Mono", "normal", 500, "jetbrains-mono-latin-500-normal.woff2"),
+    ("JetBrains Mono", "normal", 600, "jetbrains-mono-latin-600-normal.woff2"),
+    ("JetBrains Mono", "normal", 700, "jetbrains-mono-latin-700-normal.woff2"),
+]
+
+
+@lru_cache(maxsize=1)
+def get_global_css() -> str:
+    """Builds offline base64 @font-face rules and Direction A typography rules."""
+    font_faces = []
+    for family, style, weight, filename in FONT_DEFINITIONS:
+        path = FONTS_DIR / filename
+        if path.exists():
+            encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+            font_faces.append(
+                f"@font-face {{\n"
+                f"  font-family: '{family}';\n"
+                f"  font-style: {style};\n"
+                f"  font-weight: {weight};\n"
+                f"  font-display: swap;\n"
+                f"  src: url(data:font/woff2;base64,{encoded}) format('woff2');\n"
+                f"}}"
+            )
+
+    font_css = "\n".join(font_faces)
+
+    rules_css = """
+    /* Body & UI defaults */
+    html, body, [class*="css"], .stMarkdown, p, span, label {
+        font-family: 'Inter', sans-serif !important;
     }
 
-    /* Primary buttons: token accent #22C55E with high-contrast text #0F172A (7.83:1) */
+    /* Display headings in Fraunces */
+    h1, h2, h3, h4, .stTitle, .stSubheader, [data-testid="stHeader"],
+    h1 *, h2 *, h3 *, h4 *, .stTitle *, .stSubheader * {
+        font-family: 'Fraunces', serif !important;
+    }
+
+    /* Monospace for code literals, editors, and syntax */
+    code, pre, .stCode, code *, pre * {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Direction A Variant B: Metric numerals in Inter SemiBold 600 with tabular figures */
+    div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] *, .stat-number, .stat-number * {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        font-variant-numeric: tabular-nums !important;
+        letter-spacing: -0.025em;
+    }
+
+    /* Action buttons: Direction A pill geometry and typography */
+    button[kind="primary"], .stButton > button {
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+        padding: 10px 24px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+    }
     button[kind="primary"] {
-        background-color: #22C55E !important;
-        border-color: #22C55E !important;
+        background-color: #15803D !important;
+        border-color: #15803D !important;
+        color: #FFFFFF !important;
     }
     button[kind="primary"] p, button[kind="primary"] span {
-        color: #0F172A !important;
+        color: #FFFFFF !important;
         font-weight: 600 !important;
     }
     button[kind="primary"]:hover {
-        opacity: 0.9 !important;
+        background-color: #167B48 !important;
+        border-color: #167B48 !important;
     }
 
-    /* Prism code block syntax tokens: #38BDF8 (contrast 6.83:1) */
-    .stCode span.token.keyword, .stCode span.token.function {
-        color: #38BDF8 !important;
+    /* Sidebar navigation radio active indicator in accent token #15803D */
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] {
+        border-color: #15803D !important;
+    }
+    .st-key-nav_sidebar_radio div[role="radiogroup"] label div[aria-checked="true"] div {
+        background-color: #15803D !important;
     }
 
-    /* Justified data-testid 1: stSidebar border separation against canvas (#475569) */
+    /* Sidebar border separation against canvas (#E7E1D6) */
     div[data-testid="stSidebar"] {
-        border-right: 1px solid #475569 !important;
+        border-right: 1px solid #E7E1D6 !important;
     }
+    """
 
-    /* Justified data-testid 2: stMetricValue tabular monospace alignment for figures */
-    div[data-testid="stMetricValue"] {
-        font-family: "JetBrains Mono", monospace !important;
-        font-variant-numeric: tabular-nums !important;
-    }
-</style>
-""")
+    return f"<style>\n{font_css}\n{rules_css}\n</style>"
+
+
+st.html(get_global_css())
 
 # Initialize database store
 @st.cache_resource
