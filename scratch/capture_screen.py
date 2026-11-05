@@ -33,7 +33,7 @@ CURRENT_BRAIN_DIR = pathlib.Path(
     r"C:\Users\MS Computer\.gemini\antigravity\brain\d44988ce-2f18-46d8-a231-b7f0666ec30e\screenshots\r3"
 )
 ACTIVE_BRAIN_DIR = pathlib.Path(
-    r"C:\Users\MS Computer\.gemini\antigravity\brain\43758044-1901-4c55-9976-230346ca9821\screenshots\r3"
+    r"C:\Users\MS Computer\.gemini\antigravity\brain\9189ed19-6177-456e-9f75-a9b447a8e16e\screenshots\r3"
 )
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 STREAMLIT_PORT = 8501
