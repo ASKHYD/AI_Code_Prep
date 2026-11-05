@@ -312,6 +312,92 @@ def get_global_css() -> str:
         display: block;
         line-height: 1.4 !important;
     }
+
+    /* Direction A Home Due & Recent Sections */
+    div.st-key-home_due_section:has([data-testid="stVerticalBlockBorderWrapper"]),
+    div.st-key-home_recent_section:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .st-key-home_due_section,
+    .st-key-home_due_section [data-testid="stVerticalBlockBorderWrapper"] > div,
+    .st-key-home_recent_section,
+    .st-key-home_recent_section [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
+        padding: 24px !important;
+    }
+
+    /* Direction A Empty Queue Sky Wash Card */
+    div.st-key-home_caught_up:has([data-testid="stVerticalBlockBorderWrapper"]) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .st-key-home_caught_up,
+    .st-key-home_caught_up [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: #DCEBFF !important;
+        border: 1px solid rgba(29, 94, 194, 0.25) !important;
+        border-radius: 16px !important;
+        padding: 20px 24px !important;
+    }
+
+    /* Saturated Status Tint Chips */
+    .chip-pass {
+        background-color: #DFF3E4 !important;
+        color: #167B48 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        padding: 4px 12px !important;
+        border-radius: 999px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        letter-spacing: 0.04em !important;
+    }
+    .chip-timeout {
+        background-color: #FFF0C4 !important;
+        color: #9A3412 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        padding: 4px 12px !important;
+        border-radius: 999px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        letter-spacing: 0.04em !important;
+    }
+    .chip-fail {
+        background-color: #FFE0E0 !important;
+        color: #C5221F !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        padding: 4px 12px !important;
+        border-radius: 999px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    .attempt-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        background-color: #FBFAF7;
+        border: 1px solid #E7E1D6;
+        border-radius: 16px;
+        margin-bottom: 8px;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -569,39 +655,156 @@ if nav_choice == "Home":
                 unsafe_allow_html=True,
             )
 
-    with st.container(border=True):
-        st.subheader("Due for Review Today")
+    # Due for Review section
+    with st.container(border=True, key="home_due_section"):
+        cal_blue = get_svg_icon("calendar", width=22, height=22, stroke="#1D5EC2")
+        queue_text = "Queue Status: Clear" if not due_list else f"Queue Status: {len(due_list)} Due"
+        queue_color = "#1D5EC2" if not due_list else "#9A3412"
+        st.markdown(
+            f"""<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    {cal_blue}
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0;">
+                        Due for Review Today
+                    </h2>
+                </div>
+                <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: {queue_color};">
+                    {queue_text}
+                </span>
+            </div>""",
+            unsafe_allow_html=True,
+        )
         if not due_list:
-            st.info("You are all caught up! No problems due for review today. Open Practice Arena to solve a new problem.")
+            with st.container(border=True, key="home_caught_up"):
+                cal_big = get_svg_icon("calendar", width=22, height=22, stroke="#1D5EC2")
+                st.markdown(
+                    f"""<div style="display: flex; align-items: flex-start; gap: 14px;">
+                        <div style="background-color: rgba(29, 94, 194, 0.12); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            {cal_big}
+                        </div>
+                        <div>
+                            <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin-bottom: 2px;">
+                                You are all caught up!
+                            </div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #171712; line-height: 1.5;">
+                                No problems due for review today. Open Practice Arena to solve a new problem.
+                            </div>
+                        </div>
+                    </div>""",
+                    unsafe_allow_html=True,
+                )
         else:
             for item in due_list:
                 prob = problems_by_id.get(item["problem_id"])
                 if not prob:
                     continue
-                with st.container(border=True):
-                    cols = st.columns([4, 2, 2, 2, 2])
-                    cols[0].markdown(f"**{prob['title']}**")
-                    cols[1].caption(f"Track: {prob['track'].upper()}")
-                    cols[2].caption(f"Topic: {prob['topic']}")
-                    cols[3].caption(f"Passes: {item['consecutive_passes']}")
-                    if cols[4].button("Practice", key=f"due_btn_{prob['id']}"):
+                d_col1, d_col2 = st.columns([5, 1], vertical_alignment="center")
+                diff = prob["difficulty"]
+                diff_wash = "#DFF3E4" if diff == "easy" else ("#FFF0C4" if diff == "medium" else "#FFE0E0")
+                diff_text = "#167B48" if diff == "easy" else ("#9A3412" if diff == "medium" else "#C5221F")
+                with d_col1:
+                    st.markdown(
+                        f"""<div style="display: flex; align-items: center; gap: 12px; padding: 6px 0;">
+                            <span style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; background-color: {diff_wash}; color: {diff_text}; padding: 3px 10px; border-radius: 999px;">
+                                {diff}
+                            </span>
+                            <div>
+                                <strong style="font-family: 'Inter', sans-serif; font-size: 15px; color: #171712;">{prob['title']}</strong>
+                                <span style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin-left: 8px;">
+                                    Track: {prob['track'].upper()} • Topic: {prob['topic']} • Passes: {item['consecutive_passes']}
+                                </span>
+                            </div>
+                        </div>""",
+                        unsafe_allow_html=True,
+                    )
+                with d_col2:
+                    if st.button("Practice", key=f"due_btn_{prob['id']}", use_container_width=True):
                         st.session_state["selected_problem_id"] = prob["id"]
+                        st.session_state["nav_sidebar_radio"] = "Practice Arena"
                         st.query_params["screen"] = "practice"
+                        st.session_state["last_screen_param"] = "practice"
                         st.rerun()
 
-    with st.container(border=True):
-        st.subheader("Recent Practice Attempts")
+    # Recent Practice Attempts section
+    with st.container(border=True, key="home_recent_section"):
         recents = store.get_recent_attempts(limit=5)
+        st.markdown(
+            f"""<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0;">
+                        Recent Practice Attempts
+                    </h2>
+                    <p style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin: 2px 0 0 0;">
+                        Deterministic test verdicts recorded strictly in local SQLite.
+                    </p>
+                </div>
+                <span style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; font-weight: 500;">
+                    {'Showing last 5 attempts' if recents else 'No attempts recorded'}
+                </span>
+            </div>""",
+            unsafe_allow_html=True,
+        )
         if recents:
             for r in recents:
-                prob_title = problems_by_id.get(r["problem_id"], {}).get("title", r["problem_id"])
-                status_color = ":green[PASS]" if r['status'] == 'pass' else (":orange[TIMEOUT]" if r['status'] == 'timeout' else ":red[FAIL]")
-                st.markdown(
-                    f"- **{r['attempt_date']}** | **{prob_title}** | "
-                    f"Result: {status_color} | Runtime: `{r['runtime_ms']}ms` | Hints: `{r['hints_used']}`"
-                )
+                prob = problems_by_id.get(r["problem_id"], {})
+                prob_title = prob.get("title", r["problem_id"])
+                prob_track = prob.get("track", "").upper()
+                prob_topic = prob.get("topic", "")
+                prob_diff = prob.get("difficulty", "medium").title()
+
+                status_norm = (r.get("status") or "").lower()
+                if status_norm == "pass":
+                    chip_class = "chip-pass"
+                    chip_label = "PASS"
+                    chip_icon = get_svg_icon("circle-check-big", width=12, height=12, stroke="#167B48", stroke_width=3)
+                elif status_norm == "timeout":
+                    chip_class = "chip-timeout"
+                    chip_label = "TIMEOUT"
+                    chip_icon = get_svg_icon("clock", width=12, height=12, stroke="#9A3412", stroke_width=3)
+                else:
+                    chip_class = "chip-fail"
+                    chip_label = "FAIL"
+                    chip_icon = get_svg_icon("circle-x", width=12, height=12, stroke="#C5221F", stroke_width=3)
+
+                r_col1, r_col2 = st.columns([5, 1], vertical_alignment="center")
+                with r_col1:
+                    st.markdown(
+                        f"""<div class="attempt-row">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <span class="{chip_class}">
+                                    {chip_icon}
+                                    {chip_label}
+                                </span>
+                                <div>
+                                    <strong style="font-family: 'Inter', sans-serif; font-size: 15px; color: #171712;">{prob_title}</strong>
+                                    <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin-top: 2px;">
+                                        Track: {prob_track} · Topic: {prob_topic} · Difficulty: {prob_diff}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: #66635A;">Date &amp; Runtime</div>
+                                <div style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: #171712; font-variant-numeric: tabular-nums;">
+                                    {r['attempt_date']} · {r['runtime_ms']} ms · {r['hints_used']} Hints
+                                </div>
+                            </div>
+                        </div>""",
+                        unsafe_allow_html=True,
+                    )
+                with r_col2:
+                    if st.button("Review", key=f"recent_btn_{r.get('id', r['problem_id'])}_{r['attempt_date']}", use_container_width=True):
+                        st.session_state["selected_problem_id"] = r["problem_id"]
+                        st.session_state["nav_sidebar_radio"] = "Practice Arena"
+                        st.query_params["screen"] = "practice"
+                        st.session_state["last_screen_param"] = "practice"
+                        st.rerun()
         else:
-            st.caption("No attempts recorded yet. Launch Practice Arena to begin your first problem.")
+            st.markdown(
+                """<div style="padding: 24px; background-color: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; text-align: center; color: #66635A; font-family: 'Inter', sans-serif; font-size: 14px;">
+                    No attempts recorded yet. Launch Practice Arena to begin your first problem.
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
 
 # ==============================================================================
