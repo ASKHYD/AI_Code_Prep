@@ -208,25 +208,12 @@ async function run() {
     // Wait for fonts to be ready
     await evaluate(`document.fonts.ready`);
 
-    // Check if code element is on Home; if not, navigate to Practice Arena
-    let hasCode = await evaluate(`!!document.querySelector('code, pre, .stCode')`);
-    if (!hasCode) {
-      console.log("[CDP] Navigating to Practice Arena for code element evaluation...");
-      await send('Page.navigate', { url: `http://127.0.0.1:${STREAMLIT_PORT}/?screen=practice` });
-      for (let i = 0; i < 30; i++) {
-        await sleep(500);
-        hasCode = await evaluate(`!!document.querySelector('code, pre, .stCode')`);
-        if (hasCode) break;
-      }
-    }
-
-    // Extract computed font families
-    const computed = await evaluate(`
+    // Extract computed font families from Home screen (Heading, Body, Metric)
+    const homeComputed = await evaluate(`
       (() => {
-        const headingEl = document.querySelector('h1, h2, h3, .stSubheader, [data-testid="stHeader"]');
+        const headingEl = document.querySelector('h1, h2, h3, .stTitle, .stSubheader');
         const bodyEl = document.querySelector('p, .stMarkdown p, label');
-        const metricEl = document.querySelector('[data-testid="stMetricValue"]');
-        const codeEl = document.querySelector('code, pre, .stCode');
+        const metricEl = document.querySelector('[data-testid="stMetricValue"], .stat-number');
 
         return {
           heading: {
@@ -245,7 +232,25 @@ async function run() {
             fontFamily: metricEl ? window.getComputedStyle(metricEl).fontFamily : null,
             fontWeight: metricEl ? window.getComputedStyle(metricEl).fontWeight : null,
             fontVariantNumeric: metricEl ? window.getComputedStyle(metricEl).fontVariantNumeric : null
-          },
+          }
+        };
+      })()
+    `);
+
+    // Navigate to Practice Arena for code element evaluation
+    console.log("[CDP] Navigating to Practice Arena for code element evaluation...");
+    await send('Page.navigate', { url: `http://127.0.0.1:${STREAMLIT_PORT}/?screen=practice` });
+    for (let i = 0; i < 30; i++) {
+      await sleep(500);
+      const hasCode = await evaluate(`!!document.querySelector('code, pre, .stCode')`);
+      if (hasCode) break;
+    }
+    await evaluate(`document.fonts.ready`);
+
+    const practiceComputed = await evaluate(`
+      (() => {
+        const codeEl = document.querySelector('code, pre, .stCode');
+        return {
           code: {
             tag: codeEl ? codeEl.tagName : null,
             text: codeEl ? codeEl.textContent.trim().slice(0, 30) : null,
@@ -254,6 +259,13 @@ async function run() {
         };
       })()
     `);
+
+    const computed = {
+      heading: homeComputed.heading,
+      body: homeComputed.body,
+      metric: homeComputed.metric,
+      code: practiceComputed.code
+    };
 
     console.log("\n================ COMPUTED FONT RESULTS ================");
     console.log(`Heading (${computed.heading.tag} "${computed.heading.text}"):`);

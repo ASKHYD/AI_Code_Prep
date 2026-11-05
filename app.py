@@ -119,7 +119,7 @@ def get_global_css() -> str:
     /* Sidebar border separation against canvas (#E7E1D6) */
     div[data-testid="stSidebar"] {
         border-right: 1px solid #E7E1D6 !important;
-        background-color: #FAF8F5 !important;
+        background-color: #FBFAF7 !important;
     }
 
     /* Direction A Sidebar Navigation: Keyed Radio Pills */
@@ -147,7 +147,7 @@ def get_global_css() -> str:
         color: #66635A !important;
     }
     .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover {
-        background-color: #EFECE6 !important;
+        background-color: #E7E1D6 !important;
     }
     .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover p,
     .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover span {
@@ -264,23 +264,28 @@ def get_global_css() -> str:
         letter-spacing: 0.02em;
     }
     .badge-mint {
-        background-color: rgba(22, 123, 72, 0.15) !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(22, 123, 72, 0.25) !important;
         color: #167B48 !important;
     }
     .badge-sky {
-        background-color: rgba(29, 94, 194, 0.15) !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(29, 94, 194, 0.25) !important;
         color: #1D5EC2 !important;
     }
     .badge-butter {
-        background-color: rgba(180, 83, 9, 0.15) !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(180, 83, 9, 0.25) !important;
         color: #9A3412 !important;
     }
     .badge-rose {
-        background-color: rgba(197, 34, 31, 0.15) !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(197, 34, 31, 0.25) !important;
         color: #C5221F !important;
     }
     .badge-lilac {
-        background-color: rgba(89, 50, 234, 0.15) !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(89, 50, 234, 0.25) !important;
         color: #5932EA !important;
     }
 
@@ -396,16 +401,17 @@ def get_global_css() -> str:
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 14px 20px;
-        background-color: #FBFAF7;
-        border: 1px solid #E7E1D6;
-        border-radius: 16px;
-        margin-bottom: 8px;
+        padding: 14px 8px;
+        background-color: transparent;
+        border-bottom: 1px solid #E7E1D6;
+    }
+    .attempt-row:last-child {
+        border-bottom: none;
     }
 
     /* Monospace Light Code Block */
     .code-block-light {
-        background-color: #F4F1EA !important;
+        background-color: #FBFAF7 !important;
         border: 1px solid #E7E1D6 !important;
         border-radius: 10px !important;
         padding: 12px 16px !important;
@@ -625,9 +631,9 @@ def get_global_css() -> str:
     div[class*="st-key-btn_ai_hint"] button:hover,
     div[class*="st-key-btn_code_review"] button:hover,
     div[class*="st-key-btn_reveal"] button:hover {
-        background-color: #DDD6FE !important;
+        background-color: #E8E2FF !important;
         border-color: #5932EA !important;
-        color: #4C1D95 !important;
+        color: #5932EA !important;
     }
     div[class*="st-key-btn_hint"] button p,
     div[class*="st-key-btn_ai_hint"] button p,
@@ -670,9 +676,9 @@ def get_global_css() -> str:
         transition: all 0.15s ease !important;
     }
     div.st-key-btn_end_mock button:hover {
-        background-color: #FEE4E2 !important;
+        background-color: #FFE0E0 !important;
         border-color: #B93815 !important;
-        color: #991B1B !important;
+        color: #C5221F !important;
     }
     div.st-key-btn_end_mock button p,
     div.st-key-btn_end_mock button span {
@@ -693,7 +699,7 @@ def get_global_css() -> str:
         box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
     }
     div.st-key-btn_start_mock button:hover {
-        background-color: #116038 !important;
+        background-color: #167B48 !important;
     }
     div.st-key-btn_start_mock button p,
     div.st-key-btn_start_mock button span {
@@ -728,9 +734,9 @@ def get_global_css() -> str:
     button[data-baseweb="tab"]:hover,
     div[data-testid="stTab"]:hover,
     div[data-testid="stTabs"] button[role="tab"]:hover {
-        background-color: #F6F3EC !important;
+        background-color: #FBFAF7 !important;
         color: #171712 !important;
-        border-color: #D3CDC0 !important;
+        border-color: #E7E1D6 !important;
     }
     div[data-testid="stTab"] p,
     button[data-baseweb="tab"] p {
@@ -809,8 +815,8 @@ def get_global_css() -> str:
         vertical-align: -2px;
     }
     div.st-key-btn_export_markdown button:hover {
-        background-color: #F2EFE9 !important;
-        border-color: #B4ACA0 !important;
+        background-color: #FBFAF7 !important;
+        border-color: #E7E1D6 !important;
         color: #171712 !important;
     }
     div.st-key-btn_export_markdown button p,
@@ -1558,9 +1564,9 @@ elif nav_choice == "Practice Arena":
                 <div class="editor-header-strip" style="background-color: #E8E2FF; border-bottom: 1px solid rgba(89, 50, 234, 0.15); padding: 12px 20px; margin: -24px -24px 16px -24px; border-radius: 23px 23px 0 0; display: flex; justify-content: space-between; align-items: center;">
                   <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="display: flex; gap: 6px;">
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #22C55E; display: inline-block;"></span>
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #D92D20; display: inline-block;"></span>
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #B45309; display: inline-block;"></span>
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #1F9D63; display: inline-block;"></span>
                     </div>
                     <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #5932EA; text-transform: uppercase; letter-spacing: 0.04em;">Solution Editor · Python 3.12</span>
                   </div>
@@ -2005,7 +2011,7 @@ elif nav_choice == "Mock Interview":
                 p1_h = st.session_state.get("mock_p1_hints", 0)
                 st.markdown(
                     f"""
-                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {prob1_title}</strong>
                             <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">PASS</span>
@@ -2023,18 +2029,18 @@ elif nav_choice == "Mock Interview":
             # Problem 2 Summary Box (Authentic Problem Data Without Invented Metrics)
             with col_sc2:
                 prob2_title = p_list[1]["title"]
-                p2_status_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">PASS</span>' if s2 == "pass" else '<span style="background: #E0F2FE; color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">In Progress</span>'
+                p2_status_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">PASS</span>' if s2 == "pass" else '<span style="background: #DCEBFF; color: #1D5EC2; border: 1px solid rgba(29, 94, 194, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">In Progress</span>'
                 p2_h = st.session_state.get("mock_p2_hints", 0)
                 st.markdown(
                     f"""
-                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {prob2_title}</strong>
                             {p2_status_badge}
                         </div>
                         <div style="font-size: 12px; color: #66635A;">Track: DSA · Topic: strings · Medium</div>
                         <div style="font-size: 13px; color: #171712; margin-top: 4px; display: flex; flex-direction: column; gap: 3px;">
-                            <span><strong>Visible Test:</strong> Input <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #EFECE6; padding: 2px 6px; border-radius: 4px;">s = &quot;abcabcbb&quot;</code> · Expected <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #EFECE6; padding: 2px 6px; border-radius: 4px;">3</code></span>
+                            <span><strong>Visible Test:</strong> Input <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #E7E1D6; padding: 2px 6px; border-radius: 4px;">s = &quot;abcabcbb&quot;</code> · Expected <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #E7E1D6; padding: 2px 6px; border-radius: 4px;">3</code></span>
                             <span style="color: #66635A; font-size: 12px;">Starter: <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">def longest_substring(s: str) -&gt; int:</code></span>
                         </div>
                     </div>
@@ -2277,7 +2283,7 @@ Summary: {solved_count} Solved, {2 - solved_count} In Progress
                 p1_rt = st.session_state.get("mock_p1_runtime", 178)
                 st.markdown(
                     f"""
-                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {p_list[0]['title']}</strong>
                             <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700;">{s1.upper()}</span>
@@ -2297,7 +2303,7 @@ Summary: {solved_count} Solved, {2 - solved_count} In Progress
                 p2_rt = st.session_state.get("mock_p2_result", {}).get("runtime_ms", 215) if st.session_state.get("mock_p2_result") else "N/A"
                 st.markdown(
                     f"""
-                    <div style="background: #FAF8F5; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {p_list[1]['title']}</strong>
                             <span style="background: {s2_bg}; color: {s2_col}; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700;">{s2.upper()}</span>
@@ -2449,9 +2455,9 @@ elif nav_choice == "Dashboard":
         st.markdown(
             """<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                 <div>
-                    <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
                         Topic Mastery &amp; Pass Rates
-                    </h3>
+                    </h2>
                     <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
                         Per-category accuracy across DSA and Python tracks with topic-tinted bars.
                     </p>
@@ -2539,9 +2545,9 @@ elif nav_choice == "Dashboard":
     with st.container(border=True, key="dashboard_table_card"):
         st.markdown(
             """<div style="margin-bottom: 16px;">
-                <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
                     Topic Breakdown Table
-                </h3>
+                </h2>
                 <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
                     Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.
                 </p>
@@ -2576,7 +2582,7 @@ elif nav_choice == "Dashboard":
             if attempts == 0:
                 ratio_str = f'<span style="color: #66635A; font-weight: 600;">0 / {total_in_topic}</span>'
                 bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #F4F1EA; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                    <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
                         <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
                     </div>
                     <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
@@ -2585,7 +2591,7 @@ elif nav_choice == "Dashboard":
             else:
                 ratio_str = f'<span style="color: #171712; font-weight: 600;">{solved_in_topic} / {total_in_topic}</span>'
                 bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #F4F1EA; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                    <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
                         <div style="background: {bar_color}; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 999px;"></div>
                     </div>
                     <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #171712;">{pass_rate:.1f}%</span>
