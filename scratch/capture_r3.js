@@ -1,5 +1,6 @@
 const fs = require('fs');
 const http = require('http');
+const path = require('path');
 
 async function getWsUrl(port = 9222) {
   return new Promise((resolve, reject) => {
@@ -29,11 +30,23 @@ const items = [
   { name: 'mock_1920x1080.png', url: 'file:///E:/resume_project/mockups/mock.html', width: 1920, height: 1080 },
   { name: 'dashboard_1600x1000.png', url: 'file:///E:/resume_project/mockups/dashboard.html', width: 1600, height: 1000 },
   { name: 'dashboard_1920x1080.png', url: 'file:///E:/resume_project/mockups/dashboard.html', width: 1920, height: 1080 },
-  { name: 'tokens_1600x1000.png', url: 'file:///E:/resume_project/mockups/tokens.html', width: 1600, height: 1000 }
+  { name: 'tokens_1600x1000.png', url: 'file:///E:/resume_project/mockups/tokens.html', width: 1600, height: 1000 },
+  { name: 'tokens_1920x1080.png', url: 'file:///E:/resume_project/mockups/tokens.html', width: 1920, height: 1080 }
 ];
 
 const docsDir = 'E:/resume_project/docs/screenshots/r3';
-const brainDir = 'C:/Users/MS Computer/.gemini/antigravity/brain/21318fe1-53ce-4786-9ffb-fc1775e62a2f/screenshots/r3';
+const brainDir = 'C:/Users/MS Computer/.gemini/antigravity/brain/93d59834-2449-4201-af32-3cbe9726591d/screenshots/r3';
+
+if (!fs.existsSync(docsDir)) {
+  fs.mkdirSync(docsDir, { recursive: true });
+}
+if (brainDir && !fs.existsSync(brainDir)) {
+  try {
+    fs.mkdirSync(brainDir, { recursive: true });
+  } catch (e) {
+    console.warn("Could not create brainDir:", e.message);
+  }
+}
 
 async function run() {
   const wsUrl = await getWsUrl(9222);
@@ -73,9 +86,11 @@ async function run() {
           if (result && result.result && result.result.data) {
             const buf = Buffer.from(result.result.data, 'base64');
             const p1 = `${docsDir}/${item.name}`;
-            const p2 = `${brainDir}/${item.name}`;
             fs.writeFileSync(p1, buf);
-            fs.writeFileSync(p2, buf);
+            if (brainDir && fs.existsSync(brainDir)) {
+              const p2 = `${brainDir}/${item.name}`;
+              fs.writeFileSync(p2, buf);
+            }
             console.log(`Saved ${item.name} (${buf.length} bytes) to docs & brain`);
           } else {
             console.error(`Failed to capture ${item.name}:`, result);
@@ -103,7 +118,7 @@ async function run() {
 }
 
 run().then(() => {
-  console.log("All R3 screenshots captured successfully!");
+  console.log("All 10 R3 screenshots captured successfully!");
   process.exit(0);
 }).catch(err => {
   console.error("Fatal capture error:", err);
