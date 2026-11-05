@@ -19,25 +19,25 @@
       <nav class="nav-menu">
         <a href="home.html" class="nav-item">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </span>
           Home
         </a>
         <a href="practice.html" class="nav-item active-practice">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           </span>
           Practice Arena
         </a>
         <a href="mock.html" class="nav-item">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </span>
           Mock Interview
         </a>
         <a href="dashboard.html" class="nav-item">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </span>
           Dashboard
         </a>
@@ -73,7 +73,7 @@
         </div>
       </section>
 
-      <!-- Workbench Grid (Left: 4, Right: 7) -->
+      <!-- Workbench Grid (Left: 4 cols / 35%, Right: 7 cols / 65%) -->
       <div class="workbench-grid">
         
         <!-- Left Column: Problem Statement & Test Cases -->
@@ -97,12 +97,12 @@
             <div style="margin-bottom: var(--space-5);">
               <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); display: block; margin-bottom: var(--space-2);">Function Signature</span>
               <div class="code-block-light">
-                def longest_substring(s: str) -&gt; int:
+                def longest_substring(s: str) -> int:
               </div>
             </div>
 
             <div>
-              <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); display: block; margin-bottom: var(--space-2);">Inputs & Outputs</span>
+              <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); display: block; margin-bottom: var(--space-2);">Inputs &amp; Outputs</span>
               <ul style="font-size: 14px; color: var(--ink); padding-left: 20px; line-height: 1.6;">
                 <li><code style="font-family: var(--font-mono); font-size: 13px;">s (str)</code>: Input string to inspect.</li>
                 <li><strong>Return</strong> <code style="font-family: var(--font-mono); font-size: 13px;">int</code>: Maximum substring length.</li>
@@ -113,9 +113,12 @@
           <!-- Visible Test Case (Mint Tint) -->
           <div class="card card-tinted card-mint">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
-              <span style="font-size: 13px; font-weight: 700; color: var(--partner-green); text-transform: uppercase; letter-spacing: 0.04em;">
-                Visible Test Case #1
-              </span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-green);"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>
+                <span style="font-size: 13px; font-weight: 700; color: var(--partner-green); text-transform: uppercase; letter-spacing: 0.04em;">
+                  Visible Test Case #1
+                </span>
+              </div>
               <span class="badge badge-mint">Provided</span>
             </div>
             <div class="code-block-light" style="background: rgba(255, 255, 255, 0.7); border-color: rgba(22, 123, 72, 0.2);">
@@ -124,18 +127,21 @@
             </div>
           </div>
 
-          <!-- Progressive Hint Ladder -->
+          <!-- Progressive Hint Ladder (Butter Tint) -->
           <div class="card card-tinted card-butter">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
-              <span style="font-size: 13px; font-weight: 700; color: var(--partner-amber); text-transform: uppercase; letter-spacing: 0.04em;">
-                Hint Ladder (1 of 3 Available)
-              </span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--partner-amber);"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                <span style="font-size: 13px; font-weight: 700; color: var(--partner-amber); text-transform: uppercase; letter-spacing: 0.04em;">
+                  Hint Ladder (1 of 3 Available)
+                </span>
+              </div>
               <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px; border-radius: var(--radius-pill);">
                 Reveal Next
               </button>
             </div>
             <p style="font-size: 14px; color: var(--ink); line-height: 1.5;">
-              <strong>Hint 1:</strong> Use a sliding window with two pointers (<code style="font-family: var(--font-mono); font-size: 12px;">left</code> and <code style="font-family: var(--font-mono); font-size: 12px;">right</code>) and a hash map storing the last seen index of each character.
+              <strong>Hint 1:</strong> Use a sliding window defined by two pointers <code style="font-family: var(--font-mono); font-size: 12px;">left</code> and <code style="font-family: var(--font-mono); font-size: 12px;">right</code>.
             </p>
           </div>
 
@@ -159,18 +165,18 @@
             </div>
 
             <!-- Deep Ink Editor Inset (>= 440px) -->
-            <div class="editor-inset" style="min-height: 450px;">
+            <div class="editor-inset" style="min-height: 440px;">
               <div class="code-line"><span class="code-num">1</span><span class="code-text"><span class="syn-kw">def</span> <span class="syn-fn">longest_substring</span>(s: str) -&gt; int:</span></div>
-              <div class="code-line"><span class="code-num">2</span><span class="code-text">    <span class="syn-cm"># Sliding window with last-seen character indices</span></span></div>
-              <div class="code-line"><span class="code-num">3</span><span class="code-text">    char_map = {}</span></div>
+              <div class="code-line"><span class="code-num">2</span><span class="code-text">    <span class="syn-cm"># Sliding window with last seen character indices</span></span></div>
+              <div class="code-line"><span class="code-num">3</span><span class="code-text">    last_seen = {}</span></div>
               <div class="code-line"><span class="code-num">4</span><span class="code-text">    left = 0</span></div>
               <div class="code-line"><span class="code-num">5</span><span class="code-text">    max_len = 0</span></div>
               <div class="code-line"><span class="code-num">6</span><span class="code-text">    </span></div>
               <div class="code-line"><span class="code-num">7</span><span class="code-text">    <span class="syn-kw">for</span> right, ch <span class="syn-kw">in</span> <span class="syn-fn">enumerate</span>(s):</span></div>
-              <div class="code-line"><span class="code-num">8</span><span class="code-text">        <span class="syn-kw">if</span> ch <span class="syn-kw">in</span> char_map <span class="syn-kw">and</span> char_map[ch] &gt;= left:</span></div>
-              <div class="code-line"><span class="code-num">9</span><span class="code-text">            left = char_map[ch] + 1</span></div>
-              <div class="code-line"><span class="code-num">10</span><span class="code-text">        char_map[ch] = right</span></div>
-              <div class="code-line"><span class="code-num">11</span><span class="code-text">        max_len = <span class="syn-fn">max</span>(max_len, right - left + 1)</span></div>
+              <div class="code-line"><span class="code-num">8</span><span class="code-text">        <span class="syn-kw">if</span> ch <span class="syn-kw">in</span> last_seen <span class="syn-kw">and</span> last_seen[ch] &gt;= left:</span></div>
+              <div class="code-line"><span class="code-num">9</span><span class="code-text">            left = last_seen[ch] + 1</span></div>
+              <div class="code-line"><span class="code-num">10</span><span class="code-text">        last_seen[ch] = right</span></div>
+              <div class="code-line"><span class="code-num">11</span><span class="code-text">        max_len = <span class="syn-fn">max</span>(max_len, right - left)  <span class="syn-cm"># Defect: missing + 1 offset</span></span></div>
               <div class="code-line"><span class="code-num">12</span><span class="code-text">        </span></div>
               <div class="code-line"><span class="code-num">13</span><span class="code-text">    <span class="syn-kw">return</span> max_len</span></div>
             </div>
@@ -178,14 +184,14 @@
             <!-- Run Button Row -->
             <div style="padding: var(--space-4) var(--space-6); background: var(--surface); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--hairline);">
               <span style="font-size: 13px; color: var(--muted);">Clean environment · Network disabled</span>
-              <button class="btn btn-primary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <button class="btn btn-primary" style="background-color: var(--cta-green); color: var(--cta-green-text); border-radius: var(--radius-pill);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg>
                 Run &amp; Submit
               </button>
             </div>
           </div>
 
-          <!-- Execution Verdict / Failed Case Preview in Rose Tint -->
+          <!-- Execution Verdict Card in Rose Tint (Zero Invented Numbers) -->
           <div class="card card-tinted card-rose" style="padding: var(--space-6);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
               <div style="display: flex; align-items: center; gap: var(--space-3);">
@@ -194,7 +200,10 @@
                   Visible Test Case 1 Failed
                 </strong>
               </div>
-              <span style="font-size: 13px; color: var(--partner-red); font-weight: 600;">Visible Test Mismatch</span>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--partner-red);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                <span style="font-size: 13px; font-weight: 600;">Visible Test Mismatch</span>
+              </div>
             </div>
             
             <p style="font-size: 14px; color: var(--ink); margin-bottom: var(--space-3);">
