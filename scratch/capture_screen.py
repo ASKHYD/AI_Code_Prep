@@ -32,6 +32,9 @@ BRAIN_DIR = pathlib.Path(
 CURRENT_BRAIN_DIR = pathlib.Path(
     r"C:\Users\MS Computer\.gemini\antigravity\brain\d44988ce-2f18-46d8-a231-b7f0666ec30e\screenshots\r3"
 )
+ACTIVE_BRAIN_DIR = pathlib.Path(
+    r"C:\Users\MS Computer\.gemini\antigravity\brain\43758044-1901-4c55-9976-230346ca9821\screenshots\r3"
+)
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 STREAMLIT_PORT = 8501
 CDP_PORT = 9226
@@ -170,6 +173,7 @@ async def capture_screenshots(screen: str = "practice"):
             if BRAIN_DIR.parent.exists():
                 BRAIN_DIR.mkdir(parents=True, exist_ok=True)
             CURRENT_BRAIN_DIR.mkdir(parents=True, exist_ok=True)
+            ACTIVE_BRAIN_DIR.mkdir(parents=True, exist_ok=True)
 
             for filename, width, height in targets:
                 print(f"[CDP] Setting viewport to {width}x{height}...", flush=True)
@@ -204,6 +208,24 @@ async def capture_screenshots(screen: str = "practice"):
                     curr_brain_file = CURRENT_BRAIN_DIR / filename
                     curr_brain_file.write_bytes(img_bytes)
                     print(f"[CDP] Mirrored to current brain {curr_brain_file}", flush=True)
+
+                if ACTIVE_BRAIN_DIR.exists():
+                    act_brain_file = ACTIVE_BRAIN_DIR / filename
+                    act_brain_file.write_bytes(img_bytes)
+                    print(f"[CDP] Mirrored to active brain {act_brain_file}", flush=True)
+
+            if screen == "dashboard":
+                print("[CDP] Scrolling down to table...", flush=True)
+                await send_cmd("Emulation.setDeviceMetricsOverride", {"width": 1920, "height": 1080, "deviceScaleFactor": 1, "mobile": False})
+                await send_cmd("Runtime.evaluate", {"expression": "window.scrollTo(0, 520)"})
+                await asyncio.sleep(1.0)
+                res = await send_cmd("Page.captureScreenshot", {"format": "png"})
+                b64_data = res.get("data")
+                if b64_data:
+                    scrolled_bytes = base64.b64decode(b64_data)
+                    scrolled_path = DOCS_DIR / "dashboard_table_scrolled.png"
+                    scrolled_path.write_bytes(scrolled_bytes)
+                    print(f"[CDP] Successfully wrote {scrolled_path}", flush=True)
 
     finally:
         try:

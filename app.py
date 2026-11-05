@@ -877,6 +877,35 @@ def get_global_css() -> str:
         box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
         padding: 24px 28px !important;
     }
+
+    /* Topic Breakdown Table in Dashboard */
+    .dashboard-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .dashboard-table th {
+        text-align: left;
+        padding: 12px 16px;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #66635A;
+        border-bottom: 1px solid #E7E1D6;
+    }
+    .dashboard-table td {
+        padding: 16px;
+        border-bottom: 1px solid #E7E1D6;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        color: #171712;
+        vertical-align: middle;
+    }
+    .dashboard-table tr:last-child td {
+        border-bottom: none;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -2505,16 +2534,88 @@ elif nav_choice == "Dashboard":
             chart_data = {t: y for t, y in zip(topics_list, y_vals)}
             st.bar_chart(chart_data)
 
-    st.subheader("Topic Breakdown Table")
-    if stats:
-        table_rows = []
-        for t, d in stats.items():
-            table_rows.append({
-                "Topic": t,
-                "Attempts": d["attempts"],
-                "Passed": d["passed"],
-                "Pass Rate (%)": f"{d['pass_rate']}%"
-            })
-        st.table(table_rows)
-    else:
-        st.caption("No topic records found in database.")
+    st.html('<div style="height: 16px;"></div>')
+
+    with st.container(border=True, key="dashboard_table_card"):
+        st.markdown(
+            """<div style="margin-bottom: 16px;">
+                <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    Topic Breakdown Table
+                </h3>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                    Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.
+                </p>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+
+        with store._get_connection() as conn:
+            cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
+            solved_problem_ids = {row[0] for row in cur.fetchall()}
+
+        topic_problems: dict[str, list[dict[str, Any]]] = {}
+        for p in all_problems:
+            t = p.get("topic", "misc")
+            if t not in topic_problems:
+                topic_problems[t] = []
+            topic_problems[t].append(p)
+
+        rows_html = []
+        for i, t in enumerate(topics_list):
+            probs = topic_problems.get(t, [])
+            total_in_topic = len(probs)
+            solved_in_topic = sum(1 for p in probs if p["id"] in solved_problem_ids)
+            track_name = probs[0].get("track", "DSA").upper() if probs else "DSA"
+            track_badge_class = "badge-lilac" if track_name == "DSA" else "badge-butter"
+
+            d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
+            attempts = d["attempts"]
+            pass_rate = d["pass_rate"]
+            bar_color = tint_palette[i % len(tint_palette)]
+
+            if attempts == 0:
+                ratio_str = f'<span style="color: #66635A; font-weight: 600;">0 / {total_in_topic}</span>'
+                bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #F4F1EA; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                        <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+                </div>"""
+                status_chip = '<span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>'
+            else:
+                ratio_str = f'<span style="color: #171712; font-weight: 600;">{solved_in_topic} / {total_in_topic}</span>'
+                bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #F4F1EA; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                        <div style="background: {bar_color}; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 999px;"></div>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #171712;">{pass_rate:.1f}%</span>
+                </div>"""
+                if pass_rate >= 80.0:
+                    status_chip = '<span class="stat-badge badge-mint">MASTERED</span>'
+                else:
+                    status_chip = '<span class="stat-badge badge-sky">IN PROGRESS</span>'
+
+            rows_html.append(f"""<tr>
+                <td><strong>{t}</strong></td>
+                <td><span class="stat-badge {track_badge_class}">{track_name}</span></td>
+                <td style="font-variant-numeric: tabular-nums;">{ratio_str}</td>
+                <td>{bar_html}</td>
+                <td style="text-align: right;">{status_chip}</td>
+            </tr>""")
+
+        table_markup = f"""<table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Track</th>
+                    <th>Solved / Total</th>
+                    <th>Mastery Progress</th>
+                    <th style="text-align: right;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {"".join(rows_html)}
+            </tbody>
+        </table>"""
+
+        st.markdown(table_markup, unsafe_allow_html=True)
