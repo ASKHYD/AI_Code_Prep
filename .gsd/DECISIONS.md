@@ -95,8 +95,39 @@ Owner completed live browser and dual-resolution screenshot inspection of the Di
 #### Directives for Phase 2 Implementation:
 1. **Unattempted Topic Mastery Bars**: Dashboard mastery bars must use `"NOT STARTED"` for unattempted topics (matching the table), never `"0% (0/0)"`.
 2. **Mock Screen Timer Redundancy**: The Mock view shows the countdown timer three times in various places — consolidate and reduce to two placements.
-3. **Metric Numeral Typography**: The Fraunces zero glyph reads like a lowercase "o" in large metric values (e.g. `"0 problems"`) — evaluate Inter or tabular monospace figures for primary metric numerals during Streamlit implementation.
+3. **Metric Numeral Typography**: The Fraunces zero glyph reads like a lowercase "o" in large metric values (e.g. `"0 problems"`) — evaluate Inter or tabular monospace figures for primary metric numerals during Streamlit implementation. Monospace for metric values subsequently BANNED in Phase 2 discussion.
 4. **Button Whitespace Handling**: All button elements must strictly enforce `white-space: nowrap` with adequate horizontal padding to ensure labels never wrap unexpectedly on compact layouts.
+
+---
+
+### [DECISION-005] Phase 2 Implementation Architecture & Shell Gate Feasibility
+
+**Date**: 2026-11-05  
+**Status**: Accepted  
+
+#### Context
+Phase 2 translates the approved Direction A mockups into the real application. Before planning, the Shell Gate requires evaluating the feasibility of the mockups' four load-bearing elements in Streamlit 1.66.1 and locking implementation constraints.
+
+#### Feasibility Recount (The 4 Load-Bearing Elements):
+1. **Per-card tinted backgrounds in six washes**: `[bordered container]` + `[keyed CSS]` (FEASIBLE via `.st-key-<wash>_card [data-testid="stVerticalBlockBorderWrapper"] > div` and native `st.html()` card containers).
+2. **Pill primary buttons**: `[config token]` + `[keyed CSS]` (FEASIBLE via `.streamlit/config.toml` `primaryColor = "#15803D"` + `button[kind="primary"], .stButton > button { border-radius: 999px; white-space: nowrap; padding: 10px 24px; }`).
+3. **Tinted active-nav pill in the sidebar**: `[keyed CSS]` (FEASIBLE via `.st-key-nav_sidebar_radio` label pseudo-classes or `st.sidebar.pills` active indicator styled with wash `#DFF3E4` and ink `#167B48`).
+4. **Fraunces headings + Inter body genuinely loading**: `[keyed CSS]` (FEASIBLE via self-hosted offline font files in `assets/fonts/` loaded through base64 `@font-face` / static serving; verified by automated computed-font proof task).
+
+**Shell Gate Verdict**: 0 elements are `[impossible in Streamlit]`. The default Streamlit shell (`app.py`) is retained; no NiceGUI port required.
+
+#### Locked Phase 2 Constraints:
+1. **Backend & Data Freeze**: Absolute freeze on `coach/*.py`, `data/problems/*.json`, and `tests/*`. `app.py` modifications are strictly layout and presentation. All 26 pytest tests must pass before the first UI edit and after the last.
+2. **Frozen Design Tokens**: Strict adherence to Phase 1 token sheet. Paper `#FBFAF7`, surface `#FFFFFF`, ink `#171712`, muted `#66635A`, hairline `#E7E1D6`, CTA green `#15803D`, 6 wash pairs, code dark inset `#14161A` / `#F2F2ED`.
+3. **Offline Font Self-Hosting**: Fraunces, Inter, and JetBrains Mono self-hosted locally in `assets/fonts/`. No runtime Google Fonts CDN requests. Mandatory computed-font proof task using headless Chrome CDP to assert rendered font families.
+4. **Lucide-Only Icons**: Icons copied exclusively from `agent-resources/lucide/icons` to `assets/icons/` and inlined. Material Symbols fallback allowed only if inlining is technically impossible, with each fallback individually listed in UI resource map. Zero emoji icons.
+5. **Phase 1 Directives**:
+   - (i) Unattempted topics display `NOT STARTED` everywhere, including mastery progress bars.
+   - (ii) Mock timer rendered in exactly 2 places (header pill and in-card countdown).
+   - (iii) Metric numerals A/B screenshot task generated during planning (Fraunces vs Inter semibold tabular) for owner selection before execution. Monospace for metric numerals is strictly BANNED.
+   - (iv) All buttons enforce `white-space: nowrap` and adequate padding.
+6. **CSS Budget**: Priority: Config tokens $\rightarrow$ Native components $\rightarrow$ Keyed CSS (`.st-key-*`). Global selectors strictly forbidden except for 3 named exceptions: `@font-face`, button `nowrap`, and metric numeral typography. All keyed instances cataloged in UI resource map.
+7. **Visual Finish Gate**: Phase 2 completes only upon owner review and sign-off on real application screenshots.
 
 ---
 

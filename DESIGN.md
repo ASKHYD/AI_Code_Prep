@@ -1,56 +1,97 @@
 ---
 name: "AI Coding Prep Coach"
-description: "Dark coding-practice workbench and analytics dashboard"
-style: "Dark Mode (OLED)"
+description: "Colourful light learning app (Brilliant-style) for coding-interview practice"
+style: "Direction A (Brilliant Light)"
 colors:
-  primary: "#1E293B"
+  paper: "#FBFAF7"
+  surface: "#FFFFFF"
+  ink: "#171712"
+  muted: "#66635A"
+  hairline: "#E7E1D6"
+  primary: "#15803D"
   on-primary: "#FFFFFF"
-  secondary: "#334155"
-  on-secondary: "#FFFFFF"
-  accent: "#22C55E"
-  on-accent: "#0F172A"
-  background: "#0F172A"
-  foreground: "#F8FAFC"
-  card: "#1B2336"
-  card-foreground: "#F8FAFC"
-  muted: "#272F42"
-  muted-foreground: "#94A3B8"
-  border: "#475569"
-  destructive: "#EF4444"
-  on-destructive: "#000000"
-  warning: "#F59E0B"
-  info: "#38BDF8"
-  info-bg: "#1E293B"
-  violet: "#A855F7"
+  code-bg: "#14161A"
+  code-text: "#F2F2ED"
+  wash-mint: "#DFF3E4"
+  partner-green: "#167B48"
+  fill-green: "#1F9D63"
+  wash-butter: "#FFF0C4"
+  partner-amber: "#9A3412"
+  fill-amber: "#B45309"
+  wash-sky: "#DCEBFF"
+  partner-blue: "#1D5EC2"
+  fill-blue: "#2273E6"
+  wash-lilac: "#E8E2FF"
+  partner-violet: "#5932EA"
+  fill-violet: "#6C4CF1"
+  wash-peach: "#FFE8D1"
+  partner-coral: "#B93815"
+  fill-coral: "#E4572E"
+  wash-rose: "#FFE0E0"
+  partner-red: "#C5221F"
+  fill-red: "#D92D20"
 typography:
-  headingFont: "JetBrains Mono"
-  bodyFont: "IBM Plex Sans"
+  headingFont: "Fraunces"
+  bodyFont: "Inter"
   codeFont: "JetBrains Mono"
 rounded:
-  base: "8px"
-  button: "8px"
-spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "32px"
+  card: "24px"
+  tile: "14px"
+  button: "999px"
+  pill: "999px"
 ---
 
 # Design System Specification — AI Coding Prep Coach
 
-## 1. Overview & Direction
+## 1. Governing System: Direction A (Approved 2026-11-05)
 
-> **Direction Statement:**
-> *"Quiet panels, aligned figures, colour spent on data and on pass/fail state — nothing decorative competes with the code."*
-
-This design system establishes a high-contrast, distraction-free OLED dark workbench for software engineers practicing algorithmic problem solving under timed constraints. Every pixel is purposeful; decorative flourishes, unstyled voids, and generic stream-of-consciousness layouts are forbidden.
+> **Direction Statement:**  
+> *"Paper-first foundation, deep ink typography, hairline warm borders, big soft-rounded cards (24px radius), fully pill-shaped action buttons and badges (999px), generous breathing room, and an authoritative six-part functional tint system where color acts as structure rather than arbitrary decoration."*
 
 ---
 
-## 2. Colors & Token Mapping
+### Direction A Color Tokens & WCAG Contrast Ratios
 
-All colors are strictly sourced from the UI-UX Pro Max `Dark Mode (OLED)` generation and mapped to Streamlit 1.66.1 theme tokens and UI constructs.
+All tokens strictly derived from the approved Phase 1 token sheet:
+
+| Token Name | Hex Code | Role / Usage | Contrast Ratio (WCAG) |
+|---|---|---|---|
+| `paper` | `#FBFAF7` | Global canvas background | Base canvas |
+| `surface` | `#FFFFFF` | Elevated container cards, panels | 1.05:1 on paper |
+| `ink` | `#171712` | Headings, primary body text, prominent labels | 17.23:1 on paper (AAA) |
+| `muted` | `#66635A` | Secondary captions, difficulty tags, metadata | 5.75:1 on paper (AA) |
+| `hairline` | `#E7E1D6` | 1px border for cards, dividers, table gridlines | 1.25:1 on paper |
+| `cta-green` | `#15803D` | Primary action pill buttons (`Run & Submit`) | 5.02:1 with white text (AA) |
+| `code-bg` | `#14161A` | Code editor inset background | Dark anchor surface |
+| `code-text` | `#F2F2ED` | Code text inside editor inset | 16.13:1 on `#14161A` (AAA) |
+
+#### Six-Part Functional Area Tint Matrix
+
+1. **Mint & Green (Streak / PASS):** Wash `#DFF3E4` · Text `#167B48` (4.56:1, AA) · Fill `#1F9D63`
+2. **Butter & Amber (Library / TIMEOUT):** Wash `#FFF0C4` · Text `#9A3412` (6.44:1, AAA) · Fill `#B45309`
+3. **Sky & Blue (Due / Analytics):** Wash `#DCEBFF` · Text `#1D5EC2` (5.06:1, AA) · Fill `#2273E6`
+4. **Lilac & Violet (Practice Area):** Wash `#E8E2FF` · Text `#5932EA` (5.46:1, AA) · Fill `#6C4CF1`
+5. **Peach & Coral (Mock Interview / Timer):** Wash `#FFE8D1` · Text `#B93815` (4.87:1, AA) · Fill `#E4572E`
+6. **Rose & Red (FAIL / Errors):** Wash `#FFE0E0` · Text `#C5221F` (4.69:1, AA) · Fill `#D92D20`
+
+---
+
+### Typography & Component Rules
+
+- **Display Headings:** `Fraunces`, serif (Google Fonts, self-hosted offline via `@font-face` in `assets/fonts/`).
+- **Body & UI:** `Inter`, sans-serif (self-hosted offline via `@font-face`).
+- **Code & Numbers:** `JetBrains Mono`, monospace (self-hosted offline via `@font-face`).
+- **Cards:** 24px border-radius, soft elevation shadow `0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06)`.
+- **Buttons:** 999px pill border-radius, `white-space: nowrap`, generous padding (`10px 24px`).
+- **Iconography:** Exclusively Lucide SVGs inlined from `agent-resources/lucide/icons` into `assets/icons/`.
+
+---
+
+## 2. Superseded System: R2 OLED Dark Mode (Archived for Historical Reference)
+
+> **Status:** `SUPERSEDED` by Direction A on 2026-11-05. Kept strictly for audit trail.
+
+All colors below were from the rejected R2 Dark Mode (OLED) generation:
 
 | Token Name | Hex Code | Streamlit 1.66.1 Mapping | Usage / Role | Contrast Ratio (WCAG) |
 |---|---|---|---|---|

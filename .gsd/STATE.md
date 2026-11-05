@@ -7,25 +7,22 @@ updated: 2026-11-05
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 1 - Static HTML Mockups & Design Tokens (Complete) $\rightarrow$ Phase 2: Streamlit UI Implementation  
-**Status:** Phase 1 Complete & Verified (Awaiting User Go-Ahead for Phase 2)  
-**Plan:** None active (Phase 1 plans 1.1, 1.2, 1.3 all completed)  
+**Phase:** Phase 2: Streamlit UI Implementation (Discussed & Shell Gate Passed)  
+**Status:** Scope Clarified & Shell Gate Feasibility Confirmed (Awaiting User Go-Ahead to Plan)  
+**Plan:** None active (Phase 1 complete; Phase 2 pending `/plan 2`)  
 
 ## Last Action
 
-Phase 1 executed, verified, and approved by project owner:
-- Executed Wave 1 ([01-PLAN.md](file:///e:/resume_project/.gsd/phases/1/01-PLAN.md)), Wave 2 ([02-PLAN.md](file:///e:/resume_project/.gsd/phases/1/02-PLAN.md)), and Wave 3 ([03-PLAN.md](file:///e:/resume_project/.gsd/phases/1/03-PLAN.md)).
-- Delivered Direction A token specification sheet and 4 core static HTML mockups.
-- Verified dual-resolution headless Chrome screenshots in `docs/screenshots/r3/` at both 1600x1000 and 1920x1080.
-- Preserved strict code quarantine: zero modifications to `app.py`, `.streamlit/config.toml`, `coach/*.py`, `data/problems/*.json`, or `tests/*`.
-- Verified 26/26 backend pytest tests passing.
-- Owner formally approved Phase 1 mockups. Checkpoint closed.
-- Recorded 4 owner directives for Phase 2 implementation.
+Phase 2 Scope & Shell Gate Discussion completed:
+- Evaluated the 4 load-bearing UI elements against Streamlit 1.66.1: all 4 tagged feasible with `[config token]`, `[bordered container]`, and `[keyed CSS]`. 0 elements are `[impossible in Streamlit]`.
+- Retained default Streamlit shell (`app.py`); NiceGUI port eliminated.
+- Locked 7 core constraints into `.gsd/DECISIONS.md`: Shell Gate, Backend Freeze, Frozen Tokens, Offline Self-Hosted Fonts, Lucide-Only Icons, 4 Phase 1 Directives, CSS Budget & Resource Map.
+- Verified backend test suite clean: 26/26 tests passing before any UI implementation.
 
 ## Next Steps
 
-1. Await user go-ahead to plan Phase 2 (`/plan 2`)
-2. Phase 2: Streamlit theme and UI implementation matching approved Direction A mockups + incorporating the 4 recorded directives
+1. Await user go-ahead to begin Phase 2 planning (`/plan 2`)
+2. Generate atomic Phase 2 execution plans incorporating UI resource map, self-hosted fonts, A/B metric numeral screenshot task, and computed-font verification proof.
 
 ## Active Decisions
 
@@ -37,9 +34,10 @@ Decisions made that affect current work:
 | [DECISION-002] Two-Phase Redesign Gate | Phase 1 mockups only with screenshot sign-off; Phase 2 Streamlit implementation | 2026-11-05 | Phases 1 & 2 |
 | [DECISION-003] Backend & Data Freeze | `coach/*.py` and `data/problems/*.json` are strictly frozen | 2026-11-05 | Entire project |
 | [DECISION-004] Phase 1 Owner Acceptance | Mockup screenshots approved; Phase 1 closed; 4 implementation directives established | 2026-11-05 | Phase 2 implementation |
+| [DECISION-005] Phase 2 Shell Gate & Architecture | Streamlit shell retained (0 impossible elements); 7 locked decisions cataloged | 2026-11-05 | Phase 2 implementation |
 | [NOTE-001] Phase 2 Mastery Bars | Dashboard mastery bars must use "NOT STARTED" for unattempted topics, never "0% (0/0)" | 2026-11-05 | Phase 2 Dashboard |
 | [NOTE-002] Phase 2 Timer Redundancy | Mock screen timer display reduced from three placements to two | 2026-11-05 | Phase 2 Mock View |
-| [NOTE-003] Phase 2 Metric Zero Glyph | Evaluate Inter / tabular figures for metric numerals to avoid Fraunces zero looking like 'o' | 2026-11-05 | Phase 2 Metrics |
+| [NOTE-003] Phase 2 Metric Numerals | A/B screenshot task during planning (Fraunces vs Inter semibold); monospace BANNED | 2026-11-05 | Phase 2 Metrics |
 | [NOTE-004] Phase 2 Button Nowrap | All action buttons must enforce `white-space: nowrap` and proper padding | 2026-11-05 | Phase 2 Global CSS |
 
 ## Blockers
