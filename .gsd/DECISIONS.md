@@ -131,5 +131,36 @@ Phase 2 translates the approved Direction A mockups into the real application. B
 
 ---
 
+### [DECISION-006] Offline Font Asset Acquisition & Inventory
+
+**Date**: 2026-11-05  
+**Status**: Accepted  
+
+#### Context
+To guarantee offline-readiness and eliminate runtime Google Fonts CDN requests without violating the frozen typography contract, binary font files were extracted directly into `assets/fonts/` following owner approval of Option A (NPM Fontsource extraction).
+
+#### Sourced Packages & Versions:
+- `@fontsource/fraunces@5.3.0`
+- `@fontsource/inter@5.3.0`
+- `@fontsource/jetbrains-mono@5.3.0`
+
+#### Extracted Asset Inventory (Weights matching `mockups/style.css` @import exactly):
+1. `fraunces-latin-500-normal.woff2` (18,000 bytes) — Header Display (Medium)
+2. `fraunces-latin-600-normal.woff2` (18,096 bytes) — Header Display (SemiBold)
+3. `fraunces-latin-700-normal.woff2` (18,212 bytes) — Header Display (Bold)
+4. `fraunces-latin-800-normal.woff2` (18,224 bytes) — Header Display (ExtraBold)
+5. `inter-latin-400-normal.woff2` (23,664 bytes) — UI / Body Regular
+6. `inter-latin-500-normal.woff2` (24,272 bytes) — UI / Body Medium
+7. `inter-latin-600-normal.woff2` (24,452 bytes) — UI SemiBold / Button text / Tabular Numerals
+8. `inter-latin-700-normal.woff2` (24,356 bytes) — UI Bold
+9. `jetbrains-mono-latin-400-normal.woff2` (21,168 bytes) — Code Inset Regular
+10. `jetbrains-mono-latin-500-normal.woff2` (21,832 bytes) — Code Inset Medium
+11. `jetbrains-mono-latin-600-normal.woff2` (21,860 bytes) — Code Inset SemiBold
+12. `jetbrains-mono-latin-700-normal.woff2` (21,908 bytes) — Code Inset Bold
+
+**Validation**: All 12 files verified with magic bytes `0x77 0x4F 0x46 0x32` (`b"wOF2"`).
+
+---
+
 *Last updated: 2026-11-05*
 
