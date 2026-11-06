@@ -1,35 +1,45 @@
 ---
-updated: 2026-11-06
+updated: 2026-11-07
 ---
 
 # Project State
 
 ## Current Position
 
-**Milestone:** Milestone 2 — Make the Loop Smarter  
-**Phase:** Phase 3: FSRS + Interleaving  
-**Status:** VERIFIED — AWAITING OWNER LIVE ACCEPTANCE  
-**Active Plan:** `.gsd/phases/3/04-PLAN.md` (Executed, 57/57 pytest, return filed)  
+**Milestone:** Milestone 3 — Terracotta Editorial Redesign  
+**Phase:** Phase 6: Terracotta Static Mockups & Token Sheet (T1)  
+**Status:** 💬 DISCUSSING / PLANNING (Execution gated by T1 owner approval & Phase 3 live acceptance)  
+**Active Plan:** Pending Phase 6 Discussion & Plan  
+
+---
+
+## Milestone Relationship & Status
+
+- **Milestone 1 (Premium UI Redesign)**: ✅ Complete & Closed.
+- **Milestone 2 (Make the Loop Smarter)**: 
+  - **Phase 3 (FSRS + Interleaving)**: ✅ Executed & Verified (57/57 tests green, return filed, awaiting owner live acceptance). Intact and unedited.
+  - **Phase 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
+- **Milestone 3 (Terracotta Editorial Redesign)**:
+  - **Phase 6 (T1)**: Author token sheet, build 6 static HTML mockups with real data, anti-slop audit, dual captures (1450 & 1920). Stop for owner approval.
+  - **Phase 7 (T2)**: Streamlit implementation (only after T1 approval + Phase 3 live acceptance).
 
 ---
 
 ## Last Action
 
-- Filed `BACKEND_VERIFICATION.md` proving 100% backend correctness (B1–B7) and zero database mutation (`coach.db` SHA256 verified untouched).
-- Registered Milestone 2 ("Make the Loop Smarter") in `ROADMAP.md` and `SPEC.md`.
-- Established Phase 3 scope: Workstream 1 (FSRS scheduler swap) and Workstream 2 (Interleaved review queue).
-- Appended Milestone 2 future phases (Resource Measurement, Attempt History + Ruff) to `TODO.md` backlog.
+- Completed Milestone 2 Phase 3 execution and verification: 57/57 pytest passed, live 1450×900 CDP capture of Home verified, return filed.
+- Registered Milestone 3 ("Terracotta Editorial Redesign") with Phase 6 (T1 Mockups) and Phase 7 (T2 Streamlit Implementation).
+- Retained Milestone 2 phases intact without renumbering.
 
 ---
 
-## Entry Gates for Phase 3 Execution
+## Gates for Milestone 3
 
 | Gate | Requirement | Status | Action Needed |
 | :--- | :--- | :--- | :--- |
-| **G1** | Backend Verification Battery filed & triaged | ✅ VERIFIED | Audited by Milo 2026-11-07: B1–B7 pass, DB identical, defects none |
-| **G2** | Phase 2 Closed (Owner Live Approval + Bookkeeping) | ✅ VERIFIED | Formal live approval granted; closure bookkeeping complete |
-
-> **Note**: Both Entry Gates G1 and G2 are fully satisfied. Phase 3 execution authorized.
+| **G-T1** | Phase 6 Mockups & Token Sheet Owner Approval | ⏳ PENDING | Build static HTML mockups with real data; capture at 1450 & 1920 |
+| **G-M2** | Milestone 2 Phase 3 Owner Live Acceptance | ⏳ PENDING | Awaiting owner live review on `http://localhost:8501` |
+| **G-EXEC**| Phase 7 Streamlit Execution Authorization | 🔒 LOCKED | Requires both G-T1 and G-M2 (or explicit chat override) |
 
 ---
 
@@ -37,27 +47,27 @@ updated: 2026-11-06
 
 | Decision | Choice | Made | Affects |
 | :--- | :--- | :--- | :--- |
-| **[DECISION-001]** | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | All UI phases |
-| **[DECISION-002]** | Two-Phase Redesign Gate: mockups first, Streamlit second | 2026-11-05 | Phases 1 & 2 |
-| **[DECISION-003]** | Frozen backend & problems during Milestone 1 | 2026-11-05 | Milestone 1 |
-| **[DECISION-004]** | Phase 1 Mockups Approved (Home, Practice, Mock, Dash) | 2026-11-05 | Phase 2 |
-| **[DECISION-005]** | Streamlit Topbar Workbench Shell retained | 2026-11-05 | Phase 2 |
-| **[DECISION-011]** | Wave 1 subagent parallelism & Wave 2 evidence fan-out | 2026-11-06 | Phase 2 Corrective |
+| **[DECISION-001]** | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | Milestone 1 |
+| **[DECISION-002]** | Two-Phase Redesign Gate: mockups first, Streamlit second | 2026-11-05 | Milestones 1 & 3 |
+| **[DECISION-003]** | Frozen backend & problems during UI redesigns | 2026-11-05 | Milestones 1 & 3 |
+| **[DECISION-011]** | Wave 1 subagent parallelism & Wave 2 evidence fan-out | 2026-11-06 | Execution harness |
 | **[DECISION-012]** | Runtime-derived Python version chip (`3.12`) | 2026-11-06 | App navbar |
-| **[DECISION-013]** | Milestone 2 Scope: FSRS + Interleaving first | 2026-11-06 | Phase 3 |
+| **[DECISION-013]** | Milestone 2 Scope: FSRS + Interleaving first | 2026-11-06 | Milestone 2 |
 | **[DECISION-014]** | py-fsrs default parameters, retention 0.9, optimizer forbidden | 2026-11-06 | Phase 3 FSRS |
 | **[DECISION-015]** | Judge Rating Mapping: FAIL/TIMEOUT $\rightarrow$ Again; PASS+hints/tries $\rightarrow$ Hard; Clean PASS $\rightarrow$ Good; Easy omitted | 2026-11-06 | Phase 3 FSRS |
+| **[DECISION-016]** | Milestone 3 Scope: Option 3 Terracotta Editorial (Bento grid + Terracota Mediterrâneo) | 2026-11-07 | Milestone 3 |
 
 ---
 
 ## Blockers & Freezes
 
-- **Freezes for Phase 3**:
-  - `data/problems/*.json`: Statements, starter code, and test cases are untouched.
-  - `coach.judge`: Execution semantics and timeout bounds are untouched.
-  - Phase 2 UI Design: Direction A tokens, layout, and visual components are untouched except the truth-in-copy line on Home.
-- **Execution Blocker**: Entry Gate G2 (Owner live approval of Phase 2 UI).
+- **Freezes for Milestone 3**:
+  - `coach/*.py`: Engine, store, judge, FSRS, interleaving remain strictly frozen.
+  - `data/problems/*.json`: Statements, starter code, and test cases remain strictly frozen.
+  - `tests/*`: Verification test suite untouched; 57/57 invariant.
+- **Phase 6 Scope Restriction**: No application code in `app.py` in Phase 6 (static mockups & tokens only).
+- **Phase 7 Execution Blocker**: Gate G-T1 (Owner approval of Phase 6 mockups) and Gate G-M2 (Owner acceptance of Phase 3).
 
 ---
 
-*Last updated: 2026-11-06*
+*Last updated: 2026-11-07*

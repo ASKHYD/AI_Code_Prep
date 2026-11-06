@@ -27,7 +27,7 @@
 
 ## Milestone 2: Make the Loop Smarter
 
-### Phase 3: FSRS + Interleaving (Current Target)
+### Phase 3: FSRS + Interleaving (Status: ✅ Verified — Awaiting Live Acceptance)
 - [x] Entry Gate G1: Backend Verification Battery triaged by owner `high` — 2026-11-06 ✓ 2026-11-07
 - [x] Entry Gate G2: Phase 2 formally closed by owner live approval `high` — 2026-11-06 ✓ 2026-11-07
 - [x] Pin `fsrs` in `requirements.txt` and verify installation `high` — 2026-11-07 ✓ 2026-11-07
@@ -47,4 +47,23 @@
 
 ---
 
-*Last updated: 2026-11-06*
+## Milestone 3: Terracotta Editorial Redesign
+
+### Phase 6: Terracotta Static Mockups & Token Sheet (T1 — Current Planning)
+- [ ] Author `DESIGN.md` Terracotta token sheet (sun-white, sandy beige, terracotta, olive, blue, clay, fig, sea-foam) `high` — 2026-11-07
+- [ ] Build static HTML mockups using real problem & store data (Home, Practice, Mock start, Mock session, Mock scorecard, Dashboard, Tokens) `high` — 2026-11-07
+- [ ] Anti-slop audit against generator tropes (no chip soup, no invented figures, no gradients/glass/glow, no serif body text, no mono metrics) `high` — 2026-11-07
+- [ ] Capture dual-resolution CDP screenshots at 1450×900 PRIMARY and 1920×1080 secondary `medium` — 2026-11-07
+- [ ] Gate G-T1: Stop for owner mockup and token sheet approval `high` — 2026-11-07
+
+### Phase 7: Terracotta Streamlit Implementation (T2 — Gated)
+- [ ] Gate G-EXEC verification: verify Phase 6 mockup approval + Phase 3 live acceptance `high` — 2026-11-07
+- [ ] Self-host DM Serif Display and humanist sans in `assets/fonts/` with `@font-face` proof `medium` — 2026-11-07
+- [ ] Streamlit theme configuration in `.streamlit/config.toml` `medium` — 2026-11-07
+- [ ] Implement keyed-container CSS (`.st-key-*`) in `app.py` presentation layer `high` — 2026-11-07
+- [ ] Update Plotly Dashboard chart colors to Terracotta zone palette `medium` — 2026-11-07
+- [ ] Verification suite: 57/57 pytest invariant, freeze verification, live CDP measurements at 1450 `high` — 2026-11-07
+
+---
+
+*Last updated: 2026-11-07*

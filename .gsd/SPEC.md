@@ -1,8 +1,8 @@
 # SPEC.md — Project Specification
 
-> **Status**: `MILESTONE 2 REGISTERED`
+> **Status**: `MILESTONE 3 REGISTERED`
 >
-> ⚠️ **Planning Lock**: Milestone 1 complete & verified; Milestone 2 Phase 3 defined.
+> ⚠️ **Milestone Invariants**: Milestone 1 complete & verified; Milestone 2 Phase 3 complete & verified (awaiting owner live acceptance); Milestone 3 defined.
 
 ---
 
@@ -10,7 +10,8 @@
 AI Coding Prep Coach is a local, zero-cost coding-interview practice platform built with Streamlit.
 
 - **Milestone 1 (Complete)**: Transformed the visual experience from an uninspired dark UI into a warm, delightful, Brilliant-style light learning environment ("Direction A") featuring a warm paper background, ink typography (Fraunces headings + Inter body), pastel topic tints, tactile rounded cards, and pill buttons.
-- **Milestone 2 (Current)**: "Make the Loop Smarter." Upgrades the learning engine with modern adaptive spaced repetition (FSRS) and cognitive interleaving, replacing static review intervals with individualized memory modeling and interleaving problem topics to optimize retention for coding interviews.
+- **Milestone 2 (Phase 3 Verified)**: "Make the Loop Smarter." Upgrades the learning engine with modern adaptive spaced repetition (FSRS) and cognitive interleaving, replacing static review intervals with individualized memory modeling and interleaving problem topics to optimize retention for coding interviews.
+- **Milestone 3 (Current Target)**: "Terracotta Editorial Redesign." Redesigns the visual identity and layouts into Option 3 — **TERRACOTTA EDITORIAL**, combining the "Terracota Mediterrâneo" color architecture with a "Bento Grid Tech Minimalist" layout structure, disciplined by strict frontend feasibility, matte surfaces, and 100% authentic data truth.
 
 ---
 
@@ -23,53 +24,82 @@ AI Coding Prep Coach is a local, zero-cost coding-interview practice platform bu
 
 ## Milestone 2: Make the Loop Smarter
 
-### Phase 3: FSRS + Interleaving
-The first phase of Milestone 2 contains exactly two sequential workstreams:
+### Phase 3: FSRS + Interleaving (Status: Verified — Awaiting Owner Live Acceptance)
+- **Workstream 1 (FSRS Scheduler Swap)**: Pinned `fsrs==6.3.2`, SQLite card persistence in `problem_fsrs_cards`, 3-rule rating mapping with `Rating.Easy` ban, default parameters (`desired_retention = 0.9`, optimizer forbidden), idempotent migration with A1 last-attempt timestamps, ladder retired from write path (0 callers), truth-in-copy updated.
+- **Workstream 2 (Cognitive Interleaving)**: `build_interleaved_queue` non-adjacent topic sequencing weighted by due count and weakest pass rate. Free picking in Practice Arena preserved.
+- **Verification**: 57 passed tests in 17.22s, live 1450×900 CDP proof captured.
 
-#### Workstream 1 — FSRS Scheduler Swap
-- **Dependency**: `fsrs` (py-fsrs, MIT) via pip, pinned in `requirements.txt`. Load-or-report-MISSING gate before any code. Fully offline after install.
-- **Data Model**: One FSRS Card per problem; card state (JSON from py-fsrs) stored in SQLite alongside existing store (`coach.db`). The `attempts` table remains the immutable history of record and is NOT rewritten.
-- **Judge-to-Rating Mapping** (Binding):
-  - `FAIL` or `TIMEOUT` $\rightarrow$ `Rating.Again`
-  - `PASS` with `hints_used > 0` OR `attempts_on_problem > 1` $\rightarrow$ `Rating.Hard`
-  - Clean first-attempt `PASS` with no hints $\rightarrow$ `Rating.Good`
-  - `Rating.Easy` is **NOT emitted** in this phase (no trustworthy execution speed signal exists until resource measurement lands in a later phase).
-- **Scheduler Configuration**: py-fsrs default parameters only; `desired_retention = 0.9`. The FSRS optimizer is **FORBIDDEN** in this phase (review volume is too small for empirical parameter optimization).
-- **Due Semantics**: A problem is due when its card's due timestamp $\le$ `now`. Home screen due count/chip, the practice queue, and Dashboard read from FSRS state. Streak semantics remain activity-based and unchanged.
-- **Migration & Idempotency** (Critical):
-  - Existing attempt data carries over with zero loss.
-  - For each problem with historical attempts, seed its FSRS card from attempt history (last outcome drives initial review: e.g. a passed problem receives a `Good` review at its last attempt timestamp; a failed one receives `Again`).
-  - Migration must be verified on a copy of `coach.db` first.
-  - Real database SHA256 recorded before and after the phase; real DB is migrated strictly via the shipped code path once.
-  - Migration is strictly idempotent: running it multiple times produces identical state.
-- **Rollback & Old Ladder Disposition**: The old ladder function (`coach.repetition.calculate_due_date` / `calculate_next_due`) is retired from the scheduling path. Git history serves as rollback; tasks executed as atomic commits.
-- **Truth-in-Copy**: No UI copy may describe the old ladder. Replace Home subline `"Interview-targeted spaced repetition schedule (1 / 1 / 3 / 7 / 21 days)..."` with truthful FSRS copy: `"Adaptive spaced repetition (FSRS) scheduled from your objective test results."`
-
-#### Workstream 2 — Interleaved Review Queue
-- **Interleaving Invariant**: The review queue (Home daily queue + SRS-driven practice order) and mock problem selection must never place two problems of the same topic adjacently when an alternative topic exists.
-- **Topic Sampling**: Selection samples across topics weighted by due-ness first, then weakest topic (from `topic_stats`).
-- **Free Picking Intact**: Practice Arena problem picker remains free — candidates can pick and solve any problem in any order. Interleaving applies strictly to system-generated review/mock queues.
-- **First Exposure**: Brand-new topic introductions may remain in roadmap order (blocked first exposure); interleaving applies to review and consolidation.
+### Milestone 2 Backlog (Later Phases)
+1. **Phase 4: Per-Run Resource Measurement**: Peak memory allocation and precise CPU execution time instrumentation inside the judge runner; generates trustworthy execution speed signals to unlock `Rating.Easy`.
+2. **Phase 5: Attempt History & Ruff Diagnostics Panel**: Historical timeline of attempts with diff view, code evolution, and live Ruff lint/style feedback in the Practice Arena.
 
 ---
 
-## Milestone 2 Backlog (Later Phases)
-1. **Per-Run Resource Measurement**: Peak memory allocation and precise CPU execution time instrumentation inside the judge runner; generates trustworthy execution speed signals to unlock `Rating.Easy`.
-2. **Attempt History & Ruff Diagnostics Panel**: Historical timeline of attempts with diff view, code evolution, and live Ruff lint/style feedback in the Practice Arena.
+## Milestone 3: Terracotta Editorial Redesign
+
+### Design Tokens & Color Architecture (Option 3 — Binding)
+- **Canvas / Paper**: Sun-white `#FFF8F0`.
+- **Quiet Panel / Tile**: Sandy beige `#E8D5B7` (used sparingly, never as full page background).
+- **Primary Action / Terracotta**: `#C2452D` (primary CTAs, active nav underline/indicator).
+- **Success / Streak / PASS Zone**: Olive `#6B7F3B` (PASS badges, streak counters).
+- **Info / Mock / Links Zone**: Mediterranean blue `#1565C0` (mock interview badges, links).
+- **Secondary Warm Accent**: Clay `#D4956B`.
+- **Deep Accent**: Deep fig `#4A1942` (used sparingly).
+- **Fresh Accent**: Sea foam `#A8D8C8` (used sparingly).
+- **Typography**:
+  - Display headlines & wordmark: DM Serif Display.
+  - Body & UI: Humanist sans (self-hosted in `assets/fonts/`).
+  - Code, editor strip, mock timer: JetBrains Mono only.
+  - Metric numerals: Inter-style tabular semibold per DECISION-007 (never monospace).
+- **Surfaces & Borders**:
+  - Matte surfaces only.
+  - Borders over shadows: 1px warm hairlines at low alpha.
+  - Card radius: 24px per approved bento renders.
+  - Flat color only.
+- **Strict Bans (Stripped from source)**:
+  - Banned: golden-hour gradients, plaster/stone textures, arch-shaped containers, cinematic/entrance motion, glass, glow, shimmer, independent pane scrolling.
+  - Allowed motion: hover/press states only (~150ms ease-out, press scale 0.97).
+- **Color Jobs**:
+  - Terracotta: primary actions + active nav underline/state.
+  - Olive: success, PASS, streak.
+  - Blue: info, mock interview, links.
+  - Sandy: quiet explanatory panels (hint/format/summary strips).
+  - Fig / Clay / Sea-foam: accents only, never competing primaries.
+  - Verdicts: PASS olive (`#6B7F3B`), FAIL terracotta-red (`#C2452D`), TIMEOUT/NOT ATTEMPTED neutral gray.
+
+### Screen Layouts & Bento Structure
+- **Home**: Serif "Today's Practice" headline, terracotta primary pill, 3 stat tiles, de-slopped queue panel (max 1 status pill per row; track/difficulty as colored text).
+- **Practice Arena**: Page-scroll two-pane workbench (no independent scroll), 1 Problem Card + 1 Output Card, slim picker row (X5R), dark anchor editor card (iframe internals untouched).
+- **Mock Interview**:
+  - Start screen: serif title, sandy format panel with real facts (45 min, 2 problems, hints allowed), terracotta Start, timer card at 45:00.
+  - Session screen: sandy session band, mono timer with exactly 2 display places.
+  - Scorecard: PASS olive / FAIL blue-or-terracotta, sandy summary strip, terracotta Download Report, outline Back to Home.
+- **Dashboard**: Bento tiles + restored Plotly "Topic Mastery & Pass Rates" chart ABOVE table, data strictly from `store.topic_stats()`, attempted topics only, unattempted = NOT STARTED in table; chart colors from Terracotta zone palette.
+
+### Absolute Preservations
+- Full-bleed sticky topbar at top: 0.
+- Navbar right side: streak + due chips only (version chip status reported, not changed).
+- Picker-only Practice selection.
+- Signature single-source-of-truth (`starter_code` first line).
+- Natural-width right-aligned Run & Submit buttons.
+- Small-caps signature label (`STARTER FUNCTION SIGNATURE`).
+- Wash-chip inline code.
+- Mock session scoping and timer invariants.
+- Truthful copy: `"Adaptive spaced repetition (FSRS) scheduled from your objective test results."`
+- Freezes: `coach/*.py`, `data/problems/*.json`, `tests/*` 100% frozen; 57/57 tests green.
+- Data Truth: All numbers, metrics, problem lists from real store and real 12 problems; 0 generator fiction.
+
+### Milestone 3 Phases
+- **Phase 6: Terracotta Static Mockups & Token Sheet (T1)**: Static HTML mockups for all 6 screens + tokens page with real data; 1450×900 PRIMARY and 1920×1080 secondary captures; anti-slop audit. STOP for owner approval. No app code.
+- **Phase 7: Terracotta Streamlit Implementation (T2)**: Streamlit implementation with keyed-container CSS (`.st-key-*`) and native theme; self-hosted fonts in `assets/fonts/`; full verification battery and CDP DOM measurements.
 
 ---
 
-## Entry Gates (Binding)
-- **Gate G1**: Backend verification battery (`BACKEND_VERIFICATION.md`) filed and triaged (Filed: all 12 reference solutions pass, database SHA256 verified 100% untouched).
-- **Gate G2**: Phase 2 formally closed: owner live approval + pre-authorized closure bookkeeping complete. (Execution of Phase 3 code waits for G2).
+## Entry Gates
+- **Gate G-T1**: Phase 6 static HTML mockups and token sheet approved by owner.
+- **Gate G-M2**: Milestone 2 Phase 3 live acceptance granted by owner.
+- **Gate G-EXEC**: Phase 7 execution authorized only after G-T1 and G-M2 (or explicit chat override).
 
 ---
 
-## Constraints & Freezes
-- **Problem Bank Content Frozen**: `data/problems/*.json` statements, starter code, and test cases untouched.
-- **Judge Execution Semantics Frozen**: `coach.judge` test execution rules and timeout limits untouched.
-- **UI Design System Frozen**: Direction A tokens (`DESIGN.md`), fonts, colors, and layout untouched, except the truth-in-copy line on Home.
-
----
-
-*Last updated: 2026-11-06*
+*Last updated: 2026-11-07*
