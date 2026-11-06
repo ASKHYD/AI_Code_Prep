@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Arena — AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .workbench-container {
+      max-width: var(--max-width);
+      margin: 24px auto;
+      padding: 0 32px 64px;
+    }
+    .picker-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .picker-select {
+      flex: 1;
+      height: 42px;
+      padding: 0 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-hairline-solid);
+      background: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-ink);
+      outline: none;
+      cursor: pointer;
+    }
+    .picker-btn {
+      height: 42px;
+      min-width: 44px;
+      padding: 0 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-hairline-solid);
+      background: #FFFFFF;
+      color: var(--color-ink);
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 150ms ease-out;
+    }
+    .picker-btn:hover {
+      background: var(--color-panel-quiet-light);
+      border-color: var(--color-hairline-strong);
+    }
+    .picker-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Two-Pane Layout */
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Problem Card */
+    .problem-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-card);
+      padding: 28px;
+    }
+    .problem-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .problem-title {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    .problem-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .problem-statement {
+      font-size: 15px;
+      color: var(--color-ink);
+      line-height: 1.6;
+    }
+    .problem-statement p {
+      margin-bottom: 14px;
+    }
+
+    /* Signature Container */
+    .signature-container {
+      margin-top: 24px;
+      padding: 16px 18px;
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-inner);
+    }
+    .signature-code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-ink);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* Hint Accordion in Sandy Beige */
+    .hint-card {
+      margin-top: 20px;
+      background: var(--color-panel-quiet);
+      border: 1px solid var(--color-hairline-strong);
+      border-radius: var(--radius-inner);
+      overflow: hidden;
+    }
+    .hint-trigger {
+      width: 100%;
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-ink);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hint-body {
+      padding: 0 18px 16px;
+      font-size: 14px;
+      color: var(--color-ink);
+      line-height: 1.5;
+    }
+
+    /* Right Column: Editor & Output */
+    .editor-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .editor-wrapper {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--color-code-border);
+      background: var(--color-code-bg);
+    }
+
+    /* Output Card */
+    .output-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-card);
+      padding: 24px;
+    }
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .output-title {
+      font-size: 18px;
+      font-family: var(--font-display);
+    }
+    .output-results {
+      padding: 16px;
+      border-radius: var(--radius-inner);
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline-solid);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .output-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar Sticky Shell -->
+  <header class="topbar-shell">
+    <a href="home.html" class="topbar-brand">
+      <span class="topbar-brand-wordmark">Coach <span class="topbar-brand-badge">Terracotta</span></span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="home.html" class="topbar-nav-item">Home</a>
+      <a href="practice.html" class="topbar-nav-item active">Practice Arena</a>
+      <a href="mock_start.html" class="topbar-nav-item">Mock Interview</a>
+      <a href="dashboard.html" class="topbar-nav-item">Dashboard</a>
+      <a href="tokens.html" class="topbar-nav-item">Design Tokens</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>1 Day</span>
+      </div>
+      <div class="chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>1 Due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="workbench-container">
+    <!-- Slim Problem Picker Row (X5R) -->
+    <div class="picker-row">
+      <button class="picker-btn" title="Previous Problem">←</button>
+      <select class="picker-select">
+        <option selected>1. Binary Search · Easy · Binary Search</option>
+        <option>2. Two Sum · Easy · Arrays</option>
+        <option>3. Reverse Sequence In Place · Easy · Two Pointers</option>
+        <option>4. Valid Parentheses · Easy · Stack</option>
+        <option>5. Maximum Subarray Sum · Medium · Arrays</option>
+        <option>6. Climbing Stairs · Easy · Dynamic Programming</option>
+        <option>7. Longest Substring Without Repeating Characters · Medium · Strings</option>
+      </select>
+      <button class="picker-btn" title="Next Problem">→</button>
+    </div>
+
+    <!-- Page-Scroll Two-Pane Workbench -->
+    <div class="workbench-grid">
+      <!-- Left Column: Problem Card -->
+      <section class="problem-card">
+        <div class="problem-header">
+          <span class="badge badge-fail">1 Due for Review</span>
+          <span style="font-size: 13px; color: var(--color-ink-muted);">Problem 1 of 12</span>
+        </div>
+
+        <h1 class="problem-title">Binary Search</h1>
+        <div class="problem-tags">
+          <span style="color: var(--color-terracotta); font-weight: 600; font-size: 13px;">Binary Search</span>
+          <span style="color: var(--color-ink-muted); font-size: 13px;">· Easy</span>
+        </div>
+
+        <div class="problem-statement">
+          <p>
+            Given an array of integers <code class="inline-code">nums</code> which is sorted in ascending order, and an integer <code class="inline-code">target</code>, write a function to search <code class="inline-code">target</code> in <code class="inline-code">nums</code>. If <code class="inline-code">target</code> exists, then return its index. Otherwise, return <code class="inline-code">-1</code>.
+          </p>
+          <p>
+            You must write an algorithm with <code class="inline-code">O(log n)</code> runtime complexity.
+          </p>
+          <p>
+            <strong>Example 1:</strong><br>
+            Input: <code class="inline-code">nums = [-1,0,3,5,9,12], target = 9</code><br>
+            Output: <code class="inline-code">4</code> (Explanation: 9 exists in nums and its index is 4)
+          </p>
+        </div>
+
+        <!-- Single Source of Truth Signature Snippet -->
+        <div class="signature-container">
+          <span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>
+          <div class="signature-code">def search(nums: list[int], target: int) -> int:</div>
+        </div>
+
+        <!-- Progressive Hint Ladder in Sandy Beige -->
+        <div class="hint-card">
+          <button class="hint-trigger">
+            <span>Progressive Hint 1 (Concept)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="hint-body">
+            Maintain two pointers <code class="inline-code">left</code> and <code class="inline-code">right</code>. In each step, compute <code class="inline-code">mid = left + (right - left) // 2</code> to avoid overflow. Compare <code class="inline-code">nums[mid]</code> to target.
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Code Editor & Output Cards -->
+      <section class="editor-column">
+        <!-- Dark Anchor Code Editor -->
+        <div class="editor-wrapper">
+          <div class="editor-strip">
+            <span>Binary Search · Python 3.12</span>
+            <span>Sandbox · 3.0s · Python 3.12</span>
+          </div>
+          <div class="editor-surface">
+            <pre style="margin: 0; font-family: var(--font-mono); font-size: 13.5px;"><span style="color: #6A9955;"># Starter Code — Binary Search</span>
+<span style="color: #569CD6;">def</span> <span style="color: #DCDCAA;">search</span>(nums: list[<span style="color: #4EC9B0;">int</span>], target: <span style="color: #4EC9B0;">int</span>) -&gt; <span style="color: #4EC9B0;">int</span>:
+    left, right = <span style="color: #B5CEA8;">0</span>, len(nums) - <span style="color: #B5CEA8;">1</span>
+    <span style="color: #C586C0;">while</span> left &lt;= right:
+        mid = (left + right) // <span style="color: #B5CEA8;">2</span>
+        <span style="color: #C586C0;">if</span> nums[mid] == target:
+            <span style="color: #C586C0;">return</span> mid
+        <span style="color: #C586C0;">elif</span> nums[mid] &lt; target:
+            left = mid + <span style="color: #B5CEA8;">1</span>
+        <span style="color: #C586C0;">else</span>:
+            right = mid - <span style="color: #B5CEA8;">1</span>
+    <span style="color: #C586C0;">return</span> -<span style="color: #B5CEA8;">1</span>
+</pre>
+          </div>
+        </div>
+
+        <!-- Output Card -->
+        <div class="output-card">
+          <div class="output-header">
+            <h2 class="output-title">Execution Output</h2>
+            <span class="badge badge-pass">3/3 Tests Passed</span>
+          </div>
+
+          <div class="output-results">
+            <div style="color: var(--color-olive-dark); font-weight: 600; margin-bottom: 6px;">✓ VERDICT: PASS</div>
+            <div style="color: var(--color-ink-muted);">Test 1: target=9 in [-1,0,3,5,9,12] → Expected 4, Got 4 (Passed)</div>
+            <div style="color: var(--color-ink-muted);">Test 2: target=2 in [-1,0,3,5,9,12] → Expected -1, Got -1 (Passed)</div>
+            <div style="color: var(--color-ink-muted);">Runtime: 24ms · Memory: 14.1 MB</div>
+          </div>
+
+          <!-- Natural-width Right-aligned Buttons -->
+          <div class="output-actions">
+            <button class="btn btn-outline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Run Code</span>
+            </button>
+            <button class="btn btn-terracotta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Submit Solution</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

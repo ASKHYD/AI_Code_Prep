@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Today's Practice — AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .home-container {
+      max-width: var(--max-width);
+      margin: 32px auto;
+      padding: 0 32px 64px;
+    }
+    .hero-strip {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-size: 38px;
+      line-height: 1.15;
+    }
+    .hero-subline {
+      font-size: 15px;
+      color: var(--color-ink-muted);
+      margin-top: 6px;
+    }
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .queue-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-card);
+      padding: 28px;
+    }
+    .queue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .queue-title {
+      font-size: 22px;
+    }
+    .queue-meta {
+      font-size: 13px;
+      color: var(--color-ink-muted);
+    }
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .queue-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-inner);
+      background: var(--color-canvas);
+      transition: all 150ms ease-out;
+      text-decoration: none;
+      color: inherit;
+    }
+    .queue-item:hover {
+      border-color: var(--color-terracotta-border);
+      background: #FFFFFF;
+      transform: translateY(-1px);
+    }
+    .queue-item-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .queue-item-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-ink-muted);
+      width: 24px;
+    }
+    .queue-item-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+    .queue-item-tags {
+      font-size: 13px;
+      color: var(--color-ink-muted);
+      margin-top: 2px;
+    }
+    .queue-item-topic {
+      color: var(--color-terracotta);
+      font-weight: 500;
+    }
+    .queue-item-diff {
+      color: var(--color-ink-muted);
+    }
+    .queue-item-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar Sticky Shell -->
+  <header class="topbar-shell">
+    <a href="home.html" class="topbar-brand">
+      <span class="topbar-brand-wordmark">Coach <span class="topbar-brand-badge">Terracotta</span></span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="home.html" class="topbar-nav-item active">Home</a>
+      <a href="practice.html" class="topbar-nav-item">Practice Arena</a>
+      <a href="mock_start.html" class="topbar-nav-item">Mock Interview</a>
+      <a href="dashboard.html" class="topbar-nav-item">Dashboard</a>
+      <a href="tokens.html" class="topbar-nav-item">Design Tokens</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>1 Day</span>
+      </div>
+      <div class="chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>1 Due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="home-container">
+    <!-- Hero Header -->
+    <div class="hero-strip">
+      <div>
+        <h1 class="hero-title">Today's Practice</h1>
+        <p class="hero-subline">Adaptive spaced repetition (FSRS) scheduled from your objective test results.</p>
+      </div>
+      <div>
+        <a href="practice.html" class="btn btn-terracotta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Start Daily Practice</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 Bento Stat Tiles -->
+    <div class="stat-row">
+      <div class="stat-tile">
+        <div class="stat-tile-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-olive)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Active Streak</span>
+        </div>
+        <div class="stat-tile-value" style="color: var(--color-olive-dark);">1 Day</div>
+        <div class="stat-tile-sub">Daily problem solving activity</div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-tile-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-terracotta)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Problems Due</span>
+        </div>
+        <div class="stat-tile-value" style="color: var(--color-terracotta);">1 Due</div>
+        <div class="stat-tile-sub">FSRS memory retention target: 90%</div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-tile-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Problems Solved</span>
+        </div>
+        <div class="stat-tile-value" style="color: var(--color-ink);">1 / 12</div>
+        <div class="stat-tile-sub">Across 12 core technical interview topics</div>
+      </div>
+    </div>
+
+    <!-- Interleaved Review Queue Panel -->
+    <div class="queue-card">
+      <div class="queue-header">
+        <div>
+          <h2 class="queue-title">Interleaved Practice Queue</h2>
+          <div class="queue-meta">Topics sequenced to eliminate adjacent repetition and optimize cognitive consolidation</div>
+        </div>
+        <div class="badge badge-neutral">5 Problems Ready</div>
+      </div>
+
+      <div class="queue-list">
+        <!-- Problem 1: Due -->
+        <a href="practice.html" class="queue-item" style="border-color: var(--color-terracotta-border); background: var(--color-terracotta-wash);">
+          <div class="queue-item-left">
+            <span class="queue-item-num">01</span>
+            <div>
+              <div class="queue-item-name">Binary Search</div>
+              <div class="queue-item-tags">
+                <span class="queue-item-topic">Binary Search</span> · <span class="queue-item-diff">Easy</span>
+              </div>
+            </div>
+          </div>
+          <div class="queue-item-right">
+            <span class="badge badge-fail">1 Due</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+
+        <!-- Problem 2 -->
+        <a href="practice.html" class="queue-item">
+          <div class="queue-item-left">
+            <span class="queue-item-num">02</span>
+            <div>
+              <div class="queue-item-name">Two Sum</div>
+              <div class="queue-item-tags">
+                <span class="queue-item-topic">Arrays</span> · <span class="queue-item-diff">Easy</span>
+              </div>
+            </div>
+          </div>
+          <div class="queue-item-right">
+            <span class="badge badge-neutral">Ready</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+
+        <!-- Problem 3 -->
+        <a href="practice.html" class="queue-item">
+          <div class="queue-item-left">
+            <span class="queue-item-num">03</span>
+            <div>
+              <div class="queue-item-name">Reverse Sequence In Place</div>
+              <div class="queue-item-tags">
+                <span class="queue-item-topic">Two Pointers</span> · <span class="queue-item-diff">Easy</span>
+              </div>
+            </div>
+          </div>
+          <div class="queue-item-right">
+            <span class="badge badge-neutral">Ready</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+
+        <!-- Problem 4 -->
+        <a href="practice.html" class="queue-item">
+          <div class="queue-item-left">
+            <span class="queue-item-num">04</span>
+            <div>
+              <div class="queue-item-name">Valid Parentheses</div>
+              <div class="queue-item-tags">
+                <span class="queue-item-topic">Stack</span> · <span class="queue-item-diff">Easy</span>
+              </div>
+            </div>
+          </div>
+          <div class="queue-item-right">
+            <span class="badge badge-neutral">Ready</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+
+        <!-- Problem 5 -->
+        <a href="practice.html" class="queue-item">
+          <div class="queue-item-left">
+            <span class="queue-item-num">05</span>
+            <div>
+              <div class="queue-item-name">Maximum Subarray Sum</div>
+              <div class="queue-item-tags">
+                <span class="queue-item-topic">Arrays</span> · <span class="queue-item-diff">Medium</span>
+              </div>
+            </div>
+          </div>
+          <div class="queue-item-right">
+            <span class="badge badge-neutral">Ready</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+      </div>
+
+      <!-- Sandy Explanatory Strip -->
+      <div class="sandy-strip" style="margin-top: 24px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-terracotta)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span style="font-size: 13px;">
+          <strong>Adaptive Memory Engine:</strong> Each attempt adjusts the card's interval based on objective test pass/fail results, hints consumed, and repetition count.
+        </span>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
