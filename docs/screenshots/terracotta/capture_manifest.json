@@ -3,98 +3,98 @@
     "file": "terracotta_home_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 82475,
+    "bytes": 82364,
     "page": "home.html"
   },
   {
     "file": "terracotta_home_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 92839,
+    "bytes": 112986,
     "page": "home.html"
   },
   {
     "file": "terracotta_practice_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 143904,
+    "bytes": 134116,
     "page": "practice.html"
   },
   {
     "file": "terracotta_practice_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 147349,
+    "bytes": 138011,
     "page": "practice.html"
   },
   {
     "file": "terracotta_mock_start_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 92565,
+    "bytes": 91677,
     "page": "mock_start.html"
   },
   {
     "file": "terracotta_mock_start_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 96156,
+    "bytes": 95301,
     "page": "mock_start.html"
   },
   {
     "file": "terracotta_mock_session_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 129868,
+    "bytes": 127849,
     "page": "mock_session.html"
   },
   {
     "file": "terracotta_mock_session_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 133791,
+    "bytes": 131879,
     "page": "mock_session.html"
   },
   {
     "file": "terracotta_mock_scorecard_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 93863,
+    "bytes": 92958,
     "page": "mock_scorecard.html"
   },
   {
     "file": "terracotta_mock_scorecard_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 96061,
+    "bytes": 95183,
     "page": "mock_scorecard.html"
   },
   {
     "file": "terracotta_dashboard_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 115003,
+    "bytes": 106414,
     "page": "dashboard.html"
   },
   {
     "file": "terracotta_dashboard_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 139904,
+    "bytes": 123822,
     "page": "dashboard.html"
   },
   {
     "file": "terracotta_tokens_1450x900.png",
     "width": 1450,
     "height": 900,
-    "bytes": 104030,
+    "bytes": 101487,
     "page": "tokens.html"
   },
   {
     "file": "terracotta_tokens_1920x1080.png",
     "width": 1920,
     "height": 1080,
-    "bytes": 132381,
+    "bytes": 129923,
     "page": "tokens.html"
   }
 ]

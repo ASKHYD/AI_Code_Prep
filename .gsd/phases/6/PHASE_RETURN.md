@@ -122,11 +122,86 @@ Captured via headless Chrome CDP to `docs/screenshots/terracotta/` (with primary
 
 ---
 
-## 7. Known Limits & Next Step
+## 7. FIX ROUND (2026-11-07)
 
-- **Known Limits**: These deliverables are static HTML/CSS mockups running in a browser environment to validate layout, typography, and color harmony. Streamlit integration will occur in Phase 7 (T2) using `.st-key-*` keyed-container CSS and native theming.
-- **Next Step**: Await owner visual inspection of the screenshots at 1450×900 and 1920×1080. Upon owner approval of Gate G-T1 and live acceptance of Milestone 2 Phase 3, Phase 7 (T2 Streamlit Implementation) may be planned and executed.
+Following the owner screenshot audit, corrective round F1–F3 and N1 was implemented across `mockups/terracotta/`:
+
+### Summary of Corrections
+
+1. **F1 — Practice Output Card Fidelity (`practice.html`)**:
+   - **Before**: Showed invented telemetry: `"3/3 Tests Passed"`, `"Runtime: 24ms · Memory: 14.1 MB"`.
+   - **After**: Rebuilt output card mirroring real `app.py` output structure and real store attempt:
+     - Header: `Binary Search · PASS · 178 ms · Hints 0` with green `PASS` badge.
+     - Summary strip: `All Tests Accepted` with `8 / 8 Passed` (2 visible + 6 hidden tests defined in `binary-search.json`).
+     - Real attempt runtime: `178 ms` (from `coach.db` attempt #1).
+     - Visible test results rendering verbatim inputs and expectations (`Input: [-1, 0, 3, 5, 9, 12], 9` -> `Expected: 4`, `Input: [-1, 0, 3, 5, 9, 12], 2` -> `Expected: -1`).
+     - Memory measurement and 3/3 count completely eliminated.
+
+2. **F2 — Dashboard Attempted-Only Contradiction (`dashboard.html`)**:
+   - **Before**: Chart panel titled `"Attempted Topics Only"` displayed 4 unattempted topics (`NOT STARTED (0 attempts)`).
+   - **After**:
+     - Mastery chart card displays exclusively attempted topics: `Binary Search` (50%, 1 / 2 passed).
+     - Meta-caption explaining absence of other topics removed.
+     - Dedicated **Topic Breakdown** table added below with all 11 catalog topics: `Binary Search` shows 2 attempts, 1 passed, 50.0% mastery; remaining 10 topics cleanly marked `NOT STARTED` with muted zero counts.
+
+3. **F3 — Practice Editor Fidelity (`practice.html`)**:
+   - **Before**: Pre-filled complete binary search solution (`while left <= right...`) in code editor and typed `nums: List[int]` signature.
+   - **After**:
+     - Editor displays verbatim `starter_code` from `data/problems/binary-search.json`:
+       ```python
+       def binary_search(nums: list, target: int) -> int:
+           # Write your solution here
+           pass
+       ```
+     - Signature block matches first line of `starter_code`: `def binary_search(nums: list, target: int) -> int:`.
+
+4. **N1 — Navigation Bar & Streak Icon Cleanup (All Pages)**:
+   - **Before**: Navigation bar included `"Design Tokens"` linking to `tokens.html`. Streak badge in topbar and stat tiles rendered a dollar-sign-like SVG glyph (`d="M12 2v20M17 5H9.5..."`).
+   - **After**:
+     - `"Design Tokens"` removed from topbar navigation on all 7 mockups. The navigation bar lists strictly user-facing destinations: Home, Practice Arena, Mock Interview, Dashboard. (`tokens.html` remains accessible directly on port 8000 as a reference artifact).
+     - Streak icon replaced across all 7 mockups with clean Lucide flame SVG (`d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"`).
+
+### Anti-Slop Audit & Numeral Tracing Battery
+
+Extended `scratch/run_terracotta_audit.py` executed:
+- **Trope Invariants**: 0 glassmorphism (`backdrop-filter`), 0 card gradients (`linear-gradient`), 0 purple/violet leaks, 0 glow shadows, 0 serif body paragraphs, 0 mono metric values, 0 chip soup violations.
+- **Numeral Tracing**: 134 of 134 numerals across all 7 mockups verified and mapped to authoritative sources:
+  - Store metrics (`coach.db`): 2 attempts, 1 solved, 50.0% pass rate, 1 day streak, 1 due review card, 178ms runtime, 0 hints.
+  - Problem definitions (`data/problems/*.json`): 12 catalog problems, 11 topics, 8 tests for binary-search, verbatim examples.
+  - Simulation fixtures: 45 min budget, 2 problems, countdown timer (38:42), simulated scorecard metrics.
+  - Spec & environment constants: Python 3.12, Sandbox 3.0s, Option 3, Decision 007.
+- **Verdict**: `ALL 7 MOCKUPS PASSED: 0 TROPE VIOLATIONS, 0 UNTRACED NUMERALS.`
+
+### Dual-Resolution Screenshot Refresh
+
+All 14 captures refreshed via Chrome CDP:
+- `docs/screenshots/terracotta/terracotta_home_1450x900.png` (82,364 B)
+- `docs/screenshots/terracotta/terracotta_home_1920x1080.png` (112,986 B)
+- `docs/screenshots/terracotta/terracotta_practice_1450x900.png` (134,116 B)
+- `docs/screenshots/terracotta/terracotta_practice_1920x1080.png` (138,011 B)
+- `docs/screenshots/terracotta/terracotta_mock_start_1450x900.png` (91,677 B)
+- `docs/screenshots/terracotta/terracotta_mock_start_1920x1080.png` (95,301 B)
+- `docs/screenshots/terracotta/terracotta_mock_session_1450x900.png` (127,849 B)
+- `docs/screenshots/terracotta/terracotta_mock_session_1920x1080.png` (131,879 B)
+- `docs/screenshots/terracotta/terracotta_mock_scorecard_1450x900.png` (92,958 B)
+- `docs/screenshots/terracotta/terracotta_mock_scorecard_1920x1080.png` (95,183 B)
+- `docs/screenshots/terracotta/terracotta_dashboard_1450x900.png` (106,414 B)
+- `docs/screenshots/terracotta/terracotta_dashboard_1920x1080.png` (123,822 B)
+- `docs/screenshots/terracotta/terracotta_tokens_1450x900.png` (101,487 B)
+- `docs/screenshots/terracotta/terracotta_tokens_1920x1080.png` (129,923 B)
+
+### Server URLs
+- Terracotta HTML Mockups: `http://localhost:8000` (`http://localhost:8000/home.html`, etc.)
+- Milestone 2 Phase 3 Live App: `http://localhost:8501`
+
+---
+
+## 8. Known Limits & Next Step
+
+- **Known Limits**: Deliverables remain static HTML/CSS mockups running in a browser environment to validate layout, typography, and color harmony. Streamlit integration will occur in Phase 7 (T2).
+- **Next Step**: Await owner visual inspection of the corrected screenshots and live mockups on `http://localhost:8000`.
 
 ---
 
 Stopped at Terracotta Editorial gate, awaiting owner approval.
+

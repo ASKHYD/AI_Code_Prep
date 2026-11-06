@@ -33,3 +33,4 @@ None — executed strictly as planned.
 
 ## Next Step
 Proceed to Plan 6.4 (`04-PLAN.md`): Wave 3 — Anti-Slop Audit, Dual-Resolution CDP Captures & Phase Return.
+

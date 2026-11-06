@@ -33,3 +33,4 @@ None — executed strictly as planned.
 
 ## Next Step
 Proceed to Plan 6.3 (`03-PLAN.md`): Wave 2 — Mock Interview Experience Mockups (`mock_start.html`, `mock_session.html`, `mock_scorecard.html`).
+

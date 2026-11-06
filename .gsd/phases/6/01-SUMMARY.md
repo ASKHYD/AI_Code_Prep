@@ -33,3 +33,4 @@ None — executed strictly as planned.
 
 ## Next Step
 Proceed to Plan 6.2 (`02-PLAN.md`): Wave 2 — Core Screen Mockups with Real Data (`home.html`, `practice.html`, `dashboard.html`).
+

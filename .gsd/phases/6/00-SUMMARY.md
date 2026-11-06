@@ -44,3 +44,4 @@ None — executed strictly as planned.
 
 ## Next Step
 Proceed to Plan 6.1 (`01-PLAN.md`): Wave 1 — Design Tokens Specification & Base Terracotta Stylesheet.
+

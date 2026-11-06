@@ -199,11 +199,10 @@
       <a href="practice.html" class="topbar-nav-item active">Practice Arena</a>
       <a href="mock_start.html" class="topbar-nav-item">Mock Interview</a>
       <a href="dashboard.html" class="topbar-nav-item">Dashboard</a>
-      <a href="tokens.html" class="topbar-nav-item">Design Tokens</a>
     </nav>
     <div class="topbar-right">
       <div class="chip-streak">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
         <span>1 Day</span>
       </div>
       <div class="chip-due">
@@ -261,7 +260,7 @@
         <!-- Single Source of Truth Signature Snippet -->
         <div class="signature-container">
           <span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>
-          <div class="signature-code">def search(nums: list[int], target: int) -> int:</div>
+          <div class="signature-code">def binary_search(nums: list, target: int) -> int:</div>
         </div>
 
         <!-- Progressive Hint Ladder in Sandy Beige -->
@@ -285,18 +284,9 @@
             <span>Sandbox · 3.0s · Python 3.12</span>
           </div>
           <div class="editor-surface">
-            <pre style="margin: 0; font-family: var(--font-mono); font-size: 13.5px;"><span style="color: #6A9955;"># Starter Code — Binary Search</span>
-<span style="color: #569CD6;">def</span> <span style="color: #DCDCAA;">search</span>(nums: list[<span style="color: #4EC9B0;">int</span>], target: <span style="color: #4EC9B0;">int</span>) -&gt; <span style="color: #4EC9B0;">int</span>:
-    left, right = <span style="color: #B5CEA8;">0</span>, len(nums) - <span style="color: #B5CEA8;">1</span>
-    <span style="color: #C586C0;">while</span> left &lt;= right:
-        mid = (left + right) // <span style="color: #B5CEA8;">2</span>
-        <span style="color: #C586C0;">if</span> nums[mid] == target:
-            <span style="color: #C586C0;">return</span> mid
-        <span style="color: #C586C0;">elif</span> nums[mid] &lt; target:
-            left = mid + <span style="color: #B5CEA8;">1</span>
-        <span style="color: #C586C0;">else</span>:
-            right = mid - <span style="color: #B5CEA8;">1</span>
-    <span style="color: #C586C0;">return</span> -<span style="color: #B5CEA8;">1</span>
+            <pre style="margin: 0; font-family: var(--font-mono); font-size: 13.5px;"><span style="color: #569CD6;">def</span> <span style="color: #DCDCAA;">binary_search</span>(nums: <span style="color: #4EC9B0;">list</span>, target: <span style="color: #4EC9B0;">int</span>) -&gt; <span style="color: #4EC9B0;">int</span>:
+    <span style="color: #6A9955;"># Write your solution here</span>
+    <span style="color: #569CD6;">pass</span>
 </pre>
           </div>
         </div>
@@ -305,14 +295,52 @@
         <div class="output-card">
           <div class="output-header">
             <h2 class="output-title">Execution Output</h2>
-            <span class="badge badge-pass">3/3 Tests Passed</span>
+            <span class="badge badge-pass">8 / 8 Passed</span>
           </div>
 
-          <div class="output-results">
-            <div style="color: var(--color-olive-dark); font-weight: 600; margin-bottom: 6px;">✓ VERDICT: PASS</div>
-            <div style="color: var(--color-ink-muted);">Test 1: target=9 in [-1,0,3,5,9,12] → Expected 4, Got 4 (Passed)</div>
-            <div style="color: var(--color-ink-muted);">Test 2: target=2 in [-1,0,3,5,9,12] → Expected -1, Got -1 (Passed)</div>
-            <div style="color: var(--color-ink-muted);">Runtime: 24ms · Memory: 14.1 MB</div>
+          <div class="output-results" style="padding: 0; overflow: hidden;">
+            <div style="background: var(--color-olive-wash); border-bottom: 1px solid var(--color-olive-border); padding: 14px 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="badge badge-pass">PASS</span>
+                  <strong style="font-size: 14px; color: var(--color-olive-dark);">
+                    Binary Search · PASS · 178 ms · Hints 0
+                  </strong>
+                </div>
+                <span style="font-size: 12px; font-weight: 600; color: var(--color-olive-dark);">All Tests Accepted</span>
+              </div>
+              <div style="font-size: 12px; display: flex; gap: 16px; margin-top: 6px; color: var(--color-olive-dark);">
+                <span><strong>Runtime:</strong> 178 ms</span>
+                <span><strong>Tests:</strong> 8 / 8 Passed</span>
+              </div>
+            </div>
+
+            <!-- Visible Test Cases Section exactly as app.py prints -->
+            <div style="padding: 14px 18px 8px;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--color-ink); margin-bottom: 10px;">Visible Test Cases</div>
+              
+              <div style="background: var(--color-surface); border: 1px solid var(--color-hairline-solid); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--color-olive-dark); letter-spacing: 0.04em;">TEST CASE #1</span>
+                  <span class="badge badge-pass" style="font-size: 10px; padding: 2px 6px;">Provided</span>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-ink);">
+                  <div><strong>Input:</strong> <code>[-1, 0, 3, 5, 9, 12], 9</code></div>
+                  <div style="margin-top: 2px;"><strong>Expected:</strong> <code>4</code></div>
+                </div>
+              </div>
+
+              <div style="background: var(--color-surface); border: 1px solid var(--color-hairline-solid); border-radius: 8px; padding: 10px 14px; margin-bottom: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--color-olive-dark); letter-spacing: 0.04em;">TEST CASE #2</span>
+                  <span class="badge badge-pass" style="font-size: 10px; padding: 2px 6px;">Provided</span>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-ink);">
+                  <div><strong>Input:</strong> <code>[-1, 0, 3, 5, 9, 12], 2</code></div>
+                  <div style="margin-top: 2px;"><strong>Expected:</strong> <code>-1</code></div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Natural-width Right-aligned Buttons -->
@@ -332,3 +360,4 @@
   </main>
 </body>
 </html>
+
