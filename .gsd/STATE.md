@@ -8,8 +8,8 @@ updated: 2026-11-07
 
 **Milestone:** Milestone 3 — Terracotta Editorial Redesign  
 **Phase:** Phase 6: Terracotta Static Mockups & Token Sheet (T1)  
-**Status:** 💬 DISCUSSING / PLANNING (Execution gated by T1 owner approval & Phase 3 live acceptance)  
-**Active Plan:** Pending Phase 6 Discussion & Plan  
+**Status:** 📋 PLANNING COMPLETE — READY FOR EXECUTION (/executor 6)  
+**Active Plan:** `.gsd/phases/6/PLAN_CONTRACT.md` (5 plans across 4 waves)  
 
 ---
 
