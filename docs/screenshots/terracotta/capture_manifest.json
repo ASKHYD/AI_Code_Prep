@@ -1,0 +1,100 @@
+[
+  {
+    "file": "terracotta_home_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 82475,
+    "page": "home.html"
+  },
+  {
+    "file": "terracotta_home_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 92839,
+    "page": "home.html"
+  },
+  {
+    "file": "terracotta_practice_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 143904,
+    "page": "practice.html"
+  },
+  {
+    "file": "terracotta_practice_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 147349,
+    "page": "practice.html"
+  },
+  {
+    "file": "terracotta_mock_start_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 92565,
+    "page": "mock_start.html"
+  },
+  {
+    "file": "terracotta_mock_start_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 96156,
+    "page": "mock_start.html"
+  },
+  {
+    "file": "terracotta_mock_session_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 129868,
+    "page": "mock_session.html"
+  },
+  {
+    "file": "terracotta_mock_session_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 133791,
+    "page": "mock_session.html"
+  },
+  {
+    "file": "terracotta_mock_scorecard_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 93863,
+    "page": "mock_scorecard.html"
+  },
+  {
+    "file": "terracotta_mock_scorecard_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 96061,
+    "page": "mock_scorecard.html"
+  },
+  {
+    "file": "terracotta_dashboard_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 115003,
+    "page": "dashboard.html"
+  },
+  {
+    "file": "terracotta_dashboard_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 139904,
+    "page": "dashboard.html"
+  },
+  {
+    "file": "terracotta_tokens_1450x900.png",
+    "width": 1450,
+    "height": 900,
+    "bytes": 104030,
+    "page": "tokens.html"
+  },
+  {
+    "file": "terracotta_tokens_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 132381,
+    "page": "tokens.html"
+  }
+]

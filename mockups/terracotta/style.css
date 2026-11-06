@@ -113,8 +113,7 @@ h1, h2, h3, .font-serif {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background-color: rgba(255, 248, 240, 0.96);
-  backdrop-filter: blur(8px);
+  background-color: var(--color-canvas);
   border-bottom: 1px solid var(--color-hairline-solid);
   z-index: 1000;
   display: flex;
