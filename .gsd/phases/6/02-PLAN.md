@@ -90,3 +90,4 @@ After all tasks complete, verify:
 ## Success Criteria
 - [ ] All 3 core mockups render cleanly in browser without console errors.
 - [ ] Design constraints (matte, 24px radius, 1px warm hairlines) strictly maintained.
+

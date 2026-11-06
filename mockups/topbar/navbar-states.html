@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar States & Verdict Specimens | AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .specimen-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .specimen-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .specimen-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+      padding-bottom: 8px;
+    }
+    .specimen-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .specimen-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .navbar-frame {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      overflow: hidden;
+      box-shadow: none;
+      background: var(--surface);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .navbar-frame:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06);
+    }
+    .verdicts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar Header -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="home.html" class="topbar-brand">AI Coding Prep Coach</a>
+      <span class="topbar-badge-offline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        Design Specimens
+      </span>
+    </div>
+
+    <nav class="topbar-center">
+      <a href="home.html" class="nav-pill">Home</a>
+      <a href="practice.html" class="nav-pill">Practice Arena</a>
+      <a href="#mock-variant" class="nav-pill active-mock">Mock Interview</a>
+      <a href="dashboard.html" class="nav-pill">Dashboard</a>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="status-chip status-chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+        <span>0 days</span>
+      </div>
+      <div class="status-chip status-chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        <span>0 due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="specimen-container">
+    
+    <div>
+      <h1 style="font-size: 28px; line-height: 1.2;">Option B: Topbar Navigation States & Specimen Catalog</h1>
+      <p style="font-size: 14px; color: var(--muted); margin-top: 6px;">
+        Demonstrating all four active screen tint washes, the Mock Interview timer-strip variant, and authentic PASS/FAIL verdict treatments.
+      </p>
+    </div>
+
+    <!-- 1. Active State 1: Home Screen (Mint Wash #DFF3E4 / #167B48) -->
+    <section class="specimen-section">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 1: Home Active (Mint Wash)</h2>
+        <span class="specimen-tag">Tokens: bg #DFF3E4 · text #167B48</span>
+      </div>
+      <div class="navbar-frame">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-brand">AI Coding Prep Coach</span>
+            <span class="topbar-badge-offline">Offline · Code-Judged</span>
+          </div>
+          <nav class="topbar-center">
+            <span class="nav-pill active-home">Home</span>
+            <span class="nav-pill">Practice Arena</span>
+            <span class="nav-pill">Mock Interview</span>
+            <span class="nav-pill">Dashboard</span>
+          </nav>
+          <div class="topbar-right">
+            <div class="status-chip status-chip-streak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+              <span>0 days</span>
+            </div>
+            <div class="status-chip status-chip-due">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              <span>0 due</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Active State 2: Practice Arena (Lilac Wash #E8E2FF / #5932EA) -->
+    <section class="specimen-section">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 2: Practice Arena Active (Lilac Wash)</h2>
+        <span class="specimen-tag">Tokens: bg #E8E2FF · text #5932EA</span>
+      </div>
+      <div class="navbar-frame">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-brand">AI Coding Prep Coach</span>
+            <span class="topbar-badge-offline">Offline · Code-Judged</span>
+          </div>
+          <nav class="topbar-center">
+            <span class="nav-pill">Home</span>
+            <span class="nav-pill active-practice">Practice Arena</span>
+            <span class="nav-pill">Mock Interview</span>
+            <span class="nav-pill">Dashboard</span>
+          </nav>
+          <div class="topbar-right">
+            <div class="status-chip status-chip-streak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+              <span>0 days</span>
+            </div>
+            <div class="status-chip status-chip-due">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              <span>0 due</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Active State 3: Mock Interview (Peach Wash #FFE8D1 / #B93815) -->
+    <section class="specimen-section">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 3: Mock Interview Active (Peach Wash)</h2>
+        <span class="specimen-tag">Tokens: bg #FFE8D1 · text #B93815</span>
+      </div>
+      <div class="navbar-frame">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-brand">AI Coding Prep Coach</span>
+            <span class="topbar-badge-offline">Offline · Code-Judged</span>
+          </div>
+          <nav class="topbar-center">
+            <span class="nav-pill">Home</span>
+            <span class="nav-pill">Practice Arena</span>
+            <span class="nav-pill active-mock">Mock Interview</span>
+            <span class="nav-pill">Dashboard</span>
+          </nav>
+          <div class="topbar-right">
+            <div class="status-chip status-chip-streak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+              <span>0 days</span>
+            </div>
+            <div class="status-chip status-chip-due">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              <span>0 due</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Active State 4: Dashboard (Sky Wash #DCEBFF / #1D5EC2) -->
+    <section class="specimen-section">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 4: Dashboard Active (Sky Wash)</h2>
+        <span class="specimen-tag">Tokens: bg #DCEBFF · text #1D5EC2</span>
+      </div>
+      <div class="navbar-frame">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-brand">AI Coding Prep Coach</span>
+            <span class="topbar-badge-offline">Offline · Code-Judged</span>
+          </div>
+          <nav class="topbar-center">
+            <span class="nav-pill">Home</span>
+            <span class="nav-pill">Practice Arena</span>
+            <span class="nav-pill">Mock Interview</span>
+            <span class="nav-pill active-dashboard">Dashboard</span>
+          </nav>
+          <div class="topbar-right">
+            <div class="status-chip status-chip-streak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+              <span>0 days</span>
+            </div>
+            <div class="status-chip status-chip-due">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              <span>0 due</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Mock Variant: Screen-Local Slim Substrip with Timer Pill and Problem Tabs -->
+    <section class="specimen-section" id="mock-variant">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 5: Mock Chrome Variant (Sub-Navbar Timer Strip)</h2>
+        <span class="specimen-tag">Timer displays in exactly TWO places total: Substrip + Scorecard</span>
+      </div>
+      <div class="navbar-frame">
+        <!-- Topbar -->
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-brand">AI Coding Prep Coach</span>
+            <span class="topbar-badge-offline">Offline · Code-Judged</span>
+          </div>
+          <nav class="topbar-center">
+            <span class="nav-pill">Home</span>
+            <span class="nav-pill">Practice Arena</span>
+            <span class="nav-pill active-mock">Mock Interview</span>
+            <span class="nav-pill">Dashboard</span>
+          </nav>
+          <div class="topbar-right">
+            <div class="status-chip status-chip-streak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+              <span>0 days</span>
+            </div>
+            <div class="status-chip status-chip-due">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              <span>0 due</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Screen-Local Slim Substrip -->
+        <div class="mock-substrip">
+          <div class="mock-tabs">
+            <span class="mock-tab active">Problem 1: Binary Search</span>
+            <span class="mock-tab">Problem 2: Longest Substring</span>
+          </div>
+          <div class="mock-timer-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>44:41</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Verdict Band Style Specimens: PASS & Authentic FAIL -->
+    <section class="specimen-section">
+      <div class="specimen-header">
+        <h2 class="specimen-title">State 6: Verdict Band Style Specimens</h2>
+        <span class="specimen-tag">Authentic real data · Zero invented numbers</span>
+      </div>
+      
+      <div class="verdicts-grid">
+        
+        <!-- PASS Specimen: Binary Search (Real Recorded Attempt & JSON Test Fixture Counts) -->
+        <div class="verdict-band verdict-band-pass">
+          <div class="verdict-head">
+            <div class="verdict-head-left">
+              <span class="verdict-badge verdict-badge-pass">PASS</span>
+              <span class="verdict-title">Binary Search · PASS · 178 ms · Hints 0</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 500; color: var(--partner-green);">2026-11-04</span>
+          </div>
+          <div class="verdict-meta">
+            <span><strong>Runtime:</strong> 178 ms</span>
+            <span><strong>Visible Tests:</strong> 2 / 2 Passed</span>
+            <span><strong>Hidden Tests:</strong> 6 / 6 Passed</span>
+          </div>
+        </div>
+
+        <!-- FAIL Specimen: Longest Substring (Authentic Designed Fail State — Zero Invented Runtime) -->
+        <div class="verdict-band verdict-band-fail">
+          <div class="verdict-head">
+            <div class="verdict-head-left">
+              <span class="verdict-badge verdict-badge-fail">FAIL</span>
+              <span class="verdict-title">Longest Substring Without Repeating Characters · FAIL</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 500; color: var(--partner-red);">Visible Case 1 Failed</span>
+          </div>
+          <div class="verdict-meta">
+            <span><strong>Runtime:</strong> —</span>
+            <span><strong>Status:</strong> Visible Case 1 Failed</span>
+          </div>
+          <div class="verdict-fail-detail">
+            <strong>Input:</strong> <code>s = "abcabcbb"</code><br>
+            <strong>Expected:</strong> <code>3</code><br>
+            <strong>Got:</strong> <code style="color: #C5221F; font-weight: 700;">2</code>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

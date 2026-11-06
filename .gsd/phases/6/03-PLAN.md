@@ -79,3 +79,4 @@ After all tasks complete, verify:
 ## Success Criteria
 - [ ] All 3 mock interview screens render cleanly and adhere to the Terracotta token system.
 - [ ] Addendum A timer and session scoping invariants preserved.
+

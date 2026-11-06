@@ -73,3 +73,4 @@ After all tasks complete, verify:
 ## Success Criteria
 - [ ] High-fidelity captures ready for owner visual acceptance.
 - [ ] Gate G-T1 ready for owner sign-off.
+

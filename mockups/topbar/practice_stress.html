@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Arena · Log Timestamp Filter (Stress Case) | AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Topbar Navbar (56px, Paper Background, Hairline Border) -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="home.html" class="topbar-brand">AI Coding Prep Coach</a>
+      <span class="topbar-badge-offline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        Offline · Code-Judged
+      </span>
+    </div>
+
+    <nav class="topbar-center">
+      <a href="home.html" class="nav-pill">Home</a>
+      <a href="practice.html" class="nav-pill active-practice">Practice Arena</a>
+      <a href="navbar-states.html#mock-variant" class="nav-pill">Mock Interview</a>
+      <a href="dashboard.html" class="nav-pill">Dashboard</a>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="status-chip status-chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+        <span>0 days</span>
+      </div>
+      <div class="status-chip status-chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        <span>0 due</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Two-Pane Workbench (~40% Left / ~60% Right) -->
+  <main class="workbench-container">
+    
+    <!-- LEFT PANE (Reading: Filter Strip, Statement Flow, Hint Ladder) -->
+    <section class="left-pane" aria-label="Problem Description & Hints">
+      
+      <!-- Filter Strip: One single row at pane head, hairline-divided, full words that never wrap -->
+      <div class="filter-strip">
+        <div class="filter-item">
+          <span class="filter-label">TRACK</span>
+          <div class="filter-val-row">
+            <span class="filter-val">Python</span>
+            <svg class="filter-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">DIFFICULTY</span>
+          <div class="filter-val-row">
+            <span class="filter-val">Medium</span>
+            <svg class="filter-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">TOPIC</span>
+          <div class="filter-val-row">
+            <span class="filter-val">String Parsing</span>
+            <svg class="filter-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">PROBLEM</span>
+          <div class="filter-val-row">
+            <span class="filter-val">Log Timestamp Filter</span>
+            <svg class="filter-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statement Flow -->
+      <div class="pane-content">
+        
+        <!-- P1: ONE PROBLEM CARD (Contained boundary for all problem content) -->
+        <div class="problem-card">
+          <div class="problem-header">
+            <h1 class="problem-title">Log Timestamp Filter</h1>
+            <div class="problem-meta-row">
+              <span class="badge badge-sky">Python</span>
+              <span class="badge badge-lilac">String Parsing</span>
+              <span class="badge badge-peach">Medium</span>
+            </div>
+          </div>
+
+          <div class="statement-prose">
+            <p>Given a list of log lines formatted as <code>"YYYY-MM-DD HH:MM:SS [LEVEL] Message"</code>, write a function <code>filter_log_events(log_lines: list, start_time: str, end_time: str) -> list</code> that filters and returns only the log lines where the timestamp falls between <code>start_time</code> and <code>end_time</code> (both formatted as <code>"YYYY-MM-DD HH:MM:SS"</code>, inclusive).</p>
+            <p>Lines with malformed timestamps should be excluded.</p>
+          </div>
+
+          <!-- Starter Function Signature Block (Preformatted JetBrains Mono, Comma-Broken, 4-space continuations) -->
+          <div class="signature-card">
+            <span class="signature-label">Starter Function Signature (79 Characters)</span>
+            <pre class="signature-pre"><code>def filter_log_events(log_lines: list,
+    start_time: str,
+    end_time: str) -> list:</code></pre>
+          </div>
+
+          <!-- Inputs / Outputs Specification -->
+          <div class="io-spec">
+            <div>
+              <span class="io-section-title">Inputs</span>
+              <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">
+                <div class="io-item">
+                  <span class="io-bullet">•</span>
+                  <div><code>log_lines</code> (<code>list[str]</code>): List of log lines formatted as <code>"YYYY-MM-DD HH:MM:SS [LEVEL] Message"</code>.</div>
+                </div>
+                <div class="io-item">
+                  <span class="io-bullet">•</span>
+                  <div><code>start_time</code> (<code>str</code>): Start timestamp threshold (<code>"YYYY-MM-DD HH:MM:SS"</code>).</div>
+                </div>
+                <div class="io-item">
+                  <span class="io-bullet">•</span>
+                  <div><code>end_time</code> (<code>str</code>): End timestamp threshold (<code>"YYYY-MM-DD HH:MM:SS"</code>).</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 6px;">
+              <span class="io-section-title">Output</span>
+              <div style="margin-top: 4px;" class="io-item">
+                <span class="io-bullet">•</span>
+                <div><code>list[str]</code>: Matching log lines within the timestamp window (inclusive).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hint Ladder (One Tinted Butter Block BELOW Problem Card) -->
+        <div class="hint-ladder-butter">
+          <div class="hint-ladder-head">
+            <div class="hint-ladder-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 18v4"/><path d="m16.24 16.24 2.83 2.83"/><path d="M18 12h4"/><path d="m16.24 7.76 2.83-2.83"/></svg>
+              <span>Progressive Hint Ladder</span>
+            </div>
+            <div class="hint-stepper">
+              <span class="hint-step-active">Level 1 (Revealed)</span>
+              <span>›</span>
+              <span>Level 2</span>
+              <span>›</span>
+              <span>Level 3</span>
+            </div>
+          </div>
+
+          <div class="hint-content-box">
+            <strong>Hint 1:</strong> ISO date-time formats <code>YYYY-MM-DD HH:MM:SS</code> can be compared lexicographically, or parsed using <code>datetime.strptime</code>.
+          </div>
+
+          <div class="hint-actions-stacked">
+            <button class="btn-hint-outline">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              Reveal Next Hint (Level 2)
+            </button>
+            <button class="btn-hint-solid">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              Ask AI to Explain Hint
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT PANE (Working: Editor Container, Action Row, Verdict Band, Tests) -->
+    <section class="right-pane" aria-label="Editor & Execution Sandbox">
+      
+      <!-- Editor Container (Integrated Dark Surface) -->
+      <div class="editor-container">
+        
+        <!-- Editor Strip -->
+        <div class="editor-strip">
+          <span class="editor-strip-title">SOLUTION EDITOR · PYTHON</span>
+          <div class="editor-strip-right">
+            Sandbox · 3.0s · Python 3.12
+          </div>
+        </div>
+
+        <!-- Dark Editor Field (≈450px tall dark surface with 79-char signature on ONE LINE) -->
+        <div class="editor-dark-field">
+          <div class="editor-gutter">
+            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18
+          </div>
+          <div class="editor-lines">
+<span class="code-keyword">def</span> <span class="code-func">filter_log_events</span>(log_lines: list, start_time: str, end_time: str) -> list:
+    <span class="code-comment"># Write your solution here</span>
+    <span class="code-keyword">pass</span>
+          </div>
+        </div>
+
+        <!-- Action Row Glued Directly Under Editor -->
+        <div class="editor-action-row">
+          <div class="action-row-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8E95A5" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Clean environment · Network disabled</span>
+          </div>
+          <div class="action-row-right">
+            <button class="btn-primary-pill">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              Run & Submit
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- P2: ONE OUTPUT CARD (Contained boundary for all result elements) -->
+      <div class="output-card">
+        
+        <!-- Verdict Band as Card Header Strip (PASS State) -->
+        <div class="verdict-band verdict-band-pass">
+          <div class="verdict-head">
+            <div class="verdict-head-left">
+              <span class="verdict-badge verdict-badge-pass">PASS</span>
+              <span class="verdict-title">Log Timestamp Filter · PASS · 142 ms · Hints 0</span>
+            </div>
+            <span style="font-size: 12px; font-weight: 500; color: var(--partner-green);">Attempt recorded: 2026-11-06</span>
+          </div>
+          <div class="verdict-meta">
+            <span><strong>Runtime:</strong> 142 ms</span>
+            <span><strong>Visible Tests:</strong> 2 / 2 Passed</span>
+            <span><strong>Hidden Tests:</strong> 5 / 5 Passed</span>
+          </div>
+        </div>
+
+        <!-- Visible Test Cases List Inside Output Card -->
+        <div class="test-cases-section">
+          <h2 class="test-cases-header">Visible Test Cases</h2>
+
+          <div class="test-case-row">
+            <div class="test-case-head">
+              <div class="test-case-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+                <span>TEST CASE #1</span>
+              </div>
+              <span class="badge badge-mint">Provided</span>
+            </div>
+            <div class="test-case-body">
+              <div><strong>Input:</strong> <code>log_lines = ["2026-11-04 10:00:00 [INFO] System boot", ...], start = "2026-11-04 10:10:00", end = "2026-11-04 10:30:00"</code></div>
+              <div><strong>Expected:</strong> <code>["2026-11-04 10:15:30 [WARN] High memory"]</code></div>
+            </div>
+          </div>
+
+          <div class="test-case-row">
+            <div class="test-case-head">
+              <div class="test-case-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+                <span>TEST CASE #2</span>
+              </div>
+              <span class="badge badge-mint">Provided</span>
+            </div>
+            <div class="test-case-body">
+              <div><strong>Input:</strong> <code>log_lines = ["2026-01-01 00:00:00 [INFO] New year"], start = "2026-01-01 00:00:00", end = "2026-01-01 00:00:00"</code></div>
+              <div><strong>Expected:</strong> <code>["2026-01-01 00:00:00 [INFO] New year"]</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

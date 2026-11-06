@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Mastery Analytics | AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .dash-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .dash-title {
+      font-size: 32px;
+      line-height: 1.15;
+    }
+
+    .dash-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 6px;
+      max-width: 800px;
+    }
+
+    /* Mastery Bars Card */
+    .mastery-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .mastery-item {
+      background: var(--paper);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-tile);
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mastery-item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mastery-topic-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .mastery-bar-track {
+      background: #E7E1D6;
+      border-radius: var(--radius-pill);
+      height: 8px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .mastery-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+    }
+
+    .mastery-stat-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* Breakdown Table */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 28px;
+    }
+
+    .dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .dashboard-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .dashboard-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--hairline);
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    .dashboard-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar Navbar (56px, Paper Background, Hairline Border) -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="home.html" class="topbar-brand">AI Coding Prep Coach</a>
+      <span class="topbar-badge-offline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        Offline · Code-Judged
+      </span>
+    </div>
+
+    <nav class="topbar-center">
+      <a href="home.html" class="nav-pill">Home</a>
+      <a href="practice.html" class="nav-pill">Practice Arena</a>
+      <a href="navbar-states.html#mock-variant" class="nav-pill">Mock Interview</a>
+      <a href="dashboard.html" class="nav-pill active-dashboard">Dashboard</a>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="status-chip status-chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>
+        <span>0 days</span>
+      </div>
+      <div class="status-chip status-chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        <span>0 due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    
+    <!-- Page Header -->
+    <header class="dash-header">
+      <div>
+        <h1 class="dash-title">Performance Analytics</h1>
+        <p class="dash-subtitle">Authentic mastery progress, practice volume, and topic readiness based strictly on SQLite attempt history.</p>
+      </div>
+      <a href="practice.html" class="btn-primary-pill" style="text-decoration: none; padding: 10px 24px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+        Continue Practice
+      </a>
+    </header>
+
+    <!-- Stat Cards Row (Live Store Values: Solved 1, Sessions 1, Avg hints 0.0) -->
+    <div class="stats-grid">
+      
+      <!-- Stat Card 1: Solved Problems -->
+      <div class="stat-card stat-card-mint">
+        <div class="stat-head">
+          <span class="stat-label">Solved Problems</span>
+          <span class="badge badge-mint">1 / 12 Total</span>
+        </div>
+        <div class="stat-value tabular-num">1</div>
+        <p class="stat-desc">Distinct problems passed at least once.</p>
+      </div>
+
+      <!-- Stat Card 2: Practice Sessions (De-slopped: decorative Recorded badge removed) -->
+      <div class="stat-card stat-card-sky">
+        <div class="stat-head">
+          <span class="stat-label">Practice Sessions</span>
+        </div>
+        <div class="stat-value tabular-num">1</div>
+        <p class="stat-desc">Total code-judged runs recorded in SQLite.</p>
+      </div>
+
+      <!-- Stat Card 3: Average Hints Used (De-slopped: decorative Zero Hints badge removed) -->
+      <div class="stat-card stat-card-butter">
+        <div class="stat-head">
+          <span class="stat-label">Average Hints Used</span>
+        </div>
+        <div class="stat-value tabular-num">0.0</div>
+        <p class="stat-desc">Average hints revealed per problem attempt.</p>
+      </div>
+
+    </div>
+
+    <!-- Topic Mastery & Pass Rates (Unattempted topics labelled NOT STARTED with NO bar) -->
+    <section class="mastery-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h2 style="font-size: 20px; margin-bottom: 4px;">Topic Mastery & Pass Rates</h2>
+          <p style="font-size: 14px; color: var(--muted);">Per-category accuracy across curriculum topics with topic-tinted bars.</p>
+        </div>
+        <span style="font-size: 13px; font-weight: 600; color: var(--muted);">Target Threshold: 80%</span>
+      </div>
+
+      <div class="mastery-grid">
+        
+        <!-- Attempted Topic 1: binary-search (100.0%) -->
+        <div class="mastery-item" style="border-color: rgba(22, 123, 72, 0.3); background: var(--wash-mint);">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">binary-search</span>
+            <span class="badge badge-mint">MASTERED</span>
+          </div>
+          <div class="mastery-bar-track">
+            <div class="mastery-bar-fill" style="width: 100%; background: #1F9D63;"></div>
+          </div>
+          <div class="mastery-stat-line">
+            <span style="color: var(--ink);">Pass Rate: 100.0%</span>
+            <span style="color: var(--partner-green);">(1/1 Solved)</span>
+          </div>
+        </div>
+
+        <!-- Unattempted Topic 2: arrays (NOT STARTED - NO bar, NO 0% text) -->
+        <div class="mastery-item">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">arrays</span>
+            <span class="badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); font-weight: 500; padding: 4px 0;">
+            No attempts recorded yet.
+          </div>
+          <div class="mastery-stat-line">
+            <span>Pass Rate: —</span>
+            <span>(0/2 Solved)</span>
+          </div>
+        </div>
+
+        <!-- Unattempted Topic 3: data-transformation -->
+        <div class="mastery-item">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">data-transformation</span>
+            <span class="badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); font-weight: 500; padding: 4px 0;">
+            No attempts recorded yet.
+          </div>
+          <div class="mastery-stat-line">
+            <span>Pass Rate: —</span>
+            <span>(0/1 Solved)</span>
+          </div>
+        </div>
+
+        <!-- Unattempted Topic 4: dict-processing -->
+        <div class="mastery-item">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">dict-processing</span>
+            <span class="badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); font-weight: 500; padding: 4px 0;">
+            No attempts recorded yet.
+          </div>
+          <div class="mastery-stat-line">
+            <span>Pass Rate: —</span>
+            <span>(0/1 Solved)</span>
+          </div>
+        </div>
+
+        <!-- Unattempted Topic 5: dp -->
+        <div class="mastery-item">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">dp</span>
+            <span class="badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); font-weight: 500; padding: 4px 0;">
+            No attempts recorded yet.
+          </div>
+          <div class="mastery-stat-line">
+            <span>Pass Rate: —</span>
+            <span>(0/1 Solved)</span>
+          </div>
+        </div>
+
+        <!-- Unattempted Topic 6: string-parsing -->
+        <div class="mastery-item">
+          <div class="mastery-item-head">
+            <span class="mastery-topic-name">string-parsing</span>
+            <span class="badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); font-weight: 500; padding: 4px 0;">
+            No attempts recorded yet.
+          </div>
+          <div class="mastery-stat-line">
+            <span>Pass Rate: —</span>
+            <span>(0/1 Solved)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Topic Breakdown Table -->
+    <section class="table-card">
+      <div>
+        <h2 style="font-size: 20px; margin-bottom: 4px;">Topic Breakdown Table</h2>
+        <p style="font-size: 14px; color: var(--muted);">Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.</p>
+      </div>
+
+      <table class="queue-table">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Track</th>
+            <th>Solved / Total</th>
+            <th>Mastery Progress</th>
+            <th style="text-align: right;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="queue-row track-dsa">
+            <td><strong style="color: var(--ink);">binary-search</strong></td>
+            <td><span class="text-track-dsa">DSA</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #171712;">1 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #1F9D63; width: 100%; height: 100%; border-radius: 999px;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #171712;">100.0%</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge badge-mint">MASTERED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-dsa">
+            <td><strong style="color: var(--ink);">arrays</strong></td>
+            <td><span class="text-track-dsa">DSA</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 2</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-python">
+            <td><strong style="color: var(--ink);">data-transformation</strong></td>
+            <td><span class="text-track-python">PYTHON</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-python">
+            <td><strong style="color: var(--ink);">dict-processing</strong></td>
+            <td><span class="text-track-python">PYTHON</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-dsa">
+            <td><strong style="color: var(--ink);">dp</strong></td>
+            <td><span class="text-track-dsa">DSA</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-python">
+            <td><strong style="color: var(--ink);">string-parsing</strong></td>
+            <td><span class="text-track-python">PYTHON</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+          <tr class="queue-row track-dsa">
+            <td><strong style="color: var(--ink);">strings</strong></td>
+            <td><span class="text-track-dsa">DSA</span></td>
+            <td style="font-variant-numeric: tabular-nums; font-weight: 600; color: #66635A;">0 / 1</td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                  <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                </div>
+                <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+              </div>
+            </td>
+            <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">
+              <span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+</body>
+</html>
+
