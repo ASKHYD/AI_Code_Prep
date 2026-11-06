@@ -71,5 +71,34 @@ Phase 2 Final Corrective Discussion (`/discuss-phase 2`). Owner live-tested Topb
 
 ---
 
+### Session: 2026-11-06 20:05
+
+#### Objective
+Execute Phase 2 Final Corrective (`09-PLAN.md`): Wave 0 sequential gate, Wave 1 three concurrent subagent lanes (`/dispatching-parallel-agents`), and Wave 2 evidence fan-out + pre-ship finish-gate audit.
+
+#### Accomplished
+- ✅ Wave 0: Archived `scratch/build_app.py`, affirmed `app.py` as single source of truth (E7), added top-level Plotly import, verified baseline pytest 31/31.
+- ✅ Wave 1: Executed three concurrent subagent lanes on disjoint `app.py` regions:
+  - Lane A (`/agency-minimal-change-engineer`): X1 top void eliminated (`.topbar` sticky at `top: 0`), X2 dynamic runtime Python version chip (`3.12`), shared CSS.
+  - Lane B (`/agency-frontend-developer`): X3 Plotly horizontal pass-rate chart on Dashboard (store data, attempted only), X4 primary pill CTAs, X7-Home exact subtexts & streak 0 NOT STARTED state.
+  - Lane C (`/agency-senior-developer`): X5R filter strip deleted, ONE slim picker row active, X6 signatures unified 12/12, X7-Practice neutral header "Run your code to see results", X8 natural width CTA (140px), X9 small-caps signature label & code wash chips.
+- ✅ Wave 2: Executed evidence fan-out:
+  - D1 (`/agency-test-automation-engineer` + `/empirical-validation`): E6 mock proofs (store snapshot before/after, in-session solve 1/2, live timer delta 11.8s).
+  - D2 (`/impeccable`): 4-screen live audit (0 slop findings).
+  - D3 (`/agency-evidence-collector` + `/empirical-validation`): E2 offline font proof (Fraunces & Inter base64), E8 hint ladder expander capture, E9 pill-tint CDP hexes, 38 r6 captures in `docs/screenshots/r6/`.
+  - Orchestrator: `/agency-ui-finish-gate-reviewer` pre-ship review passed, `/verify 2` re-run (all 10 gates pass), return filed at `.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md`.
+
+#### Verification
+- [x] Pytest 31/31 passed in 10.79s on frozen backend.
+- [x] Backend quarantine 100% preserved (`coach/`, `data/problems/`, `tests/` untouched).
+- [x] Zero hex drift (all 26 Direction A tokens in `DESIGN.md` respected).
+- [x] 10/10 verification gates passed.
+
+#### Handoff Notes
+- App running live on `http://localhost:8501`.
+- Phase 2 Final Corrective complete; stopped at owner gate awaiting live acceptance.
+
+---
+
 *Last updated: 2026-11-06*
 

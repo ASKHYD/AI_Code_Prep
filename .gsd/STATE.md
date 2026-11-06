@@ -8,26 +8,27 @@ updated: 2026-11-06
 
 **Milestone:** Milestone 1 — UI Redesign  
 **Phase:** Phase 2: Streamlit UI Implementation (Topbar Workbench Final Corrective)  
-**Status:** READY FOR EXECUTION (09-PLAN)  
-**Plan:** `.gsd/phases/2/09-PLAN.md` (Validated by `/plan-checker`, ready for `/executor`)  
+**Status:** VERIFIED — AWAITING OWNER LIVE ACCEPTANCE  
+**Plan:** `.gsd/phases/2/09-PLAN.md` (Executed, verified across 10 gates, awaiting owner live approval)  
 
 ## Last Action
 
-Penned and validated `.gsd/phases/2/09-PLAN.md` following owner brief and DECISION-011:
-- Wave 0: Sequential pre-flight gate (E7 `build_app.py` disposition, top-level Plotly import check, baseline pytest 31/31).
-- Wave 1: Three concurrent subagent lanes via `/dispatching-parallel-agents`:
-  - Lane A: Shell & Topbar (X1 top void, X2 runtime version chip, shared CSS).
-  - Lane B: Home & Dashboard (X3 Plotly topic pass-rate chart, X4 pill buttons, X7-Home subtexts & streak 0).
-  - Lane C: Practice Arena (X5R ONE slim picker row, X6 unified signatures 12/12, X7-Practice neutral header, X8 natural width CTA, X9 small-caps signature label).
-- Wave 2: Evidence fan-out (D1 Mock E6, D2 Impeccable E1 ×4, D3 Fonts E2 / CDP Pill-tints E9 / r6 captures, Orchestrator E3–E5 return filing).
-- Full 100% item coverage confirmed by `/plan-checker`.
+Executed and verified all tasks in `09-PLAN.md`:
+- Wave 0: E7 disposition committed (`scratch/build_app.py` archived, `app.py` confirmed sole source of truth), top-level Plotly import added, baseline pytest 31/31 passed.
+- Wave 1: Three concurrent subagent lanes executed and verified:
+  - Lane A: X1 top void eliminated (`.topbar` sticky at `top: 0`), X2 runtime version chip (`3.12`), shared CSS.
+  - Lane B: X3 Plotly horizontal pass-rate chart restored on Dashboard (store data, attempted only), X4 primary pill CTAs, X7-Home exact subtexts & streak 0 NOT STARTED state.
+  - Lane C: X5R filter strip deleted, ONE slim picker row active, X6 signatures unified 12/12, X7-Practice neutral header "Run your code to see results", X8 natural width CTA (140px), X9 small-caps signature label & code wash chips.
+- Wave 2: Evidence fan-out completed:
+  - D1: E6 mock proofs (store snapshots before/after, in-session solve, live timer pair delta 11.8s).
+  - D2: E1 Impeccable live audit completed (0 slop findings).
+  - D3: E2 font proofs (Fraunces & Inter base64), E8 hint ladder capture, E9 pill-tint CDP hexes, 38 r6 captures in `docs/screenshots/r6/`.
+  - Orchestrator: Pre-ship finish-gate audit passed, `/verify 2` re-run (all 10 gates pass), return filed at `.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md`.
 
 ## Next Steps
 
-1. Run `/executor` on Wave 0 gate.
-2. Dispatch Wave 1 parallel subagents.
-3. Merge, verify, and run Wave 2 evidence fan-out.
-4. Stop at owner gate: "Stopped at Topbar Workbench final corrective gate, awaiting owner live approval."
+1. Owner live review and acceptance testing on `http://localhost:8501`.
+2. On owner live approval, execute pre-authorized Phase 2 closure bookkeeping (ROADMAP/STATE complete, TODO closure, JOURNAL entry — no code).
 
 ## Active Decisions
 
