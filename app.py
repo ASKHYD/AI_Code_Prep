@@ -191,6 +191,12 @@ def get_global_css(active_nav: str = "Home") -> str:
         height: 0 !important;
     }
 
+    /* Kill top void in main container */
+    .block-container {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
     /* Reclaim space: container styling */
     [data-testid="stAppViewContainer"] > .main {
         margin-left: 0 !important;
@@ -245,6 +251,10 @@ def get_global_css(active_nav: str = "Home") -> str:
 
     /* Topbar Navbar */
     .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        margin: 0 -2rem 24px -2rem;
         min-height: 56px;
         background-color: #FBFAF7;
         border-bottom: 1px solid #E7E1D6;
@@ -252,12 +262,8 @@ def get_global_css(active_nav: str = "Home") -> str:
         align-items: center;
         justify-content: space-between;
         padding: 10px 24px;
-        position: sticky;
-        top: 0;
-        z-index: 100;
         width: 100%;
         box-sizing: border-box;
-        margin: 0 -24px 24px -24px;
     }
     .topbar-left {
         display: flex;
@@ -828,6 +834,43 @@ def get_global_css(active_nav: str = "Home") -> str:
         color: #66635A;
         font-weight: 600;
     }
+
+    /* Lane B: Primary pill CTA */
+    .btn-pill-primary {
+        border-radius: 9999px !important;
+        background: #15803D !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
+
+    /* Lane C: Slim problem picker & statement styling */
+    .problem-picker-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        gap: 8px;
+    }
+    .picker-title {
+        font-family: 'Fraunces', serif !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: #171712 !important;
+    }
+    .signature-subhead {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        color: #66635A !important;
+    }
+    .problem-statement code, .stMarkdown code {
+        background: rgba(102, 99, 90, 0.08) !important;
+        color: #171712 !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+        font-size: 13px !important;
+    }
     """
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -935,6 +978,9 @@ def render_editor(code: str, key: str, height: str | int = "450px") -> str:
 
 def render_topbar(current_nav: str, streak_count: int, due_count: int):
     """Renders the approved 56px Topbar Navbar with active tint wash and status chips."""
+    import sys
+    py_ver = f"{sys.version_info.major}.{sys.version_info.minor}"
+
     active_home = "active-home" if current_nav == "Home" else ""
     active_practice = "active-practice" if current_nav == "Practice Arena" else ""
     active_mock = "active-mock" if current_nav == "Mock Interview" else ""
@@ -971,7 +1017,7 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
           <span>{due_count} due</span>
         </div>
         <div class="status-chip status-chip-py">
-          <span>3.11</span>
+          <span>{py_ver}</span>
         </div>
       </div>
     </header>
@@ -1024,7 +1070,7 @@ if nav_choice == "Home":
     with col_btn:
         st.markdown(
             """<div style="text-align: right;">
-                <a href="?screen=practice" target="_self" class="btn-primary-pill" style="text-decoration: none;">
+                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-pill-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #15803D; color: #FFFFFF; border: 1px solid #15803D; border-radius: 9999px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;">
                     Start Practice →
                 </a>
             </div>""",
@@ -1038,11 +1084,17 @@ if nav_choice == "Home":
     with c1:
         with st.container(border=True, key="home_card_streak"):
             streak_unit = "day" if streak_count == 1 else "days"
-            streak_caption = "Consecutive active days." if streak_count > 0 else "Solve a problem today to start your streak."
+            if streak_count == 0:
+                streak_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>'
+                streak_caption = "Complete today's problem queue to start your streak."
+            else:
+                streak_badge = '<span class="stat-badge badge-mint">ACTIVE</span>'
+                streak_caption = "Consecutive active days."
             st.markdown(
                 f"""
-                <div class="stat-head">
+                <div class="stat-head" style="display: flex; justify-content: space-between; align-items: center;">
                     <span class="stat-label">Active Streak</span>
+                    {streak_badge}
                 </div>
                 <div class="stat-value">{streak_count} {streak_unit}</div>
                 <p class="stat-desc">{streak_caption}</p>
@@ -1053,7 +1105,7 @@ if nav_choice == "Home":
     with c2:
         with st.container(border=True, key="home_card_due"):
             due_count = len(due_list)
-            due_caption = "Clean queue · You're all caught up." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
+            due_caption = "All review intervals are currently up to date." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
             st.markdown(
                 f"""
                 <div class="stat-head">
@@ -1168,63 +1220,61 @@ elif nav_choice == "Practice Arena":
     left_col, right_col = st.columns([42, 58], gap="medium")
 
     with left_col:
-        # Filter Strip: One row at head
-        tracks = ["All"] + sorted({p["track"] for p in all_problems})
-        difficulties = ["All", "easy", "medium", "hard"]
-        topics = ["All"] + sorted({p["topic"] for p in all_problems})
+        # Determine problem selection (single source of truth across app - X5R)
+        qp_prob = st.query_params.get("problem", "").strip().lower()
 
-        with st.container(border=True, key="practice_filter_strip"):
-            f_col1, f_col2, f_col3, f_col4 = st.columns([1, 1, 1, 2])
-            selected_track = f_col1.selectbox(
-                "Track",
-                tracks,
-                format_func=lambda x: x.upper() if x != "All" else "All Tracks",
-            )
-            selected_diff = f_col2.selectbox(
-                "Difficulty",
-                difficulties,
-                format_func=lambda x: x.title() if x != "All" else "All Diff",
-            )
-            selected_topic = f_col3.selectbox(
-                "Topic",
-                topics,
-                format_func=lambda x: x.title() if x != "All" else "All Topics",
-            )
+        # Handle direct arrival or query parameter from Home queue
+        if qp_prob and qp_prob != st.session_state.get("practice_last_qp"):
+            for idx, p in enumerate(all_problems):
+                if qp_prob == p["id"].lower() or qp_prob in p["id"].lower() or qp_prob in p["title"].lower():
+                    st.session_state["practice_prob_idx"] = idx
+                    st.session_state["practice_last_qp"] = qp_prob
+                    st.session_state["selected_problem_id"] = p["id"]
+                    break
 
-            filtered = [
-                p
-                for p in all_problems
-                if (selected_track == "All" or p["track"] == selected_track)
-                and (selected_diff == "All" or p["difficulty"] == selected_diff)
-                and (selected_topic == "All" or p["topic"] == selected_topic)
-            ]
-
-            if not filtered:
-                st.warning("No problems match the current filter selection.")
-                st.stop()
-
-            # Pre-select if specified via query param or session state
-            default_index = 0
-            qp_prob = st.query_params.get("problem", "").strip().lower()
-            if qp_prob:
-                for idx, p in enumerate(filtered):
-                    if qp_prob in p["id"].lower() or qp_prob in p["title"].lower():
-                        default_index = idx
-                        break
-            elif "selected_problem_id" in st.session_state:
-                for idx, p in enumerate(filtered):
+        if "practice_prob_idx" not in st.session_state:
+            st.session_state["practice_prob_idx"] = 0
+            if "selected_problem_id" in st.session_state:
+                for idx, p in enumerate(all_problems):
                     if p["id"] == st.session_state["selected_problem_id"]:
-                        default_index = idx
+                        st.session_state["practice_prob_idx"] = idx
                         break
 
-            prob_options = {p["id"]: p["title"] for p in filtered}
-            selected_id = f_col4.selectbox(
-                "Problem",
-                options=list(prob_options.keys()),
-                format_func=lambda x: prob_options[x],
-                index=default_index,
+        curr_idx = st.session_state["practice_prob_idx"] % len(all_problems)
+        st.session_state["practice_prob_idx"] = curr_idx
+        current_problem = all_problems[curr_idx]
+        st.session_state["selected_problem_id"] = current_problem["id"]
+
+        # ONE slim picker row above Problem Card: Title in Fraunces serif + Prev/Next buttons (X5R)
+        p_prev_col, p_title_col, p_next_col = st.columns([1, 4.5, 1], vertical_alignment="center")
+        with p_prev_col:
+            if st.button("← Prev", key="btn_picker_prev", use_container_width=True):
+                new_idx = (curr_idx - 1) % len(all_problems)
+                st.session_state["practice_prob_idx"] = new_idx
+                st.session_state["selected_problem_id"] = all_problems[new_idx]["id"]
+                st.session_state["practice_last_qp"] = all_problems[new_idx]["id"].lower()
+                st.query_params["problem"] = all_problems[new_idx]["id"]
+                st.rerun()
+
+        with p_title_col:
+            st.html(
+                f"""
+                <div class="problem-picker-row" style="text-align: center; justify-content: center;">
+                    <span class="picker-title" style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: #171712;">
+                        {current_problem['title']}
+                    </span>
+                </div>
+                """
             )
-            current_problem = problems_by_id[selected_id]
+
+        with p_next_col:
+            if st.button("Next →", key="btn_picker_next", use_container_width=True):
+                new_idx = (curr_idx + 1) % len(all_problems)
+                st.session_state["practice_prob_idx"] = new_idx
+                st.session_state["selected_problem_id"] = all_problems[new_idx]["id"]
+                st.session_state["practice_last_qp"] = all_problems[new_idx]["id"].lower()
+                st.query_params["problem"] = all_problems[new_idx]["id"]
+                st.rerun()
 
         # ONE Problem Card
         with st.container(border=True, key="practice_problem_card"):
@@ -1260,7 +1310,7 @@ elif nav_choice == "Practice Arena":
             )
             st.markdown(current_problem["statement_md"])
 
-            # Starter signature box (broken after commas)
+            # Starter signature box derived strictly from starter_code (single source of truth - X6)
             sig_line = (
                 current_problem["starter_code"].splitlines()[0]
                 if current_problem.get("starter_code")
@@ -1275,8 +1325,8 @@ elif nav_choice == "Practice Arena":
             st.html(
                 f"""
                 <div style="margin-top: 14px;">
-                    <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
-                    <pre style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
+                    <span class="signature-subhead" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #66635A; display: block; margin-bottom: 6px;">STARTER FUNCTION SIGNATURE</span>
+                    <pre class="signature-pre" style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
                 </div>
                 <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
                     Execution timeout: <strong>{current_problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
@@ -1359,10 +1409,22 @@ elif nav_choice == "Practice Arena":
 
         initial_code = st.session_state[editor_key]
 
-        # 1. ONE Editor Card (No window dots, glued action row)
+        # 1. ONE Editor Card (No window dots, glued action row, natural width CTA - X8)
         with st.container(border=True, key="practice_editor_card"):
             st.html(
                 """
+                <style>
+                .st-key-practice_editor_card [data-testid="stButton"] {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                .st-key-practice_editor_card [data-testid="stButton"] > button {
+                    width: auto !important;
+                    padding: 10px 24px !important;
+                    border-radius: 9999px !important;
+                    white-space: nowrap !important;
+                }
+                </style>
                 <div class="editor-strip">
                     <span class="editor-strip-title">SOLUTION EDITOR · PYTHON</span>
                     <span class="editor-strip-right">Sandbox · 3.0s · Python 3.11</span>
@@ -1373,8 +1435,8 @@ elif nav_choice == "Practice Arena":
             user_code = render_editor(initial_code, key=editor_key, height="450px")
             st.session_state[f"code_{current_problem['id']}"] = user_code
 
-            # Glued Action Row
-            col_bar_info, col_bar_btn = st.columns([1, 1], vertical_alignment="center")
+            # Glued Action Row (X8: Natural width button, no 100% full-width expansion)
+            col_bar_info, col_bar_btn = st.columns([1.5, 1], vertical_alignment="center")
             with col_bar_info:
                 st.html(
                     """
@@ -1385,7 +1447,7 @@ elif nav_choice == "Practice Arena":
                     """
                 )
             with col_bar_btn:
-                run_submitted = st.button("Run & Submit", type="primary", key=f"btn_run_{current_problem['id']}", use_container_width=True)
+                run_submitted = st.button("Run & Submit", type="primary", key=f"btn_run_{current_problem['id']}", use_container_width=False)
 
             if run_submitted:
                 stripped_code = user_code.strip()
@@ -1394,14 +1456,14 @@ elif nav_choice == "Practice Arena":
                     st.warning(f"Write your solution first — the judge expected '{current_problem['function_name']}(...)'.")
                     run_submitted = False
 
-        # 2. ONE Output Card (Neutral pre-run state or authentic post-run verdict + cases)
+        # 2. ONE Output Card (X7-Practice: Neutral pre-run state with 'Run your code to see results')
         with st.container(border=True, key="practice_output_card"):
             if not run_submitted and not is_demo_fail:
                 st.html(
                     """
                     <div style="padding: 24px; text-align: center; color: #66635A;">
                         <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: #171712; margin-bottom: 4px;">
-                            Execution Sandbox Ready
+                            Run your code to see results
                         </div>
                         <div style="font-size: 13.5px;">
                             No execution yet. Run your code to test against visible and hidden test cases.
@@ -2101,7 +2163,7 @@ elif nav_choice == "Dashboard":
     with col_dash_btn:
         st.markdown(
             """<div style="text-align: right;">
-                <a href="?screen=practice" target="_self" class="btn-primary-pill" style="text-decoration: none;">
+                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-pill-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #15803D; color: #FFFFFF; border: 1px solid #15803D; border-radius: 9999px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;">
                     Continue Practice →
                 </a>
             </div>""",
@@ -2182,6 +2244,67 @@ elif nav_choice == "Dashboard":
 
         stats = store.topic_stats()
         all_curriculum_topics = sorted(list({p.get("topic") for p in all_problems if p.get("topic")}))
+
+        attempted_topics = [t for t in all_curriculum_topics if t in stats and stats[t].get("attempts", 0) > 0]
+        for t in sorted(stats.keys()):
+            if stats[t].get("attempts", 0) > 0 and t not in attempted_topics:
+                attempted_topics.append(t)
+
+        if attempted_topics:
+            y_topics = attempted_topics
+            x_rates = [stats[t]["pass_rate"] for t in attempted_topics]
+            bar_texts = [f"{stats[t]['pass_rate']:.1f}% ({stats[t]['passed']}/{stats[t]['attempts']})" for t in attempted_topics]
+
+            fig = go.Figure(
+                data=[
+                    go.Bar(
+                        y=y_topics,
+                        x=x_rates,
+                        orientation="h",
+                        marker_color="#1F9D63",
+                        text=bar_texts,
+                        textposition="outside",
+                        textfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                        cliponaxis=False,
+                    )
+                ]
+            )
+            fig.update_layout(
+                xaxis=dict(
+                    title=dict(text="Pass Rate (%)", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
+                    range=[0, 115],
+                    gridcolor="#E7E1D6",
+                    showline=True,
+                    linecolor="#E7E1D6",
+                    zeroline=True,
+                    zerolinecolor="#E7E1D6",
+                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                    ticksuffix="%",
+                ),
+                yaxis=dict(
+                    title=dict(text="Topic", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
+                    autorange="reversed",
+                    gridcolor="#E7E1D6",
+                    showline=True,
+                    linecolor="#E7E1D6",
+                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                ),
+                margin=dict(l=40, r=40, t=20, b=40),
+                height=max(180, len(attempted_topics) * 45 + 90),
+                paper_bgcolor="#FBFAF7",
+                plot_bgcolor="#FBFAF7",
+                font=dict(family="Inter, sans-serif", color="#171712"),
+            )
+            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+        else:
+            st.markdown(
+                """<div style="padding: 16px 0; color: #66635A; font-family: 'Inter', sans-serif; font-size: 13.5px;">
+                    No attempts recorded yet. Practice problems to generate topic pass-rate analytics.
+                </div>""",
+                unsafe_allow_html=True,
+            )
+
+        st.html('<div style="height: 12px;"></div>')
 
         with store._get_connection() as conn:
             cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
