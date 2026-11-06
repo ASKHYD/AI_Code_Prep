@@ -24,6 +24,7 @@ from coach.problems import load_all_problems
 from coach.review import run_ruff_lint
 from coach.store import CoachStore
 from coach.timer import calculate_remaining_time
+from coach.interleaving import build_interleaved_queue
 
 # Page configuration with collapsed sidebar
 st.set_page_config(
@@ -1256,9 +1257,10 @@ if nav_choice == "Home":
             unsafe_allow_html=True,
         )
 
-        # Build table rows for problem queue
+        # Build table rows for problem queue (interleaved across topics)
+        interleaved_problems = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
         queue_rows = []
-        for p in all_problems:
+        for p in interleaved_problems:
             is_solved = p["id"] in solved_set
             track_class = "track-dsa" if p["track"] == "dsa" else "track-python"
             track_text_class = "text-track-dsa" if p["track"] == "dsa" else "text-track-python"
@@ -1663,9 +1665,10 @@ elif nav_choice == "Mock Interview":
         if "mock_finish_time" not in st.session_state:
             st.session_state["mock_finish_time"] = time.time()
         if "mock_problems" not in st.session_state:
+            mock_pool = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
             st.session_state["mock_problems"] = [
-                problems_by_id.get("binary-search", all_problems[0]),
-                problems_by_id.get("longest-substring-without-repeating", all_problems[1]),
+                mock_pool[0],
+                mock_pool[1] if len(mock_pool) > 1 else mock_pool[0],
             ]
         if st.query_params.get("mock_solved_p1", "").lower() == "true":
             st.session_state["mock_result_binary-search"] = {
@@ -1681,9 +1684,11 @@ elif nav_choice == "Mock Interview":
             st.session_state["mock_start_time"] = time.time() - 19
             st.session_state["mock_start_iso"] = datetime.now().isoformat()
             st.session_state["mock_duration_sec"] = 45 * 60
-            p1 = problems_by_id.get("binary-search", all_problems[0])
-            p2 = problems_by_id.get("longest-substring-without-repeating", all_problems[1])
-            st.session_state["mock_problems"] = [p1, p2]
+            mock_pool = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
+            st.session_state["mock_problems"] = [
+                mock_pool[0],
+                mock_pool[1] if len(mock_pool) > 1 else mock_pool[0],
+            ]
 
     # --- STATE 1: UNSTARTED ---
     if st.session_state["mock_state"] == "unstarted":
@@ -1716,8 +1721,9 @@ elif nav_choice == "Mock Interview":
                 unsafe_allow_html=True,
             )
             if st.button("Start 45-Minute Mock Interview", type="primary", key="btn_start_mock"):
-                p1 = problems_by_id.get("binary-search", all_problems[0])
-                p2 = problems_by_id.get("longest-substring-without-repeating", all_problems[1])
+                mock_pool = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
+                p1 = mock_pool[0]
+                p2 = mock_pool[1] if len(mock_pool) > 1 else mock_pool[0]
                 st.session_state["mock_state"] = "running"
                 st.session_state["mock_start_time"] = time.time()
                 st.session_state["mock_start_iso"] = datetime.now().isoformat()
