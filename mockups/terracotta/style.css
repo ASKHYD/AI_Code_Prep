@@ -1,0 +1,453 @@
+/* ==========================================================================
+   Terracotta Editorial Design System — Style Architecture
+   Option 3: Terracota Mediterrâneo + Bento Grid Tech Minimalist
+   Governing Milestone: Milestone 3
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Canvas & Paper */
+  --color-canvas: #FFF8F0;
+  --color-surface: #FFFFFF;
+  --color-panel-quiet: #E8D5B7;
+  --color-panel-quiet-light: #F4EAD9;
+
+  /* Primary Palette */
+  --color-terracotta: #C2452D;
+  --color-terracotta-hover: #A83822;
+  --color-terracotta-wash: #FDECE9;
+  --color-terracotta-border: #F3B5A9;
+
+  /* Functional Color Zones */
+  --color-olive: #6B7F3B;
+  --color-olive-dark: #38451D;
+  --color-olive-wash: #EFF4E4;
+  --color-olive-border: #BCD092;
+
+  --color-blue: #1565C0;
+  --color-blue-dark: #0D3E78;
+  --color-blue-wash: #E6F0FA;
+  --color-blue-border: #9BC0EA;
+
+  /* Accents */
+  --color-clay: #D4956B;
+  --color-clay-wash: #FBF0E7;
+  --color-fig: #4A1942;
+  --color-fig-wash: #F4EBF2;
+  --color-seafoam: #A8D8C8;
+  --color-seafoam-wash: #EEF8F5;
+
+  /* Ink & Typography */
+  --color-ink: #2C1810;
+  --color-ink-muted: #735A50;
+  --color-ink-subtle: #A38C82;
+
+  /* Hairlines & Borders */
+  --color-hairline: rgba(74, 25, 66, 0.10);
+  --color-hairline-solid: #EADBCE;
+  --color-hairline-strong: #D5C2B4;
+
+  /* Code Surface (Dark Anchor) */
+  --color-code-bg: #1E1E1E;
+  --color-code-text: #F8F8F2;
+  --color-code-border: #2D2D2D;
+
+  /* Typography Families */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Geometry */
+  --radius-card: 24px;
+  --radius-inner: 16px;
+  --radius-pill: 9999px;
+  --radius-tag: 6px;
+
+  /* Layout */
+  --max-width: 1400px;
+  --header-height: 64px;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Typography Classes */
+h1, h2, h3, .font-serif {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+.font-sans {
+  font-family: var(--font-body);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.tnum {
+  font-feature-settings: "tnum" 1;
+}
+
+/* Topbar Sticky Shell */
+.topbar-shell {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: rgba(255, 248, 240, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-hairline-solid);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.topbar-brand-wordmark {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--color-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.topbar-brand-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-tag);
+  background: var(--color-terracotta-wash);
+  color: var(--color-terracotta);
+  border: 1px solid var(--color-terracotta-border);
+  font-weight: 600;
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-nav-item {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  transition: all 150ms ease-out;
+}
+
+.topbar-nav-item:hover {
+  color: var(--color-ink);
+  background-color: var(--color-panel-quiet-light);
+}
+
+.topbar-nav-item.active {
+  color: var(--color-terracotta);
+  background-color: var(--color-terracotta-wash);
+  font-weight: 600;
+  border: 1px solid var(--color-terracotta-border);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chip-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: var(--color-olive-wash);
+  border: 1px solid var(--color-olive-border);
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-olive-dark);
+}
+
+.chip-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: var(--color-terracotta-wash);
+  border: 1px solid var(--color-terracotta-border);
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-terracotta);
+}
+
+/* Bento Containers & Cards */
+.bento-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.bento-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-hairline-solid);
+  padding: 24px;
+  position: relative;
+}
+
+.bento-card-quiet {
+  background-color: var(--color-panel-quiet);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-hairline-strong);
+  padding: 20px;
+}
+
+/* Stat Tiles */
+.stat-tile {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline-solid);
+  border-radius: var(--radius-card);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-tile-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-tile-value {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 10px;
+  font-feature-settings: "tnum" 1;
+}
+
+.stat-tile-sub {
+  font-size: 13px;
+  color: var(--color-ink-muted);
+  margin-top: 6px;
+}
+
+/* Buttons & Interactive Elements */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 150ms ease-out;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-terracotta {
+  background-color: var(--color-terracotta);
+  color: #FFFFFF;
+  border-color: var(--color-terracotta);
+}
+
+.btn-terracotta:hover {
+  background-color: var(--color-terracotta-hover);
+  border-color: var(--color-terracotta-hover);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-hairline-strong);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-panel-quiet-light);
+  border-color: var(--color-ink-muted);
+}
+
+.btn-olive {
+  background-color: var(--color-olive);
+  color: #FFFFFF;
+}
+
+.btn-olive:hover {
+  background-color: var(--color-olive-dark);
+}
+
+.btn-sandy {
+  background-color: var(--color-panel-quiet);
+  color: var(--color-ink);
+  border-color: var(--color-hairline-strong);
+}
+
+.btn-sandy:hover {
+  background-color: var(--color-panel-quiet-light);
+}
+
+/* Badges & Chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.badge-pass {
+  background-color: var(--color-olive-wash);
+  color: var(--color-olive-dark);
+  border: 1px solid var(--color-olive-border);
+}
+
+.badge-fail {
+  background-color: var(--color-terracotta-wash);
+  color: var(--color-terracotta);
+  border: 1px solid var(--color-terracotta-border);
+}
+
+.badge-neutral {
+  background-color: #F0ECE6;
+  color: var(--color-ink-muted);
+  border: 1px solid #DCD5CD;
+}
+
+.badge-blue {
+  background-color: var(--color-blue-wash);
+  color: var(--color-blue-dark);
+  border: 1px solid var(--color-blue-border);
+}
+
+/* Code & Wash Tags */
+code.inline-code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--color-panel-quiet-light);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline-solid);
+}
+
+/* Small Caps Signature Subhead */
+.signature-subhead {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-muted);
+}
+
+/* Dark Anchor Editor Strip */
+.editor-strip {
+  background-color: #2D2D2D;
+  color: #A0A0A0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 16px;
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #3A3A3A;
+}
+
+.editor-surface {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  font-family: var(--font-mono);
+  padding: 20px;
+  border-bottom-left-radius: var(--radius-card);
+  border-bottom-right-radius: var(--radius-card);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+/* Explanatory Sandy Strip */
+.sandy-strip {
+  background-color: var(--color-panel-quiet);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-inner);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--color-ink);
+  font-size: 14px;
+}
+
+/* Table Architecture */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-muted);
+  border-bottom: 1px solid var(--color-hairline-solid);
+}
+
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-hairline-solid);
+  vertical-align: middle;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
