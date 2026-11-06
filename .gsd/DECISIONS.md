@@ -254,6 +254,54 @@ Owner live testing identified 5 defects on the Practice Arena screen:
 
 ---
 
+### [DECISION-010] Topbar Workbench Layout Redesign Approval
+
+**Date**: 2026-11-06  
+**Status**: Accepted  
+
+#### Context
+Owner live testing of the Phase 2 Direction A implementation rejected the sidebar navigation and stacked-card Practice arena as "really ridiculous". Three candidate redesign directions were explored, and the owner selected Option B ("Topbar Workbench"). Static mockups were created in `mockups/topbar/` and approved by the owner after Corrective Round 2 (closed 2026-11-06).
+
+#### Decision
+1. **Sidebar Superseded**: The sidebar layout from Waves 00–07 is superseded and removed. Content flow reclaims the ~450px sidebar width across all 4 screens.
+2. **Topbar Navbar Architecture**: A slim 56px topbar navbar is adopted with Fraunces wordmark and "Offline · Code-Judged" pill (left), 4 screen nav pills with area-specific tint washes (center), and live streak/due status chips from `CoachStore` (right).
+3. **Practice Workbench Recomposition**: Two-pane workbench layout (~42/58 ratio). Left pane contains single-row filter strip, ONE Problem Card containing all problem specifications, and the Hint Ladder below as a separate butter block. Right pane contains the Editor Card (with glued action row and no window dots) directly followed by ONE Output Card (holding verdict band header and visible test cases).
+4. **Home Screen H1 Title**: The Home screen H1 heading is officially designated as "Today's Practice" (replacing "Daily Review and Practice Queue").
+5. **Anti-Slop & De-slopped Tables**: Daily Practice Queue and Dashboard tables enforce a maximum of 1 pill per row (status only); track and difficulty are plain typography in partner colors. Decorative tags (`READY`, `BANK`, `RECORDED`, `ZERO HINTS`) are removed; tags must carry state or they do not exist.
+6. **Mock Interview Module**: Governed by Addendum A with single-source-of-truth countdown timer in sub-strip pill and scorecard header, and strict session-scoping by `session_start_iso` and `mode == 'mock'`.
+
+---
+
+### [DECISION-011] Phase 2 Final Corrective: Topbar Workbench Polish (Items X1–X9 & Evidence §E)
+
+**Date**: 2026-11-06  
+**Status**: Accepted  
+
+#### Context
+Owner live-tested the Topbar Workbench implementation (08-PLAN) and rejected the finish based on visual/functional issues captured during testing:
+1. **Top Void (X1)**: Noticeable whitespace above the topbar; navbar not cleanly sticky full-bleed at `top: 0`.
+2. **Hardcoded Navbar Version Chip (X2)**: Static "3.11" chip in navbar does not derive from runtime environment.
+3. **Missing Dashboard Graph (X3)**: Topic pass-rate Plotly chart missing from Dashboard; needs restoration using store data for attempted topics only.
+4. **Home CTAs & Subtext (X4, X7-Home)**: Start Practice / Continue Practice buttons need primary pill styling; exact mockup subtexts restored; `NOT STARTED` tag when streak is 0.
+5. **Practice Filter Strip Clutter (X5R)**: 3-select filter strip rejected by owner. Replaced with ONE slim picker row: full problem title with prev/next navigation arrows, no box, no field labels; single selection source across app.
+6. **Practice Signature & Output Card (X6, X7-Practice, X8, X9)**: Single source of truth for signatures across all 12 problems; neutral Output Card header "Run your code to see results"; natural-width Run & Submit button; small-caps `STARTER FUNCTION SIGNATURE` label; inline code as pastel wash chips.
+7. **Audit Evidence Deficit (§E)**: Verification evidence still owed for Mock store snapshots/scoping, hint ladder, pill-tint CDP hexes, and Impeccable live audit.
+
+#### Decision
+Structure final corrective as parallel lanes across waves:
+- **Wave 0 (Sequential Gate)**: Disclose and dispose `build_app.py` under `scratch/`; record baseline pytest (31 passing).
+- **Wave 1 (3 Parallel Lanes on Disjoint app.py Regions)**:
+  - **Lane A (Shell)**: X1 (top void, sticky navbar), X2 (runtime version chip). Owns global embedded CSS (`get_global_css`) and `render_topbar()`.
+  - **Lane B (Home + Dashboard)**: X3 (Plotly topic pass-rate chart), X4 (primary pill buttons), X7-Home (mockup subtexts, NOT STARTED streak 0). Owns `Home` and `Dashboard` sections.
+  - **Lane C (Practice)**: X5R (slim picker row), X6 (signature source of truth), X7-Practice (neutral output header), X8 (Run & Submit natural width), X9 (small-caps signature label, code chips). Owns `Practice Arena` section.
+- **Wave 2 (Sequential Gate)**: Lane D (Mock + Evidence E1–E9, r6 screenshots, `/verify 2` verdict, `.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md`).
+
+#### Freezes
+- `coach/*.py`, `data/problems/*.json`, `tests/*` untouched (suite remains 31/31).
+- Logic behavior frozen; zero new hex tokens beyond DESIGN.md.
+
+---
+
 *Last updated: 2026-11-06*
 
 

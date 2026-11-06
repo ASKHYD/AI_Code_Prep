@@ -7,29 +7,27 @@ updated: 2026-11-06
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 2: Streamlit UI Implementation (Corrective Round 2 Complete)  
-**Status:** Verification Gate Ready for Owner Acceptance  
-**Plan:** `.gsd/phases/2/` (07-PLAN.md complete + Corrective Rounds 1 & 2)  
+**Phase:** Phase 2: Streamlit UI Implementation (Topbar Workbench Final Corrective)  
+**Status:** READY FOR EXECUTION (09-PLAN)  
+**Plan:** `.gsd/phases/2/09-PLAN.md` (Validated by `/plan-checker`, ready for `/executor`)  
 
 ## Last Action
 
-Phase 2 Corrective Round 2 successfully executed for the Practice Arena screen:
-1. **P1 — Editor Height Honestly**: Root-caused Round 1 measurement failure: `code_editor` treated integer `height` as `{minLines: 1, maxLines: height}`, collapsing Ace to 4 lines (~150px) while Round 1 measured outer container wrapper CSS. Removed wrapper CSS hacks and passed `height="450px"` (string) directly to Ace, sizing Ace to 450px. Measured HTMLIFrameElement bounding rect via CDP: exactly 450px tall at 1920×1080 and 1600×1000 ($\ge 440$px).
-2. **P2 — Starter Signature Fits on One Line**: Problem with longest starter first line identified as `log-timestamp-filter` (79 chars). Lever 1 (column ratio widened to `[3.5, 8.5]`) and Lever 2 (editor font-size: 13, wrap: False). First line renders on one line with soft-wrap OFF, no horizontal scrollbar (`hScrollDisplay: "none"`), and zero overflow (`hasHorizontalOverflow: false`).
-3. **P3 — Workbench Recomposition**: Recomposed Practice into two-column workbench mirroring `mockups/practice.html`. Left = Filter header card + Statement card only. Right = Editor card on top $\rightarrow$ Sandbox verdicts $\rightarrow$ Visible test cases $\rightarrow$ Hint ladder. Balance measured via CDP: 4.3% diff at 1920×1080 (55px) and 12.5% diff at 1600×1000 (185px) (both $\le 20\%$). Document `scrollWidth == clientWidth` (1920/1920 and 1600/1600).
-4. **P4 — Broken Signature Box**: Statement card signature broken after each comma with 4-space continuation indent (`formatted_sig = sig_line.replace(", ", ",\n    ")`). Preformatted monospace box with `scrollWidth == clientWidth` (342px/342px at 1920, 249px/249px at 1600) and zero scrollbar.
-5. **P5 — Single-Line Test Case Headings**: Heading simplified to `TEST CASE #{i}` with `white-space: nowrap !important;` and `class="test-case-card-title"`. Measured height: 21px (single line, no wrapping).
-- Quality Battery Verified:
-  - Full pytest suite: 31/31 passed in 12.88s.
-  - Quarantine boundary: `coach/` and `data/problems/` 100% untouched; existing test files 100% untouched.
-  - Hex drift: 0 uncataloged hexes (all 26 Direction A tokens verified).
-  - Computed fonts: Headings Fraunces, body Inter, code JetBrains Mono.
-  - Side-by-side comparisons regenerated for 1920×1080 and 1600×1000 and mirrored to brain.
+Penned and validated `.gsd/phases/2/09-PLAN.md` following owner brief and DECISION-011:
+- Wave 0: Sequential pre-flight gate (E7 `build_app.py` disposition, top-level Plotly import check, baseline pytest 31/31).
+- Wave 1: Three concurrent subagent lanes via `/dispatching-parallel-agents`:
+  - Lane A: Shell & Topbar (X1 top void, X2 runtime version chip, shared CSS).
+  - Lane B: Home & Dashboard (X3 Plotly topic pass-rate chart, X4 pill buttons, X7-Home subtexts & streak 0).
+  - Lane C: Practice Arena (X5R ONE slim picker row, X6 unified signatures 12/12, X7-Practice neutral header, X8 natural width CTA, X9 small-caps signature label).
+- Wave 2: Evidence fan-out (D1 Mock E6, D2 Impeccable E1 ×4, D3 Fonts E2 / CDP Pill-tints E9 / r6 captures, Orchestrator E3–E5 return filing).
+- Full 100% item coverage confirmed by `/plan-checker`.
 
 ## Next Steps
 
-1. Owner review and acceptance sign-off on `.gsd/phases/2/CORRECTIVE_ROUND2_RETURN.md` and Practice dual-resolution screenshots.
-2. Close Phase 2 upon owner approval and proceed to Phase 3.
+1. Run `/executor` on Wave 0 gate.
+2. Dispatch Wave 1 parallel subagents.
+3. Merge, verify, and run Wave 2 evidence fan-out.
+4. Stop at owner gate: "Stopped at Topbar Workbench final corrective gate, awaiting owner live approval."
 
 ## Active Decisions
 
