@@ -14,6 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import plotly.graph_objects as go
 import streamlit as st
 
 from coach.judge import run_solution
