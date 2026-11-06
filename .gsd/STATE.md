@@ -17,7 +17,7 @@ updated: 2026-11-07
 
 - **Milestone 1 (Premium UI Redesign)**: ✅ Complete & Closed.
 - **Milestone 2 (Make the Loop Smarter)**: 
-  - **Phase 3 (FSRS + Interleaving)**: ✅ Executed & Verified (57/57 tests green, return filed, awaiting owner live acceptance). Intact and unedited.
+  - **Phase 3 (FSRS + Interleaving)**: ⏳ Executed — awaiting owner live acceptance (57/57 tests green, return filed). Intact and unedited.
   - **Phase 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
   - **Phase 6 (T1)**: Author token sheet, build 6 static HTML mockups with real data, anti-slop audit, dual captures (1450 & 1920). Stop for owner approval.
