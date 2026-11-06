@@ -1588,6 +1588,13 @@ elif nav_choice == "Mock Interview":
                 problems_by_id.get("binary-search", all_problems[0]),
                 problems_by_id.get("longest-substring-without-repeating", all_problems[1]),
             ]
+        if st.query_params.get("mock_solved_p1", "").lower() == "true":
+            st.session_state["mock_result_binary-search"] = {
+                "status": "pass",
+                "runtime_ms": 134,
+                "passed": 5,
+                "total": 5,
+            }
 
     if st.query_params.get("mock_state", "").lower() == "running":
         st.session_state["mock_state"] = "running"
