@@ -50,3 +50,4 @@ tests\test_timer.py .....                                                [100%]
 
 ## Next Step
 Proceed to Wave 2: Plan 3.2 (`02-PLAN.md`) — Scheduling Integration, Ladder Retirement & Truth-in-Copy.
+

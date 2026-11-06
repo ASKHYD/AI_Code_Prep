@@ -1,0 +1,164 @@
+{
+  "r1_all_12_problems": [
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "statement_sig": "def binary_search(nums: list, target: int) -> int:",
+      "editor_line1": "def binary_search(nums: list, target: int) -> int:",
+      "equal": true
+    },
+    {
+      "id": "climbing-stairs",
+      "title": "Climbing Stairs",
+      "statement_sig": "def climb_stairs(n: int) -> int:",
+      "editor_line1": "def climb_stairs(n: int) -> int:",
+      "equal": true
+    },
+    {
+      "id": "csv-column-summary",
+      "title": "CSV Column Summarizer",
+      "statement_sig": "def summarize_csv_column(csv_text: str, column_name: str) -> dict:",
+      "editor_line1": "def summarize_csv_column(csv_text: str, column_name: str) -> dict:",
+      "equal": true
+    },
+    {
+      "id": "flatten-nested-dict",
+      "title": "Flatten Nested Dictionary",
+      "statement_sig": "def flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict:",
+      "editor_line1": "def flatten_dict(nested: dict, prefix: str = '', sep: str = '.') -> dict:",
+      "equal": true
+    },
+    {
+      "id": "log-timestamp-filter",
+      "title": "Log Timestamp Filter",
+      "statement_sig": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+      "editor_line1": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+      "equal": true
+    },
+    {
+      "id": "longest-substring-without-repeating",
+      "title": "Longest Substring Without Repeating Characters",
+      "statement_sig": "def longest_substring(s: str) -> int:",
+      "editor_line1": "def longest_substring(s: str) -> int:",
+      "equal": true
+    },
+    {
+      "id": "max-subarray",
+      "title": "Maximum Subarray Sum",
+      "statement_sig": "def max_subarray_sum(nums: list) -> int:",
+      "editor_line1": "def max_subarray_sum(nums: list) -> int:",
+      "equal": true
+    },
+    {
+      "id": "reverse-sequence",
+      "title": "Reverse Sequence In Place",
+      "statement_sig": "def reverse_sequence(items: list) -> list:",
+      "editor_line1": "def reverse_sequence(items: list) -> list:",
+      "equal": true
+    },
+    {
+      "id": "string-permutations",
+      "title": "String Permutations",
+      "statement_sig": "def get_permutations(s: str) -> list:",
+      "editor_line1": "def get_permutations(s: str) -> list:",
+      "equal": true
+    },
+    {
+      "id": "tree-level-order",
+      "title": "Binary Tree Level Order Traversal",
+      "statement_sig": "def level_order_traversal(root: dict | None) -> list:",
+      "editor_line1": "def level_order_traversal(root: dict | None) -> list:",
+      "equal": true
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum",
+      "statement_sig": "def two_sum(nums: list, target: int) -> list:",
+      "editor_line1": "def two_sum(nums: list, target: int) -> list:",
+      "equal": true
+    },
+    {
+      "id": "valid-parentheses",
+      "title": "Valid Parentheses",
+      "statement_sig": "def is_valid_parentheses(s: str) -> bool:",
+      "editor_line1": "def is_valid_parentheses(s: str) -> bool:",
+      "equal": true
+    }
+  ],
+  "r1_overall_pass": true,
+  "r2_label_headings": {
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Binary Search"
+      }
+    ],
+    "hasFuncSigHeading": false,
+    "subheadText": "STARTER FUNCTION SIGNATURE",
+    "subheadFontSize": "11px",
+    "subheadTextTransform": "uppercase",
+    "subheadLetterSpacing": "0.88px"
+  },
+  "r3_picker_buttons": {
+    "prevBtn": {
+      "text": "\u2190",
+      "clientWidth": 42,
+      "scrollWidth": 42,
+      "noClip": true
+    },
+    "nextBtn": {
+      "text": "\u2192",
+      "clientWidth": 42,
+      "scrollWidth": 42,
+      "noClip": true
+    }
+  },
+  "r4_overflow_and_anchors": {
+    "docWidth": 1450,
+    "docScroll": 1450,
+    "hasOverflow": false,
+    "stripRight": {
+      "text": "Sandbox \u00b7 3.0s \u00b7 Python 3.12",
+      "clientWidth": 159,
+      "scrollWidth": 159,
+      "noClip": true
+    },
+    "totalAnchorsInDom": 0,
+    "visibleAnchorsCount": 0
+  },
+  "v2_practice_pill": {
+    "selector": ".nav-pill.active-practice",
+    "text": "Practice Arena",
+    "bgColor": "rgb(232, 226, 255)",
+    "color": "rgb(89, 50, 234)",
+    "bgHex": "#E8E2FF",
+    "colorHex": "#5932EA"
+  },
+  "v2_mock_pill": {
+    "found": true,
+    "selector": ".nav-pill.active-mock",
+    "text": "Mock Interview",
+    "bgColor": "rgb(255, 232, 209)",
+    "color": "rgb(185, 56, 21)",
+    "bgHex": "#FFE8D1",
+    "colorHex": "#B93815"
+  },
+  "v6_longest_title": {
+    "text": "Longest Substring Without Repeating Characters",
+    "clientWidth": 427,
+    "scrollWidth": 427,
+    "rowWidth": 427,
+    "untruncated": true
+  },
+  "v5_unsolved_store_pair": {
+    "before": {
+      "count": 2,
+      "max_created_at": "2026-11-06T20:00:50.752400"
+    },
+    "after": {
+      "count": 2,
+      "max_created_at": "2026-11-06T20:00:50.752400"
+    },
+    "identical": true
+  }
+}

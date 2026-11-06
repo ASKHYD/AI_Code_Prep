@@ -30,15 +30,16 @@
 ### Phase 3: FSRS + Interleaving (Current Target)
 - [x] Entry Gate G1: Backend Verification Battery triaged by owner `high` — 2026-11-06 ✓ 2026-11-07
 - [x] Entry Gate G2: Phase 2 formally closed by owner live approval `high` — 2026-11-06 ✓ 2026-11-07
-- [ ] Pin `fsrs` in `requirements.txt` and verify installation `high` — 2026-11-06
-- [ ] Workstream 1: Create FSRS card state SQLite table alongside existing store `high` — 2026-11-06
-- [ ] Workstream 1: Implement judge-to-rating mapping (`Again`, `Hard`, `Good`; `Easy` omitted) `high` — 2026-11-06
-- [ ] Workstream 1: Write idempotent migration script from historical attempts on DB copy `high` — 2026-11-06
-- [ ] Workstream 1: Retire old 1/1/3/7/21-day ladder from scheduling path `high` — 2026-11-06
-- [ ] Workstream 1: Truth-in-copy update for Home repetition subline `medium` — 2026-11-06
-- [ ] Workstream 2: Implement topic interleaving for review queue and mock selection `high` — 2026-11-06
-- [ ] Verification: Test suite for rating mapping, migration idempotency, due-set equivalence, and interleaving adjacency `high` — 2026-11-06
-- [ ] Live CDP captures at 1450×900 of Home screen with FSRS due chip and queue `medium` — 2026-11-06
+- [x] Pin `fsrs` in `requirements.txt` and verify installation `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 1: Create FSRS card state SQLite table alongside existing store `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 1: Implement judge-to-rating mapping (`Again`, `Hard`, `Good`; `Easy` omitted) `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 1: Write idempotent migration script from historical attempts on DB copy `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 1: Retire old 1/1/3/7/21-day ladder from scheduling path `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 1: Truth-in-copy update for Home repetition subline `medium` — 2026-11-07 ✓ 2026-11-07
+- [x] Workstream 2: Implement topic interleaving for review queue and mock selection `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Verification: Test suite for rating mapping, migration idempotency, due-set equivalence, and interleaving adjacency `high` — 2026-11-07 ✓ 2026-11-07
+- [x] Live CDP captures at 1450×900 of Home screen with FSRS due chip and queue `medium` — 2026-11-07 ✓ 2026-11-07
+- [ ] Phase 3 Owner Live Acceptance Sign-off on `http://localhost:8501` `high` — 2026-11-07
 
 ### Milestone 2 Backlog (Future Phases — Do Not Plan Now)
 - [ ] Phase 4: Per-Run Resource Measurement (peak memory allocation + execution time instrumentation inside judge runner; unlock `Rating.Easy`) `medium` — 2026-11-06

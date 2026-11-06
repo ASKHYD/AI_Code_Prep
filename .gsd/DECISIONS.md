@@ -302,6 +302,34 @@ Structure final corrective as parallel lanes across waves:
 
 ---
 
+### [DECISION-012] Addendum V2 Rework (R1–R4) & Empirical Evidence Invariants (V1–V6)
+
+**Date**: 2026-11-06  
+**Status**: Accepted  
+
+#### Context
+Following review of the initial 09-PLAN implementation return, owner issued ADDENDUM V2 specifying 4 rework items (R1–R4) and 6 evidence items (V1–V6) to achieve clean visual finish and rigorous empirical validation.
+
+#### Decisions & Outcomes
+1. **X2 Disposition (Runtime Versioning)**: The static "3.11" version chip in the topbar and the static "Python 3.11" text in the editor strips were eliminated. All surfaces derive the version dynamically at runtime from `sys.version_info` (`3.12`), ensuring truth in environment reporting.
+2. **R1 (X6 Redo: Editor Starter Single Source of Truth)**: `starter_code.splitlines()[0].strip()` governs the function signature across the entire application. Problem JSONs contain `statement_md` (which historically had divergent handwritten signatures) and `starter_code`. Rendering logic in `app.py` strips the embedded `### Function Signature` markdown block and renders the exact `starter_code` first line, verified live across all 12 problems (12/12 matching character-for-character).
+3. **R2 (X9 Label Redo)**: The Problem Card signature block is labelled by `<span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>` (11px uppercase letter-spaced). The large serif `### Function Signature` heading was removed from `statement_md` rendering, confirmed via CDP DOM query (0 heading elements matching "Function Signature" in Problem Card).
+4. **R3 (X10 Picker Buttons)**: Prev/Next buttons in the slim problem picker row are styled as arrow-only (`←` and `→`) with dedicated padding (`padding: 6px 12px !important; min-width: 44px !important;`). Measured via CDP at 1450 viewport: `scrollWidth == clientWidth` (42px/42px), eliminating any ellipsis clipping (`←…` / `N…`).
+5. **R4 (X11 Zero Horizontal Overflow & Anchors)**: Practice Arena workbench fits 1450 viewport with `document.documentElement.scrollWidth == document.documentElement.clientWidth` (1450px / 1450px, zero overflow). The editor strip's right-side text ("Sandbox · 3.0s · Python 3.12") renders in full without truncation. Streamlit heading-anchor link icons (`[data-testid="stHeaderActionElements"]`, `[data-testid="stHeadingAnchor"]`, `a.anchor-link`) are hidden globally across ALL screens via CSS.
+6. **V1–V6 Evidence**:
+   - V1: `/verify 2` verdict and tally recorded.
+   - V2: Active nav pill computed backgrounds measured via CDP (`#E8E2FF` for Practice Arena, `#FFE8D1` for Mock Interview) with paired screenshots.
+   - V3: Authentic `npx impeccable detect` output and exit codes recorded for all 4 screens.
+   - V4: Full named accounting of parked Pro Max skills (`ui-ux-pro-max`, `design`, `design-system`, `ui-styling`).
+   - V5: Unsolved-end store pair snapshot proving zero phantom attempt writes (`count` and `max(created_at)` identical).
+   - V6: Longest problem title (`Longest Substring Without Repeating Characters`, 46 chars) captured untruncated in picker row.
+
+#### Freezes Preserved
+- `coach/*.py`, `data/problems/*.json`, `tests/*` strictly frozen.
+- Pytest suite invariant at 31/31 passing.
+
+---
+
 *Last updated: 2026-11-06*
 
 

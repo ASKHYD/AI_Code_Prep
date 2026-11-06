@@ -93,3 +93,4 @@ Implement Workstream 1a: the core FSRS engine, SQLite card storage schema, deter
 - [ ] Rating mapper implements all 3 rules; `Rating.Easy` is strictly banned.
 - [ ] `py-fsrs` wrapper uses default parameters with `desired_retention = 0.9`; optimizer is completely absent.
 - [ ] Migration accurately backfills cards from last attempt timestamps (A1) and is verified idempotent.
+

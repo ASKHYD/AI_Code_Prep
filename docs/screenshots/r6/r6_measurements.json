@@ -1,0 +1,202 @@
+{
+  "1450x900": {
+    "home": {
+      "topbar_height": 58,
+      "topbar_top": 0,
+      "py_chip_version": "3.12",
+      "h1_text": "Today's Practice",
+      "h1_font": "Fraunces, serif",
+      "body_font": "Inter, sans-serif",
+      "queue_row_count": 12,
+      "has_pill_cta": true,
+      "streak_badge_text": "ACTIVE",
+      "streak_caption": "Consecutive active days."
+    },
+    "practice": {
+      "topbar_top": 0,
+      "topbar_height": 58,
+      "left_col_width": 526,
+      "right_col_width": 732,
+      "editor_iframe_height": 450,
+      "has_picker_row": true,
+      "picker_title_text": "Binary Search",
+      "picker_button_count": 0,
+      "filter_dropdown_count": 0,
+      "is_filter_strip_deleted": true,
+      "run_btn_natural_width": true,
+      "run_btn_width": 140,
+      "output_header_text": "Run your code to see results",
+      "has_smallcaps_signature_label": true,
+      "code_chips_count": 15,
+      "sig_scroll_width": 468,
+      "sig_client_width": 468,
+      "sig_no_overflow": true
+    },
+    "signature_stress": {
+      "scroll_width": 468,
+      "client_width": 468,
+      "no_overflow": true
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "has_plotly_chart": false,
+      "plotly_bars_count": 0,
+      "mastery_items_count": 11,
+      "has_table": false,
+      "has_unsourced_80_percent": false
+    },
+    "mock_running": {
+      "timer_text": "44:35",
+      "has_end_btn": true
+    },
+    "mock_completed": {
+      "has_scorecard": true,
+      "has_178_leak": false,
+      "has_export_btn": false
+    },
+    "pill_hexes": {
+      "py_chip": {
+        "bg_raw": "rgb(255, 255, 255)",
+        "color_raw": "rgb(102, 99, 90)",
+        "bg_hex": "#FFFFFF",
+        "color_hex": "#66635A"
+      },
+      "streak_chip": {
+        "bg_raw": "rgb(223, 243, 228)",
+        "color_raw": "rgb(22, 123, 72)",
+        "bg_hex": "#DFF3E4",
+        "color_hex": "#167B48"
+      },
+      "due_chip": {
+        "bg_raw": "rgb(220, 235, 255)",
+        "color_raw": "rgb(29, 94, 194)",
+        "bg_hex": "#DCEBFF",
+        "color_hex": "#1D5EC2"
+      },
+      "nav_pill": {
+        "bg_raw": "rgba(0, 0, 0, 0)",
+        "color_raw": "rgb(102, 99, 90)",
+        "bg_hex": "#000000",
+        "color_hex": "#66635A"
+      },
+      "queue_badge": {
+        "bg_raw": null,
+        "color_raw": null,
+        "bg_hex": null,
+        "color_hex": null
+      }
+    }
+  },
+  "1920x1080": {
+    "home": {
+      "topbar_height": 58,
+      "topbar_top": 0,
+      "py_chip_version": "3.12",
+      "h1_text": "Today's Practice",
+      "h1_font": "Fraunces, serif",
+      "body_font": "Inter, sans-serif",
+      "queue_row_count": 12,
+      "has_pill_cta": true,
+      "streak_badge_text": "ACTIVE",
+      "streak_caption": "Consecutive active days."
+    },
+    "practice": {
+      "topbar_top": 0,
+      "topbar_height": 58,
+      "left_col_width": 719,
+      "right_col_width": 999,
+      "editor_iframe_height": 450,
+      "has_picker_row": true,
+      "picker_title_text": "Binary Search",
+      "picker_button_count": 0,
+      "filter_dropdown_count": 0,
+      "is_filter_strip_deleted": true,
+      "run_btn_natural_width": true,
+      "run_btn_width": 140,
+      "output_header_text": "Run your code to see results",
+      "has_smallcaps_signature_label": true,
+      "code_chips_count": 15,
+      "sig_scroll_width": 661,
+      "sig_client_width": 661,
+      "sig_no_overflow": true
+    },
+    "signature_stress": {
+      "scroll_width": 661,
+      "client_width": 661,
+      "no_overflow": true
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "has_plotly_chart": true,
+      "plotly_bars_count": 1,
+      "mastery_items_count": 11,
+      "has_table": true,
+      "has_unsourced_80_percent": false
+    },
+    "mock_running": {
+      "timer_text": "44:33",
+      "has_end_btn": true
+    },
+    "mock_completed": {
+      "has_scorecard": true,
+      "has_178_leak": false,
+      "has_export_btn": false
+    }
+  },
+  "1600x1000": {
+    "home": {
+      "topbar_height": 58,
+      "topbar_top": 0,
+      "py_chip_version": "3.12",
+      "h1_text": "Today's Practice",
+      "h1_font": "Fraunces, serif",
+      "body_font": "Inter, sans-serif",
+      "queue_row_count": 12,
+      "has_pill_cta": true,
+      "streak_badge_text": "ACTIVE",
+      "streak_caption": "Consecutive active days."
+    },
+    "practice": {
+      "topbar_top": 0,
+      "topbar_height": 58,
+      "left_col_width": 585,
+      "right_col_width": 813,
+      "editor_iframe_height": 450,
+      "has_picker_row": true,
+      "picker_title_text": "Binary Search",
+      "picker_button_count": 0,
+      "filter_dropdown_count": 0,
+      "is_filter_strip_deleted": true,
+      "run_btn_natural_width": true,
+      "run_btn_width": 140,
+      "output_header_text": "Run your code to see results",
+      "has_smallcaps_signature_label": true,
+      "code_chips_count": 15,
+      "sig_scroll_width": 527,
+      "sig_client_width": 527,
+      "sig_no_overflow": true
+    },
+    "signature_stress": {
+      "scroll_width": 527,
+      "client_width": 527,
+      "no_overflow": true
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "has_plotly_chart": true,
+      "plotly_bars_count": 1,
+      "mastery_items_count": 11,
+      "has_table": true,
+      "has_unsourced_80_percent": false
+    },
+    "mock_running": {
+      "timer_text": "44:35",
+      "has_end_btn": true
+    },
+    "mock_completed": {
+      "has_scorecard": true,
+      "has_178_leak": false,
+      "has_export_btn": false
+    }
+  }
+}

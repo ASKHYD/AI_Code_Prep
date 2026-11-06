@@ -84,3 +84,4 @@ Execute the full verification protocol for Phase 3: run the comprehensive test s
 - [ ] Database isolation proof verifies production `coach.db` is 100% untouched.
 - [ ] Live 1450×900 screenshot confirms FSRS due chip and interleaved queue display.
 - [ ] Phase return filed with full resource accounting and `/verify 3` verdict.
+

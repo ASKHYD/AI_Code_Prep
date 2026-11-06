@@ -50,3 +50,4 @@ tests\test_timer.py .....                                                [100%]
 
 ## Next Step
 Proceed to Wave 4: Plan 3.4 (`04-PLAN.md`) — Verification Suite, Dry-Run Evidence & Phase Return.
+

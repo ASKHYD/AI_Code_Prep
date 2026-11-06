@@ -63,3 +63,4 @@ Establish the execution baseline and dependency requirements for Phase 3 (FSRS +
 - [ ] Baseline test suite passes 31/31 without warnings.
 - [ ] Database isolation protocol is established with recorded SHA256 hash.
 - [ ] Gate G2 execution lock is prominently documented.
+

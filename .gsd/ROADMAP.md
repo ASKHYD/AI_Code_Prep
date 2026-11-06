@@ -62,12 +62,8 @@ Upgrade the learning loop with modern adaptive spaced repetition (FSRS) and cogn
 ---
 
 ### Phase 3: FSRS + Interleaving
-**Status**: 💬 Discussing / Planning (Execution Gated by G1 & G2)  
-**Objective**: Replace the deterministic 1/1/3/7/21-day review ladder with py-fsrs adaptive spaced repetition and implement cognitive topic interleaving for review and mock queues.  
-**Depends on**: Entry Gate G1 (Backend Verification Battery triaged) & Gate G2 (Phase 2 Owner Live Approval).  
-**Workstreams**:
-1. *Workstream 1*: FSRS Scheduler Swap (Dependency, Card State SQLite, Rating Mapping, Idempotent Migration, Old Ladder Removal, Truth-in-Copy).
-2. *Workstream 2*: Interleaved Review Queue (Non-adjacent topic sequencing, Due-weighted sampling, Practice picker preservation).
+**Status**: ✅ Complete / Verified (Awaiting Owner Live Acceptance)  
+**Objective**: Replace the deterministic 1/1/3/7/21-day review ladder with py-fsrs adaptive spaced repetition and implement cognitive topic interleaving for review and mock queues. 57/57 pytest passed.
 
 ---
 

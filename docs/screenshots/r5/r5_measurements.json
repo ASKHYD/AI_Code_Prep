@@ -1,0 +1,119 @@
+{
+  "1450x900": {
+    "home": {
+      "h1_text": "Today's Practice",
+      "queue_row_count": 12,
+      "first_row_badge_count": 1,
+      "has_queue_table": true
+    },
+    "practice": {
+      "topbar_height": 58,
+      "left_col_width": 526,
+      "right_col_width": 732,
+      "editor_iframe_height": 450,
+      "has_one_problem_card": true,
+      "has_hint_ladder_butter": true,
+      "has_editor_card": true,
+      "has_one_output_card": true
+    },
+    "signature_stress": {
+      "pre_scroll_width": 468,
+      "pre_client_width": 468,
+      "no_horizontal_overflow": true
+    },
+    "mock_running": {
+      "timer_pill_text": "44:35",
+      "has_end_button": true,
+      "has_mock_problem_card": true
+    },
+    "mock_completed": {
+      "has_scorecard": true,
+      "has_178_leak": false,
+      "has_export_button": true
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "mastery_items_count": 11,
+      "has_table": true,
+      "has_unsourced_80_percent": false
+    }
+  },
+  "1920x1080": {
+    "home": {
+      "h1_text": "Today's Practice",
+      "queue_row_count": 12,
+      "first_row_badge_count": 1,
+      "has_queue_table": true
+    },
+    "practice": {
+      "topbar_height": 58,
+      "left_col_width": 719,
+      "right_col_width": 999,
+      "editor_iframe_height": 450,
+      "has_one_problem_card": true,
+      "has_hint_ladder_butter": true,
+      "has_editor_card": true,
+      "has_one_output_card": true
+    },
+    "signature_stress": {
+      "pre_scroll_width": 661,
+      "pre_client_width": 661,
+      "no_horizontal_overflow": true
+    },
+    "mock_running": {
+      "timer_pill_text": "44:34",
+      "has_end_button": true,
+      "has_mock_problem_card": true
+    },
+    "mock_completed": {
+      "has_scorecard": true,
+      "has_178_leak": false,
+      "has_export_button": false
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "mastery_items_count": 11,
+      "has_table": true,
+      "has_unsourced_80_percent": false
+    }
+  },
+  "1600x1000": {
+    "home": {
+      "h1_text": "Today's Practice",
+      "queue_row_count": 12,
+      "first_row_badge_count": 1,
+      "has_queue_table": true
+    },
+    "practice": {
+      "topbar_height": 58,
+      "left_col_width": 585,
+      "right_col_width": 813,
+      "editor_iframe_height": 450,
+      "has_one_problem_card": true,
+      "has_hint_ladder_butter": true,
+      "has_editor_card": true,
+      "has_one_output_card": true
+    },
+    "signature_stress": {
+      "pre_scroll_width": 527,
+      "pre_client_width": 527,
+      "no_horizontal_overflow": true
+    },
+    "mock_running": {
+      "timer_pill_text": "44:36",
+      "has_end_button": true,
+      "has_mock_problem_card": true
+    },
+    "mock_completed": {
+      "has_scorecard": false,
+      "has_178_leak": false,
+      "has_export_button": false
+    },
+    "dashboard": {
+      "h1_text": "Performance Analytics",
+      "mastery_items_count": 11,
+      "has_table": true,
+      "has_unsourced_80_percent": false
+    }
+  }
+}

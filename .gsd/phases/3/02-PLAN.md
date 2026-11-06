@@ -94,3 +94,4 @@ Implement Workstream 1b: switch all scheduling consumers across the application 
 - [ ] `calculate_due_date` has 0 callers in `coach/store.py` and `app.py`.
 - [ ] `app.py` copy updated to describe FSRS; 0 ladder phrasing matches found.
 - [ ] Streak calculation behavior pinned and passing in regression tests.
+

@@ -1,0 +1,182 @@
+{
+  "1450x900": {
+    "practice": {
+      "leftPaneWidth": 609,
+      "rightPaneWidth": 841,
+      "isLeftPaneGte500": true,
+      "isRightPaneGte800": true,
+      "hasProblemCard": true,
+      "hasOutputCard": true,
+      "editorHeight": 440,
+      "isEditorTall": true,
+      "sigScrollWidth": 500,
+      "sigClientWidth": 500,
+      "sigNoOverflow": true,
+      "titleOnOneLine": true,
+      "docScrollWidth": 1450,
+      "docClientWidth": 1450,
+      "noDocOverflow": true,
+      "testCasesSingleLine": true,
+      "filterLabelsSingleLine": true,
+      "filterItemsCount": 4,
+      "hintButtonsLabels": [
+        "Reveal Next Hint (Level 2)",
+        "Ask AI to Explain Hint"
+      ],
+      "navPillsLabels": [
+        "Home",
+        "Practice Arena",
+        "Mock Interview",
+        "Dashboard"
+      ],
+      "statusChipsLabels": [
+        "0 days",
+        "0 due"
+      ]
+    },
+    "practice_stress": {
+      "firstLineText": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+      "firstLineLength": 79,
+      "sigScrollWidth": 494,
+      "sigClientWidth": 494,
+      "sigNoOverflow": true,
+      "docScrollWidth": 1435,
+      "docClientWidth": 1435,
+      "noDocOverflow": true,
+      "leftPaneWidth": 603,
+      "rightPaneWidth": 832
+    },
+    "dashboard": {
+      "statCardsValues": [
+        "1",
+        "1",
+        "0.0"
+      ],
+      "masteryItemsCount": 6,
+      "tableRowsCount": 7,
+      "docScrollWidth": 1435,
+      "docClientWidth": 1435,
+      "noDocOverflow": true
+    }
+  },
+  "1920x1080": {
+    "practice": {
+      "leftPaneWidth": 800,
+      "rightPaneWidth": 1105,
+      "isLeftPaneGte500": true,
+      "isRightPaneGte800": true,
+      "hasProblemCard": true,
+      "hasOutputCard": true,
+      "editorHeight": 440,
+      "isEditorTall": true,
+      "sigScrollWidth": 691,
+      "sigClientWidth": 691,
+      "sigNoOverflow": true,
+      "titleOnOneLine": true,
+      "docScrollWidth": 1905,
+      "docClientWidth": 1905,
+      "noDocOverflow": true,
+      "testCasesSingleLine": true,
+      "filterLabelsSingleLine": true,
+      "filterItemsCount": 4,
+      "hintButtonsLabels": [
+        "Reveal Next Hint (Level 2)",
+        "Ask AI to Explain Hint"
+      ],
+      "navPillsLabels": [
+        "Home",
+        "Practice Arena",
+        "Mock Interview",
+        "Dashboard"
+      ],
+      "statusChipsLabels": [
+        "0 days",
+        "0 due"
+      ]
+    },
+    "practice_stress": {
+      "firstLineText": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+      "firstLineLength": 79,
+      "sigScrollWidth": 691,
+      "sigClientWidth": 691,
+      "sigNoOverflow": true,
+      "docScrollWidth": 1905,
+      "docClientWidth": 1905,
+      "noDocOverflow": true,
+      "leftPaneWidth": 800,
+      "rightPaneWidth": 1105
+    },
+    "dashboard": {
+      "statCardsValues": [
+        "1",
+        "1",
+        "0.0"
+      ],
+      "masteryItemsCount": 6,
+      "tableRowsCount": 7,
+      "docScrollWidth": 1905,
+      "docClientWidth": 1905,
+      "noDocOverflow": true
+    }
+  },
+  "1600x1000": {
+    "practice": {
+      "leftPaneWidth": 666,
+      "rightPaneWidth": 919,
+      "isLeftPaneGte500": true,
+      "isRightPaneGte800": true,
+      "hasProblemCard": true,
+      "hasOutputCard": true,
+      "editorHeight": 440,
+      "isEditorTall": true,
+      "sigScrollWidth": 557,
+      "sigClientWidth": 557,
+      "sigNoOverflow": true,
+      "titleOnOneLine": true,
+      "docScrollWidth": 1585,
+      "docClientWidth": 1585,
+      "noDocOverflow": true,
+      "testCasesSingleLine": true,
+      "filterLabelsSingleLine": true,
+      "filterItemsCount": 4,
+      "hintButtonsLabels": [
+        "Reveal Next Hint (Level 2)",
+        "Ask AI to Explain Hint"
+      ],
+      "navPillsLabels": [
+        "Home",
+        "Practice Arena",
+        "Mock Interview",
+        "Dashboard"
+      ],
+      "statusChipsLabels": [
+        "0 days",
+        "0 due"
+      ]
+    },
+    "practice_stress": {
+      "firstLineText": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+      "firstLineLength": 79,
+      "sigScrollWidth": 557,
+      "sigClientWidth": 557,
+      "sigNoOverflow": true,
+      "docScrollWidth": 1585,
+      "docClientWidth": 1585,
+      "noDocOverflow": true,
+      "leftPaneWidth": 666,
+      "rightPaneWidth": 919
+    },
+    "dashboard": {
+      "statCardsValues": [
+        "1",
+        "1",
+        "0.0"
+      ],
+      "masteryItemsCount": 6,
+      "tableRowsCount": 7,
+      "docScrollWidth": 1585,
+      "docClientWidth": 1585,
+      "noDocOverflow": true
+    }
+  }
+}

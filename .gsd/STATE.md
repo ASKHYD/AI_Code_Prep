@@ -8,8 +8,8 @@ updated: 2026-11-06
 
 **Milestone:** Milestone 2 — Make the Loop Smarter  
 **Phase:** Phase 3: FSRS + Interleaving  
-**Status:** 🚀 EXECUTING (Gates G1 & G2 Verified)  
-**Active Plan:** `.gsd/phases/3/00-PLAN.md` (Wave 0 Execution)  
+**Status:** VERIFIED — AWAITING OWNER LIVE ACCEPTANCE  
+**Active Plan:** `.gsd/phases/3/04-PLAN.md` (Executed, 57/57 pytest, return filed)  
 
 ---
 

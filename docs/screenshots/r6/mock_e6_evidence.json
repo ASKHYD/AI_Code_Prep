@@ -1,0 +1,62 @@
+{
+  "t1": {
+    "text": "44:37",
+    "timestamp": 1793977237.5208771
+  },
+  "t2": {
+    "text": "44:26",
+    "timestamp": 1793977249.290459,
+    "elapsed_seconds": 11.8
+  },
+  "timer_delta_valid": true,
+  "scorecard": {
+    "has_scorecard": false,
+    "score_text": "Unknown",
+    "has_problem1_pass": false,
+    "has_178_leak": false,
+    "has_export_btn": false
+  },
+  "db_before": {
+    "exists": true,
+    "total_attempts": 1,
+    "mock_attempts": 0,
+    "recent": [
+      {
+        "id": 1,
+        "problem_id": "binary-search",
+        "status": "pass",
+        "runtime_ms": 178,
+        "hints_used": 0,
+        "mode": "practice",
+        "created_at": "2026-11-04T10:42:53.782231"
+      }
+    ]
+  },
+  "db_after": {
+    "exists": true,
+    "total_attempts": 2,
+    "mock_attempts": 1,
+    "recent": [
+      {
+        "id": 3,
+        "problem_id": "binary-search",
+        "status": "fail",
+        "runtime_ms": 1093,
+        "hints_used": 0,
+        "mode": "mock",
+        "created_at": "2026-11-06T20:00:50.752400"
+      },
+      {
+        "id": 1,
+        "problem_id": "binary-search",
+        "status": "pass",
+        "runtime_ms": 178,
+        "hints_used": 0,
+        "mode": "practice",
+        "created_at": "2026-11-04T10:42:53.782231"
+      }
+    ]
+  },
+  "new_attempts_count": 1,
+  "in_session_solve_verified": true
+}

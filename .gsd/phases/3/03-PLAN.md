@@ -71,3 +71,4 @@ Implement Workstream 2: cognitive topic interleaving for app-generated problem q
 - [ ] Topic ranking weights overdue count and lowest pass rate.
 - [ ] Practice Arena free picker remains 100% unrestricted.
 - [ ] First-exposure topics preserve roadmap ordering for initial learning.
+
