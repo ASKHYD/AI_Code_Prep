@@ -43,25 +43,25 @@ def test_store_roundtrip_and_due_problems(tmp_path):
     db_file = tmp_path / "test_coach.db"
     store = CoachStore(db_path=str(db_file))
 
-    today_str = "2026-11-04"
+    base_time = "2026-11-04T00:00:00"
 
-    # Record a failure on 'two-sum' -> due 2026-11-05
-    store.record_attempt("two-sum", status="fail", runtime_ms=120, hints_used=1, mode="practice", attempt_date=today_str)
+    # Record a failure on 'two-sum' -> FSRS step 0: due in 1 min (2026-11-04T00:01:00)
+    store.record_attempt("two-sum", status="fail", runtime_ms=120, hints_used=1, mode="practice", attempt_date=base_time)
 
-    # Record a pass on 'valid-parentheses' -> first pass -> due 2026-11-07
-    store.record_attempt("valid-parentheses", status="pass", runtime_ms=45, hints_used=0, mode="practice", attempt_date=today_str)
+    # Record a pass on 'valid-parentheses' -> FSRS step 1: due in 10 min (2026-11-04T00:10:00)
+    store.record_attempt("valid-parentheses", status="pass", runtime_ms=45, hints_used=0, mode="practice", attempt_date=base_time)
 
-    # Check due problems on 2026-11-04: none due yet
-    due_today = store.due_problems(today=today_str)
-    assert len(due_today) == 0
+    # Check due problems at base time: none due yet
+    due_start = store.due_problems(today="2026-11-04T00:00:00")
+    assert len(due_start) == 0
 
-    # Check due problems on 2026-11-05: 'two-sum' is due!
-    due_tomorrow = store.due_problems(today="2026-11-05")
-    assert len(due_tomorrow) == 1
-    assert due_tomorrow[0]["problem_id"] == "two-sum"
+    # Check due problems after 5 mins (00:05:00): 'two-sum' is due!
+    due_soon = store.due_problems(today="2026-11-04T00:05:00")
+    assert len(due_soon) == 1
+    assert due_soon[0]["problem_id"] == "two-sum"
 
-    # Check due problems on 2026-11-07: both 'two-sum' and 'valid-parentheses' are due
-    due_later = store.due_problems(today="2026-11-07")
+    # Check due problems after 15 mins (00:15:00): both are due!
+    due_later = store.due_problems(today="2026-11-04T00:15:00")
     assert len(due_later) == 2
 
 def test_store_topic_stats(tmp_path):

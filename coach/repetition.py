@@ -1,6 +1,9 @@
 """
-Deterministic Spaced Repetition Logic.
-No external ML or SM-2 dependencies. Simple interview review schedule:
+DEPRECATED: Old deterministic 1/1/3/7/21-day ladder logic.
+Retired in Milestone 2 Phase 3 in favor of FSRS adaptive repetition (coach/fsrs_engine.py).
+Retained unreferenced in runtime for legacy contract reference and rollback safety.
+
+Historical ladder:
 - Failed problem: due in 1 day; subsequent fails: 1 day; resets consecutive_passes to 0.
 - 1st consecutive pass: due in 3 days.
 - 2nd consecutive pass: due in 7 days.

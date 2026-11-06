@@ -17,7 +17,6 @@ from coach.fsrs_engine import (
     map_judge_to_rating,
     parse_utc_datetime,
 )
-from coach.repetition import calculate_due_date
 
 
 class CoachStore:
@@ -76,23 +75,12 @@ class CoachStore:
         topic: str = "",
         attempt_date: str | None = None
     ) -> int:
-        """Records an attempt and updates the repetition schedule."""
+        """Records an attempt and updates the FSRS repetition schedule."""
         iso_today = attempt_date or date.today().isoformat()
         now_ts = datetime.now().isoformat()
 
         with self._get_connection() as conn:
-            # 1. Fetch current consecutive passes for this problem
-            cur = conn.execute(
-                "SELECT consecutive_passes FROM problem_reviews WHERE problem_id = ?",
-                (problem_id,)
-            )
-            row = cur.fetchone()
-            current_passes = row["consecutive_passes"] if row else 0
-
-            # 2. Compute updated schedule
-            next_passes, next_due = calculate_due_date(current_passes, status, from_date=iso_today)
-
-            # 3. Insert attempt record
+            # 1. Insert attempt record (attempts is immutable history of record)
             cur = conn.execute(
                 """
                 INSERT INTO attempts (problem_id, topic, status, runtime_ms, hints_used, mode, attempt_date, created_at)
@@ -102,36 +90,85 @@ class CoachStore:
             )
             attempt_id = cur.lastrowid
 
-            # 4. Upsert problem review record
+            # 2. Count attempts on this problem to evaluate rating
+            cur = conn.execute(
+                "SELECT COUNT(*) as cnt FROM attempts WHERE problem_id = ?",
+                (problem_id,)
+            )
+            attempts_count = cur.fetchone()["cnt"]
+
+            # 3. Compute FSRS Rating from judge metadata
+            rating = map_judge_to_rating(status, hints_used=hints_used, attempts_on_problem=attempts_count)
+
+            # 4. Fetch existing FSRS card or seed new one
+            cur = conn.execute(
+                "SELECT card_json FROM problem_fsrs_cards WHERE problem_id = ?",
+                (problem_id,)
+            )
+            row = cur.fetchone()
+            card = card_from_json(row["card_json"]) if row else fsrs.Card()
+
+            # 5. Review card with FSRS scheduler at review time
+            scheduler = get_fsrs_scheduler()
+            review_dt = parse_utc_datetime(attempt_date or now_ts)
+            updated_card, _ = scheduler.review_card(card, rating, review_datetime=review_dt)
+
+            card_json = card_to_json(updated_card)
+            due_iso = updated_card.due.isoformat()
+            state_val = int(updated_card.state)
+            last_rev_iso = updated_card.last_review.isoformat() if updated_card.last_review else None
+            updated_at_iso = datetime.now(timezone.utc).isoformat()
+
+            # 6. Upsert FSRS card into problem_fsrs_cards
             conn.execute(
                 """
-                INSERT INTO problem_reviews (problem_id, consecutive_passes, last_status, next_due_date, last_attempt_date)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO problem_fsrs_cards (problem_id, card_json, due, state, last_review, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT(problem_id) DO UPDATE SET
-                    consecutive_passes = excluded.consecutive_passes,
-                    last_status = excluded.last_status,
-                    next_due_date = excluded.next_due_date,
-                    last_attempt_date = excluded.last_attempt_date
+                    card_json = excluded.card_json,
+                    due = excluded.due,
+                    state = excluded.state,
+                    last_review = excluded.last_review,
+                    updated_at = excluded.updated_at
                 """,
-                (problem_id, next_passes, status.lower(), next_due, iso_today)
+                (problem_id, card_json, due_iso, state_val, last_rev_iso, updated_at_iso)
             )
             conn.commit()
             return attempt_id
 
     def due_problems(self, today: str | None = None) -> list[dict[str, Any]]:
-        """Returns problems due on or before `today` (YYYY-MM-DD)."""
-        target_date = today or date.today().isoformat()
+        """Returns problems due on or before `today` (timestamp or YYYY-MM-DD) from FSRS card state."""
+        target_dt = parse_utc_datetime(today) if today else datetime.now(timezone.utc)
+        target_iso = target_dt.isoformat()
+
         with self._get_connection() as conn:
             cur = conn.execute(
                 """
-                SELECT problem_id, consecutive_passes, last_status, next_due_date, last_attempt_date
-                FROM problem_reviews
-                WHERE next_due_date <= ?
-                ORDER BY next_due_date ASC
+                SELECT problem_id, card_json, due, state, last_review, updated_at
+                FROM problem_fsrs_cards
+                WHERE due <= ?
+                ORDER BY due ASC
                 """,
-                (target_date,)
+                (target_iso,)
             )
-            return [dict(row) for row in cur.fetchall()]
+            due_list = []
+            for row in cur.fetchall():
+                card = card_from_json(row["card_json"])
+                att = conn.execute(
+                    "SELECT status FROM attempts WHERE problem_id = ? ORDER BY id DESC LIMIT 1",
+                    (row["problem_id"],)
+                ).fetchone()
+                last_status = att["status"] if att else "not_attempted"
+
+                due_list.append({
+                    "problem_id": row["problem_id"],
+                    "due": row["due"],
+                    "next_due_date": card.due.date().isoformat(),
+                    "last_status": last_status,
+                    "state": row["state"],
+                    "card_json": row["card_json"],
+                })
+            return due_list
 
     def topic_stats(self) -> dict[str, dict[str, Any]]:
         """Returns aggregate attempts and pass rates by topic."""

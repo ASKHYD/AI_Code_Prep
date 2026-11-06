@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import base64
 import re
+import sys
 import time
 from datetime import date, datetime
 from functools import lru_cache
@@ -189,6 +190,19 @@ def get_global_css(active_nav: str = "Home") -> str:
     header[data-testid="stHeader"] {
         display: none !important;
         height: 0 !important;
+    }
+
+    /* Hide Streamlit heading anchor icons globally across ALL screens (R4) */
+    [data-testid="stHeaderActionElements"],
+    [data-testid="stHeadingAnchor"],
+    .stHeadingWithActionElements button,
+    a.anchor-link {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* Kill top void in main container */
@@ -485,6 +499,8 @@ def get_global_css(active_nav: str = "Home") -> str:
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 12px;
+        overflow: hidden;
     }
     .editor-strip-title {
         font-family: 'Inter', sans-serif;
@@ -494,12 +510,14 @@ def get_global_css(active_nav: str = "Home") -> str:
         letter-spacing: 0.06em;
         color: #F2F2ED;
         white-space: nowrap;
+        flex-shrink: 0;
     }
     .editor-strip-right {
         font-family: 'JetBrains Mono', monospace;
         font-size: 12px;
         color: #66635A;
         white-space: nowrap;
+        flex-shrink: 0;
     }
 
     /* Editor Action Row */
@@ -847,8 +865,8 @@ def get_global_css(active_nav: str = "Home") -> str:
     .problem-picker-row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
+        justify-content: center;
+        margin-bottom: 0px;
         gap: 8px;
     }
     .picker-title {
@@ -856,6 +874,25 @@ def get_global_css(active_nav: str = "Home") -> str:
         font-size: 18px !important;
         font-weight: 700 !important;
         color: #171712 !important;
+        text-align: center !important;
+    }
+    .st-key-btn_picker_prev button,
+    .st-key-btn_picker_next button,
+    div[data-testid="stColumn"]:has(.st-key-btn_picker_prev) button,
+    div[data-testid="stColumn"]:has(.st-key-btn_picker_next) button {
+        padding: 6px 12px !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        min-width: 44px !important;
+        white-space: nowrap !important;
+        border-radius: 9999px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .signature-card {
+        margin-top: 14px;
+        margin-bottom: 14px;
     }
     .signature-subhead {
         font-size: 11px !important;
@@ -863,6 +900,22 @@ def get_global_css(active_nav: str = "Home") -> str:
         letter-spacing: 0.08em !important;
         text-transform: uppercase !important;
         color: #66635A !important;
+        display: block !important;
+        margin-bottom: 6px !important;
+    }
+    .signature-pre {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        margin: 0 !important;
+        padding: 12px 16px !important;
+        background: #FBFAF7 !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 12px !important;
+        color: #171712 !important;
+        overflow-x: hidden !important;
     }
     .problem-statement code, .stMarkdown code {
         background: rgba(102, 99, 90, 0.08) !important;
@@ -916,6 +969,52 @@ store = get_store()
 def get_problems() -> list[dict[str, Any]]:
     problems = load_all_problems("data/problems")
     return [p.model_dump() for p in problems]
+
+
+def render_problem_statement(problem: dict) -> None:
+    """
+    Renders problem statement prose, starter signature card, and IO specs.
+    Governed by R1/R2: starter_code line 1 is the single source of truth for the signature.
+    Removes any markdown '### Function Signature' heading/block from statement_md.
+    """
+    md = problem.get("statement_md", "")
+    sig_line = (
+        problem["starter_code"].splitlines()[0].strip()
+        if problem.get("starter_code")
+        else f"def {problem.get('function_name', 'solve')}():"
+    )
+
+    pattern = re.compile(r"###\s*Function Signature\s*```(?:python)?\s*[\r\n]+(.*?)```", re.DOTALL)
+    m = pattern.search(md)
+    if m:
+        prose_before = md[:m.start()].strip()
+        rest_after = md[m.end():].strip()
+    else:
+        prose_before = md
+        rest_after = ""
+
+    if prose_before:
+        st.markdown(prose_before)
+
+    st.html(
+        f"""
+        <div class="signature-card">
+            <span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>
+            <pre class="signature-pre">{sig_line}</pre>
+        </div>
+        """
+    )
+
+    if rest_after:
+        st.markdown(rest_after)
+
+    st.html(
+        f"""
+        <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
+            Execution timeout: <strong>{problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
+        </div>
+        """
+    )
 
 
 all_problems = get_problems()
@@ -1062,7 +1161,7 @@ if nav_choice == "Home":
                     Today's Practice
                 </h1>
                 <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
-                    Interview-targeted spaced repetition schedule (1 / 1 / 3 / 7 / 21 days) based strictly on objective test results.
+                    Adaptive spaced repetition (FSRS) scheduled from your objective test results.
                 </p>
             </div>""",
             unsafe_allow_html=True,
@@ -1245,10 +1344,10 @@ elif nav_choice == "Practice Arena":
         current_problem = all_problems[curr_idx]
         st.session_state["selected_problem_id"] = current_problem["id"]
 
-        # ONE slim picker row above Problem Card: Title in Fraunces serif + Prev/Next buttons (X5R)
-        p_prev_col, p_title_col, p_next_col = st.columns([1, 4.5, 1], vertical_alignment="center")
+        # ONE slim picker row above Problem Card: Title in Fraunces serif + Prev/Next buttons (X5R, X10)
+        p_prev_col, p_title_col, p_next_col = st.columns([0.8, 8.4, 0.8], vertical_alignment="center")
         with p_prev_col:
-            if st.button("← Prev", key="btn_picker_prev", use_container_width=True):
+            if st.button("←", key="btn_picker_prev", help="Previous Problem", use_container_width=True):
                 new_idx = (curr_idx - 1) % len(all_problems)
                 st.session_state["practice_prob_idx"] = new_idx
                 st.session_state["selected_problem_id"] = all_problems[new_idx]["id"]
@@ -1259,7 +1358,7 @@ elif nav_choice == "Practice Arena":
         with p_title_col:
             st.html(
                 f"""
-                <div class="problem-picker-row" style="text-align: center; justify-content: center;">
+                <div class="problem-picker-row" style="text-align: center; justify-content: center; margin: 0;">
                     <span class="picker-title" style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: #171712;">
                         {current_problem['title']}
                     </span>
@@ -1268,7 +1367,7 @@ elif nav_choice == "Practice Arena":
             )
 
         with p_next_col:
-            if st.button("Next →", key="btn_picker_next", use_container_width=True):
+            if st.button("→", key="btn_picker_next", help="Next Problem", use_container_width=True):
                 new_idx = (curr_idx + 1) % len(all_problems)
                 st.session_state["practice_prob_idx"] = new_idx
                 st.session_state["selected_problem_id"] = all_problems[new_idx]["id"]
@@ -1308,31 +1407,7 @@ elif nav_choice == "Practice Arena":
                 </h1>
                 """
             )
-            st.markdown(current_problem["statement_md"])
-
-            # Starter signature box derived strictly from starter_code (single source of truth - X6)
-            sig_line = (
-                current_problem["starter_code"].splitlines()[0]
-                if current_problem.get("starter_code")
-                else f"def {current_problem['function_name']}():"
-            )
-            formatted_sig = (
-                sig_line.replace(", ", ",\n    ")
-                if ("(" in sig_line and ")" in sig_line)
-                else sig_line
-            )
-
-            st.html(
-                f"""
-                <div style="margin-top: 14px;">
-                    <span class="signature-subhead" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #66635A; display: block; margin-bottom: 6px;">STARTER FUNCTION SIGNATURE</span>
-                    <pre class="signature-pre" style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
-                </div>
-                <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
-                    Execution timeout: <strong>{current_problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
-                </div>
-                """
-            )
+            render_problem_statement(current_problem)
 
         # Hint Ladder (Butter Block strictly below Problem Card)
         hint_key = f"hint_level_{current_problem['id']}"
@@ -1425,9 +1500,13 @@ elif nav_choice == "Practice Arena":
                     white-space: nowrap !important;
                 }
                 </style>
+                """
+            )
+            st.html(
+                f"""
                 <div class="editor-strip">
                     <span class="editor-strip-title">SOLUTION EDITOR · PYTHON</span>
-                    <span class="editor-strip-right">Sandbox · 3.0s · Python 3.11</span>
+                    <span class="editor-strip-right">Sandbox · {current_problem.get('time_limit_sec', 3.0)}s · Python {sys.version_info.major}.{sys.version_info.minor}</span>
                 </div>
                 """
             )
@@ -1829,27 +1908,7 @@ elif nav_choice == "Mock Interview":
                     </h1>
                     """
                 )
-                st.markdown(active_problem["statement_md"])
-
-                sig_line = (
-                    active_problem["starter_code"].splitlines()[0]
-                    if active_problem.get("starter_code")
-                    else f"def {active_problem['function_name']}():"
-                )
-                formatted_sig = (
-                    sig_line.replace(", ", ",\n    ")
-                    if ("(" in sig_line and ")" in sig_line)
-                    else sig_line
-                )
-
-                st.html(
-                    f"""
-                    <div style="margin-top: 14px;">
-                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
-                        <pre style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
-                    </div>
-                    """
-                )
+                render_problem_statement(active_problem)
 
             # Hint Ladder
             m_hint_key = f"mock_hints_{active_problem['id']}"
@@ -1909,10 +1968,10 @@ elif nav_choice == "Mock Interview":
             # Editor Card
             with st.container(border=True, key="mock_editor_card"):
                 st.html(
-                    """
+                    f"""
                     <div class="editor-strip">
                         <span class="editor-strip-title">MOCK INTERVIEW EDITOR · PYTHON</span>
-                        <span class="editor-strip-right">Sandbox · Python 3.11</span>
+                        <span class="editor-strip-right">Sandbox · Python {sys.version_info.major}.{sys.version_info.minor}</span>
                     </div>
                     """
                 )
