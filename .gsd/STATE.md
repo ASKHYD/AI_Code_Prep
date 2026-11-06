@@ -8,8 +8,8 @@ updated: 2026-11-06
 
 **Milestone:** Milestone 2 — Make the Loop Smarter  
 **Phase:** Phase 3: FSRS + Interleaving  
-**Status:** 💬 DISCUSSING / PLANNING (Execution Gated by G1 & G2)  
-**Active Plan:** Pending Phase 3 decomposition (`03-PLAN.md`)  
+**Status:** 🚀 EXECUTING (Gates G1 & G2 Verified)  
+**Active Plan:** `.gsd/phases/3/00-PLAN.md` (Wave 0 Execution)  
 
 ---
 
@@ -26,10 +26,10 @@ updated: 2026-11-06
 
 | Gate | Requirement | Status | Action Needed |
 | :--- | :--- | :--- | :--- |
-| **G1** | Backend Verification Battery filed & triaged | ✅ FILED | Awaiting owner review of `BACKEND_VERIFICATION.md` |
-| **G2** | Phase 2 Closed (Owner Live Approval + Bookkeeping) | ⏳ PENDING | Owner live testing on `http://localhost:8501` + sign-off |
+| **G1** | Backend Verification Battery filed & triaged | ✅ VERIFIED | Audited by Milo 2026-11-07: B1–B7 pass, DB identical, defects none |
+| **G2** | Phase 2 Closed (Owner Live Approval + Bookkeeping) | ✅ VERIFIED | Formal live approval granted; closure bookkeeping complete |
 
-> **Note**: Discussion and task planning may proceed immediately. No execution code may be applied to production files until G1 and G2 hold.
+> **Note**: Both Entry Gates G1 and G2 are fully satisfied. Phase 3 execution authorized.
 
 ---
 

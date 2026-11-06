@@ -21,15 +21,15 @@
 - [x] Phase 1 Owner Visual Review Gate & Sign-Off `high` — 2026-11-05 ✓ 2026-11-05
 - [x] Topbar Workbench Static Mockups & Corrective Rounds (approved) `high` — 2026-11-06 ✓ 2026-11-06
 - [x] Phase 2 Topbar Workbench Final Corrective (09-PLAN: Waves 0, 1, 2) `high` — 2026-11-06 ✓ 2026-11-06
-- [ ] Phase 2 Owner Live Acceptance Sign-off on `http://localhost:8501` `high` — 2026-11-06
+- [x] Phase 2 Owner Live Acceptance Sign-off on `http://localhost:8501` `high` — 2026-11-06 ✓ 2026-11-07
 
 ---
 
 ## Milestone 2: Make the Loop Smarter
 
 ### Phase 3: FSRS + Interleaving (Current Target)
-- [ ] Entry Gate G1: Backend Verification Battery triaged by owner `high` — 2026-11-06
-- [ ] Entry Gate G2: Phase 2 formally closed by owner live approval `high` — 2026-11-06
+- [x] Entry Gate G1: Backend Verification Battery triaged by owner `high` — 2026-11-06 ✓ 2026-11-07
+- [x] Entry Gate G2: Phase 2 formally closed by owner live approval `high` — 2026-11-06 ✓ 2026-11-07
 - [ ] Pin `fsrs` in `requirements.txt` and verify installation `high` — 2026-11-06
 - [ ] Workstream 1: Create FSRS card state SQLite table alongside existing store `high` — 2026-11-06
 - [ ] Workstream 1: Implement judge-to-rating mapping (`Again`, `Hard`, `Good`; `Easy` omitted) `high` — 2026-11-06

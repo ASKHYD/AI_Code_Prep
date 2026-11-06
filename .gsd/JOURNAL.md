@@ -98,7 +98,75 @@ Execute Phase 2 Final Corrective (`09-PLAN.md`): Wave 0 sequential gate, Wave 1 
 - App running live on `http://localhost:8501`.
 - Phase 2 Final Corrective complete; stopped at owner gate awaiting live acceptance.
 
+### Session: 2026-11-06 23:25
+
+#### Objective
+Execute ADDENDUM V2 to 09-PLAN corrective: implement rework items R1–R4, collect empirical evidence items V1–V6, and append full verification proofs to `IMPLEMENTATION_CORRECTIVE_RETURN.md`.
+
+#### Accomplished
+- ✅ **R1 (X6 Redo: Editor Starter Governs)**: Unified starter code line 1 as single source of truth across statement and editor. Stripped markdown-embedded signature block from `statement_md`. Evaluated on live page across all 12 problems via Chrome CDP: 12/12 statement signatures match editor line 1 character-for-character.
+- ✅ **R2 (X9 Label Redo)**: Signature section labeled strictly by `<span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>` (11px uppercase). Verified via live CDP DOM query that 0 headings in Problem Card match "Function Signature". Captured `docs/screenshots/r6/practice_1450x900_r2.png`.
+- ✅ **R3 (X10 Picker Buttons)**: Replaced text buttons with arrow-only buttons (`←` and `→`) with dedicated padding (`padding: 6px 12px; min-width: 44px;`). Measured via CDP at 1450 viewport: `scrollWidth == clientWidth` (42px/42px), eliminating any ellipsis clipping (`←…` / `N…`). Captured `docs/screenshots/r6/practice_1450x900_r3_picker.png`.
+- ✅ **R4 (X11 Zero Horizontal Overflow & Anchors)**: Practice layout fits 1450 viewport without horizontal scrolling (`docScroll == docWidth == 1450px`). Editor strip right text "Sandbox · 3.0s · Python 3.12" renders unclipped. Streamlit heading anchors globally hidden across ALL screens via CSS (`display: none !important;`). Captured fullpage `docs/screenshots/r6/practice_fullpage_1450x900_r4.png`.
+- ✅ **V1**: Quoted `/verify 2` verdict and tally verbatim in `IMPLEMENTATION_CORRECTIVE_RETURN.md`.
+- ✅ **V2 (E9 Redo)**: Active nav pill computed backgrounds measured via CDP (`#E8E2FF` for Practice Arena, `#FFE8D1` for Mock Interview) with paired screenshots (`nav_active_practice_1450x900.png` and `nav_active_mock_1450x900.png`).
+- ✅ **V3 (E1)**: Ran `npx impeccable detect` across all 4 live screens; recorded stdout/stderr and exit codes (Home: 0, Practice: 2, Mock: 2, Dashboard: 2).
+- ✅ **V4 (E4 Completion)**: Fully accounted by name for `ui-ux-pro-max`, `design`, `design-system`, `ui-styling` (all NOT USED with explicit rationale).
+- ✅ **V5 (E6a)**: Unsolved-end store pair recorded via sqlite3 (`count=2`, `max_created_at='2026-11-06T20:00:50.752400'` identical before/after).
+- ✅ **V6 (X5R)**: Captured longest problem title `Longest Substring Without Repeating Characters` (46 chars) untruncated in picker row (`clientWidth == scrollWidth == 427px`).
+- ✅ **X2 Disposition**: Recorded `[DECISION-012]` in `DECISIONS.md`.
+
+#### Verification
+- [x] Pytest 31/31 passed in 10.85s on frozen backend.
+- [x] Backend quarantine 100% preserved (`coach/*.py`, `data/problems/*.json`, `tests/*` untouched).
+- [x] Zero hex drift across 26 Direction A tokens in `DESIGN.md`.
+- [x] R1–R4 and V1–V6 empirical proofs verified on live app.
+
 ---
 
-*Last updated: 2026-11-06*
+### Session: 2026-11-06 23:40
+
+#### Objective
+Execute read-only BACKEND VERIFICATION BATTERY (B1–B7) to prove end-to-end correctness of frozen backend (`coach/*.py`, `data/problems/*.json`, `tests/*`, and `app.py`) with zero database mutation.
+
+#### Accomplished
+- ✅ **Database Isolation Invariant**: Executed stateful checks against isolated `scratch/verify_coach.db`. `coach.db` SHA256 verified identical before and after (`ac1d19de225221ed7c296604019d13f50bf52c9690c73063ac482f45b4770a79`).
+- ✅ **B1 (Judge Correctness)**:
+  - 12/12 problem reference solutions passed all visible and hidden tests (avg runtime 68–93ms).
+  - Deliberately wrong binary search: caught with status `fail` (3/8 passed).
+  - Infinite-loop: terminated cleanly via timeout at 3.08s wall time (limit 3.0s, reported 3082ms).
+  - Syntax error: returned status `error` with 0/8 passed and clean stderr.
+  - Sandbox network attempt: intercepted with clean `TimeoutError` in runner.
+- ✅ **B2 (Store & Spaced Repetition)**: Verified interval schedule FAIL→FAIL→PASS→PASS→PASS (+1d, +1d, +3d, +7d, +21d), streak calculation `>= 1`, `topic_stats()` hand-arithmetic equivalence (25.0%), and session counter increment (+1).
+- ✅ **B3 (Mock Session Scoping)**: Confirmed pre-session attempts excluded, in-session attempts authentically counted, and unattempted session completion writes 0 rows.
+- ✅ **B4 (Timer Truth)**: Verified `calculate_remaining_time` countdown delta (16s over 15.01s sleep) derived from single stored end timestamp.
+- ✅ **B5 (LLM Fallback & Ollama Status)**: Verified dead-port fallback returns graceful stored hint string. Ran `ollama list` and confirmed `qwen2.5-coder:3b` is ABSENT (no pull attempted).
+- ✅ **B6 (Problem Bank Census)**: 12/12 JSONs parse under `ProblemSchema` with 0 missing fields. Identified 7/12 signature divergences for Addendum V2 R1 target list.
+- ✅ **B7 (Pytest Baseline)**: 31/31 passed in 19.00s (exit code 0).
+- ✅ Filed comprehensive report at `.gsd/phases/2/BACKEND_VERIFICATION.md` and machine-readable data at `scratch/backend_battery_results.json`.
+
+#### Verification
+- [x] Pytest 31/31 passed in 19.00s.
+- [x] Backend quarantine 100% preserved (`coach/*.py`, `data/problems/*.json`, `tests/*`, and `app.py` untouched).
+- [x] Zero database mutation (`coach.db` SHA256 before == after).
+- [x] 0 functional backend defects detected.
+
+---
+
+### Session: 2026-11-07 01:03
+
+#### Objective
+Execute pre-authorized Phase 2 closure bookkeeping following owner live approval, satisfy Entry Gates G1 and G2, and transition into Phase 3 (FSRS + Interleaving) execution.
+
+#### Accomplished
+- ✅ **Phase 2 Formally Closed**: Owner live approval received. `ROADMAP.md` updated to `Complete / Closed`, `TODO.md` updated, and `STATE.md` marked G2 verified.
+- ✅ **Entry Gate G1 Verified**: Audited by Milo 2026-11-07 (`BACKEND_VERIFICATION.md`: B1–B7 pass, 31/31 pytest, zero database mutations).
+- ✅ **Entry Gate G2 Verified**: Phase 2 formally closed with pre-authorized closure bookkeeping complete.
+- ✅ **Phase 3 Execution Authorized**: All execution gates satisfied. Commencing Wave 0 execution.
+
+---
+
+*Last updated: 2026-11-07*
+
+
 
