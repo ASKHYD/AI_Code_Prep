@@ -1,21 +1,49 @@
 ---
-milestone: Milestone 1 — UI Redesign
-version: 1.0.0
-updated: 2026-11-05
+milestone: Milestone 2 — Make the Loop Smarter
+version: 2.0.0
+updated: 2026-11-06
 ---
 
 # ROADMAP.md
 
-> **Current Phase**: Phase 1: Static HTML Mockups & Design Tokens
-> **Status**: ⬜ Not Started
+> **Current Milestone**: Milestone 2 — Make the Loop Smarter  
+> **Current Phase**: Phase 3: FSRS + Interleaving  
+> **Status**: 💬 Discussing / Planning (Execution gated by G1 & G2)
 
-## Must-Haves (from SPEC)
+---
 
-- [x] Direction A Design Token Sheet (Warm paper, ink text, category tints, Fraunces + Inter, pill buttons)
-- [x] 4 Static HTML Mockups: Home, Practice, Mock Interview, Dashboard
-- [x] Visual owner approval of mockups via screenshots (no app code changes in Phase 1)
-- [ ] Streamlit UI implementation of approved design in Phase 2
-- [ ] 26/26 pytest tests pass with frozen backend
+## Milestone 1: Premium UI Redesign (Status: ✅ Complete / Verified)
+
+- [x] Phase 1: Static HTML Mockups & Design Tokens
+- [x] Phase 2: Streamlit UI Implementation (10/10 Verification Gates Passed, Return Filed)
+
+---
+
+## Milestone 2: Make the Loop Smarter
+
+### Goal
+Upgrade the learning loop with modern adaptive spaced repetition (FSRS) and cognitive interleaving, replacing static review ladders with individualized memory modeling and non-adjacent topic sequencing to optimize retention.
+
+### Must-Haves
+- [ ] **Dependency Gate**: `fsrs` (py-fsrs) installed and pinned in `requirements.txt`.
+- [ ] **FSRS Scheduler Swap (Workstream 1)**:
+  - FSRS card state persistence table in SQLite (`coach.db`).
+  - Strict judge-to-rating mapping (`Again`, `Hard`, `Good`; `Easy` omitted).
+  - Default parameters with `desired_retention = 0.9` (optimizer forbidden).
+  - Zero-loss, idempotent migration from historical attempts on DB copy.
+  - Retirement of old ladder function from scheduling path.
+  - Truth-in-copy: replace 21-day schedule text on Home with FSRS explanation.
+- [ ] **Interleaved Review Queue (Workstream 2)**:
+  - Review and mock queue generators forbid adjacent same-topic problems when alternatives exist.
+  - Topic sampling weighted by due-ness first, then weakest topic pass rate.
+  - Free problem picker in Practice Arena remains untouched.
+- [ ] **Empirical Verification Suite**:
+  - Rating mapping unit tests covering all outcome branches.
+  - Database migration idempotency and correctness tests.
+  - Due-set equivalence check between old ladder and FSRS.
+  - Interleaving adjacency test on multi-topic problem sets.
+  - All 31 existing tests + new tests green.
+  - Live 1450×900 browser capture of Home screen showing FSRS due chip and queue.
 
 ---
 
@@ -23,47 +51,43 @@ updated: 2026-11-05
 
 ### Phase 1: Static HTML Mockups & Design Tokens
 **Status**: ✅ Complete  
-**Objective**: Build pixel-perfect static HTML/CSS mockups of Home, Practice, Mock, and Dashboard along with a design token sheet implementing Direction A (Brilliant-style). Capture screenshots and obtain owner sign-off with NO changes to application code.  
-**Requirements**: REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, NFR-01  
-
-**Plans:**
-- [x] Plan 1.1: Design Tokens Foundation & Home Screen Mockup (wave 1)
-- [x] Plan 1.2: Core Workspace Mockups - Practice Arena & Mock Interview (wave 2)
-- [x] Plan 1.3: Analytics Dashboard Mockup, Dual-Resolution Capture & Visual Finish Gate (wave 3)
+**Objective**: Build pixel-perfect static HTML/CSS mockups of Home, Practice, Mock, and Dashboard along with a design token sheet implementing Direction A.
 
 ---
 
 ### Phase 2: Streamlit UI Implementation
-**Status**: ⬜ Planned (Ready for Execution)  
-**Objective**: Translate the approved Direction A mockups and tokens into the Streamlit application (`.streamlit/config.toml`, `app.py`, custom CSS/components) while keeping the backend (`coach/*.py`) and problem bank (`data/problems/*.json`) strictly frozen.  
-**Depends on**: Phase 1 approval (Completed)  
-**Requirements**: REQ-07, REQ-08, REQ-09, NFR-02, NFR-03  
+**Status**: ✅ Complete / Verified (Awaiting Owner Live Acceptance)  
+**Objective**: Implement approved Direction A topbar workbench, responsive layouts, Plotly dashboard chart, slim picker row, and design tokens in Streamlit. 10/10 verification gates passed, pytest 31/31.
 
-**Plans:**
-- [ ] Plan 2.0: Regression Guard & Metric-Numerals A/B Evaluation (Wave 0)
-- [ ] Plan 2.1: Base Theme Configuration, Offline @font-face & Computed-Font Proof (Wave 1)
-- [ ] Plan 2.2: Lucide Icon Pipeline & Direction A Sidebar Implementation (Wave 2)
-- [ ] Plan 2.3: Home Screen Redesign & Direction A Implementation (Wave 3)
-- [ ] Plan 2.4: Practice Arena Redesign & Direction A Implementation (Wave 4)
-- [ ] Plan 2.5: Mock Interview Redesign & Direction A Implementation (Wave 5)
-- [ ] Plan 2.6: Analytics Dashboard Redesign & Direction A Implementation (Wave 6)
-- [ ] Plan 2.7: Quality Gates, Impeccable Audit & §5 Return Handoff (Wave 7)
+---
+
+### Phase 3: FSRS + Interleaving
+**Status**: 💬 Discussing / Planning (Execution Gated by G1 & G2)  
+**Objective**: Replace the deterministic 1/1/3/7/21-day review ladder with py-fsrs adaptive spaced repetition and implement cognitive topic interleaving for review and mock queues.  
+**Depends on**: Entry Gate G1 (Backend Verification Battery triaged) & Gate G2 (Phase 2 Owner Live Approval).  
+**Workstreams**:
+1. *Workstream 1*: FSRS Scheduler Swap (Dependency, Card State SQLite, Rating Mapping, Idempotent Migration, Old Ladder Removal, Truth-in-Copy).
+2. *Workstream 2*: Interleaved Review Queue (Non-adjacent topic sequencing, Due-weighted sampling, Practice picker preservation).
+
+---
+
+## Milestone 2 Backlog (Future Phases)
+
+- **Phase 4**: Per-Run Resource Measurement (peak memory + CPU execution time instrumentation inside judge runner; unlock `Rating.Easy`).
+- **Phase 5**: Attempt History & Ruff Diagnostics Panel (historical attempt timeline, code diffs, inline Ruff linting).
 
 ---
 
 ## Progress Summary
 
-| Phase | Status | Plans | Complete |
-|-------|--------|-------|----------|
-| 1 | ✅ Complete | 3/3 | 100% |
-| 2 | ⬜ Planned | 0/8 | 0% |
+| Milestone | Phase | Status | Objective |
+| :--- | :--- | :--- | :--- |
+| **M1** | Phase 1 | ✅ Complete | Static HTML mockups & Direction A tokens |
+| **M1** | Phase 2 | ✅ Verified | Streamlit UI implementation & 10-gate audit |
+| **M2** | Phase 3 | 💬 Discussing | FSRS scheduler swap & interleaved review queue |
+| **M2** | Phase 4 | ⏳ Backlog | Per-run resource measurement (memory & time) |
+| **M2** | Phase 5 | ⏳ Backlog | Attempt history timeline & Ruff diagnostics panel |
 
 ---
 
-## Timeline
-
-| Phase | Started | Completed | Duration |
-|-------|---------|-----------|----------|
-| 1 | 2026-11-05 | 2026-11-05 | ~2h |
-| 2 | — | — | — |
-
+*Last updated: 2026-11-06*

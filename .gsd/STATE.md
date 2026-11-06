@@ -6,56 +6,58 @@ updated: 2026-11-06
 
 ## Current Position
 
-**Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 2: Streamlit UI Implementation (Topbar Workbench Final Corrective)  
-**Status:** VERIFIED — AWAITING OWNER LIVE ACCEPTANCE  
-**Plan:** `.gsd/phases/2/09-PLAN.md` (Executed, verified across 10 gates, awaiting owner live approval)  
+**Milestone:** Milestone 2 — Make the Loop Smarter  
+**Phase:** Phase 3: FSRS + Interleaving  
+**Status:** 💬 DISCUSSING / PLANNING (Execution Gated by G1 & G2)  
+**Active Plan:** Pending Phase 3 decomposition (`03-PLAN.md`)  
+
+---
 
 ## Last Action
 
-Executed and verified all tasks in `09-PLAN.md`:
-- Wave 0: E7 disposition committed (`scratch/build_app.py` archived, `app.py` confirmed sole source of truth), top-level Plotly import added, baseline pytest 31/31 passed.
-- Wave 1: Three concurrent subagent lanes executed and verified:
-  - Lane A: X1 top void eliminated (`.topbar` sticky at `top: 0`), X2 runtime version chip (`3.12`), shared CSS.
-  - Lane B: X3 Plotly horizontal pass-rate chart restored on Dashboard (store data, attempted only), X4 primary pill CTAs, X7-Home exact subtexts & streak 0 NOT STARTED state.
-  - Lane C: X5R filter strip deleted, ONE slim picker row active, X6 signatures unified 12/12, X7-Practice neutral header "Run your code to see results", X8 natural width CTA (140px), X9 small-caps signature label & code wash chips.
-- Wave 2: Evidence fan-out completed:
-  - D1: E6 mock proofs (store snapshots before/after, in-session solve, live timer pair delta 11.8s).
-  - D2: E1 Impeccable live audit completed (0 slop findings).
-  - D3: E2 font proofs (Fraunces & Inter base64), E8 hint ladder capture, E9 pill-tint CDP hexes, 38 r6 captures in `docs/screenshots/r6/`.
-  - Orchestrator: Pre-ship finish-gate audit passed, `/verify 2` re-run (all 10 gates pass), return filed at `.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md`.
+- Filed `BACKEND_VERIFICATION.md` proving 100% backend correctness (B1–B7) and zero database mutation (`coach.db` SHA256 verified untouched).
+- Registered Milestone 2 ("Make the Loop Smarter") in `ROADMAP.md` and `SPEC.md`.
+- Established Phase 3 scope: Workstream 1 (FSRS scheduler swap) and Workstream 2 (Interleaved review queue).
+- Appended Milestone 2 future phases (Resource Measurement, Attempt History + Ruff) to `TODO.md` backlog.
 
-## Next Steps
+---
 
-1. Owner live review and acceptance testing on `http://localhost:8501`.
-2. On owner live approval, execute pre-authorized Phase 2 closure bookkeeping (ROADMAP/STATE complete, TODO closure, JOURNAL entry — no code).
+## Entry Gates for Phase 3 Execution
+
+| Gate | Requirement | Status | Action Needed |
+| :--- | :--- | :--- | :--- |
+| **G1** | Backend Verification Battery filed & triaged | ✅ FILED | Awaiting owner review of `BACKEND_VERIFICATION.md` |
+| **G2** | Phase 2 Closed (Owner Live Approval + Bookkeeping) | ⏳ PENDING | Owner live testing on `http://localhost:8501` + sign-off |
+
+> **Note**: Discussion and task planning may proceed immediately. No execution code may be applied to production files until G1 and G2 hold.
+
+---
 
 ## Active Decisions
 
-Decisions made that affect current work:
-
 | Decision | Choice | Made | Affects |
-|----------|--------|------|---------|
-| [DECISION-001] Design Direction | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | All UI phases |
-| [DECISION-002] Two-Phase Redesign Gate | Phase 1 mockups only with screenshot sign-off; Phase 2 Streamlit implementation | 2026-11-05 | Phases 1 & 2 |
-| [DECISION-003] Backend & Data Freeze | `coach/*.py` and `data/problems/*.json` are strictly frozen | 2026-11-05 | Entire project |
-| [DECISION-004] Phase 1 Owner Acceptance | Mockup screenshots approved; Phase 1 closed; 4 implementation directives established | 2026-11-05 | Phase 2 implementation |
-| [DECISION-005] Phase 2 Shell Gate & Architecture | Streamlit shell retained (0 impossible elements); 7 locked decisions cataloged | 2026-11-05 | Phase 2 implementation |
-| [NOTE-001] Phase 2 Mastery Bars | Dashboard mastery bars must use "NOT STARTED" for unattempted topics, never "0% (0/0)" | 2026-11-05 | Phase 2 Dashboard |
-| [NOTE-002] Phase 2 Timer Redundancy | Mock screen timer display reduced from three placements to two | 2026-11-05 | Phase 2 Mock View |
-| [NOTE-003] Phase 2 Metric Numerals | A/B screenshot task during planning (Fraunces vs Inter semibold); monospace BANNED | 2026-11-05 | Phase 2 Metrics |
-| [NOTE-004] Phase 2 Button Nowrap | All action buttons must enforce `white-space: nowrap` and proper padding | 2026-11-05 | Phase 2 Global CSS |
+| :--- | :--- | :--- | :--- |
+| **[DECISION-001]** | Direction A: Brilliant-style colorful light learning theme | 2026-11-05 | All UI phases |
+| **[DECISION-002]** | Two-Phase Redesign Gate: mockups first, Streamlit second | 2026-11-05 | Phases 1 & 2 |
+| **[DECISION-003]** | Frozen backend & problems during Milestone 1 | 2026-11-05 | Milestone 1 |
+| **[DECISION-004]** | Phase 1 Mockups Approved (Home, Practice, Mock, Dash) | 2026-11-05 | Phase 2 |
+| **[DECISION-005]** | Streamlit Topbar Workbench Shell retained | 2026-11-05 | Phase 2 |
+| **[DECISION-011]** | Wave 1 subagent parallelism & Wave 2 evidence fan-out | 2026-11-06 | Phase 2 Corrective |
+| **[DECISION-012]** | Runtime-derived Python version chip (`3.12`) | 2026-11-06 | App navbar |
+| **[DECISION-013]** | Milestone 2 Scope: FSRS + Interleaving first | 2026-11-06 | Phase 3 |
+| **[DECISION-014]** | py-fsrs default parameters, retention 0.9, optimizer forbidden | 2026-11-06 | Phase 3 FSRS |
+| **[DECISION-015]** | Judge Rating Mapping: FAIL/TIMEOUT $\rightarrow$ Again; PASS+hints/tries $\rightarrow$ Hard; Clean PASS $\rightarrow$ Good; Easy omitted | 2026-11-06 | Phase 3 FSRS |
 
-## Blockers
+---
 
-None.
+## Blockers & Freezes
 
-## Concerns
+- **Freezes for Phase 3**:
+  - `data/problems/*.json`: Statements, starter code, and test cases are untouched.
+  - `coach.judge`: Execution semantics and timeout bounds are untouched.
+  - Phase 2 UI Design: Direction A tokens, layout, and visual components are untouched except the truth-in-copy line on Home.
+- **Execution Blocker**: Entry Gate G2 (Owner live approval of Phase 2 UI).
 
-- Streamlit styling constraints: Ensure that custom CSS and Streamlit component workarounds cleanly achieve the pill buttons, card radii, and custom Google Fonts (Fraunces + Inter) in Phase 2 without hacky compromises.
-- Local screenshot generation: Need a headless browser or automated screenshot tool to capture static HTML mockups cleanly.
+---
 
-## Session Context
-
-Brownfield codebase initialized under GSD. 26/26 pytest tests passing on frozen backend. Working directory: `e:\resume_project`.
-
+*Last updated: 2026-11-06*

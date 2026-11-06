@@ -4,36 +4,45 @@
 >
 > Use `/add-todo` to add items, `/check-todos` to view.
 
-## Format
-
-```markdown
-- [ ] Description `priority` — YYYY-MM-DD
-- [x] Completed item `priority` — YYYY-MM-DD ✓ YYYY-MM-DD
-```
-
 ## Priority Levels
 
 | Level | Use For |
-|-------|---------|
+|---|---|
 | `high` 🔴 | Blocking issues, urgent fixes |
 | `medium` 🟡 | Normal priority (default) |
 | `low` 🟢 | Nice-to-have, future ideas |
 
 ---
 
-## Items
+## Milestone 1: Premium UI Redesign (Status: ✅ Complete / Verified)
 
 - [x] Plan Phase 1 (Tokens + Static HTML mockups) `high` — 2026-11-05 ✓ 2026-11-05
 - [x] Verify screenshot tooling for automated CDP capture of HTML mockups `medium` — 2026-11-05 ✓ 2026-11-05
 - [x] Phase 1 Owner Visual Review Gate & Sign-Off `high` — 2026-11-05 ✓ 2026-11-05
 - [x] Topbar Workbench Static Mockups & Corrective Rounds (approved) `high` — 2026-11-06 ✓ 2026-11-06
+- [x] Phase 2 Topbar Workbench Final Corrective (09-PLAN: Waves 0, 1, 2) `high` — 2026-11-06 ✓ 2026-11-06
+- [ ] Phase 2 Owner Live Acceptance Sign-off on `http://localhost:8501` `high` — 2026-11-06
 
-### Phase 2 Topbar Workbench Final Corrective (09-PLAN)
-- [x] [Wave 0] E7 Disposition: disclose and move `build_app.py` under `scratch/`, establish `app.py` single source of truth, record baseline pytest (31 passing) `high` — 2026-11-06 ✓ 2026-11-06
-- [x] [Wave 1 / Lane A - Shell] X1: top void killed, navbar full-bleed sticky top 0; X2: remove "3.11" chip & use runtime-derived version; own embedded CSS `high` — 2026-11-06 ✓ 2026-11-06
-- [x] [Wave 1 / Lane B - Home + Dashboard] X3: Plotly topic pass-rate chart restored on Dashboard (store data, attempted only); X4: Start Practice / Continue Practice as primary pill buttons; X7-Home: exact mockup subtexts & NOT STARTED streak 0 `high` — 2026-11-06 ✓ 2026-11-06
-- [x] [Wave 1 / Lane C - Practice] X5R: filter strip deleted, ONE slim picker row (title + prev/next arrows); X6: signature source of truth 12/12 check; X7-Practice: Output neutral header "Run your code to see results"; X8: Run & Submit natural width; X9: small-caps STARTER FUNCTION SIGNATURE & inline code chips `high` — 2026-11-06 ✓ 2026-11-06
-- [x] [Wave 2 / Lane D - Mock + Evidence] E6: mock proofs (store snapshots, in-session solve, >=10s timer pair); E8: hint-ladder statement + capture; E9: pill-tint CDP hexes; E1–E5: Impeccable x4, font proof, /verify 2 verdict, return as IMPLEMENTATION_CORRECTIVE_RETURN.md `high` — 2026-11-06 ✓ 2026-11-06
+---
+
+## Milestone 2: Make the Loop Smarter
+
+### Phase 3: FSRS + Interleaving (Current Target)
+- [ ] Entry Gate G1: Backend Verification Battery triaged by owner `high` — 2026-11-06
+- [ ] Entry Gate G2: Phase 2 formally closed by owner live approval `high` — 2026-11-06
+- [ ] Pin `fsrs` in `requirements.txt` and verify installation `high` — 2026-11-06
+- [ ] Workstream 1: Create FSRS card state SQLite table alongside existing store `high` — 2026-11-06
+- [ ] Workstream 1: Implement judge-to-rating mapping (`Again`, `Hard`, `Good`; `Easy` omitted) `high` — 2026-11-06
+- [ ] Workstream 1: Write idempotent migration script from historical attempts on DB copy `high` — 2026-11-06
+- [ ] Workstream 1: Retire old 1/1/3/7/21-day ladder from scheduling path `high` — 2026-11-06
+- [ ] Workstream 1: Truth-in-copy update for Home repetition subline `medium` — 2026-11-06
+- [ ] Workstream 2: Implement topic interleaving for review queue and mock selection `high` — 2026-11-06
+- [ ] Verification: Test suite for rating mapping, migration idempotency, due-set equivalence, and interleaving adjacency `high` — 2026-11-06
+- [ ] Live CDP captures at 1450×900 of Home screen with FSRS due chip and queue `medium` — 2026-11-06
+
+### Milestone 2 Backlog (Future Phases — Do Not Plan Now)
+- [ ] Phase 4: Per-Run Resource Measurement (peak memory allocation + execution time instrumentation inside judge runner; unlock `Rating.Easy`) `medium` — 2026-11-06
+- [ ] Phase 5: Attempt History Timeline & Ruff Static Analysis Panel (attempt history diffs, code evolution, inline Ruff linting in Practice Arena) `low` — 2026-11-06
 
 ---
 
