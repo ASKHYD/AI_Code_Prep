@@ -291,3 +291,42 @@ All mockups and subsequent implementations strictly reflect live production stat
 - **Recent Attempt:** `2026-11-04 · Binary Search · PASS · 178 ms · Hints: 0`.
 - **Mock Timer:** `44:41` countdown.
 
+---
+
+## 7. Layout Amendment: Topbar Workbench (APPROVED 2026-11-06)
+
+This amendment documents the structural evolution from the legacy sidebar layout to the Topbar Workbench architecture approved by the owner on 2026-11-06.
+
+### 7.1 Global Shell & Slim Topbar Navbar
+- **Sidebar Replacement:** The Streamlit sidebar is suppressed entirely (`initial_sidebar_state="collapsed"` and CSS `[data-testid="stSidebar"] { display: none !important; }`), returning ~450px horizontal width to the application workbench.
+- **Topbar Dimensions & Style:** Height: 56px (`3.5rem`), background: `#FFFFFF` (Surface), hairline border bottom `1px solid #E7E1D6`.
+- **Topbar Layout:**
+  - **Left:** Brand wordmark "AI Coding Prep Coach" in `Fraunces 600` (17px) paired with an outlined status chip "Offline · Code-Judged" (`#66665E`, 11px, border `1px solid #E7E1D6`).
+  - **Center:** Four screen pills (`Home`, `Practice`, `Mock`, `Dashboard`) with 12px pill geometry, active screen highlighted with dedicated semantic wash and partner text:
+    - Home: `#DFF3E4` wash / `#167B48` text
+    - Practice: `#E8E2FF` wash / `#5932EA` text
+    - Mock: `#FFE8D1` wash / `#B93815` text
+    - Dashboard: `#DCEBFF` wash / `#1D5EC2` text
+  - **Right:** Status indicators: Streak chip (`🔥 1d` on `#DFF3E4`), Due chip (`📚 0 due` on `#DCEBFF`), and Python version chip (`3.11`).
+
+### 7.2 De-slopped Table Architecture (Home & Dashboard)
+- **Anti-Slop Directives:** Dense tables are replaced with restrained, high-legibility cards/rows.
+- **Status Pills:** Maximum ONE status pill per row (e.g. `NEW` in Sky wash, `PASS` in Mint wash, `NOT STARTED` in neutral wash).
+- **Track & Difficulty:** Rendered as partner colored plain text (no pill-in-pill nesting).
+- **Row Styling:** Titles rendered in `Fraunces 600` (15px); left 3px accent color bar matching track identity; clear action link/button (`Practice →`).
+
+### 7.3 Two-Pane Practice Workbench
+- **Ratio:** 42% left pane / 58% right pane.
+- **Left Pane:**
+  - **Single-Row Filter Strip:** Track, Difficulty, Topic, Problem dropdowns arranged horizontally in one unified toolbar row.
+  - **ONE Problem Card:** Contained card (`24px` radius) containing problem title, difficulty & track tags, prose description, preformatted signature block with comma-separated parameter wrapping, and example input/output blocks.
+  - **Hint Ladder:** Positioned strictly below the Problem Card as an autonomous butter block (`#FFF0C4`), preserving progressive disclosure without cluttering problem specifications.
+- **Right Pane:**
+  - **Editor Card:** Contained card featuring header toolbar (filename / runtime info, NO decorative macOS window dots), embedded Ace code editor forced to 450px iframe height (`wrap=False`, `fontSize=13`), glued bottom action bar with "Clean environment · Network disabled" notice and primary "Run & Submit" button.
+  - **ONE Output Card:** Contained card with neutral pre-run empty state, transforming upon submission into a colored verdict header band (`PASS` mint or `FAIL` rose) followed by visible test case results. Output is never seeded from historical practice attempts.
+
+### 7.4 Mock Interview Protocol
+- **Sub-strip:** Positioned immediately beneath the 56px topbar; houses problem selector tabs and the single-source-of-truth computed countdown timer capsule (`44:41`).
+- **Scoping & Isolation:** Code execution and scorecard results are strictly scoped to the active mock session (`mode == 'mock'` and `created_at >= session_start_iso`), ensuring zero leakage from past practice history.
+
+

@@ -77,7 +77,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
 
 ---
 
-### WAVE 1: THREE CONCURRENT SUBAGENTS (`/dispatching-parallel-agents`)
+### WAVE 1: THREE CONCURRENT SUBAGENTS (`/dispatching-parallel-agents` under `/executor`)
 
 #### LANE A: SHELL & TOPBAR
 *Skill Binding:* `/agency-minimal-change-engineer`  
@@ -88,6 +88,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane A.1: X1 — Top Void Killed & Sticky Full-Bleed Navbar</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-minimal-change-engineer` to enforce minimum-viable diffs without refactoring untouched code.
     - In `get_global_css()`:
       - Override `.block-container` so top padding is completely eliminated: `padding-top: 0 !important; margin-top: 0 !important;`.
       - Suppress default Streamlit header completely: `header[data-testid="stHeader"] { display: none !important; height: 0 !important; }`.
@@ -101,6 +102,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane A.2: X2 — Runtime-Derived Navbar Version Chip</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-minimal-change-engineer` for surgically precise string replacement.
     - In `render_topbar()`:
       - Remove the hardcoded `"3.11"` text chip from `.status-chip-py`.
       - Derive version dynamically at runtime using `sys.version_info`: `py_ver = f"{sys.version_info.major}.{sys.version_info.minor}"`.
@@ -114,6 +116,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane A.3: Embedded CSS Maintenance for Lanes B & C</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-minimal-change-engineer` to append only requested token-compliant CSS rules.
     - In `get_global_css()`:
       - Add styling requested by Lane B: primary pill CTA styles (`.btn-pill-primary { border-radius: 9999px !important; background: #15803D !important; color: #FFFFFF !important; font-weight: 600 !important; }`).
       - Add styling requested by Lane C: slim problem picker row styling (`.problem-picker-row`, `.picker-title`, `.picker-arrow-btn`), small-caps signature label (`.signature-subhead { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #66635A; }`), and inline code pastel wash chips (`.problem-statement code { background: rgba(102, 99, 90, 0.08) !important; color: #171712 !important; padding: 2px 6px !important; border-radius: 4px !important; }`).
@@ -134,6 +137,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane B.1: X3 — Restore Plotly Topic Pass-Rate Chart on Dashboard</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-frontend-developer` for frontend chart and component presentation.
     - In `render_dashboard()` (lines 2084–2315):
       - Build Plotly horizontal bar chart using `plotly.graph_objects as go`.
       - Sourced STRICTLY from store data (`store.topic_stats()`).
@@ -149,6 +153,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane B.2: X4 & X7-Home — Primary Pill CTAs & Mockup Subtexts</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-frontend-developer` to align UI styling and copy with approved mockup.
     - In Home screen (lines 1006–1162):
       - Style "Start Practice" and "Continue Practice" action buttons as primary pill buttons (rounded-full, primary green `#15803D`, white text).
       - Restore exact approved mockup copy for card subtexts and captions.
@@ -170,6 +175,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane C.1: X5R — Filter Strip Deleted & ONE Slim Picker Row</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-senior-developer` for premium interactive component engineering.
     - In Practice screen (lines 1163–1509):
       - DELETE the 3-select filter strip (Track, Difficulty, Topic selects and labels completely removed).
       - Implement ONE slim picker row at the top of the Left column:
@@ -186,6 +192,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane C.2: X6 & X9 — Signature Unification & Small-Caps Heading</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-senior-developer` for rigorous signature extraction and editor sync.
     - Unified Signature: Derive the preformatted statement signature box strictly from `problem["starter_code"]` or problem definition, verifying 12/12 problems match the editor code exactly.
     - X9 Label: Render section header as small-caps `STARTER FUNCTION SIGNATURE` (`font-size: 11px; letter-spacing: 0.08em; font-weight: 700; color: #66635A;`).
     - Inline Code: Render inline `code` snippets in markdown statements as styled pastel wash chips (`background: rgba(102, 99, 90, 0.08); padding: 2px 6px; border-radius: 4px;`).
@@ -198,6 +205,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane C.3: X7-Practice & X8 — Neutral Output Header & Natural Width CTA</name>
   <files>app.py</files>
   <action>
+    - Skill: Invoke `/agency-senior-developer` to refine button geometries and output messaging.
     - Neutral Output Header: Set pre-run neutral Output Card header strictly to `"Run your code to see results"`.
     - Natural Width CTA: Remove artificial 100% full-width expansion from "Run & Submit" button so it hugs its natural width with generous padding.
   </action>
@@ -209,7 +217,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
 
 ---
 
-### WAVE 2: EVIDENCE FAN-OUT & RETURN GATE (`/agency-evidence-collector`)
+### WAVE 2: EVIDENCE FAN-OUT & RETURN GATE (`/dispatching-parallel-agents` under `/agency-evidence-collector`)
 *Trigger: Initiates after Wave 1 lanes are merged, and orchestrator re-verifies 31/31 pytest and quarantine.*  
 *Rule: Evidence subagents NEVER edit app.py.*
 
@@ -217,7 +225,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane D1: E6 — Authentic Mock Proof Battery</name>
   <files>scratch/run_mock_e2e_evidence.py, docs/screenshots/r6/</files>
   <action>
-    - Skill: `/agency-test-automation-engineer` + `/empirical-validation`.
+    - Skill: Invoke `/agency-test-automation-engineer` + `/empirical-validation` for resilient test execution and proof logging.
     - Capture store snapshots before and after mock run (verifying database records).
     - Capture in-session-solve scorecard proof (solving Problem 1 in-session, proving scorecard shows 1/2 Solved authentically).
     - Capture timer pair with $\ge 10$ seconds elapsed time delta proving live ticking countdown.
@@ -230,7 +238,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane D2: E1 — Impeccable UI Audit Fan-Out</name>
   <files>docs/screenshots/r6/</files>
   <action>
-    - Skill: `/impeccable`.
+    - Skill: Invoke `/impeccable` via 4 parallel review threads.
     - Run 4 parallel audit reviews across all live screens: Home, Practice, Mock Interview, Dashboard.
     - Confirm zero primary visual slop or alignment findings.
   </action>
@@ -242,7 +250,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Lane D3: E2, E8, E9 — Font Proof, Hint Ladder & Pill-Tint CDP Hexes</name>
   <files>docs/screenshots/r6/, docs/screenshots/r6/r6_measurements.json</files>
   <action>
-    - Skill: `/agency-evidence-collector`.
+    - Skill: Invoke `/agency-evidence-collector` + `/empirical-validation` for measured DOM proofs.
     - E2 Font Proof: CDP computed style check proving Fraunces headings, Inter body, and JetBrains Mono code fonts render from offline base64.
     - E8 Hint Ladder: Empirical screenshot showing butter block statement and expander states.
     - E9 Pill-Tint CDP Hexes: Measure exact computed `background-color` and `color` hexes on Practice and Mock pills.
@@ -256,7 +264,7 @@ The work is organized into 3 sequential waves with maximum internal parallelism:
   <name>Orchestrator: E3–E5 Synthesis, Pre-Return Gate & Return Filing</name>
   <files>.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md, .gsd/phases/2/VERIFICATION.md</files>
   <action>
-    - Run `/agency-ui-finish-gate-reviewer` over r6 captures for anti-slop and mockup fidelity.
+    - Skill: Invoke `/agency-ui-finish-gate-reviewer` over r6 captures for anti-slop and mockup fidelity BEFORE `IMPLEMENTATION_CORRECTIVE_RETURN.md` is filed. Findings must be quoted directly in the return.
     - Re-run `/verify 2` protocol across all 10 gates; record verdict.
     - Synthesize E3 (quarantine), E4 (full resource accounting including parked skills), and E5 (pytest baseline).
     - File `.gsd/phases/2/IMPLEMENTATION_CORRECTIVE_RETURN.md` with full measurement rule tables and proofs.
@@ -325,3 +333,4 @@ The following skills are intentionally **PARKED** for this round with documented
 - [ ] Full suite 31/31 passes green; quarantine strictly preserved.
 - [ ] Stop line reached:
   `Stopped at Topbar Workbench final corrective gate, awaiting owner live approval.`
+

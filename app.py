@@ -1,5 +1,5 @@
 """
-AI Coding Prep Coach — Streamlit Application (R1 Corrective).
+AI Coding Prep Coach — Topbar Workbench Implementation.
 Zero-cost, local-only coding interview preparation platform.
 The judge is CODE, not AI.
 """
@@ -23,11 +23,11 @@ from coach.review import run_ruff_lint
 from coach.store import CoachStore
 from coach.timer import calculate_remaining_time
 
-# Page configuration
+# Page configuration with collapsed sidebar
 st.set_page_config(
     page_title="AI Coding Prep Coach",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed",
 )
 
 FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
@@ -47,7 +47,6 @@ FONT_DEFINITIONS = [
     ("JetBrains Mono", "normal", 600, "jetbrains-mono-latin-600-normal.woff2"),
     ("JetBrains Mono", "normal", 700, "jetbrains-mono-latin-700-normal.woff2"),
 ]
-
 
 NAV_TINTS = {
     "Home": ("#DFF3E4", "#167B48"),
@@ -100,7 +99,7 @@ def get_mock_problem_evaluation(
                     WHERE problem_id = ? AND mode = 'mock' AND created_at >= ?
                     ORDER BY id DESC LIMIT 1
                     """,
-                    (problem_id, session_start_iso)
+                    (problem_id, session_start_iso),
                 )
                 row = cur.fetchone()
                 if row:
@@ -126,7 +125,7 @@ def get_mock_problem_evaluation(
 
 
 def get_global_css(active_nav: str = "Home") -> str:
-    """Builds offline base64 @font-face rules and Direction A typography rules."""
+    """Builds offline base64 @font-face rules and Direction A Topbar Workbench CSS."""
     font_faces = []
     for family, style, weight, filename in FONT_DEFINITIONS:
         path = FONTS_DIR / filename
@@ -143,7 +142,6 @@ def get_global_css(active_nav: str = "Home") -> str:
             )
 
     font_css = "\n".join(font_faces)
-    active_bg, active_fg = NAV_TINTS.get(active_nav, ("#DFF3E4", "#167B48"))
 
     rules_css = """
     /* Body & UI defaults */
@@ -158,16 +156,51 @@ def get_global_css(active_nav: str = "Home") -> str:
     }
 
     /* Monospace for code literals, editors, and syntax */
-    code, pre, .stCode, code *, pre * {
+    code, pre, .stCode, code *, pre *, .signature-pre {
         font-family: 'JetBrains Mono', monospace !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        overflow-x: hidden !important;
     }
 
-    /* Direction A Variant B: Metric numerals in Inter SemiBold 600 with tabular figures */
+    /* Metric numerals in Inter SemiBold 600 with tabular figures */
     div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] *, .stat-number, .stat-number * {
         font-family: 'Inter', sans-serif !important;
         font-weight: 600 !important;
         font-variant-numeric: tabular-nums !important;
         letter-spacing: -0.025em;
+    }
+
+    /* Suppress Streamlit Sidebar entirely */
+    [data-testid="stSidebar"],
+    [data-testid="collapsedControl"],
+    section[data-testid="stSidebar"],
+    button[data-testid="stSidebarCollapseButton"],
+    div[data-testid="stSidebarHeader"] {
+        display: none !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        visibility: hidden !important;
+    }
+
+    /* Suppress default Streamlit header bar */
+    header[data-testid="stHeader"] {
+        display: none !important;
+        height: 0 !important;
+    }
+
+    /* Reclaim space: container styling */
+    [data-testid="stAppViewContainer"] > .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        background-color: #FBFAF7 !important;
+    }
+
+    [data-testid="stAppViewBlockContainer"] {
+        padding: 0 24px 32px 24px !important;
+        max-width: 100% !important;
     }
 
     /* Action buttons: Direction A pill geometry and typography */
@@ -177,6 +210,8 @@ def get_global_css(active_nav: str = "Home") -> str:
         padding: 10px 24px !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 600 !important;
+        font-size: 13px !important;
+        transition: background-color 140ms ease, border-color 140ms ease, transform 100ms ease !important;
     }
     button[kind="primary"] {
         background-color: #15803D !important;
@@ -191,827 +226,613 @@ def get_global_css(active_nav: str = "Home") -> str:
         background-color: #167B48 !important;
         border-color: #167B48 !important;
     }
-
-    /* Sidebar border separation against canvas (#E7E1D6) */
-    div[data-testid="stSidebar"] {
-        border-right: 1px solid #E7E1D6 !important;
-        background-color: #FBFAF7 !important;
+    button[kind="primary"]:active {
+        transform: translateY(1px) !important;
     }
 
-    /* Direction A Sidebar Navigation: Keyed Radio Pills with Area-Specific Tints */
-    .st-key-nav_sidebar_radio div[role="radiogroup"] {
-        gap: 6px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label {
+    /* Secondary buttons */
+    button[kind="secondary"], .stButton > button:not([kind="primary"]) {
         border-radius: 999px !important;
-        padding: 10px 18px !important;
-        margin: 4px 0 !important;
-        cursor: pointer !important;
-        transition: background-color 150ms ease, color 150ms ease !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        border: 1px solid transparent !important;
-        background-color: transparent !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label span {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        color: #66635A !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover {
-        background-color: #E7E1D6 !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:hover span {
-        color: #171712 !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked),
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) {
-        background-color: __NAV_ACTIVE_BG__ !important;
-        color: __NAV_ACTIVE_FG__ !important;
-        font-weight: 600 !important;
-    }
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) span,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) span {
-        color: __NAV_ACTIVE_FG__ !important;
-        font-weight: 600 !important;
-    }
-    /* Hide the default radio circle indicator */
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label > div:first-child,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label > div > div:first-child:not([data-testid="stMarkdownContainer"]) {
-        display: none !important;
-    }
-
-    /* Metric mini-card keyed container */
-    .st-key-sidebar_summary_card,
-    .st-key-sidebar_summary_card [data-testid="stVerticalBlockBorderWrapper"] > div {
         border: 1px solid #E7E1D6 !important;
-        border-radius: 16px !important;
         background-color: #FFFFFF !important;
-        padding: 16px !important;
-    }
-    .st-key-sidebar_summary_card [data-testid="stMetricLabel"] p,
-    .st-key-sidebar_summary_card [data-testid="stMetricLabel"] span {
-        color: #66635A !important;
-        font-size: 13px !important;
-        font-weight: 500 !important;
-    }
-    .st-key-sidebar_summary_card [data-testid="stMetricValue"] {
         color: #171712 !important;
-        font-size: 20px !important;
+    }
+    button[kind="secondary"]:hover, .stButton > button:not([kind="primary"]):hover {
+        border-color: #15803D !important;
+        color: #15803D !important;
     }
 
-    /* Direction A Keyed Tinted Stat Cards (Home Screen) */
-    div.st-key-home_card_streak:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-home_card_due:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-home_card_library:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-
-    .st-key-home_card_streak,
-    .st-key-home_card_streak [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DFF3E4 !important;
-        border: 1px solid rgba(22, 123, 72, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    .st-key-home_card_due,
-    .st-key-home_card_due [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DCEBFF !important;
-        border: 1px solid rgba(29, 94, 194, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    .st-key-home_card_library,
-    .st-key-home_card_library [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(154, 52, 18, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    /* Stat Cards Shared Styling */
-    .stat-icon-tile {
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        display: inline-flex;
+    /* Topbar Navbar */
+    .topbar {
+        min-height: 56px;
+        background-color: #FBFAF7;
+        border-bottom: 1px solid #E7E1D6;
+        display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        padding: 10px 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0 -24px 24px -24px;
+    }
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
         flex-shrink: 0;
     }
-    .tile-green {
-        background-color: #1F9D63 !important;
+    .topbar-brand {
+        font-family: 'Fraunces', serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #171712;
+        text-decoration: none;
+        white-space: nowrap;
     }
-    .tile-blue {
-        background-color: #2273E6 !important;
+    .topbar-badge-offline {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #66635A;
+        background: #FFFFFF;
+        border: 1px solid #E7E1D6;
+        border-radius: 999px;
+        white-space: nowrap;
     }
-    .tile-amber {
-        background-color: #B45309 !important;
+    .topbar-center {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
     }
-    .tile-violet {
-        background-color: #6C4CF1 !important;
+    .nav-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #66635A;
+        text-decoration: none;
+        border-radius: 999px;
+        transition: background-color 160ms ease, color 160ms ease;
+        white-space: nowrap;
     }
-    .tile-coral {
-        background-color: #E4572E !important;
+    .nav-pill:hover {
+        background-color: rgba(23, 23, 18, 0.04);
+        color: #171712;
+    }
+    .nav-pill.active-home {
+        background-color: #DFF3E4;
+        color: #167B48;
+        font-weight: 700;
+    }
+    .nav-pill.active-practice {
+        background-color: #E8E2FF;
+        color: #5932EA;
+        font-weight: 700;
+    }
+    .nav-pill.active-mock {
+        background-color: #FFE8D1;
+        color: #B93815;
+        font-weight: 700;
+    }
+    .nav-pill.active-dashboard {
+        background-color: #DCEBFF;
+        color: #1D5EC2;
+        font-weight: 700;
+    }
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+    .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+    .status-chip-streak {
+        background-color: #DFF3E4;
+        color: #167B48;
+        border: 1px solid rgba(22, 123, 72, 0.25);
+    }
+    .status-chip-due {
+        background-color: #DCEBFF;
+        color: #1D5EC2;
+        border: 1px solid rgba(29, 94, 194, 0.25);
+    }
+    .status-chip-py {
+        background-color: #FFFFFF;
+        color: #66635A;
+        border: 1px solid #E7E1D6;
     }
 
+    /* Sub-strip for Mock */
+    .mock-substrip {
+        min-height: 48px;
+        background-color: #FFFFFF;
+        border: 1px solid #E7E1D6;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 20px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+    .mock-tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .mock-tab {
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #66635A;
+        text-decoration: none;
+        background: transparent;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all 140ms ease;
+    }
+    .mock-tab:hover {
+        background-color: #FBFAF7;
+        color: #171712;
+    }
+    .mock-tab.active {
+        background-color: #FFE8D1;
+        color: #B93815;
+        border: 1px solid rgba(185, 56, 21, 0.25);
+    }
+    .mock-timer-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        border-radius: 999px;
+        background-color: #FFE8D1;
+        color: #B93815;
+        border: 1px solid rgba(185, 56, 21, 0.25);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Filter strip: single row toolbar */
+    .filter-strip-card {
+        background: #FFFFFF;
+        border: 1px solid #E7E1D6;
+        border-radius: 14px;
+        padding: 8px 16px;
+        margin-bottom: 16px;
+    }
+
+    /* ONE Problem Card */
+    div.st-key-practice_problem_card,
+    div.st-key-mock_problem_card {
+        background: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        padding: 24px 28px !important;
+        transition: transform 180ms ease, box-shadow 180ms ease !important;
+    }
+    div.st-key-practice_problem_card:hover,
+    div.st-key-mock_problem_card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
+    }
+
+    /* Hint Ladder (Butter Block below Problem Card) */
+    div.st-key-practice_hint_ladder,
+    div.st-key-mock_hint_ladder {
+        background: #FFF0C4 !important;
+        border: 1px solid rgba(154, 52, 18, 0.25) !important;
+        border-radius: 16px !important;
+        padding: 20px !important;
+        margin-top: 16px !important;
+        transition: transform 180ms ease, box-shadow 180ms ease !important;
+    }
+    div.st-key-practice_hint_ladder:hover,
+    div.st-key-mock_hint_ladder:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
+    }
+
+    /* Editor Card */
+    div.st-key-practice_editor_card,
+    div.st-key-mock_editor_card {
+        background: #14161A !important;
+        border: 1px solid #14161A !important;
+        border-radius: 20px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        transition: box-shadow 160ms ease !important;
+    }
+    div.st-key-practice_editor_card:focus-within,
+    div.st-key-mock_editor_card:focus-within {
+        box-shadow: 0 0 0 2px rgba(89, 50, 234, 0.40) !important;
+    }
+
+    /* Editor Strip */
+    .editor-strip {
+        background: #14161A;
+        border-bottom: 1px solid rgba(231, 225, 214, 0.15);
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .editor-strip-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #F2F2ED;
+        white-space: nowrap;
+    }
+    .editor-strip-right {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #66635A;
+        white-space: nowrap;
+    }
+
+    /* Editor Action Row */
+    .editor-action-row {
+        background: #14161A;
+        border-top: 1px solid rgba(231, 225, 214, 0.15);
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .action-row-left {
+        font-size: 12px;
+        color: #66635A;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* ONE Output Card */
+    div.st-key-practice_output_card,
+    div.st-key-mock_output_card {
+        background: #FFFFFF !important;
+        border: 1px solid #E7E1D6 !important;
+        border-radius: 24px !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin-top: 16px !important;
+        transition: transform 180ms ease, box-shadow 180ms ease !important;
+    }
+    div.st-key-practice_output_card:hover,
+    div.st-key-mock_output_card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
+    }
+
+    /* Verdict Entrance Animation */
+    @keyframes verdictEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .verdict-band {
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: verdictEntrance 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .verdict-band-pass {
+        background: #DFF3E4;
+        border-bottom: 1px solid rgba(22, 123, 72, 0.25);
+        color: #167B48;
+    }
+    .verdict-band-fail {
+        background: #FFE0E0;
+        border-bottom: 1px solid rgba(197, 34, 31, 0.25);
+        color: #C5221F;
+    }
+
+    /* Badges */
     .stat-badge {
         font-family: 'Inter', sans-serif !important;
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        padding: 4px 12px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        padding: 3px 10px !important;
         border-radius: 999px !important;
         display: inline-flex;
         align-items: center;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        white-space: nowrap !important;
     }
     .badge-mint {
-        background-color: #FFFFFF !important;
+        background-color: #DFF3E4 !important;
         border: 1px solid rgba(22, 123, 72, 0.25) !important;
         color: #167B48 !important;
     }
     .badge-sky {
-        background-color: #FFFFFF !important;
+        background-color: #DCEBFF !important;
         border: 1px solid rgba(29, 94, 194, 0.25) !important;
         color: #1D5EC2 !important;
     }
     .badge-butter {
-        background-color: #FFFFFF !important;
-        border: 1px solid rgba(180, 83, 9, 0.25) !important;
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(154, 52, 18, 0.25) !important;
         color: #9A3412 !important;
     }
     .badge-rose {
-        background-color: #FFFFFF !important;
+        background-color: #FFE0E0 !important;
         border: 1px solid rgba(197, 34, 31, 0.25) !important;
         color: #C5221F !important;
     }
     .badge-lilac {
-        background-color: #FFFFFF !important;
+        background-color: #E8E2FF !important;
         border: 1px solid rgba(89, 50, 234, 0.25) !important;
         color: #5932EA !important;
     }
+    .badge-peach {
+        background-color: #FFE8D1 !important;
+        border: 1px solid rgba(185, 56, 21, 0.25) !important;
+        color: #B93815 !important;
+    }
 
-    .stat-content {
+    /* Stat Cards */
+    div.st-key-home_card_streak,
+    div.st-key-home_card_due,
+    div.st-key-home_card_library,
+    div.st-key-dash_card_solved,
+    div.st-key-dash_card_sessions,
+    div.st-key-dash_card_hints {
+        border-radius: 24px !important;
+        padding: 24px !important;
+        transition: transform 180ms ease, box-shadow 180ms ease !important;
+    }
+    div.st-key-home_card_streak:hover,
+    div.st-key-home_card_due:hover,
+    div.st-key-home_card_library:hover,
+    div.st-key-dash_card_solved:hover,
+    div.st-key-dash_card_sessions:hover,
+    div.st-key-dash_card_hints:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
+    }
+
+    div.st-key-home_card_streak,
+    div.st-key-dash_card_solved {
+        background-color: #DFF3E4 !important;
+        border: 1px solid rgba(22, 123, 72, 0.25) !important;
+    }
+    div.st-key-home_card_due,
+    div.st-key-dash_card_sessions {
+        background-color: #DCEBFF !important;
+        border: 1px solid rgba(29, 94, 194, 0.25) !important;
+    }
+    div.st-key-home_card_library,
+    div.st-key-dash_card_hints {
+        background-color: #FFF0C4 !important;
+        border: 1px solid rgba(154, 52, 18, 0.25) !important;
+    }
+
+    .stat-head {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
     }
     .stat-label {
         font-family: 'Inter', sans-serif !important;
         font-size: 13px !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
+        letter-spacing: 0.04em !important;
         color: #66635A !important;
-        display: block;
     }
-    .stat-numeral {
+    .stat-value {
         font-family: 'Inter', sans-serif !important;
         font-size: 36px !important;
         font-weight: 600 !important;
-        color: #171712 !important;
-        line-height: 1.15 !important;
-        margin-top: 4px !important;
-        margin-bottom: 4px !important;
-        font-variant-numeric: tabular-nums !important;
         letter-spacing: -0.025em !important;
-        display: block;
+        color: #171712 !important;
+        font-variant-numeric: tabular-nums !important;
+        line-height: 1 !important;
+        margin: 4px 0 8px 0 !important;
     }
-    .stat-caption {
+    .stat-desc {
         font-family: 'Inter', sans-serif !important;
         font-size: 13px !important;
         color: #66635A !important;
-        display: block;
-        line-height: 1.4 !important;
-    }
-
-    /* Direction A Home Due & Recent Sections */
-    div.st-key-home_due_section:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-home_recent_section:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-
-    .st-key-home_due_section,
-    .st-key-home_due_section [data-testid="stVerticalBlockBorderWrapper"] > div,
-    .st-key-home_recent_section,
-    .st-key-home_recent_section [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    /* Direction A Empty Queue Sky Wash Card */
-    div.st-key-home_caught_up:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-
-    .st-key-home_caught_up,
-    .st-key-home_caught_up [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DCEBFF !important;
-        border: 1px solid rgba(29, 94, 194, 0.25) !important;
-        border-radius: 16px !important;
-        padding: 20px 24px !important;
-    }
-
-    /* Saturated Status Tint Chips */
-    .chip-pass {
-        background-color: #DFF3E4 !important;
-        color: #167B48 !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
-        padding: 4px 12px !important;
-        border-radius: 999px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        letter-spacing: 0.04em !important;
-    }
-    .chip-timeout {
-        background-color: #FFF0C4 !important;
-        color: #9A3412 !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
-        padding: 4px 12px !important;
-        border-radius: 999px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        letter-spacing: 0.04em !important;
-    }
-    .chip-fail {
-        background-color: #FFE0E0 !important;
-        color: #C5221F !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
-        padding: 4px 12px !important;
-        border-radius: 999px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        letter-spacing: 0.04em !important;
-    }
-
-    .attempt-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 14px 8px;
-        background-color: transparent;
-        border-bottom: 1px solid #E7E1D6;
-    }
-    .attempt-row:last-child {
-        border-bottom: none;
-    }
-
-    /* Monospace Light Code Block */
-    .code-block-light {
-        background-color: #FBFAF7 !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 10px !important;
-        padding: 12px 16px !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 13px !important;
-        color: #171712 !important;
-        line-height: 1.5 !important;
-    }
-
-    /* =========================================================================
-       DIRECTION A: PRACTICE ARENA STYLING
-       ========================================================================= */
-
-    /* Filter Card */
-    div.st-key-practice_filter_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-practice_filter_card,
-    .st-key-practice_filter_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 20px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 16px 24px !important;
-    }
-    .st-key-practice_filter_card div[data-baseweb="select"] > div {
-        border-radius: 999px !important;
-        border: 1px solid #E7E1D6 !important;
-        background-color: #FBFAF7 !important;
-        font-size: 13px !important;
-        font-weight: 500 !important;
-    }
-    .st-key-practice_filter_card label p {
-        font-size: 12px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
-        color: #66635A !important;
-    }
-
-    /* Problem Statement Card (Single Named Mechanism) */
-    div.st-key-practice_statement_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-practice_statement_card,
-    .st-key-practice_statement_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-    .st-key-practice_statement_card h2,
-    .st-key-practice_statement_card .problem-title {
-        font-family: 'Fraunces', serif !important;
-        font-size: 26px !important;
-        font-weight: 700 !important;
-        color: #171712 !important;
-        line-height: 1.25 !important;
-        margin-top: 4px !important;
-        margin-bottom: 12px !important;
-    }
-    .st-key-practice_statement_card code,
-    .st-key-practice_statement_card pre {
-        font-family: 'JetBrains Mono', monospace !important;
-    }
-
-    /* Editor Card (Single Named Mechanism) */
-    div.st-key-practice_editor_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-practice_editor_card,
-    .st-key-practice_editor_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-        overflow: hidden !important;
-    }
-    .st-key-practice_editor_card iframe {
-        background-color: #14161A !important;
-        border-radius: 12px !important;
-    }
-    .st-key-practice_editor_card textarea {
-        background-color: #14161A !important;
-        color: #F2F2ED !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        border-radius: 12px !important;
-    }
-
-    /* Hint Ladder Card */
-    div.st-key-practice_hint_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-practice_hint_card,
-    .st-key-practice_hint_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(180, 83, 9, 0.25) !important;
-        border-radius: 20px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
-        padding: 20px 24px !important;
-    }
-
-    /* Visible Test Case Cards */
-    div[class*="st-key-visible_test_card"]:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    div[class*="st-key-visible_test_card"],
-    div[class*="st-key-visible_test_card"] [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
-        padding: 16px 20px !important;
-    }
-
-    /* Verdict Banners */
-    div.st-key-verdict_pass_card:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-verdict_fail_card:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-verdict_timeout_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-verdict_pass_card,
-    .st-key-verdict_pass_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DFF3E4 !important;
-        border: 1px solid rgba(22, 123, 72, 0.25) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
-        padding: 18px 24px !important;
-    }
-    .st-key-verdict_fail_card,
-    .st-key-verdict_fail_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFE0E0 !important;
-        border: 1px solid rgba(197, 34, 31, 0.25) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
-        padding: 18px 24px !important;
-    }
-    .st-key-verdict_timeout_card,
-    .st-key-verdict_timeout_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(180, 83, 9, 0.25) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
-        padding: 18px 24px !important;
-    }
-
-    /* Failed Case Card (Single Named Mechanism) */
-    div.st-key-failed_case_card:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div[class*="st-key-failed_case_card"]:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-failed_case_card,
-    .st-key-failed_case_card [data-testid="stVerticalBlockBorderWrapper"] > div,
-    div[class*="st-key-failed_case_card"],
-    div[class*="st-key-failed_case_card"] [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFE0E0 !important;
-        border: 1px solid rgba(197, 34, 31, 0.25) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 22px 24px !important;
-    }
-
-    /* Ruff Code Quality Card & Post Pass Card */
-    div.st-key-ruff_quality_card:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-post_pass_review_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-ruff_quality_card,
-    .st-key-ruff_quality_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
-        padding: 20px 24px !important;
-    }
-    .st-key-post_pass_review_card,
-    .st-key-post_pass_review_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #E8E2FF !important;
-        border: 1px solid rgba(89, 50, 234, 0.25) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
-        padding: 20px 24px !important;
-    }
-
-    /* Lilac secondary action buttons */
-    div[class*="st-key-btn_hint"] button,
-    div[class*="st-key-btn_ai_hint"] button,
-    div[class*="st-key-btn_code_review"] button,
-    div[class*="st-key-btn_reveal"] button {
-        background-color: #E8E2FF !important;
-        border: 1px solid rgba(89, 50, 234, 0.25) !important;
-        color: #5932EA !important;
-        border-radius: 999px !important;
-        white-space: nowrap !important;
-        padding: 8px 20px !important;
-        font-weight: 600 !important;
-    }
-    div[class*="st-key-btn_hint"] button:hover,
-    div[class*="st-key-btn_ai_hint"] button:hover,
-    div[class*="st-key-btn_code_review"] button:hover,
-    div[class*="st-key-btn_reveal"] button:hover {
-        background-color: #E8E2FF !important;
-        border-color: #5932EA !important;
-        color: #5932EA !important;
-    }
-    div[class*="st-key-btn_hint"] button p,
-    div[class*="st-key-btn_ai_hint"] button p,
-    div[class*="st-key-btn_code_review"] button p,
-    div[class*="st-key-btn_reveal"] button p,
-    div[class*="st-key-btn_hint"] button span,
-    div[class*="st-key-btn_ai_hint"] button span,
-    div[class*="st-key-btn_code_review"] button span,
-    div[class*="st-key-btn_reveal"] button span {
-        color: #5932EA !important;
-        font-weight: 600 !important;
-    }
-
-    /* Mock Timer Card (Setup & Session Control Card) */
-    div.st-key-mock_timer_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-mock_timer_card,
-    .st-key-mock_timer_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFE8D1 !important;
-        border: 1px solid rgba(185, 56, 21, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.04) !important;
-        padding: 20px 24px !important;
-    }
-
-    /* Danger Pill Button: End Interview Early */
-    div.st-key-btn_end_mock button {
-        background-color: #FFFFFF !important;
-        border: 1px solid rgba(185, 56, 21, 0.35) !important;
-        color: #B93815 !important;
-        border-radius: 999px !important;
-        white-space: nowrap !important;
-        padding: 8px 22px !important;
-        font-weight: 600 !important;
-        font-size: 14px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
-        transition: all 0.15s ease !important;
-    }
-    div.st-key-btn_end_mock button:hover {
-        background-color: #FFE0E0 !important;
-        border-color: #B93815 !important;
-        color: #C5221F !important;
-    }
-    div.st-key-btn_end_mock button p,
-    div.st-key-btn_end_mock button span {
-        color: #B93815 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Primary Pill Button: Start Mock Interview */
-    div.st-key-btn_start_mock button {
-        background-color: #167B48 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-        border-radius: 999px !important;
-        white-space: nowrap !important;
-        padding: 10px 28px !important;
-        font-weight: 600 !important;
-        font-size: 15px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05) !important;
-    }
-    div.st-key-btn_start_mock button:hover {
-        background-color: #167B48 !important;
-    }
-    div.st-key-btn_start_mock button p,
-    div.st-key-btn_start_mock button span {
-        color: #FFFFFF !important;
-        font-weight: 600 !important;
-    }
-
-    /* Problem Tabs Styling (Direction A with React Aria + BaseWeb) */
-    div[data-baseweb="tab-list"],
-    div[role="tablist"],
-    div[data-testid="stTabs"] div[role="tablist"] {
-        background-color: transparent !important;
-        border-bottom: 1px solid #E7E1D6 !important;
-        gap: 12px !important;
-        padding-bottom: 6px !important;
-    }
-    button[data-baseweb="tab"],
-    div[data-testid="stTab"],
-    div[data-testid="stTabs"] button[role="tab"] {
-        background-color: #FBFAF7 !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 999px !important;
-        padding: 6px 20px !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        color: #66635A !important;
-        transition: all 0.15s ease !important;
-        white-space: nowrap !important;
-        cursor: pointer !important;
-    }
-    button[data-baseweb="tab"]:hover,
-    div[data-testid="stTab"]:hover,
-    div[data-testid="stTabs"] button[role="tab"]:hover {
-        background-color: #FBFAF7 !important;
-        color: #171712 !important;
-        border-color: #E7E1D6 !important;
-    }
-    div[data-testid="stTab"] p,
-    button[data-baseweb="tab"] p {
-        color: #66635A !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
         margin: 0 !important;
     }
-    /* Active tab indicator in coral (#B93815) with soft peach highlight */
-    button[data-baseweb="tab"][aria-selected="true"],
-    div[data-testid="stTab"][aria-selected="true"],
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-        background-color: #FFE8D1 !important;
-        border: 1px solid rgba(185, 56, 21, 0.35) !important;
-        border-bottom: 2px solid #B93815 !important;
-        color: #B93815 !important;
-        font-weight: 700 !important;
-        box-shadow: 0 1px 2px rgba(185, 56, 21, 0.08) !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] p,
-    button[data-baseweb="tab"][aria-selected="true"] span,
-    div[data-testid="stTab"][aria-selected="true"] p,
-    div[data-testid="stTab"][aria-selected="true"] span,
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span {
-        color: #B93815 !important;
-        font-weight: 700 !important;
-    }
-    div[data-baseweb="tab-highlight"],
-    div[data-testid="stTabsHighlight"] {
-        background-color: #B93815 !important;
-        height: 2px !important;
-    }
 
-    /* Mock Scorecard Card (Scorecard Summary Card) */
-    div.st-key-mock_scorecard_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    .st-key-mock_scorecard_card,
-    .st-key-mock_scorecard_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px 28px !important;
-    }
-
-    /* Export Results Pill Button with Lucide Download Icon */
-    div.st-key-btn_export_markdown button {
-        background-color: #FBFAF7 !important;
-        border: 1px solid #E7E1D6 !important;
-        color: #171712 !important;
-        border-radius: 999px !important;
-        white-space: nowrap !important;
-        padding: 8px 24px !important;
-        font-weight: 600 !important;
-        font-size: 14px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.04) !important;
-        transition: all 0.15s ease !important;
-        display: inline-flex !important;
-        align-items: center !important;
-    }
-    div.st-key-btn_export_markdown button::before {
-        content: "";
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23171712' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15V3'/%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        vertical-align: -2px;
-    }
-    div.st-key-btn_export_markdown button:hover {
-        background-color: #FBFAF7 !important;
-        border-color: #E7E1D6 !important;
-        color: #171712 !important;
-    }
-    div.st-key-btn_export_markdown button p,
-    div.st-key-btn_export_markdown button span {
-        color: #171712 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Direction A Keyed Tinted Stat Cards & Containers (Dashboard Screen) */
-    div.st-key-dash_card_solved:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-dash_card_sessions:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-dash_card_hints:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-dashboard_chart_card:has([data-testid="stVerticalBlockBorderWrapper"]),
-    div.st-key-dashboard_table_card:has([data-testid="stVerticalBlockBorderWrapper"]) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-
-    .st-key-dash_card_solved,
-    .st-key-dash_card_solved [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DFF3E4 !important;
-        border: 1px solid rgba(22, 123, 72, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    .st-key-dash_card_sessions,
-    .st-key-dash_card_sessions [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #DCEBFF !important;
-        border: 1px solid rgba(29, 94, 194, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    .st-key-dash_card_hints,
-    .st-key-dash_card_hints [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(154, 52, 18, 0.25) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px !important;
-    }
-
-    .st-key-dash_card_solved .stat-label {
-        color: #167B48 !important;
-    }
-    .st-key-dash_card_sessions .stat-label {
-        color: #1D5EC2 !important;
-    }
-    .st-key-dash_card_hints .stat-label {
-        color: #9A3412 !important;
-    }
-
-    .st-key-dashboard_chart_card,
-    .st-key-dashboard_chart_card [data-testid="stVerticalBlockBorderWrapper"] > div,
-    .st-key-dashboard_table_card,
-    .st-key-dashboard_table_card [data-testid="stVerticalBlockBorderWrapper"] > div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05), 0 8px 24px rgba(23, 23, 18, 0.06) !important;
-        padding: 24px 28px !important;
-    }
-
-    /* Topic Breakdown Table in Dashboard */
-    .dashboard-table {
+    /* De-slopped Queue Table */
+    .queue-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
     }
-    .dashboard-table th {
+    .queue-table th {
         text-align: left;
-        padding: 12px 16px;
-        font-family: 'Inter', sans-serif;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: #66635A;
+        padding: 12px 18px;
         border-bottom: 1px solid #E7E1D6;
     }
-    .dashboard-table td {
-        padding: 16px;
+    .queue-row {
+        position: relative;
+    }
+    .queue-row td {
+        padding: 18px;
         border-bottom: 1px solid #E7E1D6;
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        color: #171712;
+        font-size: 13.5px;
         vertical-align: middle;
+        background: #FFFFFF;
+        transition: all 180ms ease;
     }
-    .dashboard-table tr:last-child td {
+    .queue-row:last-child td {
         border-bottom: none;
     }
-    .dashboard-table th:last-child,
-    .dashboard-table td:last-child {
-        white-space: nowrap !important;
-        min-width: 140px !important;
+    .queue-row:hover td {
+        background: #FBFAF7;
+        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.04);
     }
-    .stat-badge {
-        white-space: nowrap !important;
-        display: inline-block !important;
+    .queue-row td:first-child {
+        border-left: 3px solid transparent;
+    }
+    .queue-row.track-dsa:hover td:first-child {
+        border-left-color: #5932EA;
+    }
+    .queue-row.track-python:hover td:first-child {
+        border-left-color: #9A3412;
+    }
+
+    .queue-problem-name {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 15px;
+        color: #171712;
+        line-height: 1.25;
+    }
+    .queue-problem-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        color: #66635A;
+        margin-top: 3px;
+    }
+
+    .text-track-dsa {
+        color: #5932EA;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.03em;
+    }
+    .text-track-python {
+        color: #9A3412;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.03em;
+    }
+    .text-diff-easy {
+        color: #167B48;
+        font-weight: 600;
+        font-size: 12px;
+    }
+    .text-diff-medium {
+        color: #B93815;
+        font-weight: 600;
+        font-size: 12px;
+    }
+    .text-diff-hard {
+        color: #C5221F;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .btn-row-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 18px;
+        background: #FFFFFF;
+        color: #171712;
+        border: 1px solid #E7E1D6;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 100ms ease;
+    }
+    .btn-row-action:hover {
+        background: #15803D;
+        color: #FFFFFF;
+        border-color: #15803D;
+    }
+    .btn-row-action:active {
+        transform: translateY(1px);
+    }
+
+    /* Dashboard Mastery Grid */
+    .mastery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .mastery-item {
+        background: #FBFAF7;
+        border: 1px solid #E7E1D6;
+        border-radius: 14px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .mastery-item-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mastery-topic-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #171712;
+        text-transform: capitalize;
+    }
+    .mastery-bar-track {
+        height: 8px;
+        background: #E7E1D6;
+        border-radius: 999px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .mastery-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+    }
+    .mastery-stat-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #66635A;
+        font-weight: 600;
     }
     """
-
-    rules_css = rules_css.replace("__NAV_ACTIVE_BG__", active_bg).replace("__NAV_ACTIVE_FG__", active_fg)
 
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
 
 
-current_active_nav = st.session_state.get("nav_sidebar_radio")
-if not current_active_nav:
-    qp = st.query_params.get("screen", "").lower()
-    current_active_nav = screen_to_nav.get(qp, "Home")
-
-st.html(get_global_css(current_active_nav))
-
-
+# Svg icon loader
 @lru_cache(maxsize=128)
 def get_svg_icon(
     name: str,
@@ -1021,10 +842,7 @@ def get_svg_icon(
     stroke_width: float | None = None,
     extra_class: str = "",
 ) -> str:
-    """
-    Loads an SVG icon from assets/icons/ and returns inline SVG markup.
-    Allows overriding width, height, stroke color, and stroke-width.
-    """
+    """Loads an SVG icon from assets/icons/ and returns inline SVG markup."""
     filename = name if name.endswith(".svg") else f"{name}.svg"
     icon_path = ICONS_DIR / filename
     if not icon_path.exists():
@@ -1064,12 +882,10 @@ def render_editor(code: str, key: str, height: str | int = "450px") -> str:
     """
     Renders code editor via streamlit-code-editor (Ace editor wrapper)
     with debounced two-way binding and textarea fallback.
-    Always ensures prefilled code is preserved.
-    Uses the component's own height parameter (string e.g. '450px') so react-ace
-    receives height directly and ResizeObserver sizes the rendered iframe to >= 440px.
     """
     try:
         from code_editor import code_editor
+
         editor_custom_btns = [
             {
                 "name": "Copy",
@@ -1077,10 +893,9 @@ def render_editor(code: str, key: str, height: str | int = "450px") -> str:
                 "hasText": True,
                 "alwaysOn": True,
                 "commands": ["copyAll"],
-                "style": {"top": "0.4rem", "right": "0.4rem"}
+                "style": {"top": "0.4rem", "right": "0.4rem"},
             }
         ]
-        # Component requires string height e.g. "450px" to set CSS height directly in react-ace
         if isinstance(height, int):
             str_height = f"{max(height, 440)}px"
         else:
@@ -1113,108 +928,91 @@ def render_editor(code: str, key: str, height: str | int = "450px") -> str:
             value=code,
             height=max(int_height, 440),
             key=f"{key}_textarea",
-            help="Using monospace editor."
+            help="Using monospace editor.",
         )
 
 
-# Single Source of Truth for Sidebar Metrics
+def render_topbar(current_nav: str, streak_count: int, due_count: int):
+    """Renders the approved 56px Topbar Navbar with active tint wash and status chips."""
+    active_home = "active-home" if current_nav == "Home" else ""
+    active_practice = "active-practice" if current_nav == "Practice Arena" else ""
+    active_mock = "active-mock" if current_nav == "Mock Interview" else ""
+    active_dash = "active-dashboard" if current_nav == "Dashboard" else ""
+
+    streak_str = f"{streak_count}d" if streak_count > 0 else "0 days"
+
+    shield_svg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>'
+    flame_svg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>'
+    cal_svg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>'
+
+    topbar_html = f"""
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="?screen=home" class="topbar-brand" target="_self">AI Coding Prep Coach</a>
+        <span class="topbar-badge-offline">
+          {shield_svg}
+          Offline · Code-Judged
+        </span>
+      </div>
+      <nav class="topbar-center" aria-label="Main Navigation">
+        <a href="?screen=home" class="nav-pill {active_home}" target="_self">Home</a>
+        <a href="?screen=practice" class="nav-pill {active_practice}" target="_self">Practice Arena</a>
+        <a href="?screen=mock" class="nav-pill {active_mock}" target="_self">Mock Interview</a>
+        <a href="?screen=dashboard" class="nav-pill {active_dash}" target="_self">Dashboard</a>
+      </nav>
+      <div class="topbar-right">
+        <div class="status-chip status-chip-streak">
+          {flame_svg}
+          <span>{streak_str}</span>
+        </div>
+        <div class="status-chip status-chip-due">
+          {cal_svg}
+          <span>{due_count} due</span>
+        </div>
+        <div class="status-chip status-chip-py">
+          <span>3.11</span>
+        </div>
+      </div>
+    </header>
+    """
+    st.html(topbar_html)
+
+
+# Single Source of Truth for Live Metrics
 streak_count = store.current_streak()
 due_list = store.due_problems()
 
-# Screen options and two-way query parameter sync
-nav_options = ["Home", "Practice Arena", "Mock Interview", "Dashboard"]
-screen_to_nav = {
-    "home": "Home",
-    "practice": "Practice Arena",
-    "mock": "Mock Interview",
-    "dashboard": "Dashboard",
-}
-nav_to_screen = {v: k for k, v in screen_to_nav.items()}
-
-# Sidebar Header: Fraunces serif wordmark and Inter quiet tagline
-st.sidebar.html(
-    """
-    <div style="margin-bottom: 24px; padding: 4px 0 0 0;">
-        <div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; line-height: 1.25; letter-spacing: -0.02em;">AI Coding Prep Coach</div>
-        <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: #66635A; margin-top: 4px;">Zero Cost • Code-Judged • Offline-Ready</div>
-    </div>
-    """
-)
-
-# Query parameter sync with session state
+# Query parameter sync
 qp_screen = st.query_params.get("screen", "").lower()
-if "last_screen_param" not in st.session_state:
-    st.session_state["last_screen_param"] = qp_screen
-    if qp_screen in screen_to_nav:
-        st.session_state["nav_sidebar_radio"] = screen_to_nav[qp_screen]
-elif qp_screen != st.session_state["last_screen_param"]:
-    st.session_state["last_screen_param"] = qp_screen
-    if qp_screen in screen_to_nav:
-        st.session_state["nav_sidebar_radio"] = screen_to_nav[qp_screen]
+if qp_screen in screen_to_nav:
+    nav_choice = screen_to_nav[qp_screen]
+elif "nav_choice" in st.session_state and st.session_state["nav_choice"] in nav_options:
+    nav_choice = st.session_state["nav_choice"]
+else:
+    nav_choice = "Home"
 
-# Determine default index
-current_idx = 0
-current_nav = st.session_state.get("nav_sidebar_radio")
-if current_nav in nav_options:
-    current_idx = nav_options.index(current_nav)
-elif qp_screen in screen_to_nav:
-    current_idx = nav_options.index(screen_to_nav[qp_screen])
-
-# Navigation mechanism: Keyed CSS radio pill
-nav_choice = st.sidebar.radio(
-    "Navigation",
-    nav_options,
-    index=current_idx,
-    key="nav_sidebar_radio",
-    label_visibility="collapsed",
-)
-
-# Enforce Area-Specific Tint on Active Nav Pill (DEFECT 3)
-nav_tint_bg, nav_tint_fg = NAV_TINTS.get(nav_choice, ("#DFF3E4", "#167B48"))
-st.sidebar.html(
-    f"""
-    <style>
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked),
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) {{
-        background-color: {nav_tint_bg} !important;
-        color: {nav_tint_fg} !important;
-        font-weight: 600 !important;
-    }}
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(input:checked) span,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) p,
-    .st-key-nav_sidebar_radio div[role="radiogroup"] label:has(div[aria-checked="true"]) span {{
-        color: {nav_tint_fg} !important;
-        font-weight: 600 !important;
-    }}
-    </style>
-    """
-)
-
-# Keep query params in sync with user's selection
+st.session_state["nav_choice"] = nav_choice
 target_screen = nav_to_screen.get(nav_choice, "home")
 if st.query_params.get("screen", "").lower() != target_screen:
     st.query_params["screen"] = target_screen
-    st.session_state["last_screen_param"] = target_screen
 
-# Metric mini-card with keyed container
-st.sidebar.html('<div style="height: 16px;"></div>')
-with st.sidebar.container(border=True, key="sidebar_summary_card"):
-    st.metric("Active Streak", f"{streak_count} days")
-    st.metric("Due for Review", f"{len(due_list)} problems")
+# Inject Global CSS
+st.html(get_global_css(nav_choice))
 
 
 # ==============================================================================
-# SCREEN 1: HOME / DUE REVIEW
+# SCREEN 1: HOME / DAILY PRACTICE QUEUE
 # ==============================================================================
 if nav_choice == "Home":
-    # Header banner with Fraunces serif heading and Start Practice primary CTA pill
-    col_head, col_btn = st.columns([4, 1], vertical_alignment="center")
+    render_topbar("Home", streak_count, len(due_list))
+
+    # Page Header (Approved Direction A Wording Retained)
+    col_head, col_btn = st.columns([8, 4], vertical_alignment="center")
     with col_head:
         st.markdown(
             """<div style="margin-bottom: 8px;">
                 <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
-                    Daily Review and Practice Queue
+                    Today's Practice
                 </h1>
                 <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
                     Interview-targeted spaced repetition schedule (1 / 1 / 3 / 7 / 21 days) based strictly on objective test results.
@@ -1223,271 +1021,178 @@ if nav_choice == "Home":
             unsafe_allow_html=True,
         )
     with col_btn:
-        if st.button("Start Practice", type="primary", key="home_start_practice_btn", use_container_width=True):
-            st.session_state["nav_sidebar_radio"] = "Practice Arena"
-            st.query_params["screen"] = "practice"
-            st.session_state["last_screen_param"] = "practice"
-            st.rerun()
+        st.markdown(
+            """<div style="text-align: right;">
+                <a href="?screen=practice" target="_self" class="btn-primary-pill" style="text-decoration: none;">
+                    Start Practice →
+                </a>
+            </div>""",
+            unsafe_allow_html=True,
+        )
 
-    # Three category-tinted stat cards
+    st.html('<div style="height: 8px;"></div>')
+
+    # Stat Cards Row (De-slopped: clean metrics without decorative tags)
     c1, c2, c3 = st.columns(3)
     with c1:
         with st.container(border=True, key="home_card_streak"):
-            flame_svg = get_svg_icon("flame", width=22, height=22, stroke="#FFFFFF")
             streak_unit = "day" if streak_count == 1 else "days"
-            if streak_count == 0:
-                streak_badge_html = '<span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #171712; white-space: nowrap;">Not Started</span>'
-                streak_caption = "Solve a problem today to start your streak."
-            else:
-                streak_badge_html = '<span class="stat-badge badge-mint">Active</span>'
-                streak_caption = f"Practice tomorrow to reach a {streak_count + 1}-day streak."
+            streak_caption = "Consecutive active days." if streak_count > 0 else "Solve a problem today to start your streak."
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-green">
-                            {flame_svg}
-                        </div>
-                        {streak_badge_html}
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Active Streak</span>
-                        <span class="stat-numeral">{streak_count} {streak_unit}</span>
-                        <span class="stat-caption">{streak_caption}</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Active Streak</span>
+                </div>
+                <div class="stat-value">{streak_count} {streak_unit}</div>
+                <p class="stat-desc">{streak_caption}</p>
+                """,
                 unsafe_allow_html=True,
             )
 
     with c2:
         with st.container(border=True, key="home_card_due"):
-            calendar_svg = get_svg_icon("calendar", width=22, height=22, stroke="#FFFFFF")
             due_count = len(due_list)
-            due_numeral = f"{due_count} due"
-            due_badge = "On Schedule" if due_count == 0 else "Review Ready"
-            due_caption = "All scheduled reviews are completely caught up." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
+            due_caption = "Clean queue · You're all caught up." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-blue">
-                            {calendar_svg}
-                        </div>
-                        <span class="stat-badge badge-sky">{due_badge}</span>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Problems Due Today</span>
-                        <span class="stat-numeral">{due_numeral}</span>
-                        <span class="stat-caption">{due_caption}</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Problems Due Today</span>
+                </div>
+                <div class="stat-value">{due_count} due</div>
+                <p class="stat-desc">{due_caption}</p>
+                """,
                 unsafe_allow_html=True,
             )
 
     with c3:
         with st.container(border=True, key="home_card_library"):
-            book_svg = get_svg_icon("book-open", width=22, height=22, stroke="#FFFFFF")
             total_count = len(all_problems)
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-amber">
-                            {book_svg}
-                        </div>
-                        <span class="stat-badge badge-butter">Library</span>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Total Problem Bank</span>
-                        <span class="stat-numeral">{total_count} problems</span>
-                        <span class="stat-caption">Curated across DSA, Strings, and Practical Python.</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Total Problem Bank</span>
+                </div>
+                <div class="stat-value">{total_count} problems</div>
+                <p class="stat-desc">Across DSA and Python tracks.</p>
+                """,
                 unsafe_allow_html=True,
             )
 
-    # Due for Review section
-    with st.container(border=True, key="home_due_section"):
-        cal_blue = get_svg_icon("calendar", width=22, height=22, stroke="#1D5EC2")
-        queue_text = "Queue Status: Clear" if not due_list else f"Queue Status: {len(due_list)} Due"
-        queue_color = "#1D5EC2" if not due_list else "#9A3412"
-        st.markdown(
-            f"""<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    {cal_blue}
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0;">
-                        Due for Review Today
-                    </h2>
-                </div>
-                <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: {queue_color};">
-                    {queue_text}
-                </span>
-            </div>""",
-            unsafe_allow_html=True,
-        )
-        if not due_list:
-            with st.container(border=True, key="home_caught_up"):
-                cal_big = get_svg_icon("calendar", width=22, height=22, stroke="#1D5EC2")
-                st.markdown(
-                    f"""<div style="display: flex; align-items: flex-start; gap: 14px;">
-                        <div style="background-color: rgba(29, 94, 194, 0.12); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            {cal_big}
-                        </div>
-                        <div>
-                            <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin-bottom: 2px;">
-                                You are all caught up!
-                            </div>
-                            <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #171712; line-height: 1.5;">
-                                No problems due for review today. Open Practice Arena to solve a new problem.
-                            </div>
-                        </div>
-                    </div>""",
-                    unsafe_allow_html=True,
-                )
-        else:
-            for item in due_list:
-                prob = problems_by_id.get(item["problem_id"])
-                if not prob:
-                    continue
-                d_col1, d_col2 = st.columns([5, 1], vertical_alignment="center")
-                diff = prob["difficulty"]
-                diff_wash = "#DFF3E4" if diff == "easy" else ("#FFF0C4" if diff == "medium" else "#FFE0E0")
-                diff_text = "#167B48" if diff == "easy" else ("#9A3412" if diff == "medium" else "#C5221F")
-                with d_col1:
-                    st.markdown(
-                        f"""<div style="display: flex; align-items: center; gap: 12px; padding: 6px 0;">
-                            <span style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; background-color: {diff_wash}; color: {diff_text}; padding: 3px 10px; border-radius: 999px;">
-                                {diff}
-                            </span>
-                            <div>
-                                <strong style="font-family: 'Inter', sans-serif; font-size: 15px; color: #171712;">{prob['title']}</strong>
-                                <span style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin-left: 8px;">
-                                    Track: {prob['track'].upper()} • Topic: {prob['topic']} • Passes: {item['consecutive_passes']}
-                                </span>
-                            </div>
-                        </div>""",
-                        unsafe_allow_html=True,
-                    )
-                with d_col2:
-                    if st.button("Practice", key=f"due_btn_{prob['id']}", use_container_width=True):
-                        st.session_state["selected_problem_id"] = prob["id"]
-                        st.session_state["nav_sidebar_radio"] = "Practice Arena"
-                        st.query_params["screen"] = "practice"
-                        st.session_state["last_screen_param"] = "practice"
-                        st.rerun()
+    st.html('<div style="height: 16px;"></div>')
 
-    # Recent Practice Attempts section
-    with st.container(border=True, key="home_recent_section"):
-        recents = store.get_recent_attempts(limit=5)
+    # Daily Practice Queue Card (DE-SLOPPED)
+    with st.container(border=True, key="home_due_section"):
+        with store._get_connection() as conn:
+            cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
+            solved_set = {row[0] for row in cur.fetchall()}
+
+        solved_count = len(solved_set)
         st.markdown(
-            f"""<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            f"""
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0;">
-                        Recent Practice Attempts
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                        Daily Practice Queue
                     </h2>
-                    <p style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin: 2px 0 0 0;">
-                        Deterministic test verdicts recorded strictly in local SQLite.
+                    <p style="font-family: 'Inter', sans-serif; font-size: 13.5px; color: #66635A; margin: 0;">
+                        Problems scheduled for review or exploration based on spaced repetition.
                     </p>
                 </div>
-                <span style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; font-weight: 500;">
-                    {'Showing last 5 attempts' if recents else 'No attempts recorded'}
-                </span>
-            </div>""",
+                <span class="stat-badge badge-mint" style="font-size: 12px; padding: 4px 12px;">{solved_count} / {len(all_problems)} Solved</span>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
-        if recents:
-            for r in recents:
-                prob = problems_by_id.get(r["problem_id"], {})
-                prob_title = prob.get("title", r["problem_id"])
-                prob_track = prob.get("track", "").upper()
-                prob_topic = prob.get("topic", "")
-                prob_diff = prob.get("difficulty", "medium").title()
 
-                status_norm = (r.get("status") or "").lower()
-                if status_norm == "pass":
-                    chip_class = "chip-pass"
-                    chip_label = "PASS"
-                    chip_icon = get_svg_icon("circle-check-big", width=12, height=12, stroke="#167B48", stroke_width=3)
-                elif status_norm == "timeout":
-                    chip_class = "chip-timeout"
-                    chip_label = "TIMEOUT"
-                    chip_icon = get_svg_icon("clock", width=12, height=12, stroke="#9A3412", stroke_width=3)
-                else:
-                    chip_class = "chip-fail"
-                    chip_label = "FAIL"
-                    chip_icon = get_svg_icon("circle-x", width=12, height=12, stroke="#C5221F", stroke_width=3)
+        # Build table rows for problem queue
+        queue_rows = []
+        for p in all_problems:
+            is_solved = p["id"] in solved_set
+            track_class = "track-dsa" if p["track"] == "dsa" else "track-python"
+            track_text_class = "text-track-dsa" if p["track"] == "dsa" else "text-track-python"
+            diff_text_class = f"text-diff-{p['difficulty']}"
 
-                r_col1, r_col2 = st.columns([5, 1], vertical_alignment="center")
-                with r_col1:
-                    st.markdown(
-                        f"""<div class="attempt-row">
-                            <div style="display: flex; align-items: center; gap: 14px;">
-                                <span class="{chip_class}">
-                                    {chip_icon}
-                                    {chip_label}
-                                </span>
-                                <div>
-                                    <strong style="font-family: 'Inter', sans-serif; font-size: 15px; color: #171712;">{prob_title}</strong>
-                                    <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #66635A; margin-top: 2px;">
-                                        Track: {prob_track} · Topic: {prob_topic} · Difficulty: {prob_diff}
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: #66635A;">Date &amp; Runtime</div>
-                                <div style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: #171712; font-variant-numeric: tabular-nums;">
-                                    {r['attempt_date']} · {r['runtime_ms']} ms · {r['hints_used']} Hints
-                                </div>
-                            </div>
-                        </div>""",
-                        unsafe_allow_html=True,
-                    )
-                with r_col2:
-                    if st.button("Review", key=f"recent_btn_{r.get('id', r['problem_id'])}_{r['attempt_date']}", use_container_width=True):
-                        st.session_state["selected_problem_id"] = r["problem_id"]
-                        st.session_state["nav_sidebar_radio"] = "Practice Arena"
-                        st.query_params["screen"] = "practice"
-                        st.session_state["last_screen_param"] = "practice"
-                        st.rerun()
-        else:
-            st.markdown(
-                """<div style="padding: 24px; background-color: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; text-align: center; color: #66635A; font-family: 'Inter', sans-serif; font-size: 14px;">
-                    No attempts recorded yet. Launch Practice Arena to begin your first problem.
-                </div>""",
-                unsafe_allow_html=True,
+            if is_solved:
+                status_pill = '<span class="stat-badge badge-mint">Next Due: +1 Day</span>'
+                subtitle = "Recent attempt passed · Scheduled for review"
+            else:
+                status_pill = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">Unattempted</span>'
+                subtitle = f"Standard {p['topic']} curriculum problem"
+
+            queue_rows.append(
+                f"""
+                <tr class="queue-row {track_class}">
+                    <td>
+                        <div class="queue-problem-name">{p['title']}</div>
+                        <div class="queue-problem-sub">{subtitle}</div>
+                    </td>
+                    <td><span class="{track_text_class}">{p['track'].upper()}</span></td>
+                    <td><span class="{diff_text_class}">{p['difficulty'].title()}</span></td>
+                    <td><span style="color: #171712; font-weight: 500;">{p['topic'].title()}</span></td>
+                    <td>{status_pill}</td>
+                    <td style="text-align: right;">
+                        <a href="?screen=practice&problem={p['id']}" target="_self" class="btn-row-action">Practice →</a>
+                    </td>
+                </tr>
+                """
             )
+
+        queue_table_html = f"""
+        <table class="queue-table">
+            <thead>
+                <tr>
+                    <th>Problem</th>
+                    <th>Track</th>
+                    <th>Difficulty</th>
+                    <th>Topic</th>
+                    <th>Interval Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {"".join(queue_rows)}
+            </tbody>
+        </table>
+        """
+        st.html(queue_table_html)
 
 
 # ==============================================================================
-# SCREEN 2: PRACTICE ARENA
+# SCREEN 2: PRACTICE ARENA (TWO-PANE WORKBENCH)
 # ==============================================================================
 elif nav_choice == "Practice Arena":
-    # Two-column workbench layout mirroring mockups/practice.html: Left (3.5 cols / 29%), Right (8.5 cols / 71%)
-    left_col, right_col = st.columns([3.5, 8.5], gap="large")
+    render_topbar("Practice Arena", streak_count, len(due_list))
+
+    # Two-pane Workbench: Left (~42%) / Right (~58%)
+    left_col, right_col = st.columns([42, 58], gap="medium")
 
     with left_col:
-        # Filter Card (Practice Header Card)
-        with st.container(border=True, key="practice_filter_card"):
-            tracks = ["All"] + sorted({p["track"] for p in all_problems})
-            difficulties = ["All", "easy", "medium", "hard"]
-            topics = ["All"] + sorted({p["topic"] for p in all_problems})
+        # Filter Strip: One row at head
+        tracks = ["All"] + sorted({p["track"] for p in all_problems})
+        difficulties = ["All", "easy", "medium", "hard"]
+        topics = ["All"] + sorted({p["topic"] for p in all_problems})
 
-            col_f1, col_f2, col_f3 = st.columns(3)
-            selected_track = col_f1.selectbox(
+        with st.container(border=True, key="practice_filter_strip"):
+            f_col1, f_col2, f_col3, f_col4 = st.columns([1, 1, 1, 2])
+            selected_track = f_col1.selectbox(
                 "Track",
                 tracks,
-                format_func=lambda x: x.upper() if x != "All" else "All Tracks"
+                format_func=lambda x: x.upper() if x != "All" else "All Tracks",
             )
-            selected_diff = col_f2.selectbox(
+            selected_diff = f_col2.selectbox(
                 "Difficulty",
                 difficulties,
-                format_func=lambda x: x.title() if x != "All" else "All Diff"
+                format_func=lambda x: x.title() if x != "All" else "All Diff",
             )
-            selected_topic = col_f3.selectbox(
+            selected_topic = f_col3.selectbox(
                 "Topic",
                 topics,
-                format_func=lambda x: x.title() if x != "All" else "All Topics"
+                format_func=lambda x: x.title() if x != "All" else "All Topics",
             )
 
             filtered = [
-                p for p in all_problems
+                p
+                for p in all_problems
                 if (selected_track == "All" or p["track"] == selected_track)
                 and (selected_diff == "All" or p["difficulty"] == selected_diff)
                 and (selected_topic == "All" or p["topic"] == selected_topic)
@@ -1497,7 +1202,7 @@ elif nav_choice == "Practice Arena":
                 st.warning("No problems match the current filter selection.")
                 st.stop()
 
-            # Pre-select if redirected from Due list or via ?problem= query parameter
+            # Pre-select if specified via query param or session state
             default_index = 0
             qp_prob = st.query_params.get("problem", "").strip().lower()
             if qp_prob:
@@ -1511,72 +1216,121 @@ elif nav_choice == "Practice Arena":
                         default_index = idx
                         break
 
-            prob_options = {p["id"]: f"{p['title']} [{p['track'].upper()} | {p['difficulty'].title()}]" for p in filtered}
-            selected_id = st.selectbox(
-                "Choose Problem",
+            prob_options = {p["id"]: p["title"] for p in filtered}
+            selected_id = f_col4.selectbox(
+                "Problem",
                 options=list(prob_options.keys()),
                 format_func=lambda x: prob_options[x],
-                index=default_index
+                index=default_index,
             )
             current_problem = problems_by_id[selected_id]
 
+        # ONE Problem Card
+        with st.container(border=True, key="practice_problem_card"):
             try:
                 curr_pos = all_problems.index(current_problem) + 1
             except ValueError:
                 curr_pos = 1
             total_in_lib = len(all_problems)
 
-            diff_badge_class = "butter" if current_problem["difficulty"] == "medium" else ("mint" if current_problem["difficulty"] == "easy" else "rose")
+            diff_badge_class = (
+                "butter"
+                if current_problem["difficulty"] == "medium"
+                else ("mint" if current_problem["difficulty"] == "easy" else "rose")
+            )
             track_badge_class = "lilac" if current_problem["track"] == "dsa" else "sky"
 
             st.html(
                 f"""
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #E7E1D6;">
-                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
-                    <span class="stat-badge badge-sky">{current_problem['topic'].title()}</span>
-                    <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
-                  </div>
-                  <div style="font-size: 12px; color: #66635A; font-family: 'Inter', sans-serif; white-space: nowrap;">
-                    Problem <strong>{curr_pos} of {total_in_lib}</strong>
-                  </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div style="display: flex; gap: 8px;">
+                        <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
+                        <span class="stat-badge badge-sky">{current_problem['topic'].title()}</span>
+                        <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
+                    </div>
+                    <span style="font-size: 12px; color: #66635A; font-family: 'Inter', sans-serif;">
+                        Problem <strong>{curr_pos} of {total_in_lib}</strong>
+                    </span>
                 </div>
-                """
-            )
-
-        # Problem Statement Card
-        with st.container(border=True, key="practice_statement_card"):
-            st.html(
-                f"""
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                  <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
-                  <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
-                </div>
-                <h2 class="problem-title" style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #171712; line-height: 1.25; margin-top: 0; margin-bottom: 12px;">
-                  {current_problem['title']}
-                </h2>
+                <h1 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0 0 12px 0;">
+                    {current_problem['title']}
+                </h1>
                 """
             )
             st.markdown(current_problem["statement_md"])
 
-            # Starter function signature box & constraints (P4: broken after each comma with 4-space indent)
-            sig_line = current_problem["starter_code"].splitlines()[0] if current_problem.get("starter_code") else f"def {current_problem['function_name']}():"
-            formatted_sig = sig_line.replace(", ", ",\n    ") if ("(" in sig_line and ")" in sig_line) else sig_line
+            # Starter signature box (broken after commas)
+            sig_line = (
+                current_problem["starter_code"].splitlines()[0]
+                if current_problem.get("starter_code")
+                else f"def {current_problem['function_name']}():"
+            )
+            formatted_sig = (
+                sig_line.replace(", ", ",\n    ")
+                if ("(" in sig_line and ")" in sig_line)
+                else sig_line
+            )
 
             st.html(
                 f"""
                 <div style="margin-top: 14px;">
-                  <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
-                  <pre class="code-block-light signature-display-box" style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
+                    <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
+                    <pre style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
                 </div>
                 <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
-                  Execution timeout: <strong>{current_problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
+                    Execution timeout: <strong>{current_problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
                 </div>
                 """
             )
 
+        # Hint Ladder (Butter Block strictly below Problem Card)
+        hint_key = f"hint_level_{current_problem['id']}"
+        if hint_key not in st.session_state:
+            st.session_state[hint_key] = 0
+
+        current_level = st.session_state[hint_key]
+        total_hints = len(current_problem.get("hints", []))
+
+        with st.container(border=True, key="practice_hint_ladder"):
+            sparkle_svg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 18v4"/><path d="m16.24 16.24 2.83 2.83"/><path d="M18 12h4"/><path d="m16.24 7.76 2.83-2.83"/></svg>'
+            st.html(
+                f"""
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px;">
+                        {sparkle_svg}
+                        <span>Progressive Hint Ladder</span>
+                    </div>
+                    <span style="font-size: 12px; font-weight: 600; color: #9A3412;">Level {current_level} of {total_hints} Revealed</span>
+                </div>
+                """
+            )
+
+            if current_level > 0:
+                for lvl in range(1, current_level + 1):
+                    st.html(
+                        f"""
+                        <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(154, 52, 18, 0.2); font-size: 13px; color: #9A3412;">
+                            <strong>Hint {lvl}:</strong> {current_problem['hints'][lvl - 1]}
+                        </div>
+                        """
+                    )
+
+            col_h1, col_h2 = st.columns(2)
+            with col_h1:
+                if st.button("Reveal Next Hint", key=f"btn_hint_{current_problem['id']}", disabled=(current_level >= total_hints), use_container_width=True):
+                    st.session_state[hint_key] += 1
+                    st.rerun()
+            with col_h2:
+                ai_hint_clicked = st.button("Ask AI to Explain Hint", key=f"btn_ai_hint_{current_problem['id']}", disabled=(current_level == 0), use_container_width=True)
+
+            if current_level > 0 and ai_hint_clicked:
+                with st.spinner("Asking local AI (Ollama)..."):
+                    code_val = st.session_state.get(f"code_{current_problem['id']}", current_problem["starter_code"])
+                    ai_hint_explanation = explain_hint(current_problem, code_val, hint_level=current_level)
+                    st.info(ai_hint_explanation)
+
     with right_col:
-        # Authentic defect code matching mockups/practice.html for live execution demonstration
+        # Authentic defect code for demo_fail
         LONGEST_SUBSTRING_DEFECT = (
             "def longest_substring(s: str) -> int:\n"
             "    # Sliding window with last seen character indices\n"
@@ -1596,7 +1350,6 @@ elif nav_choice == "Practice Arena":
         is_demo_fail = st.query_params.get("demo_fail", "").lower() == "true"
         editor_key = f"practice_editor_{current_problem['id']}"
 
-        # Ensure editor opens prefilled with defect code if demo_fail requested, else starter code
         if editor_key not in st.session_state:
             if is_demo_fail and current_problem["id"] == "longest-substring-without-repeating":
                 st.session_state[editor_key] = LONGEST_SUBSTRING_DEFECT
@@ -1605,21 +1358,13 @@ elif nav_choice == "Practice Arena":
 
         initial_code = st.session_state[editor_key]
 
-        # 1. Problem Editor Card (Top of Right Column)
+        # 1. ONE Editor Card (No window dots, glued action row)
         with st.container(border=True, key="practice_editor_card"):
-            # Lilac Header Strip
             st.html(
                 """
-                <div class="editor-header-strip" style="background-color: #E8E2FF; border-bottom: 1px solid rgba(89, 50, 234, 0.15); padding: 12px 20px; margin: -24px -24px 16px -24px; border-radius: 23px 23px 0 0; display: flex; justify-content: space-between; align-items: center; white-space: nowrap;">
-                  <div style="display: flex; align-items: center; gap: 10px; white-space: nowrap;">
-                    <div style="display: flex; gap: 6px;">
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #D92D20; display: inline-block;"></span>
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #B45309; display: inline-block;"></span>
-                      <span style="width: 10px; height: 10px; border-radius: 50%; background: #1F9D63; display: inline-block;"></span>
-                    </div>
-                    <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #5932EA; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;">SOLUTION EDITOR · PYTHON</span>
-                  </div>
-                  <span style="font-family: 'Inter', sans-serif; font-size: 12px; color: #5932EA; font-weight: 600; white-space: nowrap;">Sandbox · 3.0s · Python 3.12</span>
+                <div class="editor-strip">
+                    <span class="editor-strip-title">SOLUTION EDITOR · PYTHON</span>
+                    <span class="editor-strip-right">Sandbox · 3.0s · Python 3.11</span>
                 </div>
                 """
             )
@@ -1627,284 +1372,159 @@ elif nav_choice == "Practice Arena":
             user_code = render_editor(initial_code, key=editor_key, height="450px")
             st.session_state[f"code_{current_problem['id']}"] = user_code
 
-            # Bottom Action Bar with Primary Run & Submit pill
-            col_bar_info, col_bar_btn = st.columns([1, 1])
+            # Glued Action Row
+            col_bar_info, col_bar_btn = st.columns([1, 1], vertical_alignment="center")
             with col_bar_info:
                 st.html(
                     """
-                    <div style="padding-top: 10px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
-                      Clean environment · Network disabled
+                    <div style="padding-left: 18px; font-size: 12px; color: #66635A; display: flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#66635A" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+                        <span>Clean environment · Network disabled</span>
                     </div>
                     """
                 )
             with col_bar_btn:
                 run_submitted = st.button("Run & Submit", type="primary", key=f"btn_run_{current_problem['id']}", use_container_width=True)
 
-            # Check empty or unchanged starter code guard
             if run_submitted:
                 stripped_code = user_code.strip()
                 stripped_starter = current_problem["starter_code"].strip()
                 if not stripped_code or stripped_code == stripped_starter:
-                    st.warning(
-                        f"Write your solution first — the judge expected '{current_problem['function_name']}(...)'."
-                    )
+                    st.warning(f"Write your solution first — the judge expected '{current_problem['function_name']}(...)'.")
                     run_submitted = False
 
-        # 2. Verdict Banners & Diagnostics (Directly beneath editor when present)
-        if run_submitted or is_demo_fail:
-            exec_code = (
-                LONGEST_SUBSTRING_DEFECT
-                if (is_demo_fail and not run_submitted and current_problem["id"] == "longest-substring-without-repeating")
-                else user_code
-            )
-            with st.spinner("Executing solution inside sandbox..."):
-                judge_result = run_solution(exec_code, current_problem)
-
-            status = judge_result["status"]
-            runtime = judge_result["runtime_ms"]
-            passed = judge_result["passed"]
-            total = judge_result["total"]
-            hint_key = f"hint_level_{current_problem['id']}"
-            hints_used = st.session_state.get(hint_key, 0)
-
-            # Persist attempt to SQLite if manually submitted
-            if run_submitted:
-                store.record_attempt(
-                    problem_id=current_problem["id"],
-                    status=status,
-                    runtime_ms=runtime,
-                    hints_used=hints_used,
-                    mode="practice",
-                    topic=current_problem["topic"]
+        # 2. ONE Output Card (Neutral pre-run state or authentic post-run verdict + cases)
+        with st.container(border=True, key="practice_output_card"):
+            if not run_submitted and not is_demo_fail:
+                st.html(
+                    """
+                    <div style="padding: 24px; text-align: center; color: #66635A;">
+                        <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: #171712; margin-bottom: 4px;">
+                            Execution Sandbox Ready
+                        </div>
+                        <div style="font-size: 13.5px;">
+                            No execution yet. Run your code to test against visible and hidden test cases.
+                        </div>
+                    </div>
+                    """
                 )
+            else:
+                exec_code = (
+                    LONGEST_SUBSTRING_DEFECT
+                    if (is_demo_fail and not run_submitted and current_problem["id"] == "longest-substring-without-repeating")
+                    else user_code
+                )
+                with st.spinner("Executing solution inside sandbox..."):
+                    judge_result = run_solution(exec_code, current_problem)
 
-            # Verdict Banners:
-            if status == "pass":
-                check_icon_svg = get_svg_icon("circle-check-big", width=18, height=18, stroke="#167B48")
-                with st.container(border=True, key="verdict_pass_card"):
+                status = judge_result["status"]
+                runtime = judge_result["runtime_ms"]
+                passed = judge_result["passed"]
+                total = judge_result["total"]
+                hints_used = st.session_state.get(hint_key, 0)
+
+                if run_submitted:
+                    store.record_attempt(
+                        problem_id=current_problem["id"],
+                        status=status,
+                        runtime_ms=runtime,
+                        hints_used=hints_used,
+                        mode="practice",
+                        topic=current_problem["topic"],
+                    )
+
+                # Verdict Band
+                if status == "pass":
                     st.html(
                         f"""
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                          <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="stat-badge badge-mint">PASS</span>
-                            <strong style="font-size: 16px; color: #167B48; font-family: 'Inter', sans-serif;">
-                              {passed}/{total} tests passed ({runtime} ms)
-                            </strong>
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 6px; color: #167B48;">
-                            {check_icon_svg}
-                            <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">All Tests Accepted</span>
-                          </div>
+                        <div class="verdict-band verdict-band-pass">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="stat-badge badge-mint" style="background: #167B48 !important; color: #FFFFFF !important;">PASS</span>
+                                    <strong style="font-size: 15px; color: #167B48;">
+                                        {current_problem['title']} · PASS · {runtime} ms · Hints {hints_used}
+                                    </strong>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 600; color: #167B48;">All Tests Accepted</span>
+                            </div>
+                            <div style="font-size: 12px; display: flex; gap: 16px; margin-top: 4px;">
+                                <span><strong>Runtime:</strong> {runtime} ms</span>
+                                <span><strong>Tests:</strong> {passed} / {total} Passed</span>
+                            </div>
                         </div>
                         """
                     )
-            elif status == "fail":
-                circle_x_svg = get_svg_icon("circle-x", width=18, height=18, stroke="#C5221F")
-                with st.container(border=True, key="verdict_fail_card"):
+                else:
                     st.html(
                         f"""
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                          <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="stat-badge badge-rose">FAIL</span>
-                            <strong style="font-size: 16px; color: #C5221F; font-family: 'Inter', sans-serif;">
-                              {passed}/{total} tests passed ({runtime} ms)
-                            </strong>
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 6px; color: #C5221F;">
-                            {circle_x_svg}
-                            <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">Test Mismatch</span>
-                          </div>
+                        <div class="verdict-band verdict-band-fail">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="stat-badge badge-rose" style="background: #C5221F !important; color: #FFFFFF !important;">FAIL</span>
+                                    <strong style="font-size: 15px; color: #C5221F;">
+                                        {current_problem['title']} · FAIL · {runtime} ms · {passed}/{total} Passed
+                                    </strong>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 600; color: #C5221F;">Test Mismatch</span>
+                            </div>
                         </div>
                         """
                     )
 
-                # Failed Test Case Detail Card using single named mechanism: st.container(border=True, key="failed_case_card")
-                failed_cases = judge_result.get("failed_cases", [])
-                if failed_cases:
-                    fc = failed_cases[0]
-                    # Format authentic inputs cleanly
-                    if isinstance(fc.get("input_args"), list) and len(fc.get("input_args")) == 1 and isinstance(fc["input_args"][0], str):
-                        input_display = f's = "{fc["input_args"][0]}"'
-                    else:
-                        input_display = ", ".join(repr(arg) for arg in fc.get("input_args", []))
-
-                    with st.container(border=True, key="failed_case_card"):
+                    failed_cases = judge_result.get("failed_cases", [])
+                    if failed_cases:
+                        fc = failed_cases[0]
                         st.html(
                             f"""
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                              <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="stat-badge badge-rose">FAIL</span>
-                                <strong style="font-size: 16px; color: #C5221F; font-family: 'Inter', sans-serif;">
-                                  Visible Test Case 1 Failed
-                                </strong>
-                              </div>
-                              <div style="display: flex; align-items: center; gap: 6px; color: #C5221F;">
-                                {circle_x_svg}
-                                <span style="font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;">Visible Test Mismatch</span>
-                              </div>
-                            </div>
-                            <p style="font-size: 14px; color: #171712; margin-bottom: 12px; font-family: 'Inter', sans-serif;">
-                              Your solution failed on visible test case:
-                            </p>
-                            <div class="code-block-light" style="background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(197, 34, 31, 0.25);">
-                              <strong>Input:</strong> {input_display}<br>
-                              <strong>Expected:</strong> {fc.get('expected')}<br>
-                              <strong>Got:</strong> {fc.get('got')}
+                            <div style="padding: 14px 20px; background: rgba(255, 255, 255, 0.85); border-bottom: 1px solid #E7E1D6; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #171712;">
+                                <div><strong>Failed Input:</strong> <code>{fc.get('input_args')}</code></div>
+                                <div style="margin-top: 4px;"><strong>Expected:</strong> <code>{fc.get('expected')}</code></div>
+                                <div style="margin-top: 4px; color: #C5221F;"><strong>Got:</strong> <code>{fc.get('got')}</code></div>
                             </div>
                             """
                         )
-            elif status == "timeout":
-                with st.container(border=True, key="verdict_timeout_card"):
-                    st.markdown(":orange-background[**TIMEOUT**] Execution exceeded 3.0s time limit.")
-                    st.warning(judge_result.get("stderr", "Execution timed out."))
-            elif status == "error":
-                with st.container(border=True, key="verdict_fail_card"):
-                    st.markdown(":red-background[**ERROR**] Execution error")
-                    expected_fn = judge_result.get("expected_function")
-                    found_fns = judge_result.get("found_functions")
-                    if expected_fn and found_fns is not None:
-                        st.error(f"Function definition mismatch: Expected '{expected_fn}', but found {found_fns}.")
-                    st.code(judge_result.get("stderr", "Execution error"), language="text")
 
-            # Static Code Quality (Ruff)
-            with st.container(border=True, key="ruff_quality_card"):
-                st.html(
-                    """
-                    <div style="margin-bottom: 8px;">
-                      <h4 style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin: 0;">
-                        Static Code Quality (Ruff)
-                      </h4>
-                    </div>
-                    """
-                )
-                with st.spinner("Running Ruff static analysis..."):
-                    ruff_res = run_ruff_lint(user_code)
-                    if not ruff_res["findings"]:
-                        st.success("Clean code: Ruff found 0 diagnostics.")
-                    else:
-                        st.info(f"Ruff Diagnostic Summary: {ruff_res['summary']}")
-                        for finding in ruff_res["findings"]:
-                            st.markdown(f"- Line {finding['line']}, Col {finding['col']} `[{finding['code']}]`: {finding['message']}")
-
-            # Post-Pass Conceptual Review or Manual Review Trigger
-            with st.container(border=True, key="post_pass_review_card"):
-                st.html(
-                    """
-                    <div style="margin-bottom: 8px;">
-                      <h4 style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: #171712; margin: 0;">
-                        AI Code Review (Local Ollama)
-                      </h4>
-                    </div>
-                    """
-                )
-                review_requested = st.button("Request AI Code Review", key=f"btn_code_review_{current_problem['id']}", use_container_width=True)
-                if status == "pass" or review_requested:
-                    with st.spinner("Generating conceptual review..."):
-                        review_text = review_code(current_problem, user_code)
-                        st.info(review_text)
-
-        # 3. Visible Test Cases (Right Column, after Editor & Verdicts)
-        st.html(
-            """
-            <div style="margin-top: 16px; margin-bottom: 8px;">
-              <h3 style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: #171712; margin: 0;">
-                Visible Test Cases
-              </h3>
-            </div>
-            """
-        )
-        for i, tc in enumerate(current_problem["visible_tests"], 1):
-            with st.container(border=True, key=f"visible_test_card_{i}"):
-                args_repr = ", ".join(repr(arg) for arg in tc["input_args"])
-                check_icon_svg = get_svg_icon("circle-check-big", width=16, height=16, stroke="#167B48")
-                st.html(
-                    f"""
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
-                        {check_icon_svg}
-                        <span style="font-size: 13px; font-weight: 700; color: #167B48; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;">
-                          TEST CASE #{i}
-                        </span>
-                      </div>
-                      <span class="stat-badge badge-mint" style="white-space: nowrap;">Provided</span>
-                    </div>
-                    <div class="code-block-light" style="background: rgba(255, 255, 255, 0.7); border-color: rgba(22, 123, 72, 0.2);">
-                      Input: {args_repr}<br>
-                      Expected: {tc['expected']}
-                    </div>
-                    """
-                )
-
-        # 4. Progressive Hint Ladder (Right Column, after Test Cases)
-        with st.container(border=True, key="practice_hint_card"):
-            hint_key = f"hint_level_{current_problem['id']}"
-            if hint_key not in st.session_state:
-                st.session_state[hint_key] = 0
-
-            current_level = st.session_state[hint_key]
-            total_hints = len(current_problem.get("hints", []))
-
-            amber_sparkle = get_svg_icon("sparkles", width=16, height=16, stroke="#9A3412")
-            st.html(
-                f"""
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    {amber_sparkle}
-                    <span style="font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;">
-                      Hint Ladder ({current_level} of {total_hints} Revealed)
-                    </span>
-                  </div>
-                </div>
-                """
-            )
-
-            if st.button("Reveal Next Hint", key=f"btn_hint_{current_problem['id']}", disabled=(current_level >= total_hints), use_container_width=True):
-                st.session_state[hint_key] += 1
-                st.rerun()
-
-            ai_hint_clicked = st.button("Ask AI to Explain Hint", key=f"btn_ai_hint_{current_problem['id']}", disabled=(current_level == 0), use_container_width=True)
-
-            if current_level > 0:
-                for lvl in range(1, current_level + 1):
+                # Visible Test Cases Section
+                st.html('<div style="padding: 16px 20px 8px 20px;"><strong style="font-family: \'Fraunces\', serif; font-size: 15px; color: #171712;">Visible Test Cases</strong></div>')
+                for i, tc in enumerate(current_problem["visible_tests"], 1):
+                    args_repr = ", ".join(repr(arg) for arg in tc["input_args"])
                     st.html(
                         f"""
-                        <div style="margin-top: 10px; padding: 10px 14px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border: 1px solid rgba(180, 83, 9, 0.2); font-size: 14px; color: #171712;">
-                          <strong>Hint {lvl}:</strong> {current_problem['hints'][lvl - 1]}
+                        <div style="margin: 0 20px 12px 20px; background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 12px; padding: 12px 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span style="font-size: 12px; font-weight: 700; color: #167B48; letter-spacing: 0.04em;">TEST CASE #{i}</span>
+                                <span class="stat-badge badge-mint">Provided</span>
+                            </div>
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #171712;">
+                                <div><strong>Input:</strong> <code>{args_repr}</code></div>
+                                <div style="margin-top: 2px;"><strong>Expected:</strong> <code>{tc['expected']}</code></div>
+                            </div>
                         </div>
                         """
                     )
 
-                if ai_hint_clicked:
-                    with st.spinner("Asking local AI (Ollama)..."):
-                        code_val = st.session_state.get(f"code_{current_problem['id']}", current_problem["starter_code"])
-                        ai_hint_explanation = explain_hint(current_problem, code_val, hint_level=current_level)
-                        st.markdown(ai_hint_explanation)
-
 
 # ==============================================================================
-# SCREEN 3: MOCK INTERVIEW ARENA (LANE T & U5)
+# SCREEN 3: MOCK INTERVIEW ARENA (ADDENDUM A)
 # ==============================================================================
 elif nav_choice == "Mock Interview":
-    # Mock interview session state
+    render_topbar("Mock Interview", streak_count, len(due_list))
+
     if "mock_state" not in st.session_state:
-        st.session_state["mock_state"] = "unstarted"  # unstarted | running | completed
+        st.session_state["mock_state"] = "unstarted"
 
     if st.query_params.get("mock_state", "").lower() == "completed":
         st.session_state["mock_state"] = "completed"
         if "mock_start_time" not in st.session_state:
             st.session_state["mock_start_time"] = time.time() - 25 * 60
             st.session_state["mock_start_iso"] = datetime.now().isoformat()
+        if "mock_finish_time" not in st.session_state:
             st.session_state["mock_finish_time"] = time.time()
+        if "mock_problems" not in st.session_state:
             st.session_state["mock_problems"] = [
                 problems_by_id.get("binary-search", all_problems[0]),
                 problems_by_id.get("longest-substring-without-repeating", all_problems[1]),
             ]
-            st.session_state["mock_p1_status"] = "not_attempted"
-            st.session_state["mock_p2_status"] = "not_attempted"
-            st.session_state["mock_p1_hints"] = 0
-            st.session_state["mock_p2_hints"] = 0
-            st.session_state["mock_p1_result"] = None
-            st.session_state["mock_p2_result"] = None
 
     if st.query_params.get("mock_state", "").lower() == "running":
         st.session_state["mock_state"] = "running"
@@ -1915,38 +1535,33 @@ elif nav_choice == "Mock Interview":
             p1 = problems_by_id.get("binary-search", all_problems[0])
             p2 = problems_by_id.get("longest-substring-without-repeating", all_problems[1])
             st.session_state["mock_problems"] = [p1, p2]
-            st.session_state["mock_p1_status"] = "not_attempted"
-            st.session_state["mock_p1_hints"] = 0
-            st.session_state["mock_p2_status"] = "not_attempted"
-            st.session_state["mock_p2_hints"] = 0
-            st.session_state["mock_p1_result"] = None
-            st.session_state["mock_p2_result"] = None
 
+    # --- STATE 1: UNSTARTED ---
     if st.session_state["mock_state"] == "unstarted":
-        col_hdr1, col_hdr2 = st.columns([8, 4], vertical_alignment="center")
-        with col_hdr1:
+        st.markdown(
+            """
+            <div style="margin-bottom: 20px;">
+                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    Technical Interview Simulation
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0;">
+                    Two curated algorithmic problems under 45:00 strict countdown constraint.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        with st.container(border=True, key="mock_ready_card"):
             st.markdown(
                 """
-                <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
-                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        st.html('<div style="height: 16px;"></div>')
-
-        with st.container(border=True, key="mock_timer_card"):
-            st.markdown(
-                """
-                <div style="font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: #171712; margin-bottom: 6px;">
+                <div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin-bottom: 6px;">
                     Ready to Begin Simulation?
                 </div>
                 <div style="font-size: 14px; color: #66635A; line-height: 1.5; margin-bottom: 20px;">
-                    A 45-minute timed simulation of a technical coding round consisting of 2 curated problems.
-                    The timer ticks down automatically in real time across two synchronized indicators.
-                    Hints and execution metrics are tracked on your authentic scorecard.
+                    A 45-minute timed simulation consisting of 2 algorithmic problems.
+                    The timer runs automatically across synchronized indicators.
+                    Submissions are evaluated against real test suites and recorded on your session scorecard.
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1959,30 +1574,21 @@ elif nav_choice == "Mock Interview":
                 st.session_state["mock_start_iso"] = datetime.now().isoformat()
                 st.session_state["mock_duration_sec"] = 45 * 60
                 st.session_state["mock_problems"] = [p1, p2]
-                st.session_state["mock_p1_status"] = "not_attempted"
-                st.session_state["mock_p2_status"] = "not_attempted"
-                st.session_state["mock_p1_hints"] = 0
-                st.session_state["mock_p2_hints"] = 0
-                st.session_state["mock_p1_result"] = None
-                st.session_state["mock_p2_result"] = None
+                st.session_state["mock_active_tab"] = 0
                 st.rerun()
 
         st.html('<div style="height: 16px;"></div>')
 
-        # Simulation Rules Card (DEFECT 5)
+        # Simulation Rules Card (Full-width, no void)
         with st.container(border=True, key="mock_rules_card"):
             st.markdown(
                 """
                 <div style="margin-bottom: 16px;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <span style="background: #FFE8D1; color: #B93815; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            Protocol
-                        </span>
-                    </div>
-                    <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    <span class="stat-badge badge-peach" style="margin-bottom: 6px;">Protocol</span>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
                         Simulation Rules &amp; Evaluation Protocol
-                    </h3>
-                    <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                    </h2>
+                    <p style="font-size: 14px; color: #66635A; margin: 0;">
                         Standard technical coding round parameters enforced automatically by local judge.
                     </p>
                 </div>
@@ -1993,13 +1599,13 @@ elif nav_choice == "Mock Interview":
             with r_col1:
                 st.markdown(
                     """
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 16px 18px; margin-bottom: 12px;">
-                        <div style="font-weight: 700; font-size: 14px; color: #171712; margin-bottom: 4px;">1. Strict 45-Minute Limit</div>
-                        <div style="font-size: 13px; color: #66635A; line-height: 1.5;">A countdown timer runs across synchronized indicators. Submissions lock automatically when time expires.</div>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;">
+                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">1. Strict 45-Minute Limit</strong>
+                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">A countdown timer runs in the sub-strip. Submissions lock automatically when time expires.</span>
                     </div>
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 16px 18px;">
-                        <div style="font-weight: 700; font-size: 14px; color: #171712; margin-bottom: 4px;">2. Two Curated Problems</div>
-                        <div style="font-size: 13px; color: #66635A; line-height: 1.5;">Curated pairs designed to evaluate algorithmic approach, edge cases, and code efficiency under realistic interview pacing.</div>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px;">
+                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">2. Two Curated Problems</strong>
+                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Pairs designed to evaluate algorithmic approach, edge cases, and code efficiency under pacing constraints.</span>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -2007,19 +1613,19 @@ elif nav_choice == "Mock Interview":
             with r_col2:
                 st.markdown(
                     """
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 16px 18px; margin-bottom: 12px;">
-                        <div style="font-weight: 700; font-size: 14px; color: #171712; margin-bottom: 4px;">3. Progressive Hint Tracking</div>
-                        <div style="font-size: 13px; color: #66635A; line-height: 1.5;">Up to 3 progressive hints available per problem. Every revealed hint is recorded and reported on your final scorecard.</div>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;">
+                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">3. Progressive Hint Tracking</strong>
+                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Up to 3 progressive hints available per problem. Every revealed hint is reported on your scorecard.</span>
                     </div>
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 16px 18px;">
-                        <div style="font-weight: 700; font-size: 14px; color: #171712; margin-bottom: 4px;">4. Authentic Code Execution</div>
-                        <div style="font-size: 13px; color: #66635A; line-height: 1.5;">Solutions execute in an isolated local subprocess against real test suites. Zero invented scores or simulated verdicts.</div>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px;">
+                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">4. Authentic Code Execution</strong>
+                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Solutions execute in an isolated local subprocess against real test suites. Zero invented scores.</span>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
 
-        # Past Sessions (Render ONLY if mock sessions exist in store, omit completely if 0)
+        # Past Sessions (Render ONLY if mock attempts exist in store)
         with store._get_connection() as conn:
             cur = conn.execute(
                 """
@@ -2037,10 +1643,10 @@ elif nav_choice == "Mock Interview":
                 st.markdown(
                     """
                     <div style="margin-bottom: 16px;">
-                        <h3 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                        <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
                             Past Mock Sessions
-                        </h3>
-                        <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                        </h2>
+                        <p style="font-size: 14px; color: #66635A; margin: 0;">
                             Authentic interview simulation attempts recorded in local SQLite database.
                         </p>
                     </div>
@@ -2059,7 +1665,7 @@ elif nav_choice == "Mock Interview":
                         <td style="color: #66635A; font-size: 13px;">{a['attempt_date']}</td>
                     </tr>""")
                 st.markdown(
-                    f"""<table class="dashboard-table">
+                    f"""<table class="queue-table">
                         <thead>
                             <tr>
                                 <th>Problem</th>
@@ -2077,482 +1683,278 @@ elif nav_choice == "Mock Interview":
                     unsafe_allow_html=True,
                 )
 
+    # --- STATE 2: RUNNING ---
     elif st.session_state["mock_state"] == "running":
         p_list = st.session_state["mock_problems"]
+        active_tab_idx = st.session_state.get("mock_active_tab", 0)
 
-        # Header Row: Direction A Title on left, Display 1 (Autorefresh Timer Fragment) on right
-        col_hdr1, col_hdr2 = st.columns([7, 5], vertical_alignment="center")
-        with col_hdr1:
-            st.markdown(
-                """
-                <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
-                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        # Display 1: Header capsule in wash-peach #FFE8D1, text #B93815, 999px radius, Lucide timer icon, ticking mm:ss
+        # Place 1: Sub-strip Countdown Timer via @st.fragment
         @st.fragment(run_every=1.0)
-        def render_header_timer():
+        def render_mock_substrip_timer():
             start = st.session_state.get("mock_start_time", time.time())
             duration = st.session_state.get("mock_duration_sec", 45 * 60)
             mins, secs, is_expired = calculate_remaining_time(start, duration, time.time())
-            timer_icon = get_svg_icon("timer", width=20, height=20, stroke="#B93815", stroke_width=2)
+            timer_icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
             if is_expired:
                 st.session_state["mock_time_expired"] = True
-                st.markdown(
+                st.html(
                     f"""
-                    <div style="display: flex; justify-content: flex-end; align-items: center;">
-                      <div style="background: #FFE8D1; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 10px 22px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05);">
+                    <div class="mock-timer-pill" style="color: #C5221F; border-color: rgba(197, 34, 31, 0.25);">
                         {timer_icon}
-                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #C5221F; font-variant-numeric: tabular-nums;">
-                          00:00
-                        </span>
-                        <span style="background: #FFFFFF; border: 1px solid rgba(185, 56, 21, 0.25); color: #C5221F; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 12px;">Expired</span>
-                      </div>
+                        <span>00:00 Expired</span>
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
             else:
-                st.markdown(
+                st.html(
                     f"""
-                    <div style="display: flex; justify-content: flex-end; align-items: center;">
-                      <div style="background: #FFE8D1; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 10px 22px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(23, 23, 18, 0.05);">
+                    <div class="mock-timer-pill">
                         {timer_icon}
-                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #171712; font-variant-numeric: tabular-nums;">
-                          {mins:02d}:{secs:02d}
-                        </span>
-                        <span style="background: #FFFFFF; border: 1px solid rgba(185, 56, 21, 0.25); color: #B93815; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 12px;">Ticking Live</span>
-                      </div>
+                        <span>{mins:02d}:{secs:02d}</span>
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
 
-        with col_hdr2:
-            render_header_timer()
+        # Sub-strip Container
+        with st.container(border=True, key="mock_substrip_container"):
+            col_tabs, col_time, col_end = st.columns([6, 3, 3], vertical_alignment="center")
+            with col_tabs:
+                t1_active = "active" if active_tab_idx == 0 else ""
+                t2_active = "active" if active_tab_idx == 1 else ""
+                col_t1, col_t2 = st.columns(2)
+                with col_t1:
+                    if st.button(f"1: {p_list[0]['title']}", key="btn_tab_0", use_container_width=True):
+                        st.session_state["mock_active_tab"] = 0
+                        st.rerun()
+                with col_t2:
+                    if st.button(f"2: {p_list[1]['title']}", key="btn_tab_1", use_container_width=True):
+                        st.session_state["mock_active_tab"] = 1
+                        st.rerun()
 
-        st.html('<div style="height: 12px;"></div>')
+            with col_time:
+                render_mock_substrip_timer()
 
-        # Display 2 & Setup & Session Control Card: st.container(border=True, key="mock_timer_card")
-        with st.container(border=True, key="mock_timer_card"):
-            c_time, c_progress, c_action = st.columns([4, 4, 3], vertical_alignment="center")
-
-            with c_time:
-                @st.fragment(run_every=1.0)
-                def render_card_timer():
-                    start = st.session_state.get("mock_start_time", time.time())
-                    duration = st.session_state.get("mock_duration_sec", 45 * 60)
-                    mins, secs, is_expired = calculate_remaining_time(start, duration, time.time())
-                    disp = "00:00" if is_expired else f"{mins:02d}:{secs:02d}"
-                    st.markdown(
-                        f"""
-                        <div>
-                            <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9A3412;">
-                                Time Remaining
-                            </div>
-                            <div style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #B93815; font-variant-numeric: tabular-nums; line-height: 1.2; margin-top: 2px;">
-                                {disp}
-                            </div>
-                            <div style="font-size: 12px; color: #9A3412; margin-top: 2px;">
-                                45:00 strict countdown constraint
-                            </div>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-                render_card_timer()
-
-            with c_progress:
-                session_start_iso = st.session_state.get("mock_start_iso")
-                p1_eval = get_mock_problem_evaluation(
-                    p_list[0]["id"],
-                    session_start_iso,
-                    st.session_state.get("mock_p1_result"),
-                    st.session_state.get("mock_p1_hints", 0),
-                    store
-                )
-                p2_eval = get_mock_problem_evaluation(
-                    p_list[1]["id"],
-                    session_start_iso,
-                    st.session_state.get("mock_p2_result"),
-                    st.session_state.get("mock_p2_hints", 0),
-                    store
-                )
-                solved_count = (1 if p1_eval["is_pass"] else 0) + (1 if p2_eval["is_pass"] else 0)
-                p1_prog_badge = "PASS" if p1_eval["is_pass"] else ("FAIL" if p1_eval["status"] == "fail" else "Not Attempted")
-                p2_prog_badge = "PASS" if p2_eval["is_pass"] else ("FAIL" if p2_eval["status"] == "fail" else "Not Attempted")
-                st.markdown(
-                    f"""
-                    <div>
-                        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">
-                            Session Progress
-                        </div>
-                        <div style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 600; color: #171712; font-variant-numeric: tabular-nums; line-height: 1.2; margin-top: 2px;">
-                            {solved_count} of 2 Solved
-                        </div>
-                        <div style="font-size: 12px; color: #66635A; margin-top: 2px;">
-                            P1: {p1_prog_badge} · P2: {p2_prog_badge}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            with c_action:
-                st.markdown("<div style='text-align: right;'>", unsafe_allow_html=True)
-                if st.button("End Interview Early", key="btn_end_mock", help="Conclude simulation and generate final scorecard"):
+            with col_end:
+                if st.button("End Interview Early", key="btn_end_mock", use_container_width=True):
                     st.session_state["mock_state"] = "completed"
                     st.session_state["mock_finish_time"] = time.time()
                     st.rerun()
-                st.markdown("</div>", unsafe_allow_html=True)
 
-        st.html('<div style="height: 16px;"></div>')
+        # Active Problem Workspace
+        active_problem = p_list[active_tab_idx]
+        col_m_left, col_m_right = st.columns([42, 58], gap="medium")
 
-        # Scorecard Summary Card (Direction A Single Named Mechanism)
-        with st.container(border=True, key="mock_scorecard_card"):
-            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
-            with sc_hdr_left:
-                st.markdown(
+        with col_m_left:
+            # ONE Problem Card
+            with st.container(border=True, key="mock_problem_card"):
+                st.html(
+                    f"""
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <span class="stat-badge badge-peach">Problem {active_tab_idx + 1} of 2</span>
+                        <span class="stat-badge badge-sky">{active_problem['track'].upper()}</span>
+                        <span class="stat-badge badge-mint">{active_problem['difficulty'].title()}</span>
+                    </div>
+                    <h1 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0 0 12px 0;">
+                        {active_problem['title']}
+                    </h1>
                     """
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <span style="background: #FFE8D1; color: #B93815; border: 1px solid rgba(185, 56, 21, 0.25); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            Session In Progress
+                )
+                st.markdown(active_problem["statement_md"])
+
+                sig_line = (
+                    active_problem["starter_code"].splitlines()[0]
+                    if active_problem.get("starter_code")
+                    else f"def {active_problem['function_name']}():"
+                )
+                formatted_sig = (
+                    sig_line.replace(", ", ",\n    ")
+                    if ("(" in sig_line and ")" in sig_line)
+                    else sig_line
+                )
+
+                st.html(
+                    f"""
+                    <div style="margin-top: 14px;">
+                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; display: block; margin-bottom: 6px;">Starter Function Signature</span>
+                        <pre style="font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5 !important; white-space: pre-wrap !important; word-break: break-word !important; margin: 0 !important; padding: 12px 16px !important; background: #FBFAF7 !important; border: 1px solid #E7E1D6 !important; border-radius: 12px !important; color: #171712 !important; overflow-x: hidden !important;">{formatted_sig}</pre>
+                    </div>
+                    """
+                )
+
+            # Hint Ladder
+            m_hint_key = f"mock_hints_{active_problem['id']}"
+            if m_hint_key not in st.session_state:
+                st.session_state[m_hint_key] = 0
+
+            m_level = st.session_state[m_hint_key]
+            m_total_hints = len(active_problem.get("hints", []))
+
+            with st.container(border=True, key="mock_hint_ladder"):
+                st.html(
+                    f"""
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em;">
+                            Hint Ladder ({m_level} of {m_total_hints} Revealed)
                         </span>
                     </div>
-                    <div style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25;">
-                        Mock Interview Evaluation
-                    </div>
-                    <div style="font-size: 13px; color: #66635A; margin-top: 2px;">
-                        Live simulation evaluated against authentic test suites under timed conditions.
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            with sc_hdr_right:
-                st.markdown(
-                    f"""
-                    <div style="text-align: right;">
-                        <div style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: #171712; font-variant-numeric: tabular-nums;">
-                            {solved_count} Solved, {2 - solved_count} In Progress
-                        </div>
-                        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A; margin-top: 2px;">
-                            Summary Metrics
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            st.html('<div style="height: 14px;"></div>')
-
-            # Authentic Problems Evaluation Grid (2 columns matching mockups/mock.html)
-            col_sc1, col_sc2 = st.columns(2, gap="medium")
-
-            # Problem 1 Summary Box (Authentic session-scoped evaluation)
-            with col_sc1:
-                prob1_title = p_list[0]["title"]
-                if p1_eval["status"] == "pass":
-                    p1_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">PASS</span>'
-                    p1_rt_str = f"<span><strong>Runtime:</strong> {p1_eval['runtime_ms']} ms</span>"
-                elif p1_eval["status"] == "fail":
-                    p1_badge = '<span style="background: #FFE0E0; color: #C5221F; border: 1px solid rgba(197, 34, 31, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">FAIL</span>'
-                    p1_rt_str = f"<span><strong>Runtime:</strong> {p1_eval['runtime_ms']} ms</span>"
-                else:
-                    p1_badge = '<span style="background: rgba(102, 99, 90, 0.12); color: #66635A; border: 1px solid #E7E1D6; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">NOT ATTEMPTED</span>'
-                    p1_rt_str = "<span><strong>Runtime:</strong> —</span>"
-
-                st.markdown(
-                    f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {prob1_title}</strong>
-                            {p1_badge}
-                        </div>
-                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[0]['track'].upper()} · Topic: {p_list[0]['topic']} · {p_list[0]['difficulty'].title()}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
-                            {p1_rt_str}
-                            <span><strong>Hints Used:</strong> {p1_eval['hints_used']}</span>
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            # Problem 2 Summary Box (Authentic session-scoped evaluation)
-            with col_sc2:
-                prob2_title = p_list[1]["title"]
-                if p2_eval["status"] == "pass":
-                    p2_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">PASS</span>'
-                    p2_rt_str = f"<span><strong>Runtime:</strong> {p2_eval['runtime_ms']} ms</span>"
-                elif p2_eval["status"] == "fail":
-                    p2_badge = '<span style="background: #FFE0E0; color: #C5221F; border: 1px solid rgba(197, 34, 31, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">FAIL</span>'
-                    p2_rt_str = f"<span><strong>Runtime:</strong> {p2_eval['runtime_ms']} ms</span>"
-                else:
-                    p2_badge = '<span style="background: rgba(102, 99, 90, 0.12); color: #66635A; border: 1px solid #E7E1D6; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;">NOT ATTEMPTED</span>'
-                    p2_rt_str = "<span><strong>Runtime:</strong> —</span>"
-
-                st.markdown(
-                    f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {prob2_title}</strong>
-                            {p2_badge}
-                        </div>
-                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[1]['track'].upper()} · Topic: {p_list[1]['topic']} · {p_list[1]['difficulty'].title()}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
-                            {p2_rt_str}
-                            <span><strong>Hints Used:</strong> {p2_eval['hints_used']}</span>
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            st.html('<div style="height: 14px;"></div>')
-
-            # Footer of Scorecard Card: Status info and Secondary Pill Export Button
-            sc_ft_left, sc_ft_right = st.columns([7, 5], vertical_alignment="center")
-            with sc_ft_left:
-                st.markdown(
                     """
-                    <div style="font-size: 13px; color: #66635A;">
-                        Authentic Evaluation · Single Named Mechanism · Zero Invented Metrics
+                )
+                if m_level > 0:
+                    for lvl in range(1, m_level + 1):
+                        st.html(
+                            f"""
+                            <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(154, 52, 18, 0.2); font-size: 13px; color: #9A3412;">
+                                <strong>Hint {lvl}:</strong> {active_problem['hints'][lvl - 1]}
+                            </div>
+                            """
+                        )
+
+                if st.button("Reveal Next Hint", key=f"btn_m_hint_{active_problem['id']}", disabled=(m_level >= m_total_hints), use_container_width=True):
+                    st.session_state[m_hint_key] += 1
+                    st.rerun()
+
+        with col_m_right:
+            m_editor_key = f"mock_editor_{active_problem['id']}"
+            if m_editor_key not in st.session_state:
+                st.session_state[m_editor_key] = active_problem["starter_code"]
+
+            m_code = st.session_state[m_editor_key]
+
+            # Allow test solve via query param
+            if st.query_params.get("mock_solve_p1", "").lower() == "true" and active_problem["id"] == "binary-search":
+                m_code = (
+                    "def binary_search(nums: list, target: int) -> int:\n"
+                    "    left, right = 0, len(nums) - 1\n"
+                    "    while left <= right:\n"
+                    "        mid = (left + right) // 2\n"
+                    "        if nums[mid] == target:\n"
+                    "            return mid\n"
+                    "        elif nums[mid] < target:\n"
+                    "            left = mid + 1\n"
+                    "        else:\n"
+                    "            right = mid - 1\n"
+                    "    return -1\n"
+                )
+
+            # Editor Card
+            with st.container(border=True, key="mock_editor_card"):
+                st.html(
+                    """
+                    <div class="editor-strip">
+                        <span class="editor-strip-title">MOCK INTERVIEW EDITOR · PYTHON</span>
+                        <span class="editor-strip-right">Sandbox · Python 3.11</span>
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
-            with sc_ft_right:
-                scorecard_export_md = f"""# Mock Interview Scorecard — AI Coding Prep Coach
-Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}
-Status: {'Completed' if st.session_state.get('mock_state') == 'completed' else 'In Progress'}
-Time Elapsed: {round((time.time() - st.session_state.get('mock_start_time', time.time())) / 60, 1)} minutes
-Summary: {solved_count} Solved, {2 - solved_count} In Progress
+                user_m_code = render_editor(m_code, key=m_editor_key, height="450px")
+                st.session_state[f"mock_code_{active_problem['id']}"] = user_m_code
 
-## Authentic Problem Results
-- **Problem 1: {p_list[0]['title']}** ({p_list[0]['topic']} · {p_list[0]['difficulty'].title()})
-  - Status: {p1_eval['status'].upper().replace('_', ' ')}
-  - Runtime: {f"{p1_eval['runtime_ms']} ms" if p1_eval['runtime_ms'] is not None else "—"}
-  - Hints Used: {p1_eval['hints_used']}
-- **Problem 2: {p_list[1]['title']}** ({p_list[1]['topic']} · {p_list[1]['difficulty'].title()})
-  - Status: {p2_eval['status'].upper().replace('_', ' ')}
-  - Runtime: {f"{p2_eval['runtime_ms']} ms" if p2_eval['runtime_ms'] is not None else "—"}
-  - Hints Used: {p2_eval['hints_used']}
+                col_b_info, col_b_btn = st.columns([1, 1], vertical_alignment="center")
+                with col_b_info:
+                    st.html('<div style="padding-left: 18px; font-size: 12px; color: #66635A;">Timed environment · Scoped run</div>')
+                with col_b_btn:
+                    m_submit = st.button("Submit Problem Solution", type="primary", key=f"btn_msub_{active_problem['id']}", use_container_width=True)
 
-*Generated locally by AI Coding Prep Coach (Judge: Code, not AI).*
-"""
-                st.download_button(
-                    label="Export Results as Markdown",
-                    data=scorecard_export_md,
-                    file_name=f"mock_scorecard_{date.today().isoformat()}.md",
-                    mime="text/markdown",
-                    key="btn_export_markdown",
-                )
+            # Output Card
+            m_res_key = f"mock_result_{active_problem['id']}"
+            if m_submit:
+                with st.spinner("Judging solution..."):
+                    m_res = run_solution(user_m_code, active_problem)
+                    st.session_state[m_res_key] = m_res
+                    store.record_attempt(
+                        problem_id=active_problem["id"],
+                        status=m_res["status"],
+                        runtime_ms=m_res["runtime_ms"],
+                        hints_used=st.session_state.get(m_hint_key, 0),
+                        mode="mock",
+                        topic=active_problem["topic"],
+                    )
+                    st.rerun()
 
-        st.html('<div style="height: 20px;"></div>')
+            saved_m_res = st.session_state.get(m_res_key)
+            with st.container(border=True, key="mock_output_card"):
+                if not saved_m_res:
+                    st.html(
+                        """
+                        <div style="padding: 24px; text-align: center; color: #66635A;">
+                            <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: #171712; margin-bottom: 4px;">
+                                Mock Execution Output
+                            </div>
+                            <div style="font-size: 13.5px;">
+                                Submit your solution to evaluate against authentic interview test cases.
+                            </div>
+                        </div>
+                        """
+                    )
+                else:
+                    m_stat = saved_m_res["status"]
+                    m_rt = saved_m_res["runtime_ms"]
+                    m_pass = saved_m_res["passed"]
+                    m_tot = saved_m_res["total"]
 
-        time_expired = st.session_state.get("mock_time_expired", False)
-        if time_expired:
-            st.warning("Time limit expired. Submissions are now locked. Please click Finish to generate your scorecard.")
-
-        mock_tab1, mock_tab2 = st.tabs([f"Problem 1: {p_list[0]['title']}", f"Problem 2: {p_list[1]['title']}"])
-
-        # TAB 1
-        with mock_tab1:
-            prob1 = p_list[0]
-            col_m1_left, col_m1_right = st.columns([4, 7], gap="large")
-
-            with col_m1_left:
-                with st.container(border=True):
-                    st.subheader(prob1["title"])
-                    st.caption(f"Track: {prob1['track'].upper()} | Topic: {prob1['topic']} | Difficulty:\u00A0{prob1['difficulty'].title()}")
-                    st.markdown(prob1["statement_md"])
-
-                st.subheader("Visible Test Cases")
-                for i, tc in enumerate(prob1["visible_tests"], 1):
-                    with st.expander(f"Visible Case #{i}", expanded=True):
-                        st.code(f"Input: {tc['input_args']}\nExpected: {tc['expected']}", language="python")
-
-                with st.container(border=True):
-                    if st.button("Reveal Hint (Problem 1)", key="btn_m1_hint") and st.session_state["mock_p1_hints"] < 3:
-                        st.session_state["mock_p1_hints"] += 1
-                        st.rerun()
-
-                    if st.session_state["mock_p1_hints"] > 0:
-                        for h in range(st.session_state["mock_p1_hints"]):
-                            st.info(f"Hint {h+1}: {prob1['hints'][h]}")
-
-            with col_m1_right:
-                with st.container(border=True):
-                    st.subheader("Solution Editor")
-                    code1 = render_editor(prob1["starter_code"], key="mock_editor_p1", height=440)
-                    if st.query_params.get("mock_solve_p1", "").lower() == "true":
-                        code1 = (
-                            "def binary_search(nums: list, target: int) -> int:\n"
-                            "    left, right = 0, len(nums) - 1\n"
-                            "    while left <= right:\n"
-                            "        mid = (left + right) // 2\n"
-                            "        if nums[mid] == target:\n"
-                            "            return mid\n"
-                            "        elif nums[mid] < target:\n"
-                            "            left = mid + 1\n"
-                            "        else:\n"
-                            "            right = mid - 1\n"
-                            "    return -1\n"
+                    if m_stat == "pass":
+                        st.html(
+                            f"""
+                            <div class="verdict-band verdict-band-pass">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="stat-badge badge-mint" style="background: #167B48 !important; color: #FFFFFF !important;">PASS</span>
+                                    <strong style="font-size: 15px; color: #167B48;">All {m_pass}/{m_tot} Tests Accepted ({m_rt} ms)</strong>
+                                </div>
+                            </div>
+                            """
                         )
-                    st.session_state["mock_p1_code"] = code1
-
-                    if st.button("Submit Problem 1", type="primary", disabled=time_expired, key="btn_sub_p1"):
-                        res1 = run_solution(code1, prob1)
-                        st.session_state["mock_p1_status"] = res1["status"]
-                        st.session_state["mock_p1_result"] = res1
-                        store.record_attempt(
-                            prob1["id"], res1["status"], res1["runtime_ms"],
-                            st.session_state["mock_p1_hints"], mode="mock", topic=prob1["topic"]
+                    else:
+                        st.html(
+                            f"""
+                            <div class="verdict-band verdict-band-fail">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="stat-badge badge-rose" style="background: #C5221F !important; color: #FFFFFF !important;">FAIL</span>
+                                    <strong style="font-size: 15px; color: #C5221F;">{m_pass}/{m_tot} Tests Passed ({m_rt} ms)</strong>
+                                </div>
+                            </div>
+                            """
                         )
-                        st.rerun()
 
-                # Display stored result for Tab 1
-                res1 = st.session_state.get("mock_p1_result")
-                if res1:
-                    with st.container(border=True):
-                        st.subheader("Judge Results (Problem 1)")
-                        if res1["status"] == "pass":
-                            st.markdown(f':green-background[**PASS**] **{res1["passed"]}/{res1["total"]}** tests passed (`{res1["runtime_ms"]} ms`)')
-                        elif res1["status"] == "fail":
-                            st.markdown(f':red-background[**FAIL**] **{res1["passed"]}/{res1["total"]}** tests passed (`{res1["runtime_ms"]} ms`)')
-                            for fc in res1.get("failed_cases", []):
-                                with st.container(border=True):
-                                    st.markdown(f"**Input:** `{fc.get('input_args')}`")
-                                    st.markdown(f"**Expected:** `{fc.get('expected')}`")
-                                    st.markdown(f"**Got:** `{fc.get('got')}`")
-                        else:
-                            st.markdown(f':orange-background[**{res1["status"].upper()}**]')
-                            st.code(res1.get("stderr", ""), language="text")
-
-        # TAB 2
-        with mock_tab2:
-            prob2 = p_list[1]
-            col_m2_left, col_m2_right = st.columns([4, 7], gap="large")
-
-            with col_m2_left:
-                with st.container(border=True):
-                    st.subheader(prob2["title"])
-                    st.caption(f"Track: {prob2['track'].upper()} | Topic: {prob2['topic']} | Difficulty:\u00A0{prob2['difficulty'].title()}")
-                    st.markdown(prob2["statement_md"])
-
-                st.subheader("Visible Test Cases")
-                for i, tc in enumerate(prob2["visible_tests"], 1):
-                    with st.expander(f"Visible Case #{i}", expanded=True):
-                        st.code(f"Input: {tc['input_args']}\nExpected: {tc['expected']}", language="python")
-
-                with st.container(border=True):
-                    if st.button("Reveal Hint (Problem 2)", key="btn_m2_hint") and st.session_state["mock_p2_hints"] < 3:
-                        st.session_state["mock_p2_hints"] += 1
-                        st.rerun()
-
-                    if st.session_state["mock_p2_hints"] > 0:
-                        for h in range(st.session_state["mock_p2_hints"]):
-                            st.info(f"Hint {h+1}: {prob2['hints'][h]}")
-
-            with col_m2_right:
-                with st.container(border=True):
-                    st.subheader("Solution Editor")
-                    code2 = render_editor(prob2["starter_code"], key="mock_editor_p2", height=440)
-                    st.session_state["mock_p2_code"] = code2
-
-                    if st.button("Submit Problem 2", type="primary", disabled=time_expired, key="btn_sub_p2"):
-                        res2 = run_solution(code2, prob2)
-                        st.session_state["mock_p2_status"] = res2["status"]
-                        st.session_state["mock_p2_result"] = res2
-                        store.record_attempt(
-                            prob2["id"], res2["status"], res2["runtime_ms"],
-                            st.session_state["mock_p2_hints"], mode="mock", topic=prob2["topic"]
-                        )
-                        st.rerun()
-
-                # Display stored result for Tab 2
-                res2 = st.session_state.get("mock_p2_result")
-                if res2:
-                    with st.container(border=True):
-                        st.subheader("Judge Results (Problem 2)")
-                        if res2["status"] == "pass":
-                            st.markdown(f':green-background[**PASS**] **{res2["passed"]}/{res2["total"]}** tests passed (`{res2["runtime_ms"]} ms`)')
-                        elif res2["status"] == "fail":
-                            st.markdown(f':red-background[**FAIL**] **{res2["passed"]}/{res2["total"]}** tests passed (`{res2["runtime_ms"]} ms`)')
-                            for fc in res2.get("failed_cases", []):
-                                with st.container(border=True):
-                                    st.markdown(f"**Input:** `{fc.get('input_args')}`")
-                                    st.markdown(f"**Expected:** `{fc.get('expected')}`")
-                                    st.markdown(f"**Got:** `{fc.get('got')}`")
-                        else:
-                            st.markdown(f':orange-background[**{res2["status"].upper()}**]')
-                            st.code(res2.get("stderr", ""), language="text")
-
-        st.markdown("---")
-        if st.button("Finish Mock Interview and Generate Scorecard", type="primary"):
-            st.session_state["mock_state"] = "completed"
-            st.session_state["mock_finish_time"] = time.time()
-            st.rerun()
-
+    # --- STATE 3: COMPLETED (SCORECARD) ---
     elif st.session_state["mock_state"] == "completed":
-        col_hdr1, col_hdr2 = st.columns([8, 4], vertical_alignment="center")
-        with col_hdr1:
-            st.markdown(
-                """
-                <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">Technical Interview Simulation</h2>
-                    <p style="font-size: 14px; color: #66635A; margin: 0;">Two curated algorithmic problems under 45:00 strict countdown constraint.</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        st.html('<div style="height: 16px;"></div>')
+        st.markdown(
+            """
+            <div style="margin-bottom: 20px;">
+                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    Simulation Completed
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0;">
+                    Authentic evaluation verified against local judge test suites.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         with st.container(border=True, key="mock_scorecard_card"):
-            total_time_min = round((st.session_state["mock_finish_time"] - st.session_state["mock_start_time"]) / 60, 1)
+            total_time_min = round((st.session_state.get("mock_finish_time", time.time()) - st.session_state.get("mock_start_time", time.time())) / 60, 1)
             p_list = st.session_state["mock_problems"]
             session_start_iso = st.session_state.get("mock_start_iso")
+
             p1_eval = get_mock_problem_evaluation(
                 p_list[0]["id"],
                 session_start_iso,
-                st.session_state.get("mock_p1_result"),
-                st.session_state.get("mock_p1_hints", 0),
-                store
+                st.session_state.get(f"mock_result_{p_list[0]['id']}"),
+                st.session_state.get(f"mock_hints_{p_list[0]['id']}", 0),
+                store,
             )
             p2_eval = get_mock_problem_evaluation(
                 p_list[1]["id"],
                 session_start_iso,
-                st.session_state.get("mock_p2_result"),
-                st.session_state.get("mock_p2_hints", 0),
-                store
+                st.session_state.get(f"mock_result_{p_list[1]['id']}"),
+                st.session_state.get(f"mock_hints_{p_list[1]['id']}", 0),
+                store,
             )
             score = (1 if p1_eval["is_pass"] else 0) + (1 if p2_eval["is_pass"] else 0)
 
-            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
-            with sc_hdr_left:
-                st.markdown(
-                    """
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            Simulation Completed
-                        </span>
-                    </div>
-                    <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #171712; line-height: 1.25;">
-                        Final Interview Scorecard
-                    </div>
-                    <div style="font-size: 13px; color: #66635A; margin-top: 2px;">
-                        Authentic evaluation verified against local judge test suites.
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            with sc_hdr_right:
+            # Place 2: Scorecard elapsed time display
+            @st.fragment(run_every=1.0)
+            def render_scorecard_timer():
                 st.markdown(
                     f"""
                     <div style="text-align: right;">
@@ -2560,12 +1962,26 @@ Summary: {solved_count} Solved, {2 - solved_count} In Progress
                             {score} / 2 Solved
                         </div>
                         <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">
-                            Total Time: {total_time_min} min
+                            Session Duration: {total_time_min} min
                         </div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
+
+            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
+            with sc_hdr_left:
+                st.markdown(
+                    """
+                    <span class="stat-badge badge-mint" style="margin-bottom: 6px;">Official Record</span>
+                    <h2 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0;">
+                        Final Interview Scorecard
+                    </h2>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with sc_hdr_right:
+                render_scorecard_timer()
 
             st.html('<div style="height: 16px;"></div>')
 
@@ -2573,53 +1989,54 @@ Summary: {solved_count} Solved, {2 - solved_count} In Progress
             with col_sc1:
                 prob1_title = p_list[0]["title"]
                 if p1_eval["status"] == "pass":
-                    p1_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">PASS</span>'
-                    p1_rt_str = f"<span><strong>Runtime:</strong> {p1_eval['runtime_ms']} ms</span>"
+                    p1_badge = '<span class="stat-badge badge-mint">PASS</span>'
+                    p1_rt = f"{p1_eval['runtime_ms']} ms"
                 elif p1_eval["status"] == "fail":
-                    p1_badge = '<span style="background: #FFE0E0; color: #C5221F; border: 1px solid rgba(197, 34, 31, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">FAIL</span>'
-                    p1_rt_str = f"<span><strong>Runtime:</strong> {p1_eval['runtime_ms']} ms</span>"
+                    p1_badge = '<span class="stat-badge badge-rose">FAIL</span>'
+                    p1_rt = f"{p1_eval['runtime_ms']} ms"
                 else:
-                    p1_badge = '<span style="background: rgba(102, 99, 90, 0.12); color: #66635A; border: 1px solid #E7E1D6; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">NOT ATTEMPTED</span>'
-                    p1_rt_str = "<span><strong>Runtime:</strong> —</span>"
+                    p1_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT ATTEMPTED</span>'
+                    p1_rt = "—"
 
                 st.markdown(
                     f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 1: {prob1_title}</strong>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <strong style="font-size: 15px; color: #171712;">Problem 1: {prob1_title}</strong>
                             {p1_badge}
                         </div>
-                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[0]['track'].upper()} · Topic: {p_list[0]['topic']} · {p_list[0]['difficulty'].title()}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
-                            {p1_rt_str}
+                        <div style="font-size: 12px; color: #66635A; margin-bottom: 10px;">Track: {p_list[0]['track'].upper()} · Topic: {p_list[0]['topic']}</div>
+                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px;">
+                            <span><strong>Runtime:</strong> {p1_rt}</span>
                             <span><strong>Hints Used:</strong> {p1_eval['hints_used']}</span>
                         </div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
+
             with col_sc2:
                 prob2_title = p_list[1]["title"]
                 if p2_eval["status"] == "pass":
-                    p2_badge = '<span style="background: #DFF3E4; color: #167B48; border: 1px solid rgba(22, 123, 72, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">PASS</span>'
-                    p2_rt_str = f"<span><strong>Runtime:</strong> {p2_eval['runtime_ms']} ms</span>"
+                    p2_badge = '<span class="stat-badge badge-mint">PASS</span>'
+                    p2_rt = f"{p2_eval['runtime_ms']} ms"
                 elif p2_eval["status"] == "fail":
-                    p2_badge = '<span style="background: #FFE0E0; color: #C5221F; border: 1px solid rgba(197, 34, 31, 0.25); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">FAIL</span>'
-                    p2_rt_str = f"<span><strong>Runtime:</strong> {p2_eval['runtime_ms']} ms</span>"
+                    p2_badge = '<span class="stat-badge badge-rose">FAIL</span>'
+                    p2_rt = f"{p2_eval['runtime_ms']} ms"
                 else:
-                    p2_badge = '<span style="background: rgba(102, 99, 90, 0.12); color: #66635A; border: 1px solid #E7E1D6; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">NOT ATTEMPTED</span>'
-                    p2_rt_str = "<span><strong>Runtime:</strong> —</span>"
+                    p2_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT ATTEMPTED</span>'
+                    p2_rt = "—"
 
                 st.markdown(
                     f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <strong style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #171712;">Problem 2: {prob2_title}</strong>
+                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <strong style="font-size: 15px; color: #171712;">Problem 2: {prob2_title}</strong>
                             {p2_badge}
                         </div>
-                        <div style="font-size: 12px; color: #66635A;">Track: {p_list[1]['track'].upper()} · Topic: {p_list[1]['topic']} · {p_list[1]['difficulty'].title()}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px; margin-top: 4px;">
-                            {p2_rt_str}
+                        <div style="font-size: 12px; color: #66635A; margin-bottom: 10px;">Track: {p_list[1]['track'].upper()} · Topic: {p_list[1]['topic']}</div>
+                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px;">
+                            <span><strong>Runtime:</strong> {p2_rt}</span>
                             <span><strong>Hints Used:</strong> {p2_eval['hints_used']}</span>
                         </div>
                     </div>
@@ -2662,26 +2079,30 @@ Overall Score: {score}/2 Solved
 
 
 # ==============================================================================
-# SCREEN 4: DASHBOARD
+# SCREEN 4: DASHBOARD / PERFORMANCE ANALYTICS
 # ==============================================================================
 elif nav_choice == "Dashboard":
-    col_dash_head, col_dash_badge = st.columns([8, 4], vertical_alignment="center")
+    render_topbar("Dashboard", streak_count, len(due_list))
+
+    col_dash_head, col_dash_btn = st.columns([8, 4], vertical_alignment="center")
     with col_dash_head:
         st.markdown(
             """<div style="margin-bottom: 8px;">
                 <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
-                    Performance and Analytics
+                    Performance Analytics
                 </h1>
                 <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
-                    Real-time mastery and pass rates derived objectively from SQLite attempts. Zero invented metrics.
+                    Authentic mastery progress, practice volume, and topic readiness based strictly on SQLite attempt history.
                 </p>
             </div>""",
             unsafe_allow_html=True,
         )
-    with col_dash_badge:
+    with col_dash_btn:
         st.markdown(
             """<div style="text-align: right;">
-                <span class="stat-badge badge-sky" style="font-size: 13px; padding: 6px 14px;">Zero Invented Metrics</span>
+                <a href="?screen=practice" target="_self" class="btn-primary-pill" style="text-decoration: none;">
+                    Continue Practice →
+                </a>
             </div>""",
             unsafe_allow_html=True,
         )
@@ -2696,175 +2117,70 @@ elif nav_choice == "Dashboard":
         avg_hints_raw = cur.fetchone()[0]
         avg_hints = round(avg_hints_raw, 1) if avg_hints_raw is not None else 0.0
 
-    # Three category-tinted stat cards
+    st.html('<div style="height: 8px;"></div>')
+
+    # Three Stat Cards (De-slopped: decorative badges removed)
     col1, col2, col3 = st.columns(3)
     with col1:
         with st.container(border=True, key="dash_card_solved"):
-            check_svg = get_svg_icon("check", width=22, height=22, stroke="#FFFFFF")
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-green">
-                            {check_svg}
-                        </div>
-                        <span class="stat-badge badge-mint">{solved_count} / {len(all_problems)}</span>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Solved Problems</span>
-                        <span class="stat-numeral">{solved_count}</span>
-                        <span class="stat-caption">{solved_count} of {len(all_problems)} curriculum problems solved.</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Solved Problems</span>
+                    <span class="stat-badge badge-mint">{solved_count} / {len(all_problems)} Total</span>
+                </div>
+                <div class="stat-value">{solved_count}</div>
+                <p class="stat-desc">Distinct problems passed at least once.</p>
+                """,
                 unsafe_allow_html=True,
             )
 
     with col2:
         with st.container(border=True, key="dash_card_sessions"):
-            chart_svg = get_svg_icon("bar-chart-3", width=22, height=22, stroke="#FFFFFF")
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-blue">
-                            {chart_svg}
-                        </div>
-                        <span class="stat-badge badge-sky">Recorded</span>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Practice Sessions</span>
-                        <span class="stat-numeral">{total_sessions}</span>
-                        <span class="stat-caption">Total code-judged runs recorded in SQLite.</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Practice Sessions</span>
+                </div>
+                <div class="stat-value">{total_sessions}</div>
+                <p class="stat-desc">Total code-judged runs recorded in SQLite.</p>
+                """,
                 unsafe_allow_html=True,
             )
 
     with col3:
         with st.container(border=True, key="dash_card_hints"):
-            sparkles_svg = get_svg_icon("sparkles", width=22, height=22, stroke="#FFFFFF")
-            hints_badge = "Zero Hints" if avg_hints == 0 else f"{avg_hints} Avg"
             st.markdown(
-                f"""<div class="stat-card-inner">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <div class="stat-icon-tile tile-amber">
-                            {sparkles_svg}
-                        </div>
-                        <span class="stat-badge badge-butter">{hints_badge}</span>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Average Hints Used</span>
-                        <span class="stat-numeral">{avg_hints:.1f}</span>
-                        <span class="stat-caption">Average hints revealed per problem attempt.</span>
-                    </div>
-                </div>""",
+                f"""
+                <div class="stat-head">
+                    <span class="stat-label">Average Hints Used</span>
+                </div>
+                <div class="stat-value">{avg_hints:.1f}</div>
+                <p class="stat-desc">Average hints revealed per problem attempt.</p>
+                """,
                 unsafe_allow_html=True,
             )
 
     st.html('<div style="height: 16px;"></div>')
 
-    # Topic Mastery Chart Card
-    with st.container(border=True, key="dashboard_chart_card"):
+    # Topic Mastery & Pass Rates (Unattempted topics NOT STARTED with NO bar)
+    with st.container(border=True, key="dashboard_mastery_card"):
         st.markdown(
-            """<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                        Topic Mastery &amp; Pass Rates
-                    </h2>
-                    <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
-                        Per-category accuracy across DSA and Python tracks with topic-tinted bars.
-                    </p>
-                </div>
-                <span style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #66635A;">Target Threshold: 80%</span>
-            </div>""",
+            """
+            <div>
+                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    Topic Mastery &amp; Pass Rates
+                </h2>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                    Per-category accuracy across curriculum topics with topic-tinted bars.
+                </p>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
 
         stats = store.topic_stats()
         all_curriculum_topics = sorted(list({p.get("topic") for p in all_problems if p.get("topic")}))
-        # Sort attempted topics first, then unattempted alphabetically
-        topics_list = sorted(
-            all_curriculum_topics,
-            key=lambda t: (0 if t in stats and stats[t]["attempts"] > 0 else 1, t),
-        )
-
-        tint_palette = ["#1F9D63", "#2273E6", "#B45309", "#6C4CF1", "#E4572E"]
-        bar_colors = []
-        y_vals = []
-        bar_texts = []
-        text_colors = []
-
-        for i, t in enumerate(topics_list):
-            d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
-            color = tint_palette[i % len(tint_palette)]
-            bar_colors.append(color)
-            if d["attempts"] > 0:
-                y_vals.append(d["pass_rate"])
-                bar_texts.append(f"{d['pass_rate']}% ({d['passed']}/{d['attempts']})")
-                text_colors.append("#171712")
-            else:
-                y_vals.append(0)
-                bar_texts.append("NOT STARTED")
-                text_colors.append("#66635A")
-
-        try:
-            import plotly.graph_objects as go
-
-            fig = go.Figure(
-                data=[
-                    go.Bar(
-                        x=topics_list,
-                        y=y_vals,
-                        text=bar_texts,
-                        textposition="outside",
-                        textfont=dict(family="Inter, sans-serif", size=11, color=text_colors),
-                        marker_color=bar_colors,
-                        cliponaxis=False,
-                    )
-                ]
-            )
-            fig.update_layout(
-                xaxis=dict(
-                    title=dict(text="Topic", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
-                    gridcolor="#E7E1D6",
-                    showline=True,
-                    linecolor="#E7E1D6",
-                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
-                    tickangle=-25,
-                ),
-                yaxis=dict(
-                    title=dict(text="Pass Rate (%)", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
-                    range=[0, 115],
-                    gridcolor="#E7E1D6",
-                    showline=True,
-                    linecolor="#E7E1D6",
-                    zeroline=True,
-                    zerolinecolor="#E7E1D6",
-                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
-                ),
-                margin=dict(l=40, r=40, t=30, b=60),
-                height=380,
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(family="Inter, sans-serif", color="#171712"),
-            )
-            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-        except Exception:
-            chart_data = {t: y for t, y in zip(topics_list, y_vals)}
-            st.bar_chart(chart_data)
-
-    st.html('<div style="height: 16px;"></div>')
-
-    with st.container(border=True, key="dashboard_table_card"):
-        st.markdown(
-            """<div style="margin-bottom: 16px;">
-                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                    Topic Breakdown Table
-                </h2>
-                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
-                    Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.
-                </p>
-            </div>""",
-            unsafe_allow_html=True,
-        )
 
         with store._get_connection() as conn:
             cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
@@ -2877,18 +2193,80 @@ elif nav_choice == "Dashboard":
                 topic_problems[t] = []
             topic_problems[t].append(p)
 
+        mastery_items_html = []
+        for t in all_curriculum_topics:
+            probs = topic_problems.get(t, [])
+            total_in_topic = len(probs)
+            solved_in_topic = sum(1 for p in probs if p["id"] in solved_problem_ids)
+            d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
+            attempts = d["attempts"]
+            pass_rate = d["pass_rate"]
+
+            if attempts > 0:
+                item_html = f"""
+                <div class="mastery-item" style="border-color: rgba(22, 123, 72, 0.3); background: #DFF3E4;">
+                    <div class="mastery-item-head">
+                        <span class="mastery-topic-name">{t}</span>
+                        <span class="stat-badge badge-mint">MASTERED</span>
+                    </div>
+                    <div class="mastery-bar-track">
+                        <div class="mastery-bar-fill" style="width: {min(pass_rate, 100.0)}%; background: #1F9D63;"></div>
+                    </div>
+                    <div class="mastery-stat-line">
+                        <span style="color: #171712;">Pass Rate: {pass_rate:.1f}%</span>
+                        <span style="color: #167B48;">({solved_in_topic}/{total_in_topic} Solved)</span>
+                    </div>
+                </div>
+                """
+            else:
+                item_html = f"""
+                <div class="mastery-item">
+                    <div class="mastery-item-head">
+                        <span class="mastery-topic-name">{t}</span>
+                        <span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
+                    </div>
+                    <div style="font-size: 13px; color: #66635A; font-weight: 500; padding: 4px 0;">
+                        No attempts recorded yet.
+                    </div>
+                    <div class="mastery-stat-line">
+                        <span>Pass Rate: —</span>
+                        <span>(0/{total_in_topic} Solved)</span>
+                    </div>
+                </div>
+                """
+            mastery_items_html.append(item_html)
+
+        st.html(f'<div class="mastery-grid">{"".join(mastery_items_html)}</div>')
+
+    st.html('<div style="height: 16px;"></div>')
+
+    # Topic Breakdown Table (DE-SLOPPED)
+    with st.container(border=True, key="dashboard_table_card"):
+        st.markdown(
+            """
+            <div style="margin-bottom: 16px;">
+                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                    Topic Breakdown Table
+                </h2>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
+                    Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
         rows_html = []
-        for i, t in enumerate(topics_list):
+        for t in all_curriculum_topics:
             probs = topic_problems.get(t, [])
             total_in_topic = len(probs)
             solved_in_topic = sum(1 for p in probs if p["id"] in solved_problem_ids)
             track_name = probs[0].get("track", "DSA").upper() if probs else "DSA"
-            track_badge_class = "badge-lilac" if track_name == "DSA" else "badge-butter"
+            track_class = "text-track-dsa" if track_name == "DSA" else "text-track-python"
 
             d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
             attempts = d["attempts"]
             pass_rate = d["pass_rate"]
-            bar_color = tint_palette[i % len(tint_palette)]
 
             if attempts == 0:
                 ratio_str = f'<span style="color: #66635A; font-weight: 600;">0 / {total_in_topic}</span>'
@@ -2898,29 +2276,28 @@ elif nav_choice == "Dashboard":
                     </div>
                     <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
                 </div>"""
-                status_chip = '<span class="stat-badge" style="background-color: rgba(102, 99, 90, 0.12); color: #66635A; white-space: nowrap !important; display: inline-block;">NOT STARTED</span>'
+                status_chip = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>'
             else:
                 ratio_str = f'<span style="color: #171712; font-weight: 600;">{solved_in_topic} / {total_in_topic}</span>'
                 bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
                     <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
-                        <div style="background: {bar_color}; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 999px;"></div>
+                        <div style="background: #1F9D63; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 999px;"></div>
                     </div>
                     <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #171712;">{pass_rate:.1f}%</span>
                 </div>"""
-                if pass_rate >= 80.0:
-                    status_chip = '<span class="stat-badge badge-mint" style="white-space: nowrap !important; display: inline-block;">MASTERED</span>'
-                else:
-                    status_chip = '<span class="stat-badge badge-sky" style="white-space: nowrap !important; display: inline-block;">IN PROGRESS</span>'
+                status_chip = '<span class="stat-badge badge-mint">MASTERED</span>' if pass_rate >= 80.0 else '<span class="stat-badge badge-sky">IN PROGRESS</span>'
 
-            rows_html.append(f"""<tr>
-                <td><strong>{t}</strong></td>
-                <td><span class="stat-badge {track_badge_class}">{track_name}</span></td>
-                <td style="font-variant-numeric: tabular-nums;">{ratio_str}</td>
-                <td>{bar_html}</td>
-                <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">{status_chip}</td>
-            </tr>""")
+            rows_html.append(
+                f"""<tr>
+                    <td><strong>{t}</strong></td>
+                    <td><span class="{track_class}">{track_name}</span></td>
+                    <td style="font-variant-numeric: tabular-nums;">{ratio_str}</td>
+                    <td>{bar_html}</td>
+                    <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">{status_chip}</td>
+                </tr>"""
+            )
 
-        table_markup = f"""<table class="dashboard-table">
+        table_markup = f"""<table class="queue-table">
             <thead>
                 <tr>
                     <th>Topic</th>
@@ -2935,4 +2312,4 @@ elif nav_choice == "Dashboard":
             </tbody>
         </table>"""
 
-        st.markdown(table_markup, unsafe_allow_html=True)
+        st.html(table_markup)
