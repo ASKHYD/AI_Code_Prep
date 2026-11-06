@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Interview Active Session — AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .session-container {
+      max-width: var(--max-width);
+      margin: 20px auto;
+      padding: 0 32px 64px;
+    }
+
+    /* Sandy Session Band in #E8D5B7 */
+    .session-band {
+      background: var(--color-panel-quiet);
+      border: 1px solid var(--color-hairline-strong);
+      border-radius: var(--radius-card);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .session-switcher {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .switcher-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--color-hairline-strong);
+      background: #FFFFFF;
+      color: var(--color-ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 150ms ease-out;
+    }
+    .switcher-btn.active {
+      background: var(--color-terracotta);
+      color: #FFFFFF;
+      border-color: var(--color-terracotta);
+    }
+    .session-timer-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .session-timer-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-ink-muted);
+    }
+    .session-timer-clock {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-ink);
+      letter-spacing: 0.02em;
+      background: #FFFFFF;
+      padding: 4px 14px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--color-hairline-strong);
+    }
+
+    /* Workbench Layout */
+    .session-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Problem Card */
+    .problem-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-card);
+      padding: 28px;
+    }
+    .problem-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .problem-title {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    .problem-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .problem-statement {
+      font-size: 15px;
+      color: var(--color-ink);
+      line-height: 1.6;
+    }
+    .problem-statement p {
+      margin-bottom: 14px;
+    }
+
+    /* Signature Snippet */
+    .signature-container {
+      margin-top: 24px;
+      padding: 16px 18px;
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-inner);
+    }
+    .signature-code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-ink);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* Right Column */
+    .editor-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .editor-wrapper {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--color-code-border);
+      background: var(--color-code-bg);
+    }
+
+    /* Output Card */
+    .output-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-card);
+      padding: 24px;
+    }
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .output-title {
+      font-size: 18px;
+      font-family: var(--font-display);
+    }
+    .output-results {
+      padding: 16px;
+      border-radius: var(--radius-inner);
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline-solid);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .output-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar Sticky Shell -->
+  <header class="topbar-shell">
+    <a href="home.html" class="topbar-brand">
+      <span class="topbar-brand-wordmark">Coach <span class="topbar-brand-badge">Terracotta</span></span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="home.html" class="topbar-nav-item">Home</a>
+      <a href="practice.html" class="topbar-nav-item">Practice Arena</a>
+      <a href="mock_session.html" class="topbar-nav-item active">Mock Interview (Live)</a>
+      <a href="dashboard.html" class="topbar-nav-item">Dashboard</a>
+      <a href="tokens.html" class="topbar-nav-item">Design Tokens</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>1 Day</span>
+      </div>
+      <div class="chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>1 Due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="session-container">
+    <!-- Sandy Session Band with Exact 2-Place Mono Countdown Timer -->
+    <div class="session-band">
+      <div class="session-switcher">
+        <button class="switcher-btn active">Problem 1: Binary Search</button>
+        <button class="switcher-btn">Problem 2: Reverse Sequence</button>
+      </div>
+      <div class="session-timer-box">
+        <span class="session-timer-label">Time Remaining</span>
+        <div class="session-timer-clock">38:42</div>
+      </div>
+    </div>
+
+    <!-- Two-Pane Session Workbench -->
+    <div class="session-grid">
+      <!-- Left Column: Problem 1 Card -->
+      <section class="problem-card">
+        <div class="problem-header">
+          <span class="badge badge-blue">Problem 1 of 2</span>
+          <span style="font-size: 13px; color: var(--color-ink-muted);">Mock Candidate Problem</span>
+        </div>
+
+        <h1 class="problem-title">Binary Search</h1>
+        <div class="problem-tags">
+          <span style="color: var(--color-terracotta); font-weight: 600; font-size: 13px;">Binary Search</span>
+          <span style="color: var(--color-ink-muted); font-size: 13px;">· Easy</span>
+        </div>
+
+        <div class="problem-statement">
+          <p>
+            Given an array of integers <code class="inline-code">nums</code> which is sorted in ascending order, and an integer <code class="inline-code">target</code>, write a function to search <code class="inline-code">target</code> in <code class="inline-code">nums</code>. If <code class="inline-code">target</code> exists, then return its index. Otherwise, return <code class="inline-code">-1</code>.
+          </p>
+          <p>
+            You must write an algorithm with <code class="inline-code">O(log n)</code> runtime complexity.
+          </p>
+        </div>
+
+        <div class="signature-container">
+          <span class="signature-subhead">STARTER FUNCTION SIGNATURE</span>
+          <div class="signature-code">def search(nums: list[int], target: int) -> int:</div>
+        </div>
+
+        <!-- Hint Consultation Strip -->
+        <div class="sandy-strip" style="margin-top: 20px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-terracotta)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span style="font-size: 13px;">Need guidance? Progressive hints are available but will be noted on your interview scorecard.</span>
+        </div>
+      </section>
+
+      <!-- Right Column: Code Editor & Output -->
+      <section class="editor-column">
+        <div class="editor-wrapper">
+          <div class="editor-strip">
+            <span>Binary Search · Python 3.12</span>
+            <span>Mock Simulation · 38:42 Remaining</span>
+          </div>
+          <div class="editor-surface">
+            <pre style="margin: 0; font-family: var(--font-mono); font-size: 13.5px;"><span style="color: #6A9955;"># Mock Session Candidate Solution</span>
+<span style="color: #569CD6;">def</span> <span style="color: #DCDCAA;">search</span>(nums: list[<span style="color: #4EC9B0;">int</span>], target: <span style="color: #4EC9B0;">int</span>) -&gt; <span style="color: #4EC9B0;">int</span>:
+    left, right = <span style="color: #B5CEA8;">0</span>, len(nums) - <span style="color: #B5CEA8;">1</span>
+    <span style="color: #C586C0;">while</span> left &lt;= right:
+        mid = (left + right) // <span style="color: #B5CEA8;">2</span>
+        <span style="color: #C586C0;">if</span> nums[mid] == target:
+            <span style="color: #C586C0;">return</span> mid
+        <span style="color: #C586C0;">elif</span> nums[mid] &lt; target:
+            left = mid + <span style="color: #B5CEA8;">1</span>
+        <span style="color: #C586C0;">else</span>:
+            right = mid - <span style="color: #B5CEA8;">1</span>
+    <span style="color: #C586C0;">return</span> -<span style="color: #B5CEA8;">1</span>
+</pre>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <div class="output-header">
+            <h2 class="output-title">Session Controls &amp; Output</h2>
+            <span class="badge badge-pass">Problem 1 Solved</span>
+          </div>
+
+          <div class="output-results">
+            <div style="color: var(--color-olive-dark); font-weight: 600;">✓ Problem 1: All 3 visible tests passed (24ms)</div>
+            <div style="color: var(--color-ink-muted); margin-top: 4px;">Ready to proceed to Problem 2 or finalize your interview.</div>
+          </div>
+
+          <div class="output-actions">
+            <a href="mock_scorecard.html" class="btn btn-outline" style="color: var(--color-terracotta); border-color: var(--color-terracotta-border);">
+              Finish &amp; View Scorecard
+            </a>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-outline">Run Tests</button>
+              <button class="btn btn-terracotta">Submit Problem 1</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Interview Performance Scorecard — AI Coding Prep Coach</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .scorecard-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 24px 80px;
+    }
+    .scorecard-hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .scorecard-title {
+      font-size: 40px;
+      line-height: 1.15;
+    }
+    .scorecard-subtitle {
+      font-size: 16px;
+      color: var(--color-ink-muted);
+      margin-top: 8px;
+    }
+
+    /* Overall Verdict Card */
+    .verdict-banner {
+      background: var(--color-olive-wash);
+      border: 1px solid var(--color-olive-border);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .verdict-tag {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-olive-dark);
+      margin-bottom: 6px;
+    }
+    .verdict-headline {
+      font-family: var(--font-display);
+      font-size: 44px;
+      color: var(--color-olive-dark);
+      font-weight: 400;
+    }
+    .verdict-sub {
+      font-size: 15px;
+      color: var(--color-olive-dark);
+      margin-top: 8px;
+    }
+
+    /* Sandy Summary Strip in #E8D5B7 */
+    .summary-strip {
+      background: var(--color-panel-quiet);
+      border: 1px solid var(--color-hairline-strong);
+      border-radius: var(--radius-card);
+      padding: 24px 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .summary-item-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-ink-muted);
+    }
+    .summary-item-val {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-ink);
+      margin-top: 6px;
+      font-feature-settings: "tnum" 1;
+    }
+
+    /* Problem Outcome Rows */
+    .problem-outcomes {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .outcome-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-hairline-solid);
+      border-radius: var(--radius-inner);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .outcome-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .outcome-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-ink-muted);
+    }
+    .outcome-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+    .outcome-meta {
+      font-size: 13px;
+      color: var(--color-ink-muted);
+      margin-top: 2px;
+    }
+    .outcome-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .outcome-stats {
+      text-align: right;
+      font-size: 13px;
+      color: var(--color-ink-muted);
+      font-feature-settings: "tnum" 1;
+    }
+
+    /* Actions Footer */
+    .scorecard-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar Sticky Shell -->
+  <header class="topbar-shell">
+    <a href="home.html" class="topbar-brand">
+      <span class="topbar-brand-wordmark">Coach <span class="topbar-brand-badge">Terracotta</span></span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="home.html" class="topbar-nav-item">Home</a>
+      <a href="practice.html" class="topbar-nav-item">Practice Arena</a>
+      <a href="mock_scorecard.html" class="topbar-nav-item active">Mock Interview</a>
+      <a href="dashboard.html" class="topbar-nav-item">Dashboard</a>
+      <a href="tokens.html" class="topbar-nav-item">Design Tokens</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="chip-streak">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>1 Day</span>
+      </div>
+      <div class="chip-due">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>1 Due</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="scorecard-container">
+    <div class="scorecard-hero">
+      <h1 class="scorecard-title">Interview Performance Scorecard</h1>
+      <p class="scorecard-subtitle">Assessment generated automatically from executed test suites and timer telemetry.</p>
+    </div>
+
+    <!-- Overall Verdict Banner in Olive #6B7F3B -->
+    <div class="verdict-banner">
+      <div class="verdict-tag">Overall Assessment Result</div>
+      <div class="verdict-headline">PASS — Interview Benchmark Met</div>
+      <div class="verdict-sub">Both problems successfully solved within the 45-minute budget with verified test coverage.</div>
+    </div>
+
+    <!-- Sandy Summary Strip in #E8D5B7 -->
+    <div class="summary-strip">
+      <div>
+        <div class="summary-item-label">Time Consumed</div>
+        <div class="summary-item-val">24m 18s <span style="font-size: 14px; font-weight: 500; color: var(--color-ink-muted);">/ 45m</span></div>
+      </div>
+      <div>
+        <div class="summary-item-label">Problems Solved</div>
+        <div class="summary-item-val">2 / 2</div>
+      </div>
+      <div>
+        <div class="summary-item-label">Hints Consulted</div>
+        <div class="summary-item-val">1 Hint</div>
+      </div>
+    </div>
+
+    <!-- Problem-by-Problem Outcome Breakdown -->
+    <div class="problem-outcomes">
+      <!-- Problem 1 -->
+      <div class="outcome-card">
+        <div class="outcome-left">
+          <span class="outcome-num">01</span>
+          <div>
+            <div class="outcome-name">Binary Search</div>
+            <div class="outcome-meta">
+              <span style="color: var(--color-terracotta); font-weight: 500;">Binary Search</span> · Easy
+            </div>
+          </div>
+        </div>
+        <div class="outcome-right">
+          <div class="outcome-stats">
+            <div>Time: <strong>8m 12s</strong></div>
+            <div>0 hints · 24ms runtime</div>
+          </div>
+          <span class="badge badge-pass">PASS</span>
+        </div>
+      </div>
+
+      <!-- Problem 2 -->
+      <div class="outcome-card">
+        <div class="outcome-left">
+          <span class="outcome-num">02</span>
+          <div>
+            <div class="outcome-name">Reverse Sequence In Place</div>
+            <div class="outcome-meta">
+              <span style="color: var(--color-terracotta); font-weight: 500;">Two Pointers</span> · Easy
+            </div>
+          </div>
+        </div>
+        <div class="outcome-right">
+          <div class="outcome-stats">
+            <div>Time: <strong>16m 06s</strong></div>
+            <div>1 hint · 18ms runtime</div>
+          </div>
+          <span class="badge badge-pass">PASS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="scorecard-actions">
+      <a href="dashboard.html" class="btn btn-outline" style="padding: 12px 28px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span>Return to Dashboard</span>
+      </a>
+      <button class="btn btn-terracotta" style="padding: 12px 28px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download Assessment Report</span>
+      </button>
+    </div>
+  </main>
+</body>
+</html>
