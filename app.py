@@ -960,7 +960,9 @@ def get_svg_icon(
 # Initialize database store
 @st.cache_resource
 def get_store() -> CoachStore:
-    return CoachStore(db_path="coach.db")
+    s = CoachStore(db_path="coach.db")
+    s.migrate_history_to_fsrs()
+    return s
 
 
 store = get_store()
