@@ -183,5 +183,78 @@ Project owner explicitly selected **Variant B (Inter SemiBold 600 with tabular f
 
 ---
 
-*Last updated: 2026-11-05*
+### [DECISION-008] Phase 2 Corrective Round Resolutions
+
+**Date**: 2026-11-06  
+**Status**: Accepted  
+
+#### Context
+Following owner review of the initial Phase 2 return, five specific defects were identified:
+1. **Defect 1 (Mock Scorecard Scoping)**: Ending an unattempted mock displayed historical 2026-11-04 practice data for Problem 1 instead of session-scoped attempts.
+2. **Defect 2 (Practice Arena Layout)**: Alignment with `mockups/practice.html` column assignments and code editor height minimum (>= 440px).
+3. **Defect 3 (Nav Pill Tint per Area)**: Sidebar active pill tint switching dynamically per active screen (Home mint, Practice lilac, Mock peach, Dashboard sky).
+4. **Defect 4 (Nowrap Badges)**: Dashboard table status badges ("NOT STARTED", "MASTERED") wrapping across lines.
+5. **Defect 5 (State Honesty & Mock Start Rules)**: Streak badge reflecting 0 days as "Not Started", and Mock start view showing Simulation Rules with empty past sessions omitted.
+
+#### Resolutions & Enforced Architecture
+1. **Mock Session Scoping**:
+   - Implemented `get_mock_problem_evaluation` in `app.py` query/render layer scoping all attempts by `session_start_iso`.
+   - Problems without an authentic submission inside the current mock session render `NOT ATTEMPTED` with runtime `—`, hints `0`, and no pass/fail badge.
+   - Ending an unsubmitted mock writes 0 rows to SQLite and leaves all dashboard figures byte-identical.
+   - Authorized new unit test suite: `tests/test_mock_session_scoping.py` (5 tests passing; total suite 31/31 passed).
+2. **Practice Arena Column Structure**:
+   - Left column (4 cols / 35%): Statement card (with nowrap starter signature and inputs/outputs) + visible tests + vertically stacked hint ladder buttons (`use_container_width=True`).
+   - Right column (7 cols / 65%): Editor card with single-line flex header strip, Ace code editor locked at 440px minimum computed height, Run pill, and sandbox verdict cards.
+3. **Dynamic Sidebar Pill Tinting**:
+   - `NAV_TINTS` dictionary injects area-specific tokens:
+     - Home: `#DFF3E4` (bg) / `#167B48` (fg)
+     - Practice Arena: `#E8E2FF` (bg) / `#5932EA` (fg)
+     - Mock Interview: `#FFE8D1` (bg) / `#B93815` (fg)
+     - Dashboard: `#DCEBFF` (bg) / `#1D5EC2` (fg)
+   - Zero new hex codes; zero hex drift.
+4. **Table Badge Nowrap**:
+   - `.dashboard-table th:last-child`, `.dashboard-table td:last-child`, and `.stat-badge` enforce `white-space: nowrap !important; min-width: 140px;`.
+5. **State Honesty**:
+   - Home streak card conditionally renders "Not Started" (deep ink `#171712` on muted background, WCAG AA compliant) when `streak_count == 0`, and "Active" (mint) when `>= 1`.
+   - Mock start view includes the Simulation Rules & Evaluation Protocol card and renders Past Mock Sessions only when `attempts` with `mode = 'mock'` exist (omitted when count is 0).
+
+---
+
+### [DECISION-009] Phase 2 Corrective Round 2 Resolutions (Practice Arena Focus)
+
+**Date**: 2026-11-06  
+**Status**: Accepted  
+
+#### Context
+Owner live testing identified 5 defects on the Practice Arena screen:
+1. **P1 — Editor Height Honestly**: Round 1 script reported 440px by measuring outer wrapper CSS while the rendered Ace dark field was ~250px tall.
+2. **P2 — Starter Signature Fits on One Line**: The longest starter signature line (`log-timestamp-filter`, 79 chars) must fit on one line in Ace editor with soft-wrap OFF and no horizontal scrollbar.
+3. **P3 — Workbench Recomposition**: Mirroring `mockups/practice.html`, Left column holds filter header card + statement card; Right column holds editor card on top, verdict card, visible test cases, and hint ladder. Column bottoms must balance within 20% and document horizontal overflow is prohibited.
+4. **P4 — Broken Signature Display Box**: Statement signature box must break after each comma with 4-space continuation indent, visible at a glance with no scrollbar.
+5. **P5 — Single-Line Test Case Card Labels**: Test case headers must display short label `TEST CASE #n` on one line with no two-line wrapping.
+
+#### Resolutions & Measurement Honesty
+1. **P1 Editor Height**:
+   - Removed artificial wrapper/iframe CSS overrides (`min-height: 440px !important; height: 440px !important;`).
+   - Sized Ace editor directly via `code_editor(..., height="450px")` (passing a string rather than an integer, which sets Ace container height directly instead of `{minLines: 1, maxLines: n}`).
+   - Measured exact HTMLIFrameElement bounding rect via CDP: 450px rendered height at both 1920×1080 and 1600×1000 ($\ge 440$px).
+2. **P2 Longest Signature Fit**:
+   - Lever 1: Column ratio widened to `[3.5, 8.5]`.
+   - Lever 2: Editor component `fontSize` set to `13` with `wrap: False`.
+   - Result: `log-timestamp-filter` (`def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:`, 79 chars) renders on exactly 1 line with `hScrollDisplay: "none"` and `hasHorizontalOverflow: false`.
+3. **P3 Workbench Recomposition**:
+   - Left column (`practice_left_col`): `practice_filter_card` + `practice_statement_card` only.
+   - Right column (`practice_right_col`): `practice_editor_card` on top $\rightarrow$ sandbox verdict banners $\rightarrow$ `visible_test_card_{i}` $\rightarrow$ `practice_hint_card`.
+   - Balance measured via CDP: 4.3% diff at 1920×1080 (55px) and 12.5% diff at 1600×1000 (185px) (both well within the 20% limit). Document `scrollWidth == clientWidth` (1920/1920 and 1600/1600).
+4. **P4 Signature Box Formatting**:
+   - Broken after commas: `formatted_sig = sig_line.replace(", ", ",\n    ")`.
+   - Monospace preformatted block with `scrollWidth == clientWidth` (342px/342px at 1920, 249px/249px at 1600), 0 horizontal scrollbar.
+5. **P5 Single-Line Test Case Headings**:
+   - Short heading `TEST CASE #{i}` with `white-space: nowrap !important;` and `class="test-case-card-title"`. Measured height: 21px (single line).
+
+---
+
+*Last updated: 2026-11-06*
+
+
 

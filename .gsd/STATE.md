@@ -1,5 +1,5 @@
 ---
-updated: 2026-11-05
+updated: 2026-11-06
 ---
 
 # Project State
@@ -7,26 +7,29 @@ updated: 2026-11-05
 ## Current Position
 
 **Milestone:** Milestone 1 — UI Redesign  
-**Phase:** Phase 2: Streamlit UI Implementation  
-**Status:** Wave 7 Completed (Implementation Gate Ready for Owner Acceptance)  
-**Plan:** `.gsd/phases/2/` (07-PLAN.md complete)  
+**Phase:** Phase 2: Streamlit UI Implementation (Corrective Round 2 Complete)  
+**Status:** Verification Gate Ready for Owner Acceptance  
+**Plan:** `.gsd/phases/2/` (07-PLAN.md complete + Corrective Rounds 1 & 2)  
 
 ## Last Action
 
-Phase 2 Wave 7 completed:
-- Executed full quality battery across all 5 gates:
-  1. Regression Guard: 26/26 backend pytest passed in 6.07s (longest_substring fixture verified).
-  2. Quarantine: 0 dirty files in coach/, data/problems/, tests/.
-  3. Impeccable detect: 0 primary findings across all 4 live states (Home, Practice, Mock, Dashboard).
-  4. Hex drift: 0 uncataloged hex values (100% Direction A catalog compliance).
-  5. Computed-font proof: Fraunces, Inter, Inter 600 tabular figures, JetBrains Mono verified with 0 Google Fonts network calls.
-- Generated all 8 dual-resolution side-by-side comparison images (1920×1080 and 1600×1000) comparing real app screenshots to Phase 1 mockups.
-- Compiled complete Phase 2 §5 Return artifact in `.gsd/phases/2/RETURN.md`.
+Phase 2 Corrective Round 2 successfully executed for the Practice Arena screen:
+1. **P1 — Editor Height Honestly**: Root-caused Round 1 measurement failure: `code_editor` treated integer `height` as `{minLines: 1, maxLines: height}`, collapsing Ace to 4 lines (~150px) while Round 1 measured outer container wrapper CSS. Removed wrapper CSS hacks and passed `height="450px"` (string) directly to Ace, sizing Ace to 450px. Measured HTMLIFrameElement bounding rect via CDP: exactly 450px tall at 1920×1080 and 1600×1000 ($\ge 440$px).
+2. **P2 — Starter Signature Fits on One Line**: Problem with longest starter first line identified as `log-timestamp-filter` (79 chars). Lever 1 (column ratio widened to `[3.5, 8.5]`) and Lever 2 (editor font-size: 13, wrap: False). First line renders on one line with soft-wrap OFF, no horizontal scrollbar (`hScrollDisplay: "none"`), and zero overflow (`hasHorizontalOverflow: false`).
+3. **P3 — Workbench Recomposition**: Recomposed Practice into two-column workbench mirroring `mockups/practice.html`. Left = Filter header card + Statement card only. Right = Editor card on top $\rightarrow$ Sandbox verdicts $\rightarrow$ Visible test cases $\rightarrow$ Hint ladder. Balance measured via CDP: 4.3% diff at 1920×1080 (55px) and 12.5% diff at 1600×1000 (185px) (both $\le 20\%$). Document `scrollWidth == clientWidth` (1920/1920 and 1600/1600).
+4. **P4 — Broken Signature Box**: Statement card signature broken after each comma with 4-space continuation indent (`formatted_sig = sig_line.replace(", ", ",\n    ")`). Preformatted monospace box with `scrollWidth == clientWidth` (342px/342px at 1920, 249px/249px at 1600) and zero scrollbar.
+5. **P5 — Single-Line Test Case Headings**: Heading simplified to `TEST CASE #{i}` with `white-space: nowrap !important;` and `class="test-case-card-title"`. Measured height: 21px (single line, no wrapping).
+- Quality Battery Verified:
+  - Full pytest suite: 31/31 passed in 12.88s.
+  - Quarantine boundary: `coach/` and `data/problems/` 100% untouched; existing test files 100% untouched.
+  - Hex drift: 0 uncataloged hexes (all 26 Direction A tokens verified).
+  - Computed fonts: Headings Fraunces, body Inter, code JetBrains Mono.
+  - Side-by-side comparisons regenerated for 1920×1080 and 1600×1000 and mirrored to brain.
 
 ## Next Steps
 
-1. Owner review and acceptance sign-off on `.gsd/phases/2/RETURN.md` and dual-resolution screenshots.
-2. Proceed to Phase 3 upon owner approval.
+1. Owner review and acceptance sign-off on `.gsd/phases/2/CORRECTIVE_ROUND2_RETURN.md` and Practice dual-resolution screenshots.
+2. Close Phase 2 upon owner approval and proceed to Phase 3.
 
 ## Active Decisions
 

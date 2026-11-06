@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw, ImageFont
 WORKSPACE_ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS_DIR = WORKSPACE_ROOT / "docs" / "screenshots" / "r3"
 BRAIN_DIR = pathlib.Path(
-    r"C:\Users\MS Computer\.gemini\antigravity\brain\9189ed19-6177-456e-9f75-a9b447a8e16e\screenshots\r3"
+    r"C:\Users\MS Computer\.gemini\antigravity\brain\a88a339d-8602-40c1-9fa8-9253ebf3f144"
 )
 
 SCREENS = ["home", "practice", "mock", "dashboard"]

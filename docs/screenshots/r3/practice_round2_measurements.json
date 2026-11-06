@@ -1,0 +1,144 @@
+{
+  "1920x1080": {
+    "p1": {
+      "selector": ".st-key-practice_editor_card iframe",
+      "elementDescription": "HTMLIFrameElement rendered by streamlit-code-editor component",
+      "renderedWidth": 952,
+      "renderedHeight": 450,
+      "top": 175,
+      "bottom": 625,
+      "computedHeight": "450px",
+      "isGte440": true
+    },
+    "p2": {
+      "selector": ".st-key-practice_editor_card iframe -> .ace_line",
+      "elementDescription": "First line of starter code inside Ace Editor iframe",
+      "iframeWidth": 945,
+      "iframeHeight": 450,
+      "ace": {
+        "line1Text": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+        "line1WidthPx": 1000000,
+        "hScrollDisplay": "none",
+        "hScrollHeight": 0,
+        "scrollerClientWidth": 904,
+        "scrollerScrollWidth": 904,
+        "contentWidth": 904,
+        "hasHorizontalOverflow": false,
+        "isHScrollHidden": true
+      }
+    },
+    "p3": {
+      "leftCardBottom": 1238,
+      "rightCardBottom": 1293,
+      "diffPx": 55,
+      "diffPct": 4.3,
+      "isWithin20Pct": true,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "noHorizontalOverflow": true
+    },
+    "p4": {
+      "selector": ".signature-display-box pre",
+      "elementDescription": "HTMLPreElement displaying broken function signature",
+      "scrollWidth": 342,
+      "clientWidth": 342,
+      "noHorizontalScrollbar": true,
+      "lines": [
+        "def binary_search(nums: list,",
+        "target: int) -> int:"
+      ]
+    },
+    "p5": [
+      {
+        "index": 1,
+        "text": "TEST CASE #1",
+        "whiteSpace": "nowrap",
+        "heightPx": 21,
+        "isSingleLine": true
+      },
+      {
+        "index": 2,
+        "text": "TEST CASE #2",
+        "whiteSpace": "nowrap",
+        "heightPx": 21,
+        "isSingleLine": true
+      }
+    ],
+    "fonts": {
+      "headingFamily": "Fraunces, serif",
+      "bodyFamily": "Inter, sans-serif",
+      "codeFamily": "\"JetBrains Mono\", monospace"
+    }
+  },
+  "1600x1000": {
+    "p1": {
+      "selector": ".st-key-practice_editor_card iframe",
+      "elementDescription": "HTMLIFrameElement rendered by streamlit-code-editor component",
+      "renderedWidth": 726,
+      "renderedHeight": 450,
+      "top": 175,
+      "bottom": 625,
+      "computedHeight": "450px",
+      "isGte440": true
+    },
+    "p2": {
+      "selector": ".st-key-practice_editor_card iframe -> .ace_line",
+      "elementDescription": "First line of starter code inside Ace Editor iframe",
+      "iframeWidth": 718,
+      "iframeHeight": 450,
+      "ace": {
+        "line1Text": "def filter_log_events(log_lines: list, start_time: str, end_time: str) -> list:",
+        "line1WidthPx": 1000000,
+        "hScrollDisplay": "none",
+        "hScrollHeight": 0,
+        "scrollerClientWidth": 677,
+        "scrollerScrollWidth": 677,
+        "contentWidth": 677,
+        "hasHorizontalOverflow": false,
+        "isHScrollHidden": true
+      }
+    },
+    "p3": {
+      "leftCardBottom": 1478,
+      "rightCardBottom": 1293,
+      "diffPx": 185,
+      "diffPct": 12.5,
+      "isWithin20Pct": true,
+      "scrollWidth": 1600,
+      "clientWidth": 1600,
+      "noHorizontalOverflow": true
+    },
+    "p4": {
+      "selector": ".signature-display-box pre",
+      "elementDescription": "HTMLPreElement displaying broken function signature",
+      "scrollWidth": 249,
+      "clientWidth": 249,
+      "noHorizontalScrollbar": true,
+      "lines": [
+        "def binary_search(nums: list,",
+        "target: int) -> int:"
+      ]
+    },
+    "p5": [
+      {
+        "index": 1,
+        "text": "TEST CASE #1",
+        "whiteSpace": "nowrap",
+        "heightPx": 21,
+        "isSingleLine": true
+      },
+      {
+        "index": 2,
+        "text": "TEST CASE #2",
+        "whiteSpace": "nowrap",
+        "heightPx": 21,
+        "isSingleLine": true
+      }
+    ],
+    "fonts": {
+      "headingFamily": "Fraunces, serif",
+      "bodyFamily": "Inter, sans-serif",
+      "codeFamily": "\"JetBrains Mono\", monospace"
+    }
+  }
+}
