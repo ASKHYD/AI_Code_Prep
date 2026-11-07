@@ -330,7 +330,51 @@ Following review of the initial 09-PLAN implementation return, owner issued ADDE
 
 ---
 
-*Last updated: 2026-11-06*
+### [DECISION-013] Phase 7 Terracotta Editorial Streamlit Implementation & Functional Auth Architecture
+
+**Date**: 2026-11-07  
+**Status**: Accepted  
+
+#### Context
+Phase 6 produced the complete owner-approved Terracotta Editorial design system across 7 mockup screens (`mockups/terracotta/`) and `DESIGN.md`. Phase 3 closed with 64/64 passing tests and live verification. Phase 7 implements the Terracotta design in the live Streamlit app (`app.py`), replacing legacy Direction A styling, while introducing a functional authentication and real email confirmation gate per owner windup decisions.
+
+#### Decisions & Specifications
+1. **Brand Identity & Chrome**:
+   - Official name: **AI Prep Coach**.
+   - Topbar: Logo Variant A (28×28 inline SVG: terracotta tile `#C2452D`, sun-white serif "A", olive dot `#6B7F3B`) + serif wordmark `AI Prep Coach` in DM Serif Display + nav pills (Home, Practice Arena, Mock Interview, Dashboard) + live Streak chip (yesterday-anchored per C1) + live Due chip (FSRS `due_problems()` per C2) + text Logout action button.
+   - Dropped elements: Version chip and "Offline · Code-Judged" tag removed per approved mockups.
+2. **Functional Authentication with Real Email Confirmation**:
+   - Dedicated auth module: `auth_store.py` in project root, preserving strict freeze on `coach/*.py`.
+   - SQLite table: `user_profile` in `coach.db` (single-user application):
+     - `email TEXT UNIQUE`, `password_hash TEXT`, `salt TEXT`, `status TEXT` ('pending' | 'active'), `verify_token_hash TEXT`, `verify_expires_at TEXT`, `reset_token_hash TEXT`, `reset_expires_at TEXT`, `created_at TEXT`.
+   - Password security: PBKDF2-HMAC-SHA256 with 600,000 iterations and per-profile salt (`secrets.token_hex(16)`). Never plaintext.
+   - Real email confirmation via standard library `smtplib` + STARTTLS using local `.env` credentials (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_APP_PASSWORD`).
+   - Create account $\rightarrow$ profile `pending` $\rightarrow$ raw token (`secrets.token_urlsafe(32)`) emailed as `http://localhost:8501/?verify=<token>` (24h expiry, SHA-256 hash in DB).
+   - In-app activation: URL query param `?verify=<token>` triggers token verification $\rightarrow$ status `active` $\rightarrow$ "Email confirmed — you can log in now."
+   - Pending login attempt: refused with "Confirm your email to activate your account" and a "Resend confirmation email" action.
+   - Password recovery: "Forgot password?" emails `http://localhost:8501/?reset=<token>` (1h expiry) $\rightarrow$ in-app new password form.
+   - Failure honesty: if SMTP fails (offline/bad app password), pending profile is kept, UI plainly states delivery failure and offers Resend; UI NEVER falsely claims an email was sent. Send audit outcome logged in SQLite/session state.
+   - Session-state gate: unauthenticated users access only Login / Register / Verify / Reset screens.
+   - Logout placement: small text button at topbar right end, after the due chip.
+3. **Font Gate Audit & Remediation**:
+   - Audit of `assets/fonts/` revealed `DM Serif Display` and `Plus Jakarta Sans` are absent.
+   - Wave 0 Task 1 must download and self-host offline woff2 files for both families in `assets/fonts/` for 100% offline runtime.
+4. **Terracotta Theming & Keyed CSS**:
+   - `.streamlit/config.toml`: `primaryColor = "#C2452D"`, `backgroundColor = "#FFF8F0"`, `textColor = "#2C1810"`, `secondaryBackgroundColor = "#FFFFFF"`.
+   - Keyed CSS (`.st-key-*`) in `app.py`: binds native Streamlit components to Terracotta tokens (24px matte cards, 1px warm hairlines, 9999px pills, `#E8D5B7` quiet strips, `#6B7F3B` olive accents, `#1565C0` med-blue chips).
+5. **Preserved Invariants & Freezes**:
+   - `coach/*.py` and `data/problems/*.json` remain strictly frozen.
+   - Problem bank data and judge runner untouched. Existing SQLite tables (`attempts`, `problem_fsrs_cards`, `streaks`, `problem_notes`) preserved with identical content.
+   - 64/64 pytest suite remains intact; new auth tests in `tests/test_auth.py` add to the count.
+   - Output Card: F1 invariant enforced (verdict, visible tests, real attempt runtime; zero invented telemetry, zero memory metrics).
+   - Practice picker: Round 2 format `"N. Title · Topic (Difficulty)"`, signature from `starter_code.splitlines()[0]`, small-caps `STARTER FUNCTION SIGNATURE` label.
+   - Dashboard: Plotly chart of attempted topics only above full topic table with `NOT STARTED` rows.
+   - Mock: 45-min facts panel, session timer at exactly two display places (`MM:SS`), session-scoped scoring, zero-write unsolved end.
+
+---
+
+*Last updated: 2026-11-07*
+
 
 
 

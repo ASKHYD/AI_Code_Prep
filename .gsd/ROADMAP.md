@@ -7,8 +7,8 @@ updated: 2026-11-07
 # ROADMAP.md
 
 > **Current Milestone**: Milestone 3 — Terracotta Editorial Redesign  
-> **Current Phase**: Phase 6: Terracotta Static Mockups & Token Sheet (T1)  
-> **Status**: 💬 Discussing / Planning (Execution gated by Phase 3 live acceptance & T1 mockup approval)
+> **Current Phase**: Phase 7: Terracotta Streamlit Implementation (T2)  
+> **Status**: 📋 Planning Complete — Awaiting Plan Audit before /executor 7
 
 ---
 
@@ -107,8 +107,8 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 ---
 
 ### Phase 3: FSRS + Interleaving
-**Status**: ⏳ Executed — awaiting owner live acceptance  
-**Objective**: Replace the deterministic 1/1/3/7/21-day review ladder with py-fsrs adaptive spaced repetition and implement cognitive topic interleaving for review and mock queues. 57/57 pytest passed.
+**Status**: Complete — accepted with corrective (2026-11-07)  
+**Objective**: Replace the deterministic 1/1/3/7/21-day review ladder with py-fsrs adaptive spaced repetition and implement cognitive topic interleaving for review and mock queues. 64/64 pytest passed.
 
 ---
 
@@ -125,14 +125,14 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 ---
 
 ### Phase 6: Terracotta Static Mockups & Token Sheet (T1)
-**Status**: 💬 Discussing / Planning  
-**Objective**: Author `DESIGN.md` Terracotta token sheet, build 6 static HTML mockups using real problem and store data, conduct anti-slop audit, and capture 1450×900 & 1920×1080 proofs for owner approval before any app code.
+**Status**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round)  
+**Objective**: Author `DESIGN.md` Terracotta token sheet, build 7 static HTML mockups using real problem and store data, conduct anti-slop audit, and capture 1450×900 & 1920×1080 proofs for owner approval before any app code.
 
 ---
 
 ### Phase 7: Terracotta Streamlit Implementation (T2)
-**Status**: ⏳ Pending Phase 6 Approval  
-**Objective**: Implement approved Terracotta Editorial theme, DM Serif Display & humanist sans self-hosted typography, 24px bento cards, terracotta primary actions, olive/blue/sandy color zones, and Plotly terracotta palette into Streamlit.
+**Status**: 📋 Planning Complete — Awaiting Plan Audit (Block P7 Authorised)  
+**Objective**: Implement approved Terracotta Editorial theme, DM Serif Display & Plus Jakarta Sans typography, 24px bento cards, terracotta primary actions, olive/blue/sandy color zones, Plotly terracotta palette, and functional authentication with real email confirmation into Streamlit.
 
 ---
 
@@ -142,7 +142,11 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 | :--- | :--- | :--- | :--- |
 | **M1** | Phase 1 | ✅ Complete | Static HTML mockups & Direction A tokens |
 | **M1** | Phase 2 | ✅ Complete | Streamlit UI implementation & 10-gate audit |
-| **M2** | Phase 3 | ⏳ Executed — awaiting owner live acceptance | FSRS scheduler swap & interleaved review queue |
+| **M2** | Phase 3 | Complete — accepted with corrective (2026-11-07) | FSRS scheduler swap & interleaved review queue |
+| **M2** | Phase 4 | ⏳ Backlog | Per-run memory & CPU resource measurement |
+| **M2** | Phase 5 | ⏳ Backlog | Attempt history timeline & live Ruff diagnostics |
+| **M3** | Phase 6 | ✅ Complete | Terracotta static HTML mockups & token sheet (T1) |
+| **M3** | Phase 7 | 📋 Planning Complete | Terracotta Streamlit implementation & Auth (T2) |
 | **M2** | Phase 4 | ⏳ Backlog | Per-run resource measurement (memory & time) |
 | **M2** | Phase 5 | ⏳ Backlog | Attempt history timeline & Ruff diagnostics panel |
 | **M3** | Phase 6 | 💬 Discussing | Terracotta static mockups (T1) & token sheet (real data, 1450 captures) |

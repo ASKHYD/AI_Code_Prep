@@ -7,9 +7,9 @@ updated: 2026-11-07
 ## Current Position
 
 **Milestone:** Milestone 3 — Terracotta Editorial Redesign  
-**Phase:** Phase 6: Terracotta Static Mockups & Token Sheet (T1)  
-**Status:** 📋 PLANNING COMPLETE — READY FOR EXECUTION (/executor 6)  
-**Active Plan:** `.gsd/phases/6/PLAN_CONTRACT.md` (5 plans across 4 waves)  
+**Phase:** Phase 7: Terracotta Streamlit Implementation (T2)  
+**Status:** 📋 PLANNING COMPLETE — READY FOR PLAN AUDIT  
+**Active Plan:** `.gsd/phases/7/PLAN_CONTRACT.md` (5 plans across 5 waves)  
 
 ---
 
@@ -17,19 +17,21 @@ updated: 2026-11-07
 
 - **Milestone 1 (Premium UI Redesign)**: ✅ Complete & Closed.
 - **Milestone 2 (Make the Loop Smarter)**: 
-  - **Phase 3 (FSRS + Interleaving)**: Complete — accepted with corrective (2026-11-07) (64/64 tests green, corrective return filed). Intact and unedited.
+  - **Phase 3 (FSRS + Interleaving)**: ✅ Complete — accepted with corrective (2026-11-07) (64/64 tests green, live capture verified). Intact and unedited.
   - **Phase 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
-  - **Phase 6 (T1)**: Author token sheet, build 6 static HTML mockups with real data, anti-slop audit, dual captures (1450 & 1920). Stop for owner approval.
-  - **Phase 7 (T2)**: Streamlit implementation (only after T1 approval + Phase 3 live acceptance).
+  - **Phase 6 (T1)**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round, 7 screens).
+  - **Phase 7 (T2)**: 📋 Planning complete across Waves 0–4; awaiting owner / Milo audit before execution.
 
 ---
 
 ## Last Action
 
-- Completed Milestone 2 Phase 3 execution and verification: 57/57 pytest passed, live 1450×900 CDP capture of Home verified, return filed.
-- Registered Milestone 3 ("Terracotta Editorial Redesign") with Phase 6 (T1 Mockups) and Phase 7 (T2 Streamlit Implementation).
-- Retained Milestone 2 phases intact without renumbering.
+- Completed Phase 3 corrective C1–C3 (streak yesterday-anchored, due pill from FSRS, due-first interleaved queue, 64/64 pytest, zero DB mutations).
+- Authorized DISCUSS + PLAN for Phase 7 via Block P7.
+- Conducted Font Gate audit (found DM Serif Display and Plus Jakarta Sans absent from assets/fonts/; scheduled offline self-hosting in Wave 0).
+- Documented functional authentication architecture with real confirmation email via SMTP STARTTLS and .env in DECISIONS.md [DECISION-013].
+- Produced full Phase 7 plan contract and 5 wave plans (00-PLAN.md through 04-PLAN.md).
 
 ---
 
@@ -37,9 +39,10 @@ updated: 2026-11-07
 
 | Gate | Requirement | Status | Action Needed |
 | :--- | :--- | :--- | :--- |
-| **G-T1** | Phase 6 Mockups & Token Sheet Owner Approval | ⏳ PENDING | Build static HTML mockups with real data; capture at 1450 & 1920 |
-| **G-M2** | Milestone 2 Phase 3 Owner Live Acceptance | ⏳ PENDING | Awaiting owner live review on `http://localhost:8501` |
-| **G-EXEC**| Phase 7 Streamlit Execution Authorization | 🔒 LOCKED | Requires both G-T1 and G-M2 (or explicit chat override) |
+| **G-T1** | Phase 6 Mockups & Token Sheet Owner Approval | ✅ PASSED | Approved with Rounds 1–2 + Fix Round (7 screens) |
+| **G-M2** | Milestone 2 Phase 3 Owner Live Acceptance | ✅ PASSED | Accepted with corrective C1–C3 (64/64 green, live capture) |
+| **G-AUDIT7** | Phase 7 Plan Audit by Owner / Milo | ⏳ PENDING | Owner / Milo audit of Phase 7 plan set before execution |
+| **G-EXEC7** | Phase 7 Streamlit Execution Authorization | 🔒 LOCKED | Awaiting G-AUDIT7 approval before /executor 7 |
 
 ---
 
