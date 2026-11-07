@@ -81,3 +81,12 @@ Wave 2 rebuilds the Home and Dashboard views in `app.py` to match the approved T
       - Meta-captions and specimen notes removed per fix round F2.
 - **Verification**:
   - Live inspection: Plotly chart renders above table showing only attempted topics; unattempted rows in table read `NOT STARTED`.
+
+---
+
+## 3. Skill Bindings
+
+- `developing-with-streamlit`: Governs Streamlit multi-column bento layouts, Plotly chart integration inside Streamlit containers, and dynamic queue table rendering.
+- `/ui-styling`: Guides Terracotta bento container aesthetics, status badge styling, and Plotly color palette tuning.
+
+

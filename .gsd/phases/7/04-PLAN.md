@@ -82,3 +82,14 @@ Wave 4 provides the exhaustive empirical evidence and design finish audit for Ph
       `/developing-with-streamlit`, `/ui-ux-pro-max`, `/ui-styling`, `/design-system`, `/brand`, `/design`, `/impeccable`, `/agency-frontend-developer`, `/agency-ui-finish-gate-reviewer`, `/empirical-validation`.
 - **Verification**:
   - `.gsd/phases/7/PHASE_RETURN.md` authored and complete.
+
+---
+
+## 3. Skill Bindings
+
+- `/empirical-validation`: Governs rigorous evidence collection, pytest baseline and regression verification, database immutability checks, and live store numeral tracing.
+- `/agency-evidence-collector`: Governs headless Chrome CDP screenshot captures at dual viewports (1450×900 primary & 1920×1080), authentic file recording, and zero phantom reports.
+- `/agency-ui-finish-gate-reviewer`: Governs visual finish inspection, checking for forbidden tropes (zero gradients, zero glass, zero arch containers), typography rendering, and alignment against approved mockups.
+- `/impeccable`: Conducts automated detection and critique of layout anomalies, contrast compliance, and typography hierarchy across live views.
+
+

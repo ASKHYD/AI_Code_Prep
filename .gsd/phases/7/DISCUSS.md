@@ -148,3 +148,4 @@ Wave 4: Verification, CDP Captures & Plan Audit Gate Return
 - `data/problems/*.json` strictly **FROZEN**.
 - Existing SQLite tables in `coach.db` (`attempts`, `problem_fsrs_cards`, `streaks`, `problem_notes`) have schema and contents preserved.
 - Suite baseline: 64/64 pytest passing; new auth tests expand the count.
+

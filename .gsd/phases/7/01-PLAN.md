@@ -98,3 +98,14 @@ Wave 1 establishes the Terracotta visual foundation and entry gate in the live S
   - Live browser test: Unauthenticated view displays Terracotta login card matching `login.html`.
   - Logging in with valid active account admits user to Home.
   - Logging out returns user to login card.
+
+---
+
+## 3. Skill Bindings
+
+- `developing-with-streamlit`: Governs Streamlit config theming, session-state authentication guarding, and keyed component styling.
+- `/ui-styling`: Guides translation of Terracotta design tokens into Streamlit CSS rules, button micro-interactions, and 24px bento containers.
+- `/design-system`: Governs token hierarchy consistency across `.streamlit/config.toml`, `@font-face` base64 embedding, and custom UI components.
+- `/brand`: Enforces exact brand application: official wordmark "AI Prep Coach", Logo Variant A (28×28 and 44×44 inline SVGs), and color discipline.
+
+

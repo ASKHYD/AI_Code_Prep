@@ -90,3 +90,12 @@ Wave 3 translates the Practice Arena and Mock Interview workflows into the Terra
     - Zero-write unsolved end: Quitting without solving writes zero false records to `coach.db`.
 - **Verification**:
   - Live mock session test: Timer displays strictly two places (`MM:SS`); scorecard displays authentic session results; exiting early creates zero false database records.
+
+---
+
+## 3. Skill Bindings
+
+- `developing-with-streamlit`: Governs Streamlit Ace editor integration, timer countdown loops, session-scoped scoring, and Output Card layout.
+- `/ui-styling`: Guides slim picker styling, dark editor container styling, and Output Card verdict card typography.
+
+

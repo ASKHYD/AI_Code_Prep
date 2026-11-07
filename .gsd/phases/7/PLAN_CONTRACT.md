@@ -74,10 +74,26 @@ Wave 4: Verification, CDP Captures & Plan Audit Gate Return
 
 ---
 
-## 4. Skill Bindings
+## 4. Per-Wave Skill Bindings Matrix
 
-- **Phase Orchestration & Plan Validation**: `/planner`, `/plan-checker`
-- **Streamlit Development & Theming**: `/developing-with-streamlit` (Unparked for Phase 7)
-- **UI Architecture & Tokens**: `/ui-ux-pro-max`, `/ui-styling`, `/design-system`, `/brand`, `/design`
-- **Frontend Implementation**: `/agency-frontend-developer`
-- **Empirical Validation & Audit**: `/empirical-validation`, `/agency-ui-finish-gate-reviewer`, `/impeccable`
+- **Wave 0 (Foundations & Auth Storage)**:
+  - `/test-driven-development`: Auth module testing (`tests/test_auth.py`).
+  - `/empirical-validation`: Pytest 64/64 baseline and SQLite SHA256 audit.
+- **Wave 1 (Streamlit Config, Core Shell & Login Gate)**:
+  - `developing-with-streamlit`: Streamlit config theming, session-state auth guard, keyed CSS.
+  - `/ui-styling`: Translation of Terracotta tokens to Streamlit styling rules.
+  - `/design-system`: Token hierarchy consistency across config, base64 `@font-face`, and components.
+  - `/brand`: Brand enforcement (official name "AI Prep Coach", Logo Variant A SVGs).
+- **Wave 2 (Home Bento & Dashboard Implementation)**:
+  - `developing-with-streamlit`: Multi-column bento layouts, Plotly integration, dynamic queue rows.
+  - `/ui-styling`: Bento card aesthetics, status badge styling, Plotly palette tuning.
+- **Wave 3 (Practice Arena & Mock Interview Simulation)**:
+  - `developing-with-streamlit`: Ace code editor integration, countdown loops, Output Card layout.
+  - `/ui-styling`: Slim picker row styling, dark editor container, Output Card verdict styling.
+- **Wave 4 (Verification, CDP Captures & Gate Return)**:
+  - `/empirical-validation`: Test suite pass (64+N) and database immutability verification.
+  - `/agency-evidence-collector`: Dual-resolution headless Chrome CDP captures (1450×900 primary & 1920×1080).
+  - `/agency-ui-finish-gate-reviewer`: Anti-slop DOM audit, forbidden trope detection, visual finish review.
+  - `/impeccable`: Contrast compliance, typography hierarchy, and layout anomaly critique.
+
+

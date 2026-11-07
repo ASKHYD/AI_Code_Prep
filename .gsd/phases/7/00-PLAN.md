@@ -79,3 +79,12 @@ Wave 0 establishes the unbreakable baseline for Phase 7:
 - **Verification**:
   - Run `.venv/Scripts/python -m pytest tests/test_auth.py` — all new tests pass.
   - Run full suite `.venv/Scripts/python -m pytest tests/` — 64 baseline + new auth tests all pass.
+
+---
+
+## 3. Skill Bindings
+
+- `/test-driven-development`: Governs test authoring in `tests/test_auth.py` and regression prevention.
+- `/empirical-validation`: Governs verification of 64/64 pytest baseline and database SHA256 immutability check.
+
+
