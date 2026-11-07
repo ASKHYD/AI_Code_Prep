@@ -18,6 +18,7 @@ from typing import Any
 import plotly.graph_objects as go
 import streamlit as st
 
+from auth_store import AuthStore, send_smtp_email
 from coach.judge import run_solution
 from coach.llm_hints import explain_hint, review_code
 from coach.problems import load_all_problems
@@ -28,7 +29,7 @@ from coach.interleaving import build_interleaved_queue
 
 # Page configuration with collapsed sidebar
 st.set_page_config(
-    page_title="AI Coding Prep Coach",
+    page_title="AI Prep Coach",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -37,14 +38,11 @@ FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
 ICONS_DIR = Path(__file__).parent / "assets" / "icons"
 
 FONT_DEFINITIONS = [
-    ("Fraunces", "normal", 500, "fraunces-latin-500-normal.woff2"),
-    ("Fraunces", "normal", 600, "fraunces-latin-600-normal.woff2"),
-    ("Fraunces", "normal", 700, "fraunces-latin-700-normal.woff2"),
-    ("Fraunces", "normal", 800, "fraunces-latin-800-normal.woff2"),
-    ("Inter", "normal", 400, "inter-latin-400-normal.woff2"),
-    ("Inter", "normal", 500, "inter-latin-500-normal.woff2"),
-    ("Inter", "normal", 600, "inter-latin-600-normal.woff2"),
-    ("Inter", "normal", 700, "inter-latin-700-normal.woff2"),
+    ("DM Serif Display", "normal", 400, "dm-serif-display-latin-400-normal.woff2"),
+    ("Plus Jakarta Sans", "normal", 400, "plus-jakarta-sans-latin-400-normal.woff2"),
+    ("Plus Jakarta Sans", "normal", 500, "plus-jakarta-sans-latin-500-normal.woff2"),
+    ("Plus Jakarta Sans", "normal", 600, "plus-jakarta-sans-latin-600-normal.woff2"),
+    ("Plus Jakarta Sans", "normal", 700, "plus-jakarta-sans-latin-700-normal.woff2"),
     ("JetBrains Mono", "normal", 400, "jetbrains-mono-latin-400-normal.woff2"),
     ("JetBrains Mono", "normal", 500, "jetbrains-mono-latin-500-normal.woff2"),
     ("JetBrains Mono", "normal", 600, "jetbrains-mono-latin-600-normal.woff2"),
@@ -147,31 +145,34 @@ def get_global_css(active_nav: str = "Home") -> str:
     font_css = "\n".join(font_faces)
 
     rules_css = """
-    /* Body & UI defaults */
-    html, body, [class*="css"], .stMarkdown, p, span, label {
-        font-family: 'Inter', sans-serif !important;
+    /* Body & UI defaults: Terracotta Editorial (Plus Jakarta Sans) */
+    html, body, [class*="css"], .stMarkdown, p, span, label, input, button {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        color: #2C1810;
     }
 
-    /* Display headings in Fraunces */
+    /* Display headings in DM Serif Display */
     h1, h2, h3, h4, .stTitle, .stSubheader, [data-testid="stHeader"],
-    h1 *, h2 *, h3 *, h4 *, .stTitle *, .stSubheader * {
-        font-family: 'Fraunces', serif !important;
+    h1 *, h2 *, h3 *, h4 *, .stTitle *, .stSubheader *, .font-display {
+        font-family: 'DM Serif Display', Georgia, serif !important;
+        color: #2C1810 !important;
     }
 
     /* Monospace for code literals, editors, and syntax */
-    code, pre, .stCode, code *, pre *, .signature-pre {
+    code, pre, .stCode, code *, pre *, .signature-pre, .timer-mono {
         font-family: 'JetBrains Mono', monospace !important;
         white-space: pre-wrap !important;
         word-break: break-word !important;
         overflow-x: hidden !important;
     }
 
-    /* Metric numerals in Inter SemiBold 600 with tabular figures */
+    /* Metric numerals in tabular semibold Plus Jakarta Sans */
     div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] *, .stat-number, .stat-number * {
-        font-family: 'Inter', sans-serif !important;
-        font-weight: 600 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 700 !important;
+        font-feature-settings: 'tnum' 1 !important;
         font-variant-numeric: tabular-nums !important;
-        letter-spacing: -0.025em;
+        letter-spacing: -0.02em;
     }
 
     /* Suppress Streamlit Sidebar entirely */
@@ -193,7 +194,7 @@ def get_global_css(active_nav: str = "Home") -> str:
         height: 0 !important;
     }
 
-    /* Hide Streamlit heading anchor icons globally across ALL screens (R4) */
+    /* Hide Streamlit heading anchor icons globally across ALL screens */
     [data-testid="stHeaderActionElements"],
     [data-testid="stHeadingAnchor"],
     .stHeadingWithActionElements button,
@@ -212,12 +213,13 @@ def get_global_css(active_nav: str = "Home") -> str:
         margin-top: 0 !important;
     }
 
-    /* Reclaim space: container styling */
+    /* Canvas: Sun-white #FFF8F0 */
+    [data-testid="stAppViewContainer"],
     [data-testid="stAppViewContainer"] > .main {
         margin-left: 0 !important;
         padding: 0 !important;
         width: 100% !important;
-        background-color: #FBFAF7 !important;
+        background-color: #FFF8F0 !important;
     }
 
     [data-testid="stAppViewBlockContainer"] {
@@ -225,54 +227,58 @@ def get_global_css(active_nav: str = "Home") -> str:
         max-width: 100% !important;
     }
 
-    /* Action buttons: Direction A pill geometry and typography */
-    button[kind="primary"], .stButton > button {
-        border-radius: 999px !important;
+    /* Terracotta Primary Action Buttons */
+    button[kind="primary"], .stButton > button[kind="primary"], .btn-terracotta {
+        border-radius: 9999px !important;
         white-space: nowrap !important;
         padding: 10px 24px !important;
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-weight: 600 !important;
-        font-size: 13px !important;
-        transition: background-color 140ms ease, border-color 140ms ease, transform 100ms ease !important;
-    }
-    button[kind="primary"] {
-        background-color: #15803D !important;
-        border-color: #15803D !important;
-        color: #FFFFFF !important;
+        font-size: 13.5px !important;
+        background-color: #C2452D !important;
+        border: 1px solid #C2452D !important;
+        color: #FFF8F0 !important;
+        transition: transform 150ms ease-out, background-color 150ms ease-out !important;
     }
     button[kind="primary"] p, button[kind="primary"] span {
-        color: #FFFFFF !important;
+        color: #FFF8F0 !important;
         font-weight: 600 !important;
     }
     button[kind="primary"]:hover {
-        background-color: #167B48 !important;
-        border-color: #167B48 !important;
+        background-color: #A83822 !important;
+        border-color: #A83822 !important;
     }
     button[kind="primary"]:active {
-        transform: translateY(1px) !important;
+        transform: scale(0.97) !important;
     }
 
-    /* Secondary buttons */
+    /* Secondary outline buttons */
     button[kind="secondary"], .stButton > button:not([kind="primary"]) {
-        border-radius: 999px !important;
-        border: 1px solid #E7E1D6 !important;
+        border-radius: 9999px !important;
+        border: 1px solid rgba(74, 25, 66, 0.15) !important;
         background-color: #FFFFFF !important;
-        color: #171712 !important;
+        color: #2C1810 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 600 !important;
+        transition: transform 150ms ease-out, border-color 150ms ease-out !important;
     }
     button[kind="secondary"]:hover, .stButton > button:not([kind="primary"]):hover {
-        border-color: #15803D !important;
-        color: #15803D !important;
+        border-color: #C2452D !important;
+        color: #C2452D !important;
+    }
+    button[kind="secondary"]:active {
+        transform: scale(0.97) !important;
     }
 
-    /* Topbar Navbar */
+    /* Topbar Navbar: Terracotta System */
     .topbar {
         position: sticky;
         top: 0;
         z-index: 999;
         margin: 0 -2rem 24px -2rem;
         min-height: 56px;
-        background-color: #FBFAF7;
-        border-bottom: 1px solid #E7E1D6;
+        background-color: #FFF8F0;
+        border-bottom: 1px solid rgba(74, 25, 66, 0.10);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -283,29 +289,17 @@ def get_global_css(active_nav: str = "Home") -> str:
     .topbar-left {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         flex-shrink: 0;
     }
     .topbar-brand {
-        font-family: 'Fraunces', serif;
-        font-size: 18px;
-        font-weight: 700;
-        color: #171712;
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 22px;
+        font-weight: 400;
+        color: #2C1810;
         text-decoration: none;
         white-space: nowrap;
-    }
-    .topbar-badge-offline {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        font-size: 11px;
-        font-weight: 600;
-        color: #66635A;
-        background: #FFFFFF;
-        border: 1px solid #E7E1D6;
-        border-radius: 999px;
-        white-space: nowrap;
+        line-height: 1;
     }
     .topbar-center {
         display: flex;
@@ -317,38 +311,24 @@ def get_global_css(active_nav: str = "Home") -> str:
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 6px 16px;
+        font-size: 13.5px;
         font-weight: 500;
-        color: #66635A;
+        color: #735A50;
         text-decoration: none;
-        border-radius: 999px;
-        transition: background-color 160ms ease, color 160ms ease;
+        border-radius: 9999px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
         white-space: nowrap;
     }
     .nav-pill:hover {
-        background-color: rgba(23, 23, 18, 0.04);
-        color: #171712;
+        background-color: rgba(74, 25, 66, 0.05);
+        color: #2C1810;
     }
-    .nav-pill.active-home {
-        background-color: #DFF3E4;
-        color: #167B48;
+    .nav-pill.active {
+        background-color: #FDECE9;
+        color: #C2452D;
         font-weight: 700;
-    }
-    .nav-pill.active-practice {
-        background-color: #E8E2FF;
-        color: #5932EA;
-        font-weight: 700;
-    }
-    .nav-pill.active-mock {
-        background-color: #FFE8D1;
-        color: #B93815;
-        font-weight: 700;
-    }
-    .nav-pill.active-dashboard {
-        background-color: #DCEBFF;
-        color: #1D5EC2;
-        font-weight: 700;
+        border: 1px solid rgba(194, 69, 45, 0.25);
     }
     .topbar-right {
         display: flex;
@@ -360,315 +340,59 @@ def get_global_css(active_nav: str = "Home") -> str:
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 6px 14px;
-        border-radius: 999px;
+        padding: 5px 12px;
+        border-radius: 9999px;
         font-size: 12px;
         font-weight: 600;
         white-space: nowrap;
-        font-variant-numeric: tabular-nums;
+        font-feature-settings: 'tnum' 1;
     }
     .status-chip-streak {
-        background-color: #DFF3E4;
-        color: #167B48;
-        border: 1px solid rgba(22, 123, 72, 0.25);
+        background-color: #EFF4E4;
+        color: #38451D;
+        border: 1px solid rgba(107, 127, 59, 0.30);
     }
     .status-chip-due {
-        background-color: #DCEBFF;
-        color: #1D5EC2;
-        border: 1px solid rgba(29, 94, 194, 0.25);
+        background-color: #FDECE9;
+        color: #C2452D;
+        border: 1px solid rgba(194, 69, 45, 0.30);
     }
-    .status-chip-py {
-        background-color: #FFFFFF;
-        color: #66635A;
-        border: 1px solid #E7E1D6;
-    }
-
-    /* Sub-strip for Mock */
-    .mock-substrip {
-        min-height: 48px;
-        background-color: #FFFFFF;
-        border: 1px solid #E7E1D6;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 20px;
-        margin-bottom: 20px;
-        box-sizing: border-box;
-    }
-    .mock-tabs {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .mock-tab {
-        padding: 6px 16px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #66635A;
-        text-decoration: none;
+    .btn-logout {
         background: transparent;
-        border: 1px solid transparent;
+        border: none;
+        color: #735A50;
+        font-size: 13px;
+        font-weight: 500;
         cursor: pointer;
-        transition: all 140ms ease;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-decoration: none;
     }
-    .mock-tab:hover {
-        background-color: #FBFAF7;
-        color: #171712;
-    }
-    .mock-tab.active {
-        background-color: #FFE8D1;
-        color: #B93815;
-        border: 1px solid rgba(185, 56, 21, 0.25);
-    }
-    .mock-timer-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 16px;
-        border-radius: 999px;
-        background-color: #FFE8D1;
-        color: #B93815;
-        border: 1px solid rgba(185, 56, 21, 0.25);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 14px;
-        font-weight: 700;
-        font-variant-numeric: tabular-nums;
+    .btn-logout:hover {
+        color: #C2452D;
+        background: rgba(194, 69, 45, 0.06);
     }
 
-    /* Filter strip: single row toolbar */
-    .filter-strip-card {
-        background: #FFFFFF;
-        border: 1px solid #E7E1D6;
-        border-radius: 14px;
-        padding: 8px 16px;
-        margin-bottom: 16px;
-    }
-
-    /* ONE Problem Card */
-    div.st-key-practice_problem_card,
-    div.st-key-mock_problem_card {
-        background: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        padding: 24px 28px !important;
-        transition: transform 180ms ease, box-shadow 180ms ease !important;
-    }
-    div.st-key-practice_problem_card:hover,
-    div.st-key-mock_problem_card:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
-    }
-
-    /* Hint Ladder (Butter Block below Problem Card) */
-    div.st-key-practice_hint_ladder,
-    div.st-key-mock_hint_ladder {
-        background: #FFF0C4 !important;
-        border: 1px solid rgba(154, 52, 18, 0.25) !important;
-        border-radius: 16px !important;
-        padding: 20px !important;
-        margin-top: 16px !important;
-        transition: transform 180ms ease, box-shadow 180ms ease !important;
-    }
-    div.st-key-practice_hint_ladder:hover,
-    div.st-key-mock_hint_ladder:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
-    }
-
-    /* Editor Card */
-    div.st-key-practice_editor_card,
-    div.st-key-mock_editor_card {
-        background: #14161A !important;
-        border: 1px solid #14161A !important;
-        border-radius: 20px !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        transition: box-shadow 160ms ease !important;
-    }
-    div.st-key-practice_editor_card:focus-within,
-    div.st-key-mock_editor_card:focus-within {
-        box-shadow: 0 0 0 2px rgba(89, 50, 234, 0.40) !important;
-    }
-
-    /* Editor Strip */
-    .editor-strip {
-        background: #14161A;
-        border-bottom: 1px solid rgba(231, 225, 214, 0.15);
-        padding: 10px 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        overflow: hidden;
-    }
-    .editor-strip-title {
-        font-family: 'Inter', sans-serif;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #F2F2ED;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    .editor-strip-right {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-        color: #66635A;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    /* Editor Action Row */
-    .editor-action-row {
-        background: #14161A;
-        border-top: 1px solid rgba(231, 225, 214, 0.15);
-        padding: 10px 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .action-row-left {
-        font-size: 12px;
-        color: #66635A;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    /* ONE Output Card */
-    div.st-key-practice_output_card,
-    div.st-key-mock_output_card {
-        background: #FFFFFF !important;
-        border: 1px solid #E7E1D6 !important;
-        border-radius: 24px !important;
-        overflow: hidden !important;
-        padding: 0 !important;
-        margin-top: 16px !important;
-        transition: transform 180ms ease, box-shadow 180ms ease !important;
-    }
-    div.st-key-practice_output_card:hover,
-    div.st-key-mock_output_card:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
-    }
-
-    /* Verdict Entrance Animation */
-    @keyframes verdictEntrance {
-        from {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .verdict-band {
-        padding: 16px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        animation: verdictEntrance 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    .verdict-band-pass {
-        background: #DFF3E4;
-        border-bottom: 1px solid rgba(22, 123, 72, 0.25);
-        color: #167B48;
-    }
-    .verdict-band-fail {
-        background: #FFE0E0;
-        border-bottom: 1px solid rgba(197, 34, 31, 0.25);
-        color: #C5221F;
-    }
-
-    /* Badges */
-    .stat-badge {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 11px !important;
-        font-weight: 700 !important;
-        padding: 3px 10px !important;
-        border-radius: 999px !important;
-        display: inline-flex;
-        align-items: center;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        white-space: nowrap !important;
-    }
-    .badge-mint {
-        background-color: #DFF3E4 !important;
-        border: 1px solid rgba(22, 123, 72, 0.25) !important;
-        color: #167B48 !important;
-    }
-    .badge-sky {
-        background-color: #DCEBFF !important;
-        border: 1px solid rgba(29, 94, 194, 0.25) !important;
-        color: #1D5EC2 !important;
-    }
-    .badge-butter {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(154, 52, 18, 0.25) !important;
-        color: #9A3412 !important;
-    }
-    .badge-amber {
-        background-color: #FEF3C7 !important;
-        border: 1px solid rgba(180, 83, 9, 0.25) !important;
-        color: #92400E !important;
-    }
-    .badge-rose {
-        background-color: #FFE0E0 !important;
-        border: 1px solid rgba(197, 34, 31, 0.25) !important;
-        color: #C5221F !important;
-    }
-    .badge-lilac {
-        background-color: #E8E2FF !important;
-        border: 1px solid rgba(89, 50, 234, 0.25) !important;
-        color: #5932EA !important;
-    }
-    .badge-peach {
-        background-color: #FFE8D1 !important;
-        border: 1px solid rgba(185, 56, 21, 0.25) !important;
-        color: #B93815 !important;
-    }
-
-    /* Stat Cards */
+    /* Bento 24px Container Cards */
     div.st-key-home_card_streak,
     div.st-key-home_card_due,
-    div.st-key-home_card_library,
-    div.st-key-dash_card_solved,
-    div.st-key-dash_card_sessions,
-    div.st-key-dash_card_hints {
+    div.st-key-home_card_retention,
+    div.st-key-dash_card_attempts,
+    div.st-key-dash_card_passrate,
+    div.st-key-dash_card_practiced {
+        background-color: #FFFFFF !important;
+        border: 1px solid rgba(74, 25, 66, 0.10) !important;
         border-radius: 24px !important;
-        padding: 24px !important;
-        transition: transform 180ms ease, box-shadow 180ms ease !important;
+        padding: 22px 24px !important;
+        transition: transform 150ms ease-out !important;
     }
     div.st-key-home_card_streak:hover,
     div.st-key-home_card_due:hover,
-    div.st-key-home_card_library:hover,
-    div.st-key-dash_card_solved:hover,
-    div.st-key-dash_card_sessions:hover,
-    div.st-key-dash_card_hints:hover {
+    div.st-key-home_card_retention:hover,
+    div.st-key-dash_card_attempts:hover,
+    div.st-key-dash_card_passrate:hover,
+    div.st-key-dash_card_practiced:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.06) !important;
-    }
-
-    div.st-key-home_card_streak,
-    div.st-key-dash_card_solved {
-        background-color: #DFF3E4 !important;
-        border: 1px solid rgba(22, 123, 72, 0.25) !important;
-    }
-    div.st-key-home_card_due,
-    div.st-key-dash_card_sessions {
-        background-color: #DCEBFF !important;
-        border: 1px solid rgba(29, 94, 194, 0.25) !important;
-    }
-    div.st-key-home_card_library,
-    div.st-key-dash_card_hints {
-        background-color: #FFF0C4 !important;
-        border: 1px solid rgba(154, 52, 18, 0.25) !important;
     }
 
     .stat-head {
@@ -678,31 +402,94 @@ def get_global_css(active_nav: str = "Home") -> str:
         margin-bottom: 8px;
     }
     .stat-label {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.04em !important;
-        color: #66635A !important;
+        letter-spacing: 0.06em !important;
+        color: #735A50 !important;
     }
     .stat-value {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 36px !important;
-        font-weight: 600 !important;
-        letter-spacing: -0.025em !important;
-        color: #171712 !important;
-        font-variant-numeric: tabular-nums !important;
-        line-height: 1 !important;
-        margin: 4px 0 8px 0 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 34px !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.02em !important;
+        color: #2C1810 !important;
+        font-feature-settings: 'tnum' 1 !important;
+        line-height: 1.1 !important;
+        margin: 4px 0 6px 0 !important;
     }
     .stat-desc {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 13px !important;
-        color: #66635A !important;
+        color: #735A50 !important;
+        line-height: 1.4 !important;
         margin: 0 !important;
     }
 
-    /* De-slopped Queue Table */
+    /* Sandy Quiet Panel Strip */
+    .panel-quiet {
+        background-color: #E8D5B7;
+        border: 1px solid rgba(74, 25, 66, 0.10);
+        border-radius: 16px;
+        padding: 16px 20px;
+        color: #2C1810;
+    }
+
+    /* Badges */
+    .stat-badge {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        padding: 3px 10px !important;
+        border-radius: 9999px !important;
+        display: inline-flex;
+        align-items: center;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap !important;
+    }
+    .badge-olive {
+        background-color: #EFF4E4 !important;
+        border: 1px solid rgba(107, 127, 59, 0.35) !important;
+        color: #38451D !important;
+    }
+    .badge-amber {
+        background-color: #FEF3C7 !important;
+        border: 1px solid rgba(180, 83, 9, 0.35) !important;
+        color: #92400E !important;
+    }
+    .badge-terracotta {
+        background-color: #FDECE9 !important;
+        border: 1px solid rgba(194, 69, 45, 0.35) !important;
+        color: #C2452D !important;
+    }
+    .badge-blue {
+        background-color: #E6F0FA !important;
+        border: 1px solid rgba(21, 101, 192, 0.35) !important;
+        color: #1565C0 !important;
+    }
+    .badge-quiet {
+        background-color: rgba(115, 90, 80, 0.10) !important;
+        border: 1px solid rgba(115, 90, 80, 0.20) !important;
+        color: #735A50 !important;
+    }
+
+    /* Legacy compatibility badge names */
+    .badge-mint { background-color: #EFF4E4 !important; border: 1px solid rgba(107, 127, 59, 0.35) !important; color: #38451D !important; }
+    .badge-rose { background-color: #FDECE9 !important; border: 1px solid rgba(194, 69, 45, 0.35) !important; color: #C2452D !important; }
+
+    /* Problem Cards & Bento Tables */
+    div.st-key-home_queue_card,
+    div.st-key-practice_problem_card,
+    div.st-key-mock_problem_card,
+    div.st-key-dash_table_card {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(74, 25, 66, 0.10) !important;
+        border-radius: 24px !important;
+        padding: 24px 28px !important;
+    }
+
     .queue-table {
         width: 100%;
         border-collapse: separate;
@@ -713,188 +500,122 @@ def get_global_css(active_nav: str = "Home") -> str:
         font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #66635A;
-        padding: 12px 18px;
-        border-bottom: 1px solid #E7E1D6;
-    }
-    .queue-row {
-        position: relative;
+        letter-spacing: 0.06em;
+        color: #735A50;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(74, 25, 66, 0.10);
     }
     .queue-row td {
-        padding: 18px;
-        border-bottom: 1px solid #E7E1D6;
+        padding: 16px;
+        border-bottom: 1px solid rgba(74, 25, 66, 0.08);
         font-size: 13.5px;
         vertical-align: middle;
         background: #FFFFFF;
-        transition: all 180ms ease;
     }
     .queue-row:last-child td {
         border-bottom: none;
     }
     .queue-row:hover td {
-        background: #FBFAF7;
-        box-shadow: 0 4px 12px rgba(23, 23, 18, 0.04);
+        background: #FFFDF9;
     }
-    .queue-row td:first-child {
-        border-left: 3px solid transparent;
-    }
-    .queue-row.track-dsa:hover td:first-child {
-        border-left-color: #5932EA;
-    }
-    .queue-row.track-python:hover td:first-child {
-        border-left-color: #9A3412;
-    }
-
     .queue-problem-name {
-        font-family: 'Fraunces', serif;
-        font-weight: 600;
-        font-size: 15px;
-        color: #171712;
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-weight: 400;
+        font-size: 17px;
+        color: #2C1810;
         line-height: 1.25;
     }
     .queue-problem-sub {
-        font-family: 'Inter', sans-serif;
         font-size: 12px;
-        color: #66635A;
-        margin-top: 3px;
+        color: #735A50;
+        margin-top: 2px;
     }
 
-    .text-track-dsa {
-        color: #5932EA;
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.03em;
+    /* Dark Code Editor Anchor */
+    div.st-key-practice_editor_card,
+    div.st-key-mock_editor_card {
+        background: #1E1E1E !important;
+        border: 1px solid #1E1E1E !important;
+        border-radius: 24px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
-    .text-track-python {
-        color: #9A3412;
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.03em;
-    }
-    .text-diff-easy {
-        color: #167B48;
-        font-weight: 600;
-        font-size: 12px;
-    }
-    .text-diff-medium {
-        color: #B93815;
-        font-weight: 600;
-        font-size: 12px;
-    }
-    .text-diff-hard {
-        color: #C5221F;
-        font-weight: 600;
-        font-size: 12px;
-    }
-
-    .btn-row-action {
-        display: inline-flex;
+    .editor-strip {
+        background: #1E1E1E;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 18px;
+        display: flex;
         align-items: center;
-        gap: 6px;
-        padding: 7px 18px;
-        background: #FFFFFF;
-        color: #171712;
-        border: 1px solid #E7E1D6;
-        border-radius: 999px;
-        font-size: 12.5px;
-        font-weight: 600;
-        text-decoration: none;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 100ms ease;
+        justify-content: space-between;
+        gap: 12px;
     }
-    .btn-row-action:hover {
-        background: #15803D;
-        color: #FFFFFF;
-        border-color: #15803D;
+    .editor-strip-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #FFF8F0;
     }
-    .btn-row-action:active {
-        transform: translateY(1px);
+    .editor-strip-right {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #A38C82;
+    }
+    .editor-action-row {
+        background: #1E1E1E;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    /* Dashboard Mastery Grid */
-    .mastery-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-        margin-top: 16px;
+    /* Output Card */
+    div.st-key-practice_output_card,
+    div.st-key-mock_output_card {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(74, 25, 66, 0.10) !important;
+        border-radius: 24px !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin-top: 16px !important;
     }
-    .mastery-item {
-        background: #FBFAF7;
-        border: 1px solid #E7E1D6;
-        border-radius: 14px;
-        padding: 16px;
+    .verdict-band {
+        padding: 16px 20px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
-    }
-    .mastery-item-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .mastery-topic-name {
-        font-weight: 700;
-        font-size: 14px;
-        color: #171712;
-        text-transform: capitalize;
-    }
-    .mastery-bar-track {
-        height: 8px;
-        background: #E7E1D6;
-        border-radius: 999px;
-        width: 100%;
-        overflow: hidden;
-    }
-    .mastery-bar-fill {
-        height: 100%;
-        border-radius: 999px;
-    }
-    .mastery-stat-line {
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        color: #66635A;
-        font-weight: 600;
-    }
-
-    /* Lane B: Primary pill CTA */
-    .btn-pill-primary {
-        border-radius: 9999px !important;
-        background: #15803D !important;
-        color: #FFFFFF !important;
-        font-weight: 600 !important;
-    }
-
-    /* Lane C: Slim problem picker & statement styling */
-    .problem-picker-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0px;
         gap: 8px;
     }
-    .picker-title {
-        font-family: 'Fraunces', serif !important;
-        font-size: 18px !important;
-        font-weight: 700 !important;
-        color: #171712 !important;
-        text-align: center !important;
+    .verdict-band-pass {
+        background: #EFF4E4;
+        border-bottom: 1px solid rgba(107, 127, 59, 0.35);
+        color: #38451D;
+    }
+    .verdict-band-fail {
+        background: #FDECE9;
+        border-bottom: 1px solid rgba(194, 69, 45, 0.35);
+        color: #C2452D;
+    }
+
+    /* Slim problem picker row */
+    .filter-strip-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(74, 25, 66, 0.10);
+        border-radius: 16px;
+        padding: 8px 16px;
+        margin-bottom: 16px;
     }
     .st-key-btn_picker_prev button,
     .st-key-btn_picker_next button,
     div[data-testid="stColumn"]:has(.st-key-btn_picker_prev) button,
     div[data-testid="stColumn"]:has(.st-key-btn_picker_next) button {
-        padding: 6px 12px !important;
+        padding: 6px 14px !important;
         font-size: 16px !important;
         font-weight: 700 !important;
         min-width: 44px !important;
         white-space: nowrap !important;
         border-radius: 9999px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
     }
     .signature-card {
         margin-top: 14px;
@@ -905,7 +626,7 @@ def get_global_css(active_nav: str = "Home") -> str:
         font-weight: 700 !important;
         letter-spacing: 0.08em !important;
         text-transform: uppercase !important;
-        color: #66635A !important;
+        color: #735A50 !important;
         display: block !important;
         margin-bottom: 6px !important;
     }
@@ -913,25 +634,14 @@ def get_global_css(active_nav: str = "Home") -> str:
         font-family: 'JetBrains Mono', monospace !important;
         font-size: 13px !important;
         line-height: 1.5 !important;
-        white-space: pre-wrap !important;
-        word-break: break-word !important;
         margin: 0 !important;
         padding: 12px 16px !important;
-        background: #FBFAF7 !important;
-        border: 1px solid #E7E1D6 !important;
+        background: #FFF8F0 !important;
+        border: 1px solid rgba(74, 25, 66, 0.10) !important;
         border-radius: 12px !important;
-        color: #171712 !important;
-        overflow-x: hidden !important;
-    }
-    .problem-statement code, .stMarkdown code {
-        background: rgba(102, 99, 90, 0.08) !important;
-        color: #171712 !important;
-        padding: 2px 6px !important;
-        border-radius: 4px !important;
-        font-size: 13px !important;
+        color: #2C1810 !important;
     }
     """
-
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
 
 
