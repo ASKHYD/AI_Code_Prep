@@ -53,41 +53,54 @@ Grow the problem bank of AI Prep Coach from 12 problems to 20 by authoring 8 new
 
 ---
 
-## Milestone 5: MCQ Practice (180 Questions across 10 Categories)
+## Milestone 5: MCQ Practice, Quizzes & Flashcards (180 MCQs + 100 Flashcards across 10 Categories)
 
 ### Goal
-Add a dedicated Multiple Choice Question (MCQ) Practice module covering 10 major programming subjects mapped from the Sanfoundry programming index taxonomy, each with 18 questions (6 Easy, 6 Medium, 6 Hard) for 180 total questions. Every question is authored fresh under strict no-copy law, machine-verified where runtimes exist, and presented in an owner-approved Terracotta practice interface with instant feedback and session scoring.
+Add a comprehensive technical assessment and spaced-repetition module covering 10 major programming subjects mapped from the Sanfoundry programming index taxonomy:
+1. **MCQ Practice & Timed Quizzes**: 180 questions (6 Easy, 6 Medium, 6 Hard per category) in `data/mcqs/<category>.json`, authored fresh under strict no-copy law, machine-verified where runtimes exist. Features two interactive modes: Practice (instant feedback + explanation) and Timed Quiz (10 mixed questions, 10-minute countdown timer, mock-style scorecard review, `mcq_attempts` with `mode` column).
+2. **Flashcards with FSRS Spaced Repetition**: 100 flashcards across the same 10 categories (10 cards/deck in `data/flashcards/<category>.json`), sharing the existing `coach/fsrs_engine.py` scheduler (`desired_retention=0.9`) with a dedicated self-grade mapper permitting `Again`, `Hard`, `Good`, `Easy`, persisting in `flashcard_fsrs_cards`, with daily new card caps (20/day) and live next-interval preview buttons.
+Both screens gated behind owner-approved static Terracotta mockups (`mockups/terracotta/mcq.html` and `mockups/terracotta/flashcards.html`).
 
 ### Must-Haves
 - [ ] **The No-Copy Rule (Binding)**:
   - Sanfoundry's index supplies the subject taxonomy only.
-  - Every question, option set, answer key, and explanation is authored fresh in this project, in the coach's own words.
+  - Every question, option set, answer key, explanation, card front, back, and tag is authored fresh in this project, in the coach's own words.
   - Zero scraping, copying, or paraphrasing.
-- [ ] **10 Categories (180 MCQs total: 6 Easy, 6 Medium, 6 Hard each)**:
+- [ ] **10 Shared Categories**:
   - `python`, `data-structures`, `algorithms`, `oop`, `c`, `cpp`, `java`, `javascript`, `sql`, `data-science`.
-- [ ] **Data Model Discipline (`data/mcqs/<category>.json`)**:
-  - `id`, `category`, `difficulty`, `kind`, `question`, `options` (exactly 4), `answer_index` (0–3), `explanation` (1–3 sentences).
+- [ ] **MCQ Bank (180 MCQs total: 6 Easy, 6 Medium, 6 Hard each)**:
+  - Schema in `data/mcqs/<category>.json`: `id`, `category`, `difficulty`, `kind`, `question`, `options` (exactly 4), `answer_index` (0–3), `explanation` (1–3 sentences).
   - Roughly even answer-index distribution across 0–3 per category (no clustering).
+- [ ] **Flashcard Bank (100 Flashcards total: 10 per category)**:
+  - Schema in `data/flashcards/<category>.json`: `id`, `category`, `front`, `back`, `tag`.
 - [ ] **Verification Standard (B1 Equivalent)**:
-  - 100% of Python output questions machine-verified via Python 3.12 sandbox; observed output equals keyed answer option text.
+  - 100% of Python output questions and card code facts machine-verified via Python 3.12 sandbox; observed output equals keyed answer option text.
   - JavaScript output questions machine-verified via Node.js.
   - C, C++, Java, and SQL: 100% `concept`-kind questions (zero unverified output predictions, since no local compiler exists).
   - Independent 20% sample re-derivation audit with 100% resolved agreement.
-  - 180-question schema census report.
-- [ ] **Terracotta Screen & Mockup Gate**:
-  - Static HTML mockup at `mockups/terracotta/mcq.html` approved by owner before implementation.
-  - Topbar nav destination "MCQ Practice".
-  - One-at-a-time quiz flow: radio selection, submit -> instant verdict (olive correct / terracotta wrong) + explanation, running session score, end summary.
-  - Persistence in `mcq_attempts` table (`category`, `difficulty`, `correct`, `timestamp`).
-  - Dashboard & FSRS out of scope (honestly omitted from UI copy).
+  - 180-question schema census report + 100-card census report.
+- [ ] **FSRS Reuse & Boundary Doctrine**:
+  - Reuses `coach/fsrs_engine.py` scheduler (`fsrs==6.3.2`, default parameters, `desired_retention=0.9`).
+  - Table: `flashcard_fsrs_cards` (card_id, state, stability, difficulty, elapsed_days, scheduled_days, reps, lapses, last_review, due) keyed on `card_id`.
+  - Flashcard self-grade rating mapper emits `Again` (1), `Hard` (2), `Good` (3), `Easy` (4) with live next-interval calculation.
+  - Coding problem rating mapper in `coach/fsrs_engine.py` remains **strictly frozen and untouched** (`Rating.Easy` remains strictly forbidden for judge verdicts).
+- [ ] **Terracotta Screen & Mockup Gates**:
+  - Phase 10 Mockup: `mockups/terracotta/mcq.html` showing Practice Mode, Timed Quiz Mode (timer, locked submission), and Quiz Scorecard. Approved by owner before implementation.
+  - Phase 11 Mockup: `mockups/terracotta/flashcards.html` showing Deck Picker with live counts (due / new / total), card review flow (Front -> Show Answer -> Back -> 4 interval buttons), session summary, no JS flip animations (clean state toggle). Approved by owner before implementation.
+- [ ] **Persistence & Analytics**:
+  - `mcq_attempts` table schema: `(id, category, difficulty, question_id, selected_index, correct, mode, timestamp)` with `mode` in `('practice', 'quiz')`.
+  - `flashcard_fsrs_cards` tracking card states and reviews.
 
 ### Phases
 - **Phase 9: MCQ Bank (180 Questions across 10 Categories)**
   - Status: 💬 DISCUSSING / PLANNING
   - Objective: Define schema, author 180 fresh MCQs across 10 categories, machine-verify output questions, conduct 20% independent derivation audit, and file bank census.
-- **Phase 10: MCQ Screen (Terracotta Mockup Gate + Implementation)**
+- **Phase 10: MCQ & Quiz Screen (Practice + Timed Quiz Modes, Mockup Gate)**
   - Status: 🔒 GATED (Starts after Phase 9 & Owner Mockup Approval)
-  - Objective: Author static Terracotta mockup (`mockups/terracotta/mcq.html`), secure owner approval, implement Streamlit screen and `mcq_attempts` table, and verify via CDP captures.
+  - Objective: Author static Terracotta mockup (`mockups/terracotta/mcq.html`), secure owner approval, implement Streamlit screen with Practice and Timed Quiz modes, `mcq_attempts` table with `mode` column, and verify via CDP captures.
+- **Phase 11: Flashcards (100 Cards, FSRS Reuse & Review Screen)**
+  - Status: 🔒 GATED (Starts after Phase 10 & Owner Mockup Approval)
+  - Objective: Author 100 flashcards across 10 categories, verify Python/Node facts, reuse FSRS scheduler with `flashcard_fsrs_cards` and 4-button self-grader, author `mockups/terracotta/flashcards.html`, implement review screen with 20 new cards/day cap, and verify via CDP captures.
 
 ---
 
@@ -104,7 +117,8 @@ Add a dedicated Multiple Choice Question (MCQ) Practice module covering 10 major
 | **M3** | Phase 7 | ✅ Complete | Terracotta Streamlit implementation & Auth (T2) |
 | **M4** | Phase 8 | ✅ Complete | Problem Bank Expansion (8 new problems: 2E, 3M, 3H; 20 total) |
 | **M5** | Phase 9 | 💬 Discussing | MCQ Bank (180 MCQs, 10 categories, machine-verified) |
-| **M5** | Phase 10| 🔒 Gated | MCQ Screen (Terracotta Mockup Gate + Streamlit Screen) |
+| **M5** | Phase 10| 🔒 Gated | MCQ & Quiz Screen (Practice + Timed Quiz, Terracotta Mockup Gate) |
+| **M5** | Phase 11| 🔒 Gated | Flashcards (100 cards, FSRS scheduler reuse, Terracotta Mockup Gate) |
 
 ---
 
