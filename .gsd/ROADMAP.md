@@ -19,7 +19,7 @@ updated: 2026-11-07
 
 ---
 
-## Milestone 2: Make the Loop Smarter (Status: ⏳ Executed — awaiting owner live acceptance)
+## Milestone 2: Make the Loop Smarter (Status: Complete — accepted with corrective (2026-11-07))
 
 ### Goal
 Upgrade the learning loop with modern adaptive spaced repetition (FSRS) and cognitive interleaving, replacing static review ladders with individualized memory modeling and non-adjacent topic sequencing to optimize retention.
@@ -46,7 +46,7 @@ Upgrade the learning loop with modern adaptive spaced repetition (FSRS) and cogn
   - Live 1450×900 browser capture of Home screen showing FSRS due chip and queue.
 
 ### Phases
-- **Phase 3: FSRS + Interleaving** — Status: ⏳ Executed — awaiting owner live acceptance
+- **Phase 3: FSRS + Interleaving** — Status: Complete — accepted with corrective (2026-11-07)
 - **Phase 4: Per-Run Resource Measurement** (Milestone 2 Backlog) — Peak memory + CPU execution time instrumentation inside judge runner; unlock `Rating.Easy`.
 - **Phase 5: Attempt History & Ruff Diagnostics Panel** (Milestone 2 Backlog) — Historical attempt timeline, code diffs, inline Ruff linting.
 

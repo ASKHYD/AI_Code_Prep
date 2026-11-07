@@ -3,7 +3,7 @@
 **Milestone**: Milestone 2: Make the Loop Smarter  
 **Phase**: Phase 3: FSRS + Interleaving  
 **Date**: 2026-11-07  
-**Status**: Execution & Verification Complete — Awaiting Owner Live Acceptance  
+**Status**: Complete — accepted with corrective (2026-11-07)  
 **Source Contract**: Block M2 (`MILESTONE-2-DISCUSS-BLOCK.md`) & Block P3 (`PLAN_CONTRACT.md`)  
 
 ---
@@ -336,6 +336,97 @@ Following the owner's live inspection of `http://localhost:8501/?screen=home` on
 | Skill | Status | Technical Rationale / Evidence |
 | :--- | :--- | :--- |
 | `/systematic-debugging` | **USED** | Performed read-only diagnosis of live Home screen state, isolating two distinct defects: midnight streak reset in `store.current_streak` and hardcoded `"Next Due: +1 Day"` in `app.py` queue row rendering. |
+
+---
+
+## 4. CORRECTIVE (2026-11-07) — Phase 3 Closure Fixes C1–C3
+
+Following the Phase 3 Live Reconciliation (diagnosed on 2026-11-07 from owner's live inspection of `http://localhost:8501/?screen=home`), three targeted closure fixes were executed with strict boundary enforcement:
+
+### Fix C1 — Streak Semantics (`coach/store.py`, `CoachStore.current_streak`)
+- **Root Cause**: The streak calculation previously anchored strictly on `today`. If the user had not yet submitted an attempt on the current calendar day, the streak evaluated to 0 even if yesterday had active attempts.
+- **Implemented Fix**: Updated `CoachStore.current_streak(today=None)`:
+  - If `today` has an attempt in `attempt_dates`, count the unbroken consecutive calendar-day chain ending `today`.
+  - Else if `yesterday` (`today - 1 day`) has an attempt in `attempt_dates`, count the unbroken consecutive calendar-day chain ending `yesterday` (streak is alive and active, awaiting today's practice).
+  - Else, return 0.
+- **Regression Tests**: Added 4 tests in `tests/test_streak_regression.py`:
+  1. `test_streak_yesterday_only_alive()`: yesterday-only -> streak = 1.
+  2. `test_streak_today_and_yesterday_chain()`: today + yesterday -> streak = 2.
+  3. `test_streak_last_attempt_two_days_ago_broken()`: attempt 2+ days ago -> streak = 0.
+  4. `test_streak_chain_with_gap()`: attempts today and today - 2 days -> streak = 1.
+- **Result**: All 11 streak tests passing. Live Home navbar streak chip renders `1d` and active streak tile renders `1 day / ACTIVE` on 2026-11-07 (matching attempt on 2026-11-06).
+
+### Fix C2 — Queue Row Due State (`app.py`, Home Queue Row Builder)
+- **Root Cause**: The queue row generator in `app.py` previously ignored `store.due_problems()`, checking only `is_solved = p["id"] in solved_set`. When `is_solved` was `True`, it hardcoded `status_pill = 'Next Due: +1 Day'`. Because `binary-search` had a passed attempt, it rendered `"Next Due: +1 Day"` even though its FSRS card was overdue.
+- **Implemented Fix**:
+  - Queried `store.due_problems()` once per render as `due_list` with `due_problem_ids = {d["problem_id"] for d in due_list}`.
+  - Added `.badge-amber` CSS badge class (`background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D;`).
+  - If problem is in `due_problem_ids`:
+    - Renders `<span class="stat-badge badge-amber">DUE FOR REVIEW</span>`.
+    - Subtitle: `"Due for review · Scheduled by FSRS"`.
+  - If problem is solved and NOT in `due_problem_ids`:
+    - Reads card due date and dynamically computes delta days relative to today:
+      ```python
+      due_dt = datetime.fromisoformat(card.due.replace("Z", "+00:00"))
+      delta_days = (due_dt.date() - today).days
+      status_pill = f"Next Due: +{max(1, delta_days)} Day{'s' if delta_days != 1 else ''}"
+      ```
+    - Subtitle: `"Recent attempt passed · Scheduled for review"`.
+- **Grep Proof**:
+  - `git grep "Next Due: +1" app.py` returned exit code 1 (0 matches). Zero hardcoded string occurrences remain.
+
+### Fix C3 — Due-First Interleaved Queue (`coach/interleaving.py`, `build_interleaved_queue`)
+- **Specification**: FSRS due problems must appear at the head of the system-generated Home queue, sorted by due timestamp ascending. Non-due problems follow with cognitive interleaving (depth-then-weakness). The seam between the last due problem and the first non-due problem must preserve the no-same-topic-adjacency invariant (`topic[i] != topic[i-1]`).
+- **Implemented Fix**:
+  - Updated signature: `build_interleaved_queue(candidate_problems, topic_stats=None, due_problems=None)`.
+  - If `due_problems` are provided:
+    - Sorts due candidates by FSRS `due` timestamp ascending.
+    - Places due candidates first in the queue.
+    - Initializes `last_topic = due_problems[-1]["topic"]` across the seam.
+    - Interleaves remaining non-due problems by bucket count descending and historical pass rate ascending, strictly enforcing `t != last_topic`.
+- **Regression Tests**: Added tests in `tests/test_interleaving.py`:
+  - `test_interleaving_due_first_partition_and_seam_invariant()`: verifies due problems placed first, non-due problems follow, and zero adjacent topic collisions occur across the seam or throughout the queue.
+- **Result**: All 9 interleaving tests passing.
+
+---
+
+### Empirical Verification & Integrity Audit
+
+1. **Pytest Regression Battery**:
+   ```
+   ============================= 64 passed in 7.56s ==============================
+   ```
+   - 57 baseline Phase 3 tests + 7 new corrective regression tests: 100% GREEN.
+
+2. **Database Immutability Audit**:
+   - `coach.db` SHA-256 before corrective: `8a709dc1b1304de1b78d9762e17188b19bfaf6c8d56e08e59c6c42d54356b75c`
+   - `coach.db` SHA-256 after corrective: `8a709dc1b1304de1b78d9762e17188b19bfaf6c8d56e08e59c6c42d54356b75c`
+   - Zero database mutations occurred during corrective implementation and testing.
+
+3. **Grep Proof**:
+   ```
+   $ git grep "Next Due: +1" app.py
+   (exit code 1 - 0 occurrences)
+   ```
+
+4. **Live Chrome CDP Visual Capture (1450×900)**:
+   - Captured: `docs/screenshots/m2_p3_home_1450x900.png`
+   - DOM & Visual Measurements:
+     - Navbar streak chip: `1d`
+     - Home streak stat tile: `ACTIVE STREAK ACTIVE 1 day Consecutive active days.`
+     - Home queue position 1: `Binary Search` (due problem) with amber pill `<span class="stat-badge badge-amber">DUE FOR REVIEW</span>` and subtitle `"Due for review · Scheduled by FSRS"`.
+     - Home queue position 2: `Maximum Subarray Sum` (arrays topic). Zero topic adjacency violation across the seam.
+     - Entire 12-problem queue satisfies `topic[i] != topic[i-1]`.
+
+---
+
+### Resources Exercised Line (Corrective)
+
+| Skill / Resource | Status | Technical Rationale / Evidence |
+| :--- | :--- | :--- |
+| `/systematic-debugging` | **USED** | Pinpointed exact defect sites in `coach/store.py` (`current_streak`) and `app.py` queue row rendering. |
+| `/test-driven-development` | **USED** | Authored regression test suites in `tests/test_streak_regression.py` and `tests/test_interleaving.py` prior to finalizing changes. |
+| `/verification-before-completion` | **USED** | Ran full test suite (64/64), computed SQLite SHA256 before and after, executed grep proof, and verified live CDP headless capture at 1450×900. |
 
 ---
 

@@ -613,6 +613,11 @@ def get_global_css(active_nav: str = "Home") -> str:
         border: 1px solid rgba(154, 52, 18, 0.25) !important;
         color: #9A3412 !important;
     }
+    .badge-amber {
+        background-color: #FEF3C7 !important;
+        border: 1px solid rgba(180, 83, 9, 0.25) !important;
+        color: #92400E !important;
+    }
     .badge-rose {
         background-color: #FFE0E0 !important;
         border: 1px solid rgba(197, 34, 31, 0.25) !important;
@@ -1259,17 +1264,35 @@ if nav_choice == "Home":
             unsafe_allow_html=True,
         )
 
-        # Build table rows for problem queue (interleaved across topics)
-        interleaved_problems = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
+        # Build table rows for problem queue (interleaved across topics, due first per C3)
+        due_problem_ids = {d["problem_id"] if isinstance(d, dict) else str(d) for d in (due_list or [])}
+        interleaved_problems = build_interleaved_queue(
+            all_problems, topic_stats=store.topic_stats(), due_problems=due_list
+        )
         queue_rows = []
         for p in interleaved_problems:
-            is_solved = p["id"] in solved_set
+            pid = p["id"]
+            is_due = pid in due_problem_ids
+            is_solved = pid in solved_set
             track_class = "track-dsa" if p["track"] == "dsa" else "track-python"
             track_text_class = "text-track-dsa" if p["track"] == "dsa" else "text-track-python"
             diff_text_class = f"text-diff-{p['difficulty']}"
 
-            if is_solved:
-                status_pill = '<span class="stat-badge badge-mint">Next Due: +1 Day</span>'
+            if is_due:
+                status_pill = '<span class="stat-badge badge-amber">DUE FOR REVIEW</span>'
+                subtitle = "Due for review · Scheduled by FSRS"
+            elif is_solved:
+                card = store.get_fsrs_card(pid)
+                if card and card.due:
+                    today_date = date.today()
+                    due_date = card.due.date() if hasattr(card.due, "date") else datetime.fromisoformat(str(card.due)).date()
+                    delta_days = (due_date - today_date).days
+                    computed_days = max(1, delta_days)
+                    day_unit_str = "Day" if computed_days == 1 else "Days"
+                    status_pill = f'<span class="stat-badge badge-mint">Next Due: +{computed_days} {day_unit_str}</span>'
+                else:
+                    fallback_interval = 1
+                    status_pill = f'<span class="stat-badge badge-mint">Next Due: +{fallback_interval} Day</span>'
                 subtitle = "Recent attempt passed · Scheduled for review"
             else:
                 status_pill = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">Unattempted</span>'

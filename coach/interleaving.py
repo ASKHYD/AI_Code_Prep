@@ -23,21 +23,58 @@ def is_first_exposure(topic: str, attempted_topics: set[str] | list[str]) -> boo
 def build_interleaved_queue(
     problems: list[dict[str, Any]],
     topic_stats: dict[str, dict[str, Any]] | None = None,
+    due_problems: list[dict[str, Any]] | list[str] | None = None,
 ) -> list[dict[str, Any]]:
     """
     Reorders a list of problems so that no two problems of the same topic appear adjacently,
     whenever an alternative topic exists.
 
-    Ranking:
-    1. Topic due-ness / frequency (topics with more problems get prioritized to avoid starvation).
-    2. Weakest topic pass rate (lowest pass rate from topic_stats is prioritized).
+    Corrective C3 (Due-First Interleaving):
+    - When due_problems is provided (e.g. from store.due_problems()), due problems are
+      placed first, ordered among themselves by due timestamp (earliest due first).
+    - Remaining problems follow the depth-then-weakness topic interleaving.
+    - The no-same-topic-adjacency invariant holds across the seam: the interleaver initializes
+      last_topic to the final due problem's topic, excluding that topic from the first remaining pick.
     """
-    if not problems or len(problems) <= 2:
-        return list(problems)
+    if not problems:
+        return []
 
-    # 1. Bucket problems by topic
+    # 1. Separate due problems (if provided) from remaining problems
+    interleaved: list[dict[str, Any]] = []
+    seen_due_ids: set[str] = set()
+
+    if due_problems:
+        prob_map: dict[str, dict[str, Any]] = {}
+        for p in problems:
+            pid = p.get("id") if isinstance(p, dict) else getattr(p, "id", None)
+            if pid:
+                prob_map[pid] = p
+
+        # Order due problems by due timestamp (earliest due first)
+        sorted_due = sorted(
+            due_problems,
+            key=lambda x: str(x.get("due", "")) if isinstance(x, dict) else ""
+        )
+        for item in sorted_due:
+            pid = item.get("problem_id", "") if isinstance(item, dict) else str(item)
+            if pid in prob_map and pid not in seen_due_ids:
+                interleaved.append(prob_map[pid])
+                seen_due_ids.add(pid)
+
+    remaining_problems = [
+        p for p in problems
+        if (p.get("id") if isinstance(p, dict) else getattr(p, "id", None)) not in seen_due_ids
+    ]
+
+    if not remaining_problems:
+        return interleaved
+
+    if not interleaved and len(remaining_problems) <= 2:
+        return list(remaining_problems)
+
+    # 2. Bucket remaining problems by topic
     topic_buckets: dict[str, list[dict[str, Any]]] = {}
-    for p in problems:
+    for p in remaining_problems:
         if isinstance(p, dict):
             t = p.get("topic", "general")
         else:
@@ -47,9 +84,11 @@ def build_interleaved_queue(
     stats = topic_stats or {}
     all_topics = list(topic_buckets.keys())
 
-    # 2. Interleaving selection loop
-    interleaved: list[dict[str, Any]] = []
+    # 3. Interleaving selection loop (maintaining seam invariant from last due problem)
     last_topic: str | None = None
+    if interleaved:
+        last_item = interleaved[-1]
+        last_topic = last_item.get("topic") if isinstance(last_item, dict) else getattr(last_item, "topic", None)
 
     while any(len(b) > 0 for b in topic_buckets.values()):
         # Find available topics that are NOT the last_topic

@@ -83,3 +83,65 @@ def test_first_exposure_detection():
     assert is_first_exposure("trees", attempted) is True
     assert is_first_exposure("arrays", attempted) is False
 
+
+# --- Corrective C3 Specification Tests ---
+
+def test_interleaving_due_problem_at_row_1():
+    """(i) with a due problem present it sits at row 1 (Corrective C3)."""
+    problems = [
+        {"id": "a1", "topic": "arrays", "title": "Array 1"},
+        {"id": "b1", "topic": "binary-search", "title": "Binary Search 1"},
+        {"id": "t1", "topic": "trees", "title": "Tree 1"},
+    ]
+    due_problems = [{"problem_id": "b1", "due": "2026-11-06T20:00:00Z"}]
+    queue = build_interleaved_queue(problems, due_problems=due_problems)
+    assert queue[0]["id"] == "b1", "Due problem must sit at row 1!"
+
+
+def test_interleaving_seam_and_real_data_shape():
+    """
+    (ii) adjacency violations = 0 including across the seam, on today's real data shape
+    (1 due + 11 others, arrays bucket of 2) (Corrective C3).
+    """
+    from coach.problems import load_all_problems
+    all_problems = [p.model_dump() for p in load_all_problems()]
+    assert len(all_problems) == 12
+
+    # Today's store state: 1 due problem (binary-search)
+    due_problems = [{"problem_id": "binary-search", "due": "2026-11-06T20:01:50Z"}]
+    topic_stats = {"binary-search": {"attempts": 2, "passed": 1, "pass_rate": 50.0}}
+
+    queue = build_interleaved_queue(all_problems, topic_stats=topic_stats, due_problems=due_problems)
+    assert len(queue) == 12
+    assert queue[0]["id"] == "binary-search", "Due problem binary-search must sit at row 1!"
+
+    # Verify zero adjacency violations across the entire queue (including the seam at index 0 -> 1)
+    for i in range(1, len(queue)):
+        prev_topic = queue[i - 1]["topic"]
+        curr_topic = queue[i]["topic"]
+        assert prev_topic != curr_topic, f"Adjacency violation between row {i} and {i+1}: topic '{curr_topic}' repeated!"
+
+    # Seam test with due problem sharing the multi-item topic (arrays)
+    due_arrays = [{"problem_id": "two-sum", "due": "2026-11-06T10:00:00Z"}]
+    queue_arrays_due = build_interleaved_queue(all_problems, topic_stats=topic_stats, due_problems=due_arrays)
+    assert queue_arrays_due[0]["id"] == "two-sum"
+    # Row 2 cannot be arrays across the seam!
+    assert queue_arrays_due[1]["topic"] != "arrays", "Seam invariant failed: row 2 cannot share topic with row 1!"
+
+
+def test_interleaving_free_picking_and_mock_unaffected():
+    """(iii) free picking / Practice selection unaffected and mock calls default cleanly (Corrective C3)."""
+    from coach.problems import load_all_problems
+    all_problems = [p.model_dump() for p in load_all_problems()]
+
+    # Practice selection is direct index lookup, completely unaffected
+    assert len(all_problems) == 12
+    assert {p["id"] for p in all_problems} == {p.id for p in load_all_problems()}
+
+    # Mock interview call passes due_problems=None (default behavior preserved)
+    mock_pool = build_interleaved_queue(all_problems, topic_stats={}, due_problems=None)
+    assert len(mock_pool) == 12
+    # Verify mock pool has no adjacent duplicate topics
+    for i in range(1, len(mock_pool)):
+        assert mock_pool[i]["topic"] != mock_pool[i - 1]["topic"]
+

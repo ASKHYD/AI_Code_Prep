@@ -196,18 +196,31 @@ class CoachStore:
             return stats
 
     def current_streak(self, today: str | None = None) -> int:
-        """Calculates current consecutive days with at least 1 attempt leading to today."""
+        """
+        Calculates current consecutive days with at least 1 attempt leading to today.
+        Standard streak semantics (Corrective C1):
+        - If today has an attempt, count the unbroken chain ending today.
+        - Else if yesterday has an attempt, count the unbroken chain ending yesterday
+          (the streak is alive, awaiting today's practice).
+        - Else 0 (a gap older than yesterday breaks the chain).
+        """
         curr = datetime.strptime(today, "%Y-%m-%d").date() if today else date.today()
-        streak = 0
 
         with self._get_connection() as conn:
             cur = conn.execute("SELECT DISTINCT attempt_date FROM attempts ORDER BY attempt_date DESC")
             attempt_dates = {row["attempt_date"] for row in cur.fetchall()}
 
-        # Count backwards from curr
-        while curr.isoformat() in attempt_dates:
+        if curr.isoformat() in attempt_dates:
+            anchor = curr
+        elif (curr - timedelta(days=1)).isoformat() in attempt_dates:
+            anchor = curr - timedelta(days=1)
+        else:
+            return 0
+
+        streak = 0
+        while anchor.isoformat() in attempt_dates:
             streak += 1
-            curr -= timedelta(days=1)
+            anchor -= timedelta(days=1)
 
         return streak
 

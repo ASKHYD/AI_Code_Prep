@@ -68,9 +68,29 @@ async def main():
             print("FSRS Truth-in-Copy verified in DOM:", eval_copy.get("result", {}).get("value"))
 
             eval_due_chip = await send("Runtime.evaluate", {
-                "expression": "document.querySelector('.status-chip-due') ? document.querySelector('.status-chip-due').innerText : 'NOT FOUND'"
+                "expression": "document.querySelector('.status-chip-due') ? document.querySelector('.status-chip-due').innerText.trim() : 'NOT FOUND'"
             })
             print("Due chip text:", eval_due_chip.get("result", {}).get("value"))
+
+            eval_streak_chip = await send("Runtime.evaluate", {
+                "expression": "document.querySelector('.status-chip-streak') ? document.querySelector('.status-chip-streak').innerText.trim() : 'NOT FOUND'"
+            })
+            print("Navbar streak chip text:", eval_streak_chip.get("result", {}).get("value"))
+
+            eval_streak_tile = await send("Runtime.evaluate", {
+                "expression": "document.querySelector('div.st-key-home_card_streak') ? document.querySelector('div.st-key-home_card_streak').innerText.replace(/\\n+/g, ' ').trim() : 'NOT FOUND'"
+            })
+            print("Streak tile text:", eval_streak_tile.get("result", {}).get("value"))
+
+            eval_first_row = await send("Runtime.evaluate", {
+                "expression": "document.querySelector('tr.queue-row') ? document.querySelector('tr.queue-row').innerText.replace(/\\n+/g, ' ').trim() : 'NOT FOUND'"
+            })
+            print("First queue row text:", eval_first_row.get("result", {}).get("value"))
+
+            eval_due_pill = await send("Runtime.evaluate", {
+                "expression": "document.querySelector('.badge-amber') ? document.querySelector('.badge-amber').innerText.trim() : 'NOT FOUND'"
+            })
+            print("Amber due pill text in queue:", eval_due_pill.get("result", {}).get("value"))
 
             # Capture screenshot
             ss = await send("Page.captureScreenshot", {"format": "png"})
@@ -78,6 +98,12 @@ async def main():
             with open(OUTPUT_IMAGE, "wb") as f:
                 f.write(png_bytes)
             print(f"Captured 1450x900 Home screenshot to: {OUTPUT_IMAGE} ({len(png_bytes)} bytes)")
+
+            # Mirror to brain dir
+            brain_img = pathlib.Path(r"C:\Users\MS Computer\.gemini\antigravity\brain\a88a339d-8602-40c1-9fa8-9253ebf3f144\m2_p3_home_1450x900.png")
+            with open(brain_img, "wb") as f:
+                f.write(png_bytes)
+            print(f"Mirrored screenshot to brain: {brain_img}")
 
     finally:
         chrome_proc.terminate()
