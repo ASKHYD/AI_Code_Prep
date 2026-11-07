@@ -232,4 +232,98 @@ Suite Composition: 64 baseline + 9 Milestone 4 bank expansion + 9 auth (7 baseli
 | `agency-minimal-change-engineer` | **USED** | Enforced minimal diff discipline: added `import os` to `app.py`, handled duplicate account edge case in `auth_store.py`, and avoided any unsolicited refactoring or styling changes. |
 | `verification-before-completion` | **USED** | Verified fix via Ruff F821 static check (`All checks passed!`), 82/82 full pytest battery, and headless Chrome CDP captures of both error state and signed-in topbar/tiles. |
 
+---
+
+## 10. Home & Dashboard Premium Polish (Owner Live Review 2026-11-08)
+
+### 10.1 The Logo Restoration
+- **Asset**: Reused Logo Variant A (28×28 inline SVG): terracotta tile `#C2452D` (rx 7.28px), sun-white serif "A" in `DM Serif Display` (`#FFF8F0`), and olive accent dot `#6B7F3B` (cx 21, cy 21, r 2.2).
+- **Placement**: Placed inside `.topbar-brand` immediately to the left of the serif wordmark "AI Prep Coach" across all screens.
+- **Typography & Sanitizer Fix**: Set `.topbar-brand-wordmark` to `font-family: 'DM Serif Display', Georgia, serif !important; font-size: 22px !important; color: #2C1810 !important;`. Rendered topbar via `st.markdown(topbar_html, unsafe_allow_html=True)` to prevent Streamlit's `st.html` sanitizer from stripping inline `<svg>` elements.
+
+### 10.2 Queue De-Slop (Home Screen)
+- **Topic Styling**: Converted from pill/badge (`.stat-badge.badge-blue`) to plain coloured text via `.queue-item-topic` (`color: #C2452D !important; font-weight: 500; font-size: 13.5px;`). Blue topic badges completely eliminated.
+- **One Pill Rule**: Enforced maximum of exactly one pill per row (status pill only).
+- **Subtitle De-Slop**: Eliminated generic `"Standard ... curriculum problem"` string generator across the codebase. Replaced with authentic problem descriptor when present, or omitted cleanly when not.
+- **Row Action**: Replaced default browser blue link with `.btn-row-action` (`color: #C2452D !important; font-weight: 600; text-decoration: none !important;` with `:hover` state `#9C341E`).
+- **Dynamic FSRS Status**: Rendered strictly from FSRS card state — amber `DUE FOR REVIEW` when due, olive `+{N} DAY(S)` when scheduled, and quiet `READY` when unattempted. Zero hardcoded `"Next Due"` strings remain.
+
+### 10.3 Dashboard Table De-Slop
+- **Track Column**: Removed blue background badge; rendered as unadorned monospace text (`.track-dsa` in `#2F5D8A`, `.track-python` in `#C2452D`) matching `dashboard.html`.
+- **Topic Label Formatting**: Fixed capitalized acronym `"Dp"` $\rightarrow$ `"DP"` via canonical dictionary lookup `TOPIC_DISPLAY_NAMES = {"dp": "DP", "dsa": "DSA", "oop": "OOP", "sql": "SQL"}`.
+
+### 10.4 Deviation Sweep (Live Streamlit vs Approved Mockups)
+
+| Element / Treatment | Approved Mockup Contract (`mockups/terracotta/`) | Live Polish Implementation (`app.py`) | Fidelity Status |
+| :--- | :--- | :--- | :--- |
+| **Topbar Logo** | Logo Variant A 28×28 tile `#C2452D` + serif "A" + olive dot `#6B7F3B` | Embedded inline SVG in `.topbar-brand` on all views | **MATCH** |
+| **Topbar Wordmark** | 22px `DM Serif Display` `#2C1810` | Styled via `.topbar-brand-wordmark` (`!important` rules) | **MATCH** |
+| **Home Hero Title** | 38px `DM Serif Display` `#2C1810` | 38px font-size with line-height 1.15 | **MATCH** |
+| **Queue Header Badge** | Quiet pill `{count} Problems Ready` | `<span class="stat-badge badge-quiet">{count} Problems Ready</span>` | **MATCH** |
+| **Queue Topic** | Colored text `#C2452D` (no badge container) | `<span class="queue-item-topic">` colored text | **MATCH** |
+| **Queue Pill Count** | Max 1 pill per row (status pill only) | Enforced: 1 pill per row (`all_one_pill_per_row = True`) | **MATCH** |
+| **Queue Subtitle** | Problem descriptor or blank (0 template filler) | 0 instances of `"curriculum problem"` | **MATCH** |
+| **Queue Row Action** | Terracotta text action "Practice →" | Styled via `.btn-row-action` `#C2452D` | **MATCH** |
+| **Dashboard Track** | Clean coloured text (`#2F5D8A` / `#C2452D`) | No pill container, monospace font | **MATCH** |
+| **Dashboard DP Topic**| Uppercase acronym "DP" | Formatted via `TOPIC_DISPLAY_NAMES` | **MATCH** |
+
+### 10.5 Data Question Reconciliation: Binary Search Topic Mastery
+- **Owner Observation**: Dashboard displays Binary Search topic mastery at 66.7%.
+- **Empirical SQLite Record**: Querying `attempts` table in `coach.db` for `problem_id = 'binary-search'`:
+  - `id=1`: status = `"pass"`, mode = `"practice"`, timestamp = `2026-11-04T10:42:53.782231`
+  - `id=3`: status = `"fail"`, mode = `"mock"`, timestamp = `2026-11-06T20:00:50.752400`
+  - `id=4`: status = `"pass"`, mode = `"practice"`, timestamp = `2026-11-08T03:02:57.334290`
+- **Arithmetic Verification**:
+  $$\text{Pass Rate} = \frac{2 \text{ passed}}{3 \text{ total attempts}} = \frac{2}{3} \approx 66.666\dots\% \longrightarrow \mathbf{66.7\%}$$
+- **Finding**: The 66.7% figure is mathematically exact and 100% authentic to the recorded test attempts in SQLite. There is zero defect or mocked telemetry.
+
+### 10.6 Anti-Slop Audit Output & System Invariants
+
+Headless Chrome CDP DOM audit executed via `scratch/capture_polish_and_audit.py`:
+```json
+{
+  "logo_present": true,
+  "logo_rect_fill": "#C2452D",
+  "logo_dot_fill": "#6B7F3B",
+  "wordmark_present": true,
+  "wordmark_font": "\"DM Serif Display\", Georgia, serif",
+  "wordmark_color": "rgb(44, 24, 16)",
+  "blue_pills_in_queue_count": 0,
+  "filler_subtitles_in_queue_count": 0,
+  "all_one_pill_per_row": true,
+  "first_topic_color": "rgb(194, 69, 45)",
+  "first_topic_text": "Arrays",
+  "action_link_color": "rgb(194, 69, 45)",
+  "action_text_decoration": "none",
+  "blue_pills_in_dashboard_count": 0,
+  "dp_label_rendered": "DP"
+}
+```
+
+- **Static Analysis**: `ruff check app.py` $\rightarrow$ `All checks passed!`
+- **Database Immutability**:
+  - `coach.db` SHA256: `125b3d4c5c914ff8937fd14940292e8af36263dd8f1b7b2ffada62471fb8ce37` (bit-exact, 0 mutation).
+  - Row counts: `attempts = 3`, `problem_fsrs_cards = 1`, `user_profile = 1`.
+- **Test Suite**:
+  ```text
+  ============================= 82 passed in 43.11s =============================
+  ```
+
+### 10.7 Visual Evidence Captures
+The following fresh dual captures were recorded at 1450×900:
+- `docs/screenshots/live_terracotta/polish_home_1450x900.png` (111,835 B): Full Home view showing Logo Variant A, DM Serif Display wordmark, 3 bento stat cards, and de-slopped practice queue.
+- `docs/screenshots/live_terracotta/polish_topbar_closeup_1450x900.png`: High-resolution crop of the topbar showing Logo Variant A tile, serif wordmark, nav pills, and live streak/due status chips.
+- `docs/screenshots/live_terracotta/polish_queue_after_1450x900.png`: Crop of the Interleaved Practice Queue showing colored text topics, 1 pill per row, zero filler subtitles, and terracotta action buttons.
+- `docs/screenshots/live_terracotta/polish_dashboard_1450x900.png` (81,375 B): Full Dashboard view showing clean unbadged track text and uppercase "DP" topic label.
+
+### 10.8 Resources Exercised Accounting (Polish Round)
+
+| Resource / Skill | Status | Evidence & Contribution in Polish Round |
+| :--- | :--- | :--- |
+| `/ui-styling` | **USED** | Restored approved typography (`DM Serif Display` 22px `#2C1810`, `Plus Jakarta Sans`), colored topic spans (`#C2452D`), clean action links, and eliminated unauthorized badge containers. |
+| `/design-system` | **USED** | Maintained strict token discipline: Terracotta `#C2452D`, Earth `#2C1810`, Olive `#6B7F3B`, Slate `#2F5D8A`. Enforced 0 gradients, 0 glass, and 0 glow. |
+| `developing-with-streamlit` | **USED** | Resolved Streamlit `st.html` SVG sanitization limitation by migrating the topbar header to `st.markdown(..., unsafe_allow_html=True)`, ensuring the inline SVG logo renders reliably across all view states. |
+| `/agency-ui-finish-gate-reviewer` | **USED** | Executed element-by-element deviation sweep against `mockups/terracotta/home.html` and `dashboard.html`. Ran automated Chrome CDP DOM audit verifying 0 anti-slop violations. |
+
+
 

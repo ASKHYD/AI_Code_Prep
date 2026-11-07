@@ -293,13 +293,45 @@ def get_global_css(active_nav: str = "Home") -> str:
         flex-shrink: 0;
     }
     .topbar-brand {
-        font-family: 'DM Serif Display', Georgia, serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none !important;
+    }
+    .topbar-brand-wordmark {
+        font-family: 'DM Serif Display', Georgia, serif !important;
         font-size: 22px;
         font-weight: 400;
-        color: #2C1810;
-        text-decoration: none;
-        white-space: nowrap;
+        color: #2C1810 !important;
+        letter-spacing: -0.2px;
         line-height: 1;
+        text-decoration: none !important;
+        white-space: nowrap;
+    }
+    .app-logo {
+        flex-shrink: 0;
+        display: block;
+    }
+    .btn-row-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #C2452D !important;
+        text-decoration: none !important;
+        transition: color 150ms ease-out, transform 150ms ease-out;
+    }
+    .btn-row-action:hover {
+        color: #9C341E !important;
+        text-decoration: none !important;
+        transform: translateX(2px);
+    }
+    .queue-item-topic {
+        color: #C2452D !important;
+        font-weight: 500;
+        font-size: 13.5px;
     }
     .topbar-center {
         display: flex;
@@ -944,8 +976,8 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
 
     streak_str = f"{streak_count}d" if streak_count > 0 else "0d"
 
-    # Logo Variant A (28x28 inline SVG): terracotta tile, serif "A", olive dot
-    logo_svg = """<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AI Prep Coach Logo">
+    # Logo Variant A (28x28 inline SVG): terracotta tile #C2452D, sun-white serif "A", olive dot #6B7F3B
+    logo_svg = """<svg class="app-logo" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AI Prep Coach Logo" style="flex-shrink: 0; display: block;">
       <rect width="28" height="28" rx="7.28" fill="#C2452D"/>
       <text x="13.5" y="20.5" font-family="'DM Serif Display', Georgia, serif" font-size="20" fill="#FFF8F0" text-anchor="middle">A</text>
       <circle cx="21" cy="21" r="2.2" fill="#6B7F3B"/>
@@ -957,9 +989,9 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
     topbar_html = f"""
     <header class="topbar">
       <div class="topbar-left">
-        <a href="?screen=home" style="display: flex; align-items: center; gap: 10px; text-decoration: none;" target="_self">
+        <a href="?screen=home" class="topbar-brand" target="_self">
           {logo_svg}
-          <span class="topbar-brand">AI Prep Coach</span>
+          <span class="topbar-brand-wordmark">AI Prep Coach</span>
         </a>
       </div>
       <nav class="topbar-center" aria-label="Main Navigation">
@@ -980,7 +1012,7 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
       </div>
     </header>
     """
-    st.html(topbar_html)
+    st.markdown(topbar_html, unsafe_allow_html=True)
 
 
 def render_login_screen(auth_store_instance: AuthStore) -> None:
@@ -1224,7 +1256,7 @@ if nav_choice == "Home":
     with col_head:
         st.markdown(
             """<div style="margin-bottom: 8px;">
-                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 34px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 38px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
                     Today's Practice
                 </h1>
                 <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #735A50; margin: 0; line-height: 1.5;">
@@ -1309,30 +1341,33 @@ if nav_choice == "Home":
 
     st.html('<div style="height: 16px;"></div>')
 
-    # Recommended Practice Queue Bento Card
+    # Interleaved Practice Queue Bento Card
     with st.container(border=True, key="home_queue_card"):
+        due_problem_ids = {d["problem_id"] if isinstance(d, dict) else str(d) for d in (due_list or [])}
+        interleaved_problems = build_interleaved_queue(
+            all_problems, topic_stats=store.topic_stats(), due_problems=due_list
+        )
+        total_queue_count = len(interleaved_problems)
+        header_badge_text = f"{total_queue_count} Problems Ready"
+
         st.markdown(
             f"""
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div>
                     <h2 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; font-weight: 400; color: #2C1810; margin: 0 0 4px 0;">
-                        Recommended Practice Queue
+                        Interleaved Practice Queue
                     </h2>
                     <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; color: #735A50; margin: 0;">
-                        Interleaved topic sequence prioritized by memory decay and weakness.
+                        Topics sequenced to eliminate adjacent repetition and optimize cognitive consolidation.
                     </p>
                 </div>
-                <span class="stat-badge badge-olive" style="font-size: 12px; padding: 4px 14px;">{solved_count} / {len(all_problems)} Solved</span>
+                <span class="stat-badge badge-quiet">{header_badge_text}</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
         # Build table rows for problem queue (interleaved across topics, due first per C3)
-        due_problem_ids = {d["problem_id"] if isinstance(d, dict) else str(d) for d in (due_list or [])}
-        interleaved_problems = build_interleaved_queue(
-            all_problems, topic_stats=store.topic_stats(), due_problems=due_list
-        )
         queue_rows = []
         for p in interleaved_problems:
             pid = p["id"]
@@ -1341,9 +1376,9 @@ if nav_choice == "Home":
             track_class = "track-dsa" if p["track"] == "dsa" else "track-python"
             diff_text_class = f"text-diff-{p['difficulty']}"
 
+            # 1. Status pill: EXACTLY ONE pill per row (per 2b & 2e)
             if is_due:
                 status_pill = '<span class="stat-badge badge-amber">DUE FOR REVIEW</span>'
-                subtitle = "Due for review · Scheduled by FSRS"
             elif is_solved:
                 card = store.get_fsrs_card(pid)
                 if card and card.due:
@@ -1351,30 +1386,37 @@ if nav_choice == "Home":
                     due_date = card.due.date() if hasattr(card.due, "date") else datetime.fromisoformat(str(card.due)).date()
                     delta_days = (due_date - today_date).days
                     computed_days = max(1, delta_days)
-                    day_unit_str = "Day" if computed_days == 1 else "Days"
-                    status_pill = f'<span class="stat-badge badge-olive">Next Due: +{computed_days} {day_unit_str}</span>'
+                    day_unit_str = "DAY" if computed_days == 1 else "DAYS"
+                    status_pill = f'<span class="stat-badge badge-olive">+{computed_days} {day_unit_str}</span>'
                 else:
-                    fallback_interval = 1
-                    status_pill = f'<span class="stat-badge badge-olive">Next Due: +{fallback_interval} Day</span>'
-                subtitle = "Recent attempt passed · Scheduled for review"
+                    status_pill = '<span class="stat-badge badge-olive">+1 DAY</span>'
             else:
-                status_pill = '<span class="stat-badge badge-quiet">Unattempted</span>'
-                subtitle = f"Standard {p['topic']} curriculum problem"
+                status_pill = '<span class="stat-badge badge-quiet">READY</span>'
 
+            # 2. Topic is COLOURED TEXT, never a pill/badge (per 2a)
             topic_formatted = p['topic'].replace('-', ' ').title()
+            topic_cell = f'<span class="queue-item-topic">{topic_formatted}</span>'
+
+            # 3. Subtitle: kill filler template "curriculum problem" (per 2c)
+            # Only render if problem JSON provides a real short descriptor; otherwise omit
+            raw_sub = p.get("descriptor") or ""
+            sub_html = f'<div class="queue-problem-sub">{raw_sub}</div>' if raw_sub else ""
+
+            # 4. Action: Terracotta text action with system hover state (per 2d)
+            action_html = f'<a href="?screen=practice&problem={p["id"]}" target="_self" class="btn-row-action">Practice →</a>'
 
             queue_rows.append(
                 f"""
                 <tr class="queue-row {track_class}">
                     <td>
                         <div class="queue-problem-name">{p['title']}</div>
-                        <div class="queue-problem-sub">{subtitle}</div>
+                        {sub_html}
                     </td>
-                    <td><span class="stat-badge badge-blue">{topic_formatted}</span></td>
+                    <td>{topic_cell}</td>
                     <td><span class="{diff_text_class}">{p['difficulty'].title()}</span></td>
                     <td>{status_pill}</td>
                     <td style="text-align: right;">
-                        <a href="?screen=practice&problem={p['id']}" target="_self" class="btn-row-action">Practice →</a>
+                        {action_html}
                     </td>
                 </tr>
                 """
@@ -2496,6 +2538,13 @@ elif nav_choice == "Dashboard":
                 topic_problems[t] = []
             topic_problems[t].append(p)
 
+        TOPIC_DISPLAY_NAMES = {
+            "dp": "DP",
+            "dsa": "DSA",
+            "oop": "OOP",
+            "sql": "SQL",
+        }
+
         rows_html = []
         for t in all_curriculum_topics:
             probs = topic_problems.get(t, [])
@@ -2507,7 +2556,7 @@ elif nav_choice == "Dashboard":
             attempts = d["attempts"]
             pass_rate = d["pass_rate"]
 
-            formatted_title = t.replace('-', ' ').title()
+            formatted_title = TOPIC_DISPLAY_NAMES.get(t, t.replace('-', ' ').title())
 
             if attempts == 0:
                 ratio_str = f'<span style="color: #735A50; font-weight: 500;">0 / {total_in_topic}</span>'
@@ -2529,10 +2578,14 @@ elif nav_choice == "Dashboard":
                 </div>"""
                 status_chip = '<span class="stat-badge badge-olive">PASSING</span>' if pass_rate >= 70.0 else '<span class="stat-badge badge-terracotta">NEEDS WORK</span>'
 
+            # Track column: coloured text as in dashboard.html, NO PILL BACKGROUND (per Requirement 3)
+            track_color = "#2F5D8A" if track_name == "DSA" else "#C2452D"
+            track_cell = f'<span style="color: {track_color}; font-weight: 600; font-size: 13px; font-family: \'JetBrains Mono\', monospace; letter-spacing: 0.03em;">{track_name}</span>'
+
             rows_html.append(
                 f"""<tr>
                     <td><strong>{formatted_title}</strong></td>
-                    <td><span class="stat-badge badge-blue">{track_name}</span></td>
+                    <td>{track_cell}</td>
                     <td>{ratio_str}</td>
                     <td>{bar_html}</td>
                     <td style="text-align: right; white-space: nowrap !important; min-width: 130px;">{status_chip}</td>
