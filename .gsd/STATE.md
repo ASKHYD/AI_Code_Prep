@@ -1,15 +1,15 @@
 ---
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 
 # Project State
 
 ## Current Position
 
-**Milestone:** Milestone 4 — Problem Bank Expansion (20 Problems)  
-**Phase:** Phase 8: Problem Bank Expansion (8 New Problems: 2 Easy, 3 Medium, 3 Hard)  
-**Status:** 💬 DISCUSSING / PLANNING (Execution Gated: Starts after Terracotta Phase 7 Shipped)  
-**Active Plan:** Pending Phase 8 discuss & plan authoring  
+**Milestone:** Milestone 5 — MCQ Practice (180 Questions across 10 Categories)  
+**Phase:** Phase 9: MCQ Bank (Authoring, Schema & Verification)  
+**Status:** 💬 REGISTERED / DISCUSSING (Execution Gated: Starts after Windup Closing)  
+**Active Plan:** Pending Phase 9 discuss alignment  
 
 ---
 
@@ -21,28 +21,32 @@ updated: 2026-11-07
   - **Phases 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
   - **Phase 6 (T1)**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round, 7 screens).
-  - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, 71/71 tests green, 14 CDP captures, Phase Return filed).
+  - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, Phase Return filed, Fix Round closed, 82/82 tests green, Visual Captures verified).
 - **Milestone 4 (Problem Bank Expansion)**:
-  - **Phase 8**: 💬 DISCUSSING / PLANNING. Authoring 8 new problems (2 Easy, 3 Medium, 3 Hard) to grow bank from 12 to 20.
+  - **Phase 8**: ✅ Complete (8 new problems authored: 2 Easy, 3 Medium, 3 Hard; 100% reference pass; full suite 82/82 passing).
+- **Milestone 5 (MCQ Practice)**:
+  - **Phase 9**: 💬 DISCUSSING / PLANNING (Data layer: 180 MCQs across 10 categories, machine-verified output questions, independent audit).
+  - **Phase 10**: 🔒 GATED (Terracotta Mockup Gate `mockups/terracotta/mcq.html` at 1450×900, owner approval, Streamlit screen).
 
 ---
 
 ## Last Action
 
-- Completed Phase 7 (Terracotta Streamlit Implementation) with 71/71 tests passing, 0 database disruptions, and 14 dual-resolution CDP captures.
-- Registered Milestone 4 (Problem Bank Expansion) and Phase 8 (8 New Problems: 2 Easy, 3 Medium, 3 Hard) per owner instruction Block B.
-- Confirmed Bank Law requirements (JSON schema completeness, B1 reference test pass, X6 signature single-source-of-truth, 3-level offline hints, "Hard" UI tier support, scratch FSRS migration test, and UI count refresh).
+- Completed Phase 7 Fix Round: Added `import os` to `app.py`, resolved duplicate registration UX with friendly warning and Resend button, restored Home third bento card to "Problems Solved" (`1 / 20`), confirmed signed-in topbar Logout button, verified 82/82 tests, captured visual proofs, and committed (`6822e43`).
+- Registered Milestone 5 (MCQ Practice) with Phases 9 and 10 per owner instruction Block Q.
+- Surveyed machine runtimes: Python 3.12 and Node.js exist; gcc/g++/clang/java/javac are absent. Formulated verification doctrine accordingly.
 
 ---
 
-## Gates for Milestone 4
+## Gates for Milestone 5
 
 | Gate | Requirement | Status | Action Needed |
 | :--- | :--- | :--- | :--- |
-| **G-SHIP7** | Phase 7 Terracotta Implementation Shipped in App | ✅ MET | Phase 7 completed, 71/71 tests green, Return filed |
-| **G-DISCUSS8** | Phase 8 Discussion & Scope Alignment | ⏳ ACTIVE | Align on 8 problem specs, topics, and difficulty tier handling |
-| **G-PLAN8** | Phase 8 Plan Set Authoring & Audit | 🔒 PENDING | Author wave plans and submit for owner/Milo audit |
-| **G-EXEC8** | Phase 8 Execution Authorization | 🔒 LOCKED | Authorise execution after plan audit approval |
+| **G-WINDUP** | Current Windup Closure (Phase 7 fix filed + final verification accepted) | ⏳ ACTIVE | Owner acceptance of windup |
+| **G-DISCUSS9** | Phase 9 MCQ Bank Discussion & Scope Alignment | ⏳ ACTIVE | Return Block Q discuss output |
+| **G-PLAN9** | Phase 9 Plan Set Authoring & Audit | 🔒 PENDING | Author wave plans and submit for owner/Milo audit |
+| **G-MOCK10** | Phase 10 Terracotta Static Mockup Approval | 🔒 PENDING | Author `mockups/terracotta/mcq.html` and secure owner signoff |
+| **G-EXEC10** | Phase 10 Screen Execution Authorization | 🔒 LOCKED | Implementation starts only after mockup approval |
 
 ---
 
@@ -61,13 +65,15 @@ updated: 2026-11-07
 | **[DECISION-016]** | Milestone 3 Scope: Option 3 Terracotta Editorial (Bento grid + Terracota Mediterrâneo) | 2026-11-07 | Milestone 3 |
 | **[DECISION-017]** | Official Brand Name: AI Prep Coach | 2026-11-07 | Milestone 3 |
 | **[DECISION-018]** | Milestone 4 Scope: Bank Expansion to 20 problems (8 new: 2E, 3M, 3H) | 2026-11-07 | Milestone 4 |
+| **[DECISION-019]** | Milestone 5 Scope: MCQ Practice (10 categories, 180 questions, No-Copy Law, Mockup Gate) | 2026-11-08 | Milestone 5 |
 
 ---
 
 ## Blockers & Freezes
 
-- **Freezes during Milestone 4**:
+- **Freezes during Milestone 5**:
   - `coach/fsrs_engine.py`, `coach/judge.py`, and rating mapping strictly frozen.
-  - Terracotta tokens and CSS classes in `app.py` strictly frozen (data growth must not restyle components).
-  - Existing 12 problem JSON files in `data/problems/` strictly read-only.
-  - Real `coach.db` SHA256 preserved (all migration test runs must execute on a scratch DB copy).
+  - Terracotta tokens and CSS classes strictly frozen.
+  - Existing 20 coding problem JSON files in `data/problems/` strictly read-only.
+  - Real `coach.db` SHA256 preserved.
+  - Execution of Milestone 5 is gated on owner acceptance of current windup.
