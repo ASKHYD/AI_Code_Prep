@@ -78,7 +78,7 @@ surfaces:
 
 1. **Display Headlines & Wordmark**:
    - Family: `DM Serif Display`, serif.
-   - Usage: App wordmark ("Coach"), page hero titles ("Today's Practice", "Coding Interview Simulation", "Performance Scorecard"), prominent section titles.
+   - Usage: App wordmark ("AI Prep Coach"), page hero titles ("Today's Practice", "Coding Interview Simulation", "Performance Scorecard"), prominent section titles.
    - Styling: Normal style, generous line height (1.2), high contrast, warm editorial feel.
 2. **Body & General UI**:
    - Family: Humanist Sans (`Plus Jakarta Sans` or `Source Sans 3`).
@@ -91,6 +91,29 @@ surfaces:
 4. **Metric Numerals (DECISION-007 Binding)**:
    - Family: Tabular semibold Inter-style humanist sans (`Plus Jakarta Sans` with `font-feature-settings: "tnum"`).
    - Monospace is **STRICTLY FORBIDDEN** for general metric numbers (e.g. "1 Day", "1 Due", "90%"). Numbers remain clean, proportional, and tabular.
+
+---
+
+### Brand Identity & Logo Specification (Owner Decisions — 2026-11-07)
+
+- **Official Brand Name**: **AI Prep Coach** (replaces legacy "Coach" and "AI Coding Prep Coach").
+- **Wordmark Typography**: `DM Serif Display`, 22px in topbar shell, deep warm-ink `#2C1810`.
+- **Terracotta Logo System**:
+  - **Hard Constraints**: Inline SVG only, flat color fills, 100% matte, zero gradients, zero glow/box-shadow, zero stock imagery. Fully legible at 28×28 topbar scale.
+  - **Variant A (Primary / Active Choice)**:
+    - Rounded-square tile (corner radius ≈ 26%, `rx="7.28"` on 28×28 tile).
+    - Tile fill: Terracotta `#C2452D`.
+    - Centered glyph: Sun-white `#FFF8F0` monogram "A" set in `DM Serif Display`.
+    - Accent dot: Olive `#6B7F3B` dot at bottom-right (`cx="21" cy="21" r="2.2"`), representing verified code pass and practice streak.
+    - Deployment: Top navigation bar (28×28) across all screens; Login screen hero (44×44).
+  - **Variant B (Alternate Candidate)**:
+    - Rounded-square tile (corner radius ≈ 26%).
+    - Tile fill: Mediterranean blue `#1565C0`.
+    - Centered glyph: Sun-white `#FFF8F0` code brackets `</>` set in `JetBrains Mono`.
+    - Accent dot: Terracotta `#C2452D` dot at bottom-right.
+    - Deployment: Showcased side-by-side with Variant A in `tokens.html` for owner selection.
+- **Picker Format**: Every problem picker label (closed select and dropdown options) formatted strictly as: `N. Title · Topic (Difficulty)` (e.g., `1. Binary Search · Binary Search (Easy)`).
+- **Authentication Presentation**: Dedicated login screen at `mockups/terracotta/login.html` acting as a local profile lock, explicitly stating: *"Local profile — your data stays on this device."*
 
 ---
 

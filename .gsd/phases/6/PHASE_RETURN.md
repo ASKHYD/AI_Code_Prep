@@ -214,10 +214,111 @@ All 14 captures refreshed via Chrome CDP:
 
 ---
 
-## 8. Known Limits & Next Step
+## 8. ROUND 2 (2026-11-07)
 
-- **Known Limits**: Deliverables remain static HTML/CSS mockups running in a browser environment to validate layout, typography, and color harmony. Streamlit integration will occur in Phase 7 (T2).
-- **Next Step**: Await owner visual inspection of the corrected screenshots and live mockups on `http://localhost:8000`.
+Following the owner's design review, Round 2 brand identity, logo, login screen, text removals, and picker format changes (B1–B5) were executed across `mockups/terracotta/` and recorded in `DESIGN.md`:
+
+### Per-Item Before / After Summary
+
+1. **B1 — App Name**:
+   - **Before**: Brand wordmark displayed `"Coach"` (or `"AI Coding Prep Coach"` in page `<title>`).
+   - **After**: Brand wordmark across all 8 mockups is strictly `"AI Prep Coach"` in `DM Serif Display` (`22px` in topbar, `30px` on login screen), with page titles updated to `... — AI Prep Coach`.
+
+2. **B2 — Terracotta Logo System**:
+   - **Before**: No graphic mark; plain text wordmark with a temporary tag badge.
+   - **After**: Built two flat, 100% matte inline SVG logo marks adhering to the Terracotta design language (zero gradients, zero glow, clean vector geometry):
+     - **Variant A (Primary)**: Rounded-square tile (`rx="7.28"`, radius ≈ 26%) filled terracotta `#C2452D`, containing sun-white `#FFF8F0` `DM Serif Display` monogram `"A"`, with a small olive `#6B7F3B` dot at bottom-right (`cx="21" cy="21"`) representing verified test passing and streak retention. Deployed at `28×28` in the topbar across all screens and at `44×44` on the login screen.
+     - **Variant B (Alternate)**: Mediterranean blue `#1565C0` rounded-square tile containing sun-white `JetBrains Mono` code brackets `"</>"`, with a small terracotta `#C2452D` accent dot at bottom-right.
+     - **Token Presentation**: Both Variant A and Variant B are presented side-by-side in `tokens.html` under Section 4 ("Brand Identity & Logo System") at both 44×44 and 28×28 with full wordmark lockups for owner review.
+
+3. **B3 — Login Screen (`mockups/terracotta/login.html`)**:
+   - **Before**: No authentication screen existed in mockups.
+   - **After**: Created `login.html` on sun-white `#FFF8F0` canvas with a centered 24px-radius card (`#FFFFFF`, 1px warm hairline border), 44×44 logo Variant A, headline `"AI Prep Coach"`, subline *"Welcome back — your practice, judged by code."*, Email and Password inputs with sandy `#E8D5B7` focus ring, full-width terracotta pill `"Log In"`, Mediterranean-blue `"Forgot password?"`, and outline pill `"Create account"`. Under the card sits the honest offline guarantee: *"Local profile — your data stays on this device."* (Not added to topbar nav).
+
+4. **B4 — Text Removals & Copy Fixes**:
+   - **Before**:
+     - Wordmark carried a `<span class="topbar-brand-badge">Terracotta</span>` tag on every screen.
+     - Mock Start displayed timer caption `"Two display places (MM:SS) · Monospace JetBrains countdown"`.
+     - Mock Start format panel stated: *"Comprehensive scorecard with test execution timings, pass verdicts, and memory telemetry."*
+   - **After**:
+     - Removed the `"Terracotta"` badge chip across all topbars (clean lockup: Logo + `"AI Prep Coach"`).
+     - Removed the timer meta-caption outright from `mock_start.html` with zero replacement text.
+     - Replaced format panel copy with: *"Comprehensive scorecard with pass verdicts, execution timings and hints used."* (memory telemetry eliminated).
+
+5. **B5 — Picker Format**:
+   - **Before**: Picker options in `practice.html` were formatted as `"N. Title · Difficulty · Topic"` (e.g. `1. Binary Search · Easy · Binary Search`).
+   - **After**: Re-formatted strictly as `"N. Title · Topic (Difficulty)"` with difficulty at the end in brackets across closed select and all dropdown options in `practice.html` (e.g. `1. Binary Search · Binary Search (Easy)`, `7. Longest Substring Without Repeating Characters · Strings (Medium)`) and in `mock_session.html` switcher buttons.
+
+---
+
+### Extended Anti-Slop Audit & Numeral Tracing (Round 2)
+
+Execution of `scratch/run_terracotta_audit.py` across all 8 HTML mockups:
+```
+Catalog Census: 12 problems across 11 topics.
+Store State: 2 attempts, 1 passes (50.0%), binary-search pass runtime: 178ms
+
+[PASS] All 144 numerals across all 8 mockups are authoritatively traced.
+
+--- ANTI-SLOP AUDIT & NUMERAL TRACE RESULTS ---
+ALL 8 MOCKUPS PASSED: 0 TROPE VIOLATIONS, 0 UNTRACED NUMERALS.
+```
+- **Trope Invariants**: 0 glassmorphism, 0 card gradients, 0 purple/violet leaks, 0 glow shadows, 0 serif body paragraphs, 0 mono metric values, 0 chip soup violations.
+- **Numeral Tracing**: 144 of 144 numerals mapped to authoritative store metrics, problem catalog items, simulation fixtures, and token spec scales.
+
+---
+
+### Dual-Resolution Screenshot Refresh (16 Captures)
+
+All 16 captures refreshed via Chrome CDP into `docs/screenshots/terracotta/`:
+
+| Page | 1450 × 900 (Primary) | 1920 × 1080 | File Path |
+| :--- | :--- | :--- | :--- |
+| **Login** | 28,526 B | 37,374 B | `docs/screenshots/terracotta/terracotta_login_*.png` |
+| **Home** | 99,673 B | 113,553 B | `docs/screenshots/terracotta/terracotta_home_*.png` |
+| **Practice Arena** | 135,678 B | 139,383 B | `docs/screenshots/terracotta/terracotta_practice_*.png` |
+| **Mock Start** | 86,634 B | 89,998 B | `docs/screenshots/terracotta/terracotta_mock_start_*.png` |
+| **Mock Session** | 129,883 B | 133,810 B | `docs/screenshots/terracotta/terracotta_mock_session_*.png` |
+| **Mock Scorecard** | 93,572 B | 95,816 B | `docs/screenshots/terracotta/terracotta_mock_scorecard_*.png` |
+| **Dashboard** | 106,944 B | 124,343 B | `docs/screenshots/terracotta/terracotta_dashboard_*.png` |
+| **Design Tokens** | 101,689 B | 130,203 B | `docs/screenshots/terracotta/terracotta_tokens_*.png` |
+
+---
+
+### Resources Exercised Accounting (Round 2 & Fix Round)
+
+| Resource / Skill | Status | Round 2 Evidence / Technical Disposition |
+| :--- | :--- | :--- |
+| `Lucide Icons` | **USED** | Flame icon and action SVGs maintained cleanly across topbars, tiles, and form buttons. |
+| `Awesome Design MD` | **USED** | Terracotta token architecture guided logo geometry (26% radius) and matte surface discipline. |
+| `/design-system` | **USED** | Authored new Section 4 in `tokens.html` displaying Variant A and Variant B side-by-side with lockups. |
+| `/design` | **USED** | Layout of centered local authentication card in `login.html` with proper hierarchy and spacing. |
+| `/brand` | **USED** | Defined official brand "AI Prep Coach", wordmark lockup, and 2-variant SVG logo system in `DESIGN.md`. |
+| `/ui-styling` | **USED** | Added input form styles with sandy `#E8D5B7` focus ring in `style.css` and refined topbar brand CSS. |
+| `/ui-ux-pro-max` | **USED** | Applied strict picker label formatting `"N. Title · Topic (Difficulty)"` and purged timer/telemetry slop. |
+| `/impeccable` | **USED** | Extended anti-slop audit and numeral tracing across all 8 mockups; achieved 0 violations, 0 untraced numerals. |
+| `/agency-frontend-developer` | **USED** | Implemented `login.html` and updated 7 existing HTML mockups with semantic HTML5 and clean SVGs. |
+| `/agency-ui-finish-gate-reviewer` | **USED** | Audited refreshed dual-resolution screenshots verifying brand wordmark, logo clarity, and layout. |
+| `/agency-evidence-collector` | **USED** | Captured 16 dual-resolution screenshots via headless Chrome CDP into `docs/screenshots/terracotta/`. |
+| `/empirical-validation` | **USED** | Verified 57/57 pytest test suite pass, verified strict code quarantine, and validated all 144 numerals. |
+| `developing-with-streamlit` | **PARKED** | Parked for Phase 6. Phase 6 is mockups only; Streamlit implementation begins in Phase 7 (T2). |
+
+---
+
+### Code Quarantine & Invariant Verification
+
+- `app.py`: UNTOUCHED
+- `coach/*.py`: UNTOUCHED
+- `data/problems/*.json`: UNTOUCHED
+- `tests/*`: UNTOUCHED
+- Pytest Suite: **57 / 57 passed** (16.50s)
+
+---
+
+## 9. Known Limits & Next Step
+
+- **Known Limits**: Deliverables remain static HTML/CSS mockups running on `http://localhost:8000` to validate visual hierarchy, logo selection, and brand alignment. Functional authentication and Streamlit integration belong to Phase 7+.
+- **Next Step**: Await owner visual inspection of the Round 2 screenshots and live mockups on `http://localhost:8000` (specifically the logo variants in `tokens.html` and the new `login.html`).
 
 ---
 

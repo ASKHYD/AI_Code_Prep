@@ -96,8 +96,8 @@ def audit_mockups():
     print(f"Catalog Census: {len(valid_titles)} problems across {len(topics)} topics.")
 
     html_files = sorted(glob.glob(os.path.join(MOCKUP_DIR, "*.html")))
-    if len(html_files) != 7:
-        violations.append(f"Expected 7 HTML mockups, found {len(html_files)}")
+    if len(html_files) != 8:
+        violations.append(f"Expected 8 HTML mockups, found {len(html_files)}")
 
     # -------------------------------------------------------------
     # 3. HTML SLOP INVARIANTS
@@ -267,9 +267,18 @@ def audit_mockups():
             elif num == "3" and ("Option 3" in snippet or "3. Bento" in snippet):
                 category = "Design Spec"
                 source = "DESIGN.md / Option 3 Terracotta Editorial specification"
-            elif num in ("1", "2") and ("1. Color Architecture" in snippet or "2. Typography System" in snippet):
+            elif num in ("1", "2", "3") and ("1. Color Architecture" in snippet or "2. Typography System" in snippet or "3. Bento Surfaces" in snippet):
                 category = "Design Spec"
                 source = "tokens.html: Specification section index"
+            elif num == "4" and "4. Brand Identity" in snippet:
+                category = "Design Spec"
+                source = "tokens.html: Specification section index (4. Brand Identity)"
+            elif num in ("44", "28") and ("44×44" in snippet or "28×28" in snippet or "44px" in snippet or "28px" in snippet):
+                category = "Design Spec"
+                source = "DESIGN.md / B2: Logo display scales (44px display, 28px topbar)"
+            elif num in ("26", "26%") and "26%" in snippet:
+                category = "Design Spec"
+                source = "DESIGN.md / B2: Logo tile corner radius parameter (≈26%)"
             elif num == "007" and "DECISION-007" in snippet:
                 category = "Design Spec"
                 source = "tokens.html: Decision record reference (DECISION-007)"
@@ -294,12 +303,12 @@ def audit_mockups():
             print(f" - {fn}:{ln} -> Numeral: '{num}' in snippet: '{snip}'")
             violations.append(f"Untraced numeral '{num}' at {fn}:{ln} ('{snip}')")
     else:
-        print(f"\n[PASS] All {len(trace_table)} numerals across 7 mockups are authoritatively traced.")
+        print(f"\n[PASS] All {len(trace_table)} numerals across all {len(html_files)} mockups are authoritatively traced.")
 
     # Summary
     print("\n--- ANTI-SLOP AUDIT & NUMERAL TRACE RESULTS ---")
     if not violations:
-        print("ALL 7 MOCKUPS PASSED: 0 TROPE VIOLATIONS, 0 UNTRACED NUMERALS.")
+        print(f"ALL {len(html_files)} MOCKUPS PASSED: 0 TROPE VIOLATIONS, 0 UNTRACED NUMERALS.")
         return True
     else:
         print(f"FAILED: {len(violations)} total violations detected:")

@@ -42,6 +42,7 @@ RESOLUTIONS = [
 ]
 
 PAGES = [
+    ("login.html", "terracotta_login"),
     ("home.html", "terracotta_home"),
     ("practice.html", "terracotta_practice"),
     ("mock_start.html", "terracotta_mock_start"),

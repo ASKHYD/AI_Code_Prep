@@ -125,7 +125,7 @@ h1, h2, h3, .font-serif {
 .topbar-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
 }
 
@@ -133,20 +133,44 @@ h1, h2, h3, .font-serif {
   font-family: var(--font-display);
   font-size: 22px;
   color: var(--color-ink);
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
+  letter-spacing: -0.2px;
 }
 
-.topbar-brand-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 2px 7px;
-  border-radius: var(--radius-tag);
-  background: var(--color-terracotta-wash);
-  color: var(--color-terracotta);
-  border: 1px solid var(--color-terracotta-border);
+/* Form Controls (Auth & Input) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-label {
+  font-size: 13px;
   font-weight: 600;
+  color: var(--color-ink);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--color-hairline-strong);
+  background: #FFFFFF;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.form-input:focus {
+  border-color: var(--color-sand);
+  box-shadow: 0 0 0 3px rgba(232, 213, 183, 0.45);
+}
+
+.form-input::placeholder {
+  color: var(--color-ink-faint);
 }
 
 .topbar-nav {
