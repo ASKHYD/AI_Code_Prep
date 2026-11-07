@@ -6,10 +6,10 @@ updated: 2026-11-07
 
 ## Current Position
 
-**Milestone:** Milestone 3 — Terracotta Editorial Redesign  
-**Phase:** Phase 7: Terracotta Streamlit Implementation (T2)  
-**Status:** ✅ COMPLETE — PHASE RETURN FILED  
-**Active Plan:** `.gsd/phases/7/PHASE_RETURN.md` (Waves 0–4 executed and verified)  
+**Milestone:** Milestone 4 — Problem Bank Expansion (20 Problems)  
+**Phase:** Phase 8: Problem Bank Expansion (8 New Problems: 2 Easy, 3 Medium, 3 Hard)  
+**Status:** 💬 DISCUSSING / PLANNING (Execution Gated: Starts after Terracotta Phase 7 Shipped)  
+**Active Plan:** Pending Phase 8 discuss & plan authoring  
 
 ---
 
@@ -17,33 +17,32 @@ updated: 2026-11-07
 
 - **Milestone 1 (Premium UI Redesign)**: ✅ Complete & Closed.
 - **Milestone 2 (Make the Loop Smarter)**: 
-  - **Phase 3 (FSRS + Interleaving)**: ✅ Complete — accepted with corrective (2026-11-07) (64/64 tests green, live capture verified). Intact and unedited.
-  - **Phase 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
+  - **Phase 3 (FSRS + Interleaving)**: ✅ Complete — accepted with corrective (64/64 tests green, live capture verified). Intact and unedited.
+  - **Phases 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
   - **Phase 6 (T1)**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round, 7 screens).
   - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, 71/71 tests green, 14 CDP captures, Phase Return filed).
+- **Milestone 4 (Problem Bank Expansion)**:
+  - **Phase 8**: 💬 DISCUSSING / PLANNING. Authoring 8 new problems (2 Easy, 3 Medium, 3 Hard) to grow bank from 12 to 20.
 
 ---
 
 ## Last Action
 
-- Executed Phase 7 Waves 0–4:
-  - Wave 0: Downloaded & self-hosted offline `.woff2` font files in `assets/fonts/` for `DM Serif Display`, `Plus Jakarta Sans`, and `JetBrains Mono`. Created functional auth store in `auth_store.py` with 7 passing tests.
-  - Wave 1: Injected complete Terracotta tokens, base64 fonts, 28×28 inline SVG Logo Variant A, "AI Prep Coach" serif brand wordmark, active navigation pills, live streak & due chips, and session-state login gate into `app.py`.
-  - Wave 2: Restyled Home bento cards, FSRS explanatory copy, due-first queue table, and Dashboard with Plotly pass-rate chart for attempted topics placed strictly above the curriculum table.
-  - Wave 3: Rebuilt Practice Arena slim picker row in Round 2 format `"N. Title · Topic (Difficulty)"`, single-source starter signature block, 450px dark editor anchor, F1 Output Card (0 memory metrics), and complete Mock Interview simulation.
-  - Wave 4: Verified 71/71 pytest suite, audited SQLite `coach.db` immutability, verified 0 anti-slop violations, captured 14 dual-resolution Chrome CDP screenshots at 1450×900 and 1920×1080 with zero horizontal overflow, and authored `.gsd/phases/7/PHASE_RETURN.md`.
+- Completed Phase 7 (Terracotta Streamlit Implementation) with 71/71 tests passing, 0 database disruptions, and 14 dual-resolution CDP captures.
+- Registered Milestone 4 (Problem Bank Expansion) and Phase 8 (8 New Problems: 2 Easy, 3 Medium, 3 Hard) per owner instruction Block B.
+- Confirmed Bank Law requirements (JSON schema completeness, B1 reference test pass, X6 signature single-source-of-truth, 3-level offline hints, "Hard" UI tier support, scratch FSRS migration test, and UI count refresh).
 
 ---
 
-## Gates for Milestone 3
+## Gates for Milestone 4
 
 | Gate | Requirement | Status | Action Needed |
 | :--- | :--- | :--- | :--- |
-| **G-T1** | Phase 6 Mockups & Token Sheet Owner Approval | ✅ PASSED | Approved with Rounds 1–2 + Fix Round (7 screens) |
-| **G-M2** | Milestone 2 Phase 3 Owner Live Acceptance | ✅ PASSED | Accepted with corrective C1–C3 (64/64 green, live capture) |
-| **G-AUDIT7** | Phase 7 Plan Audit by Owner / Milo | ✅ PASSED | Plan contract approved across Waves 0–4 |
-| **G-EXEC7** | Phase 7 Streamlit Execution Authorization | ✅ PASSED | Execution complete, 71/71 tests passing, Phase Return filed |
+| **G-SHIP7** | Phase 7 Terracotta Implementation Shipped in App | ✅ MET | Phase 7 completed, 71/71 tests green, Return filed |
+| **G-DISCUSS8** | Phase 8 Discussion & Scope Alignment | ⏳ ACTIVE | Align on 8 problem specs, topics, and difficulty tier handling |
+| **G-PLAN8** | Phase 8 Plan Set Authoring & Audit | 🔒 PENDING | Author wave plans and submit for owner/Milo audit |
+| **G-EXEC8** | Phase 8 Execution Authorization | 🔒 LOCKED | Authorise execution after plan audit approval |
 
 ---
 
@@ -61,12 +60,14 @@ updated: 2026-11-07
 | **[DECISION-015]** | Judge Rating Mapping: FAIL/TIMEOUT $\rightarrow$ Again; PASS+hints/tries $\rightarrow$ Hard; Clean PASS $\rightarrow$ Good; Easy omitted | 2026-11-06 | Phase 3 FSRS |
 | **[DECISION-016]** | Milestone 3 Scope: Option 3 Terracotta Editorial (Bento grid + Terracota Mediterrâneo) | 2026-11-07 | Milestone 3 |
 | **[DECISION-017]** | Official Brand Name: AI Prep Coach | 2026-11-07 | Milestone 3 |
+| **[DECISION-018]** | Milestone 4 Scope: Bank Expansion to 20 problems (8 new: 2E, 3M, 3H) | 2026-11-07 | Milestone 4 |
 
 ---
 
 ## Blockers & Freezes
 
-- **Freezes for Milestone 3**:
-  - `coach/*.py`: Engine, store, judge, FSRS, interleaving remain strictly frozen.
-  - `data/problems/*.json`: Statements, starter code, and test cases remain strictly frozen.
-  - `coach.db`: Pre-existing tables (`attempts`: 2 rows, `problem_fsrs_cards`: 1 row) remain strictly frozen.
+- **Freezes during Milestone 4**:
+  - `coach/fsrs_engine.py`, `coach/judge.py`, and rating mapping strictly frozen.
+  - Terracotta tokens and CSS classes in `app.py` strictly frozen (data growth must not restyle components).
+  - Existing 12 problem JSON files in `data/problems/` strictly read-only.
+  - Real `coach.db` SHA256 preserved (all migration test runs must execute on a scratch DB copy).
