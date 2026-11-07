@@ -194,6 +194,24 @@ All 14 captures refreshed via Chrome CDP:
 - Terracotta HTML Mockups: `http://localhost:8000` (`http://localhost:8000/home.html`, etc.)
 - Milestone 2 Phase 3 Live App: `http://localhost:8501`
 
+### Resources Exercised Accounting (Fix Round)
+
+| Resource / Skill | Status | Fix Round Evidence / Technical Disposition |
+| :--- | :--- | :--- |
+| `Lucide Icons` | **USED** | Replaced the legacy `$`-shaped streak glyph with the official Lucide flame SVG icon across all 7 mockups (topbar and stat tiles) in accordance with N1. |
+| `Awesome Design MD` | **USED** | Verified Terracotta Editorial token architecture and layout guidelines (Mediterranean palette + Bento Tech Minimalist) across the corrected output card and dashboard tables. |
+| `/design-system` | **USED** | Maintained token discipline in `mockups/terracotta/style.css` and `tokens.html`; enforced non-mono tabular semibold numerals for metrics per DECISION-007. |
+| `/design` | **USED** | Structured the newly added 11-Topic Breakdown table on `dashboard.html` and rebuilt the two-pane practice workbench in `practice.html` without visual slop. |
+| `/brand` | **USED** | Preserved typographic brand hierarchy: DM Serif Display strictly for headings/wordmarks, Inter/system humanist sans for body and table text across all corrected templates. |
+| `/ui-styling` | **USED** | Engineered clean semantic styles for the corrected output results card, signature block, and topic table cells adhering to CSS custom property tokens. |
+| `/ui-ux-pro-max` | **USED** | Eliminated invented telemetry tropes in `practice.html` (F1) and resolved the attempted-only cognitive contradiction on `dashboard.html` (F2); streamlined topbar navigation to core user destinations (N1). |
+| `/impeccable` | **USED** | Extended automated anti-slop audit script (`scratch/run_terracotta_audit.py`) with a rigorous numeral-tracing battery; confirmed 0 trope violations and 0 untraced numerals. |
+| `/agency-frontend-developer` | **USED** | Implemented markup fixes across all 7 HTML templates (`practice.html`, `dashboard.html`, `home.html`, `mock_start.html`, `mock_session.html`, `mock_scorecard.html`, `tokens.html`) with semantic HTML5. |
+| `/agency-ui-finish-gate-reviewer` | **USED** | Audited refreshed dual-resolution mockups against owner screenshot findings to ensure exact pixel fidelity before gate sign-off. |
+| `/agency-evidence-collector` | **USED** | Automated headless Chrome CDP capture pipeline (`scratch/capture_terracotta_mockups.py`) producing 14 dual-resolution screenshots and updating `capture_manifest.json`. |
+| `/empirical-validation` | **USED** | Verified 57/57 pytest test suite pass, verified zero modifications to frozen code (`app.py`, `coach/`, `data/problems/`, `tests/`), and validated all 134 numerals against DB/catalog facts. |
+| `developing-with-streamlit` | **PARKED** | Parked for Phase 6. Phase 6 is strictly HTML/CSS mockups. Streamlit implementation is gated for Phase 7 (T2). |
+
 ---
 
 ## 8. Known Limits & Next Step
