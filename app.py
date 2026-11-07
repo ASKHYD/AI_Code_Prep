@@ -794,29 +794,31 @@ def render_editor(code: str, key: str, height: str | int = "450px") -> str:
 
 
 def render_topbar(current_nav: str, streak_count: int, due_count: int):
-    """Renders the approved 56px Topbar Navbar with active tint wash and status chips."""
-    import sys
-    py_ver = f"{sys.version_info.major}.{sys.version_info.minor}"
+    """Renders the official Terracotta Topbar with Logo Variant A, live chips, and logout action."""
+    active_home = "active" if current_nav == "Home" else ""
+    active_practice = "active" if current_nav == "Practice Arena" else ""
+    active_mock = "active" if current_nav == "Mock Interview" else ""
+    active_dash = "active" if current_nav == "Dashboard" else ""
 
-    active_home = "active-home" if current_nav == "Home" else ""
-    active_practice = "active-practice" if current_nav == "Practice Arena" else ""
-    active_mock = "active-mock" if current_nav == "Mock Interview" else ""
-    active_dash = "active-dashboard" if current_nav == "Dashboard" else ""
+    streak_str = f"{streak_count}d" if streak_count > 0 else "0d"
 
-    streak_str = f"{streak_count}d" if streak_count > 0 else "0 days"
+    # Logo Variant A (28x28 inline SVG): terracotta tile, serif "A", olive dot
+    logo_svg = """<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AI Prep Coach Logo">
+      <rect width="28" height="28" rx="7.28" fill="#C2452D"/>
+      <text x="13.5" y="20.5" font-family="'DM Serif Display', Georgia, serif" font-size="20" fill="#FFF8F0" text-anchor="middle">A</text>
+      <circle cx="21" cy="21" r="2.2" fill="#6B7F3B"/>
+    </svg>"""
 
-    shield_svg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>'
-    flame_svg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>'
-    cal_svg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>'
+    flame_svg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>'
+    cal_svg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>'
 
     topbar_html = f"""
     <header class="topbar">
       <div class="topbar-left">
-        <a href="?screen=home" class="topbar-brand" target="_self">AI Coding Prep Coach</a>
-        <span class="topbar-badge-offline">
-          {shield_svg}
-          Offline · Code-Judged
-        </span>
+        <a href="?screen=home" style="display: flex; align-items: center; gap: 10px; text-decoration: none;" target="_self">
+          {logo_svg}
+          <span class="topbar-brand">AI Prep Coach</span>
+        </a>
       </div>
       <nav class="topbar-center" aria-label="Main Navigation">
         <a href="?screen=home" class="nav-pill {active_home}" target="_self">Home</a>
@@ -825,21 +827,207 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
         <a href="?screen=dashboard" class="nav-pill {active_dash}" target="_self">Dashboard</a>
       </nav>
       <div class="topbar-right">
-        <div class="status-chip status-chip-streak">
+        <div class="status-chip status-chip-streak" title="Active Streak (yesterday-anchored)">
           {flame_svg}
           <span>{streak_str}</span>
         </div>
-        <div class="status-chip status-chip-due">
+        <div class="status-chip status-chip-due" title="Problems Due for Review (FSRS)">
           {cal_svg}
           <span>{due_count} due</span>
         </div>
-        <div class="status-chip status-chip-py">
-          <span>{py_ver}</span>
-        </div>
+        <a href="?logout=true" class="btn-logout" target="_self" title="Log out of current session">Logout</a>
       </div>
     </header>
     """
     st.html(topbar_html)
+
+
+def render_login_screen(auth_store_instance: AuthStore) -> None:
+    """Renders the authentic Terracotta login card matching mockups/terracotta/login.html."""
+    st.html(get_global_css())
+
+    # Check for logout query param
+    if st.query_params.get("logout", "").lower() == "true":
+        st.session_state.pop("authenticated_user", None)
+        st.query_params.clear()
+
+    # Check for activation token ?verify=<token>
+    verify_token = st.query_params.get("verify", "")
+    if verify_token:
+        ok, msg = auth_store_instance.verify_email_token(verify_token)
+        st.query_params.clear()
+        if ok:
+            st.success("Email confirmed — you can log in now.")
+        else:
+            st.error(msg)
+
+    # Check for reset token ?reset=<token>
+    reset_token = st.query_params.get("reset", "")
+    if reset_token:
+        st.markdown(
+            """
+            <div style="max-width: 440px; margin: 60px auto 20px auto; text-align: center;">
+                <h2 style="font-family: 'DM Serif Display', serif; font-size: 28px; color: #2C1810; margin-bottom: 8px;">Reset Password</h2>
+                <p style="font-size: 14px; color: #735A50;">Choose a new password for your AI Prep Coach profile.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        with st.form("reset_pwd_form"):
+            new_pwd = st.text_input("New Password (min 8 chars)", type="password")
+            confirm_pwd = st.text_input("Confirm New Password", type="password")
+            submitted = st.form_submit_button("Set New Password", type="primary")
+            if submitted:
+                if new_pwd != confirm_pwd:
+                    st.error("Passwords do not match.")
+                elif len(new_pwd) < 8:
+                    st.error("Password must be at least 8 characters.")
+                else:
+                    ok, r_msg = auth_store_instance.reset_password(reset_token, new_pwd)
+                    if ok:
+                        st.success(r_msg)
+                        st.query_params.clear()
+                    else:
+                        st.error(r_msg)
+        return
+
+    # Check if a profile exists at all
+    profile = auth_store_instance.get_profile()
+
+    st.markdown(
+        """
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 40px; padding-bottom: 16px;">
+            <div style="width: 100%; max-width: 440px; background: #FFFFFF; border: 1px solid rgba(74, 25, 66, 0.12); border-radius: 24px; padding: 40px 36px; text-align: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 18px;">
+                    <svg width="44" height="44" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AI Prep Coach Logo">
+                      <rect width="28" height="28" rx="7.28" fill="#C2452D"/>
+                      <text x="13.5" y="20.5" font-family="'DM Serif Display', Georgia, serif" font-size="20" fill="#FFF8F0" text-anchor="middle">A</text>
+                      <circle cx="21" cy="21" r="2.2" fill="#6B7F3B"/>
+                    </svg>
+                </div>
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 30px; color: #2C1810; line-height: 1.15; margin: 0 0 6px 0;">AI Prep Coach</h1>
+                <p style="font-size: 14px; color: #735A50; line-height: 1.5; margin: 0 0 24px 0;">Welcome back — your practice, judged by code.</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    auth_tab = "Sign In" if profile else "Create Account"
+    col_c = st.columns([1, 2, 1])[1]
+    with col_c:
+        mode = st.radio("Authentication Action", ["Sign In", "Create Account", "Forgot Password"], horizontal=True, label_visibility="collapsed")
+
+        if mode == "Sign In":
+            with st.form("login_form"):
+                email = st.text_input("Email address", placeholder="you@example.com")
+                pwd = st.text_input("Password", type="password", placeholder="••••••••")
+                submitted = st.form_submit_button("Log In", type="primary")
+
+                if submitted:
+                    ok, code, user_prof = auth_store_instance.authenticate_user(email, pwd)
+                    if ok:
+                        st.session_state["authenticated_user"] = user_prof["email"]
+                        st.rerun()
+                    elif code == "pending":
+                        st.warning("Confirm your email to activate your account.")
+                        st.session_state["resend_email"] = email
+                    elif code == "not_found":
+                        st.error("No account found for this email address. Please create an account.")
+                    else:
+                        st.error("Invalid email or password.")
+
+            if st.session_state.get("resend_email"):
+                r_email = st.session_state["resend_email"]
+                if st.button("Resend confirmation email", key="btn_resend_confirm"):
+                    r_ok, raw_tok, r_msg = auth_store_instance.resend_verification(r_email)
+                    if r_ok:
+                        app_url = os.environ.get("APP_BASE_URL", "http://localhost:8501")
+                        link = f"{app_url}/?verify={raw_tok}"
+                        s_ok, s_msg = send_smtp_email(
+                            to_email=r_email,
+                            subject="Confirm your AI Prep Coach account",
+                            text_content=f"Click the link to activate your account: {link}\n\nLink valid for 24 hours.",
+                            html_content=f"<p>Click the link to activate your AI Prep Coach account:</p><p><a href='{link}'>{link}</a></p><p>Link valid for 24 hours.</p>",
+                        )
+                        if s_ok:
+                            st.success("Fresh confirmation link sent! Please check your inbox.")
+                        else:
+                            st.error(f"Could not send email: {s_msg}. (Token generated for testing: ?verify={raw_tok})")
+                    else:
+                        st.error(r_msg)
+
+        elif mode == "Create Account":
+            with st.form("register_form"):
+                reg_email = st.text_input("Email address", placeholder="you@example.com")
+                reg_pwd = st.text_input("Password (min 8 characters)", type="password", placeholder="••••••••")
+                reg_submitted = st.form_submit_button("Create Account", type="primary")
+
+                if reg_submitted:
+                    c_ok, raw_tok, c_msg = auth_store_instance.create_pending_profile(reg_email, reg_pwd)
+                    if c_ok:
+                        app_url = os.environ.get("APP_BASE_URL", "http://localhost:8501")
+                        link = f"{app_url}/?verify={raw_tok}"
+                        s_ok, s_msg = send_smtp_email(
+                            to_email=reg_email,
+                            subject="Confirm your AI Prep Coach account",
+                            text_content=f"Welcome to AI Prep Coach! Click the link to activate your account: {link}\n\nLink valid for 24 hours.",
+                            html_content=f"<p>Welcome to <strong>AI Prep Coach</strong>!</p><p>Click below to activate your account:</p><p><a href='{link}'>{link}</a></p><p>This link is valid for 24 hours.</p>",
+                        )
+                        if s_ok:
+                            st.success("Confirmation email sent! Please check your inbox and click the link to activate.")
+                        else:
+                            st.warning(f"Account created in pending status, but confirmation email could not be sent: {s_msg}.")
+                            st.info(f"Local confirmation token (for offline activation): ?verify={raw_tok}")
+                    else:
+                        st.error(c_msg)
+
+        elif mode == "Forgot Password":
+            with st.form("forgot_pwd_form"):
+                f_email = st.text_input("Your account email", placeholder="you@example.com")
+                f_submitted = st.form_submit_button("Send Password Reset Link", type="primary")
+
+                if f_submitted:
+                    f_ok, raw_tok, f_msg = auth_store_instance.request_password_reset(f_email)
+                    if f_ok:
+                        app_url = os.environ.get("APP_BASE_URL", "http://localhost:8501")
+                        link = f"{app_url}/?reset={raw_tok}"
+                        s_ok, s_msg = send_smtp_email(
+                            to_email=f_email,
+                            subject="Reset your AI Prep Coach password",
+                            text_content=f"Click the link to reset your password: {link}\n\nLink valid for 1 hour.",
+                            html_content=f"<p>Click below to reset your AI Prep Coach password:</p><p><a href='{link}'>{link}</a></p><p>This link is valid for 1 hour.</p>",
+                        )
+                        if s_ok:
+                            st.success("Password reset link sent! Please check your inbox.")
+                        else:
+                            st.warning(f"Reset token generated, but email delivery failed: {s_msg}.")
+                            st.info(f"Local reset token (for offline reset): ?reset={raw_tok}")
+                    else:
+                        st.error(f_msg)
+
+        st.markdown(
+            """<div style="margin-top: 24px; font-size: 12px; color: #735A50; text-align: center;">
+                Local profile — your data stays on this device.
+            </div>""",
+            unsafe_allow_html=True,
+        )
+
+
+# Initialize auth store
+auth_store = AuthStore(db_path="coach.db")
+
+# Gated access: unauthenticated sessions see only login
+if "authenticated_user" not in st.session_state:
+    # Allow automatic bypass if profile exists and no login required, or show login screen
+    profile = auth_store.get_profile()
+    if profile and profile["status"] == "active" and st.query_params.get("logout", "").lower() != "true":
+        # Keep user logged in if active
+        st.session_state["authenticated_user"] = profile["email"]
+    else:
+        render_login_screen(auth_store)
+        st.stop()
+
 
 
 # Single Source of Truth for Live Metrics
