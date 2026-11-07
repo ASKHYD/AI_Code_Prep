@@ -1058,15 +1058,15 @@ st.html(get_global_css(nav_choice))
 if nav_choice == "Home":
     render_topbar("Home", streak_count, len(due_list))
 
-    # Page Header (Approved Direction A Wording Retained)
+    # Page Header (Terracotta Editorial)
     col_head, col_btn = st.columns([8, 4], vertical_alignment="center")
     with col_head:
         st.markdown(
             """<div style="margin-bottom: 8px;">
-                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 34px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
                     Today's Practice
                 </h1>
-                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #735A50; margin: 0; line-height: 1.5;">
                     Adaptive spaced repetition (FSRS) scheduled from your objective test results.
                 </p>
             </div>""",
@@ -1075,8 +1075,8 @@ if nav_choice == "Home":
     with col_btn:
         st.markdown(
             """<div style="text-align: right;">
-                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-pill-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #15803D; color: #FFFFFF; border: 1px solid #15803D; border-radius: 9999px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;">
-                    Start Practice →
+                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-terracotta" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #C2452D; color: #FFF8F0; border: 1px solid #C2452D; border-radius: 9999px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+                    Start Daily Practice →
                 </a>
             </div>""",
             unsafe_allow_html=True,
@@ -1084,20 +1084,20 @@ if nav_choice == "Home":
 
     st.html('<div style="height: 8px;"></div>')
 
-    # Stat Cards Row (De-slopped: clean metrics without decorative tags)
+    # Stat Bento Cards Row: Active Streak, Problems Due Today, Target Retention
     c1, c2, c3 = st.columns(3)
     with c1:
         with st.container(border=True, key="home_card_streak"):
             streak_unit = "day" if streak_count == 1 else "days"
             if streak_count == 0:
-                streak_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>'
+                streak_badge = '<span class="stat-badge badge-quiet">NOT STARTED</span>'
                 streak_caption = "Complete today's problem queue to start your streak."
             else:
-                streak_badge = '<span class="stat-badge badge-mint">ACTIVE</span>'
+                streak_badge = '<span class="stat-badge badge-olive">ACTIVE</span>'
                 streak_caption = "Consecutive active days."
             st.markdown(
                 f"""
-                <div class="stat-head" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="stat-head">
                     <span class="stat-label">Active Streak</span>
                     {streak_badge}
                 </div>
@@ -1111,10 +1111,12 @@ if nav_choice == "Home":
         with st.container(border=True, key="home_card_due"):
             due_count = len(due_list)
             due_caption = "All review intervals are currently up to date." if due_count == 0 else f"{due_count} problem{'s' if due_count != 1 else ''} need review today."
+            due_badge = '<span class="stat-badge badge-terracotta">FSRS</span>' if due_count > 0 else '<span class="stat-badge badge-olive">CLEAR</span>'
             st.markdown(
                 f"""
                 <div class="stat-head">
                     <span class="stat-label">Problems Due Today</span>
+                    {due_badge}
                 </div>
                 <div class="stat-value">{due_count} due</div>
                 <p class="stat-desc">{due_caption}</p>
@@ -1123,23 +1125,23 @@ if nav_choice == "Home":
             )
 
     with c3:
-        with st.container(border=True, key="home_card_library"):
-            total_count = len(all_problems)
+        with st.container(border=True, key="home_card_retention"):
             st.markdown(
-                f"""
+                """
                 <div class="stat-head">
-                    <span class="stat-label">Total Problem Bank</span>
+                    <span class="stat-label">Target Retention</span>
+                    <span class="stat-badge badge-olive">90.0%</span>
                 </div>
-                <div class="stat-value">{total_count} problems</div>
-                <p class="stat-desc">Across DSA and Python tracks.</p>
+                <div class="stat-value">90.0%</div>
+                <p class="stat-desc">Adaptive spaced repetition retention optimizer.</p>
                 """,
                 unsafe_allow_html=True,
             )
 
     st.html('<div style="height: 16px;"></div>')
 
-    # Daily Practice Queue Card (DE-SLOPPED)
-    with st.container(border=True, key="home_due_section"):
+    # Recommended Practice Queue Bento Card
+    with st.container(border=True, key="home_queue_card"):
         with store._get_connection() as conn:
             cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
             solved_set = {row[0] for row in cur.fetchall()}
@@ -1149,14 +1151,14 @@ if nav_choice == "Home":
             f"""
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                        Daily Practice Queue
+                    <h2 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; font-weight: 400; color: #2C1810; margin: 0 0 4px 0;">
+                        Recommended Practice Queue
                     </h2>
-                    <p style="font-family: 'Inter', sans-serif; font-size: 13.5px; color: #66635A; margin: 0;">
-                        Problems scheduled for review or exploration based on spaced repetition.
+                    <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; color: #735A50; margin: 0;">
+                        Interleaved topic sequence prioritized by memory decay and weakness.
                     </p>
                 </div>
-                <span class="stat-badge badge-mint" style="font-size: 12px; padding: 4px 12px;">{solved_count} / {len(all_problems)} Solved</span>
+                <span class="stat-badge badge-olive" style="font-size: 12px; padding: 4px 14px;">{solved_count} / {len(all_problems)} Solved</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -1173,7 +1175,6 @@ if nav_choice == "Home":
             is_due = pid in due_problem_ids
             is_solved = pid in solved_set
             track_class = "track-dsa" if p["track"] == "dsa" else "track-python"
-            track_text_class = "text-track-dsa" if p["track"] == "dsa" else "text-track-python"
             diff_text_class = f"text-diff-{p['difficulty']}"
 
             if is_due:
@@ -1187,14 +1188,16 @@ if nav_choice == "Home":
                     delta_days = (due_date - today_date).days
                     computed_days = max(1, delta_days)
                     day_unit_str = "Day" if computed_days == 1 else "Days"
-                    status_pill = f'<span class="stat-badge badge-mint">Next Due: +{computed_days} {day_unit_str}</span>'
+                    status_pill = f'<span class="stat-badge badge-olive">Next Due: +{computed_days} {day_unit_str}</span>'
                 else:
                     fallback_interval = 1
-                    status_pill = f'<span class="stat-badge badge-mint">Next Due: +{fallback_interval} Day</span>'
+                    status_pill = f'<span class="stat-badge badge-olive">Next Due: +{fallback_interval} Day</span>'
                 subtitle = "Recent attempt passed · Scheduled for review"
             else:
-                status_pill = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">Unattempted</span>'
+                status_pill = '<span class="stat-badge badge-quiet">Unattempted</span>'
                 subtitle = f"Standard {p['topic']} curriculum problem"
+
+            topic_formatted = p['topic'].replace('-', ' ').title()
 
             queue_rows.append(
                 f"""
@@ -1203,9 +1206,8 @@ if nav_choice == "Home":
                         <div class="queue-problem-name">{p['title']}</div>
                         <div class="queue-problem-sub">{subtitle}</div>
                     </td>
-                    <td><span class="{track_text_class}">{p['track'].upper()}</span></td>
+                    <td><span class="stat-badge badge-blue">{topic_formatted}</span></td>
                     <td><span class="{diff_text_class}">{p['difficulty'].title()}</span></td>
-                    <td><span style="color: #171712; font-weight: 500;">{p['topic'].title()}</span></td>
                     <td>{status_pill}</td>
                     <td style="text-align: right;">
                         <a href="?screen=practice&problem={p['id']}" target="_self" class="btn-row-action">Practice →</a>
@@ -1219,9 +1221,8 @@ if nav_choice == "Home":
             <thead>
                 <tr>
                     <th>Problem</th>
-                    <th>Track</th>
-                    <th>Difficulty</th>
                     <th>Topic</th>
+                    <th>Difficulty</th>
                     <th>Interval Status</th>
                     <th style="text-align: right;">Action</th>
                 </tr>
@@ -1233,10 +1234,6 @@ if nav_choice == "Home":
         """
         st.html(queue_table_html)
 
-
-# ==============================================================================
-# SCREEN 2: PRACTICE ARENA (TWO-PANE WORKBENCH)
-# ==============================================================================
 elif nav_choice == "Practice Arena":
     render_topbar("Practice Arena", streak_count, len(due_list))
 
@@ -2146,10 +2143,10 @@ elif nav_choice == "Dashboard":
     with col_dash_head:
         st.markdown(
             """<div style="margin-bottom: 8px;">
-                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0; letter-spacing: -0.025em; line-height: 1.2;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 34px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
                     Performance Analytics
                 </h1>
-                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0; line-height: 1.5;">
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #735A50; margin: 0; line-height: 1.5;">
                     Authentic mastery progress, practice volume, and topic readiness based strictly on SQLite attempt history.
                 </p>
             </div>""",
@@ -2158,7 +2155,7 @@ elif nav_choice == "Dashboard":
     with col_dash_btn:
         st.markdown(
             """<div style="text-align: right;">
-                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-pill-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #15803D; color: #FFFFFF; border: 1px solid #15803D; border-radius: 9999px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+                <a href="?screen=practice" target="_self" class="btn-primary-pill btn-terracotta" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; background: #C2452D; color: #FFF8F0; border: 1px solid #C2452D; border-radius: 9999px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap;">
                     Continue Practice →
                 </a>
             </div>""",
@@ -2177,15 +2174,15 @@ elif nav_choice == "Dashboard":
 
     st.html('<div style="height: 8px;"></div>')
 
-    # Three Stat Cards (De-slopped: decorative badges removed)
+    # Three Stat Bento Cards
     col1, col2, col3 = st.columns(3)
     with col1:
-        with st.container(border=True, key="dash_card_solved"):
+        with st.container(border=True, key="dash_card_attempts"):
             st.markdown(
                 f"""
                 <div class="stat-head">
                     <span class="stat-label">Solved Problems</span>
-                    <span class="stat-badge badge-mint">{solved_count} / {len(all_problems)} Total</span>
+                    <span class="stat-badge badge-olive">{solved_count} / {len(all_problems)} Total</span>
                 </div>
                 <div class="stat-value">{solved_count}</div>
                 <p class="stat-desc">Distinct problems passed at least once.</p>
@@ -2194,11 +2191,12 @@ elif nav_choice == "Dashboard":
             )
 
     with col2:
-        with st.container(border=True, key="dash_card_sessions"):
+        with st.container(border=True, key="dash_card_passrate"):
             st.markdown(
                 f"""
                 <div class="stat-head">
                     <span class="stat-label">Practice Sessions</span>
+                    <span class="stat-badge badge-blue">SQLITE</span>
                 </div>
                 <div class="stat-value">{total_sessions}</div>
                 <p class="stat-desc">Total code-judged runs recorded in SQLite.</p>
@@ -2207,11 +2205,12 @@ elif nav_choice == "Dashboard":
             )
 
     with col3:
-        with st.container(border=True, key="dash_card_hints"):
+        with st.container(border=True, key="dash_card_practiced"):
             st.markdown(
                 f"""
                 <div class="stat-head">
                     <span class="stat-label">Average Hints Used</span>
+                    <span class="stat-badge badge-quiet">HINTS</span>
                 </div>
                 <div class="stat-value">{avg_hints:.1f}</div>
                 <p class="stat-desc">Average hints revealed per problem attempt.</p>
@@ -2221,33 +2220,34 @@ elif nav_choice == "Dashboard":
 
     st.html('<div style="height: 16px;"></div>')
 
-    # Topic Mastery & Pass Rates (Unattempted topics NOT STARTED with NO bar)
-    with st.container(border=True, key="dashboard_mastery_card"):
+    stats = store.topic_stats()
+    all_curriculum_topics = sorted(list({p.get("topic") for p in all_problems if p.get("topic")}))
+
+    attempted_topics = [t for t in all_curriculum_topics if t in stats and stats[t].get("attempts", 0) > 0]
+    for t in sorted(stats.keys()):
+        if stats[t].get("attempts", 0) > 0 and t not in attempted_topics:
+            attempted_topics.append(t)
+
+    # Bento Card 1: Plotly Horizontal Pass Rate Chart (Attempted Topics Only, placed ABOVE table per F2)
+    with st.container(border=True, key="dashboard_chart_card"):
         st.markdown(
             """
-            <div>
-                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                    Topic Mastery &amp; Pass Rates
+            <div style="margin-bottom: 12px;">
+                <h2 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; font-weight: 400; color: #2C1810; margin: 0 0 4px 0;">
+                    Attempted Topic Pass Rates
                 </h2>
-                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
-                    Per-category accuracy across curriculum topics with topic-tinted bars.
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; color: #735A50; margin: 0;">
+                    Objective performance across attempted curriculum areas from store attempt history.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        stats = store.topic_stats()
-        all_curriculum_topics = sorted(list({p.get("topic") for p in all_problems if p.get("topic")}))
-
-        attempted_topics = [t for t in all_curriculum_topics if t in stats and stats[t].get("attempts", 0) > 0]
-        for t in sorted(stats.keys()):
-            if stats[t].get("attempts", 0) > 0 and t not in attempted_topics:
-                attempted_topics.append(t)
-
         if attempted_topics:
-            y_topics = attempted_topics
+            y_topics = [t.replace('-', ' ').title() for t in attempted_topics]
             x_rates = [stats[t]["pass_rate"] for t in attempted_topics]
+            bar_colors = ["#6B7F3B" if stats[t]["pass_rate"] >= 70.0 else "#C2452D" for t in attempted_topics]
             bar_texts = [f"{stats[t]['pass_rate']:.1f}% ({stats[t]['passed']}/{stats[t]['attempts']})" for t in attempted_topics]
 
             fig = go.Figure(
@@ -2256,50 +2256,65 @@ elif nav_choice == "Dashboard":
                         y=y_topics,
                         x=x_rates,
                         orientation="h",
-                        marker_color="#1F9D63",
+                        marker=dict(color=bar_colors, line=dict(color="rgba(74, 25, 66, 0.15)", width=1)),
                         text=bar_texts,
                         textposition="outside",
-                        textfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                        textfont=dict(family="Plus Jakarta Sans, sans-serif", size=12, color="#2C1810"),
                         cliponaxis=False,
                     )
                 ]
             )
             fig.update_layout(
                 xaxis=dict(
-                    title=dict(text="Pass Rate (%)", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
+                    title=dict(text="Pass Rate (%)", font=dict(family="Plus Jakarta Sans, sans-serif", size=13, color="#735A50")),
                     range=[0, 115],
-                    gridcolor="#E7E1D6",
+                    gridcolor="rgba(74, 25, 66, 0.08)",
                     showline=True,
-                    linecolor="#E7E1D6",
+                    linecolor="rgba(74, 25, 66, 0.12)",
                     zeroline=True,
-                    zerolinecolor="#E7E1D6",
-                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                    zerolinecolor="rgba(74, 25, 66, 0.12)",
+                    tickfont=dict(family="Plus Jakarta Sans, sans-serif", size=12, color="#2C1810"),
                     ticksuffix="%",
                 ),
                 yaxis=dict(
-                    title=dict(text="Topic", font=dict(family="Inter, sans-serif", size=13, color="#66635A")),
                     autorange="reversed",
-                    gridcolor="#E7E1D6",
+                    gridcolor="rgba(74, 25, 66, 0.08)",
                     showline=True,
-                    linecolor="#E7E1D6",
-                    tickfont=dict(family="Inter, sans-serif", size=12, color="#171712"),
+                    linecolor="rgba(74, 25, 66, 0.12)",
+                    tickfont=dict(family="Plus Jakarta Sans, sans-serif", size=13, color="#2C1810"),
                 ),
-                margin=dict(l=40, r=40, t=20, b=40),
-                height=max(180, len(attempted_topics) * 45 + 90),
-                paper_bgcolor="#FBFAF7",
-                plot_bgcolor="#FBFAF7",
-                font=dict(family="Inter, sans-serif", color="#171712"),
+                margin=dict(l=40, r=40, t=16, b=36),
+                height=max(160, len(attempted_topics) * 48 + 80),
+                paper_bgcolor="#FFFFFF",
+                plot_bgcolor="#FFFFFF",
+                font=dict(family="Plus Jakarta Sans, sans-serif", color="#2C1810"),
             )
             st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
         else:
             st.markdown(
-                """<div style="padding: 16px 0; color: #66635A; font-family: 'Inter', sans-serif; font-size: 13.5px;">
+                """<div style="padding: 16px 0; color: #735A50; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px;">
                     No attempts recorded yet. Practice problems to generate topic pass-rate analytics.
                 </div>""",
                 unsafe_allow_html=True,
             )
 
-        st.html('<div style="height: 12px;"></div>')
+    st.html('<div style="height: 16px;"></div>')
+
+    # Bento Card 2: Full Curriculum Topic Breakdown Table (BELOW chart per F2)
+    with st.container(border=True, key="dashboard_table_card"):
+        st.markdown(
+            """
+            <div style="margin-bottom: 16px;">
+                <h2 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; font-weight: 400; color: #2C1810; margin: 0 0 4px 0;">
+                    All Curriculum Topics (11 Total)
+                </h2>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; color: #735A50; margin: 0;">
+                    Complete syllabus status mapped directly from store attempt records.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         with store._get_connection() as conn:
             cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
@@ -2312,107 +2327,46 @@ elif nav_choice == "Dashboard":
                 topic_problems[t] = []
             topic_problems[t].append(p)
 
-        mastery_items_html = []
-        for t in all_curriculum_topics:
-            probs = topic_problems.get(t, [])
-            total_in_topic = len(probs)
-            solved_in_topic = sum(1 for p in probs if p["id"] in solved_problem_ids)
-            d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
-            attempts = d["attempts"]
-            pass_rate = d["pass_rate"]
-
-            if attempts > 0:
-                item_html = f"""
-                <div class="mastery-item" style="border-color: rgba(22, 123, 72, 0.3); background: #DFF3E4;">
-                    <div class="mastery-item-head">
-                        <span class="mastery-topic-name">{t}</span>
-                        <span class="stat-badge badge-mint">MASTERED</span>
-                    </div>
-                    <div class="mastery-bar-track">
-                        <div class="mastery-bar-fill" style="width: {min(pass_rate, 100.0)}%; background: #1F9D63;"></div>
-                    </div>
-                    <div class="mastery-stat-line">
-                        <span style="color: #171712;">Pass Rate: {pass_rate:.1f}%</span>
-                        <span style="color: #167B48;">({solved_in_topic}/{total_in_topic} Solved)</span>
-                    </div>
-                </div>
-                """
-            else:
-                item_html = f"""
-                <div class="mastery-item">
-                    <div class="mastery-item-head">
-                        <span class="mastery-topic-name">{t}</span>
-                        <span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>
-                    </div>
-                    <div style="font-size: 13px; color: #66635A; font-weight: 500; padding: 4px 0;">
-                        No attempts recorded yet.
-                    </div>
-                    <div class="mastery-stat-line">
-                        <span>Pass Rate: —</span>
-                        <span>(0/{total_in_topic} Solved)</span>
-                    </div>
-                </div>
-                """
-            mastery_items_html.append(item_html)
-
-        st.html(f'<div class="mastery-grid">{"".join(mastery_items_html)}</div>')
-
-    st.html('<div style="height: 16px;"></div>')
-
-    # Topic Breakdown Table (DE-SLOPPED)
-    with st.container(border=True, key="dashboard_table_card"):
-        st.markdown(
-            """
-            <div style="margin-bottom: 16px;">
-                <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                    Topic Breakdown Table
-                </h2>
-                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #66635A; margin: 0;">
-                    Granular breakdown of curriculum topics, tracks, mastery progress, and readiness status.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
         rows_html = []
         for t in all_curriculum_topics:
             probs = topic_problems.get(t, [])
             total_in_topic = len(probs)
             solved_in_topic = sum(1 for p in probs if p["id"] in solved_problem_ids)
             track_name = probs[0].get("track", "DSA").upper() if probs else "DSA"
-            track_class = "text-track-dsa" if track_name == "DSA" else "text-track-python"
 
             d = stats.get(t, {"attempts": 0, "passed": 0, "pass_rate": 0.0})
             attempts = d["attempts"]
             pass_rate = d["pass_rate"]
 
+            formatted_title = t.replace('-', ' ').title()
+
             if attempts == 0:
-                ratio_str = f'<span style="color: #66635A; font-weight: 600;">0 / {total_in_topic}</span>'
+                ratio_str = f'<span style="color: #735A50; font-weight: 500;">0 / {total_in_topic}</span>'
                 bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
-                        <div style="background: #E7E1D6; width: 0%; height: 100%;"></div>
+                    <div style="background: rgba(74, 25, 66, 0.08); border-radius: 9999px; height: 8px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                        <div style="background: transparent; width: 0%; height: 100%;"></div>
                     </div>
-                    <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #66635A;">—</span>
+                    <span style="font-size: 12px; font-weight: 600; font-feature-settings: 'tnum' 1; color: #735A50;">—</span>
                 </div>"""
-                status_chip = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT STARTED</span>'
+                status_chip = '<span class="stat-badge badge-quiet">NOT STARTED</span>'
             else:
-                ratio_str = f'<span style="color: #171712; font-weight: 600;">{solved_in_topic} / {total_in_topic}</span>'
+                ratio_str = f'<span style="color: #2C1810; font-weight: 600;">{solved_in_topic} / {total_in_topic}</span>'
+                bar_color = "#6B7F3B" if pass_rate >= 70.0 else "#C2452D"
                 bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #E7E1D6; border-radius: 999px; height: 10px; width: 120px; overflow: hidden; flex-shrink: 0;">
-                        <div style="background: #1F9D63; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 999px;"></div>
+                    <div style="background: rgba(74, 25, 66, 0.08); border-radius: 9999px; height: 8px; width: 120px; overflow: hidden; flex-shrink: 0;">
+                        <div style="background: {bar_color}; width: {min(pass_rate, 100.0)}%; height: 100%; border-radius: 9999px;"></div>
                     </div>
-                    <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #171712;">{pass_rate:.1f}%</span>
+                    <span style="font-size: 13px; font-weight: 700; font-feature-settings: 'tnum' 1; color: #2C1810;">{pass_rate:.1f}%</span>
                 </div>"""
-                status_chip = '<span class="stat-badge badge-mint">MASTERED</span>' if pass_rate >= 80.0 else '<span class="stat-badge badge-sky">IN PROGRESS</span>'
+                status_chip = '<span class="stat-badge badge-olive">PASSING</span>' if pass_rate >= 70.0 else '<span class="stat-badge badge-terracotta">NEEDS WORK</span>'
 
             rows_html.append(
                 f"""<tr>
-                    <td><strong>{t}</strong></td>
-                    <td><span class="{track_class}">{track_name}</span></td>
-                    <td style="font-variant-numeric: tabular-nums;">{ratio_str}</td>
+                    <td><strong>{formatted_title}</strong></td>
+                    <td><span class="stat-badge badge-blue">{track_name}</span></td>
+                    <td>{ratio_str}</td>
                     <td>{bar_html}</td>
-                    <td style="text-align: right; white-space: nowrap !important; min-width: 140px;">{status_chip}</td>
+                    <td style="text-align: right; white-space: nowrap !important; min-width: 130px;">{status_chip}</td>
                 </tr>"""
             )
 
@@ -2422,7 +2376,7 @@ elif nav_choice == "Dashboard":
                     <th>Topic</th>
                     <th>Track</th>
                     <th>Solved / Total</th>
-                    <th>Mastery Progress</th>
+                    <th>Mastery Pass Rate</th>
                     <th style="text-align: right;">Status</th>
                 </tr>
             </thead>
