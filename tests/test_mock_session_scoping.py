@@ -9,9 +9,9 @@ Tests session-scoped attempt evaluation for Mock Interview:
 """
 
 from datetime import datetime, timedelta
-import pytest
-from coach.store import CoachStore
+
 from app import get_mock_problem_evaluation
+from coach.store import CoachStore
 
 
 def test_unsubmitted_mock_problem_returns_not_attempted(tmp_path):

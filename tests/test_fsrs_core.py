@@ -8,13 +8,14 @@ Verifies Task 1.1 & Task 1.2 requirements:
 - Card serialization roundtrip.
 """
 
-import pytest
 import fsrs
+import pytest
+
 from coach.fsrs_engine import (
+    card_from_json,
+    card_to_json,
     get_fsrs_scheduler,
     map_judge_to_rating,
-    card_to_json,
-    card_from_json,
     parse_utc_datetime,
 )
 

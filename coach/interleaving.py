@@ -9,6 +9,7 @@ Free picking in the Practice Arena remains completely unrestricted.
 """
 
 from __future__ import annotations
+
 from typing import Any
 
 

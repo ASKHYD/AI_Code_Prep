@@ -8,11 +8,12 @@ Verifies:
   are explicitly verified and accounted for with technical reasons.
 """
 
-from datetime import datetime, timedelta, timezone
-import pytest
+from datetime import datetime, timezone
+
 import fsrs
-from coach.repetition import calculate_due_date
+
 from coach.fsrs_engine import get_fsrs_scheduler, map_judge_to_rating, parse_utc_datetime
+from coach.repetition import calculate_due_date
 
 
 def test_due_set_equivalence_and_delta_accounting():

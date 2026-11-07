@@ -20,13 +20,12 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from auth_store import AuthStore, send_smtp_email
+from coach.interleaving import build_interleaved_queue
 from coach.judge import run_solution
-from coach.llm_hints import explain_hint, review_code
+from coach.llm_hints import explain_hint
 from coach.problems import load_all_problems
-from coach.review import run_ruff_lint
 from coach.store import CoachStore
 from coach.timer import calculate_remaining_time
-from coach.interleaving import build_interleaved_queue
 
 # Page configuration with collapsed sidebar
 st.set_page_config(
@@ -1059,7 +1058,13 @@ def render_login_screen(auth_store_instance: AuthStore) -> None:
     auth_tab = "Sign In" if profile else "Create Account"
     col_c = st.columns([1, 2, 1])[1]
     with col_c:
-        mode = st.radio("Authentication Action", ["Sign In", "Create Account", "Forgot Password"], horizontal=True, label_visibility="collapsed")
+        mode = st.radio(
+            "Authentication Action",
+            ["Sign In", "Create Account", "Forgot Password"],
+            index=0 if auth_tab == "Sign In" else 1,
+            horizontal=True,
+            label_visibility="collapsed",
+        )
 
         if mode == "Sign In":
             with st.form("login_form"):
@@ -2522,7 +2527,7 @@ elif nav_choice == "Dashboard":
 
             if attempts == 0:
                 ratio_str = f'<span style="color: #735A50; font-weight: 500;">0 / {total_in_topic}</span>'
-                bar_html = f"""<div style="display: flex; align-items: center; gap: 10px;">
+                bar_html = """<div style="display: flex; align-items: center; gap: 10px;">
                     <div style="background: rgba(74, 25, 66, 0.08); border-radius: 9999px; height: 8px; width: 120px; overflow: hidden; flex-shrink: 0;">
                         <div style="background: transparent; width: 0%; height: 100%;"></div>
                     </div>

@@ -8,10 +8,10 @@ Verifies:
   - Syntax error raises clean error verdict.
 """
 
-from pathlib import Path
 import pytest
-from coach.problems import load_problem
+
 from coach.judge import run_solution
+from coach.problems import load_problem
 
 NEW_PROBLEM_IDS = [
     "merge-sorted-array",
@@ -32,7 +32,7 @@ def test_new_problem_schema_and_reference_pass(pid: str):
     assert len(data["visible_tests"]) >= 2
     assert len(data["hidden_tests"]) >= 5
     assert len(data["hints"]) == 3
-    
+
     # X6 signature doctrine
     first_line = data["starter_code"].splitlines()[0].strip()
     import re

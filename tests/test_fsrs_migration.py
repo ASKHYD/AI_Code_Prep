@@ -9,12 +9,11 @@ Verifies:
 """
 
 import tempfile
-import sqlite3
-from datetime import datetime, timezone
+
 import pytest
-import fsrs
-from coach.store import CoachStore
+
 from coach.fsrs_engine import parse_utc_datetime
+from coach.store import CoachStore
 
 
 @pytest.fixture

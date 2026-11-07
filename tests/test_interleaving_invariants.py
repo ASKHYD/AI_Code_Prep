@@ -6,9 +6,8 @@ Verifies:
 - Problem bank data files are 100% frozen and unmodified.
 """
 
-import pytest
+from coach.interleaving import is_first_exposure
 from coach.problems import load_all_problems
-from coach.interleaving import is_first_exposure, build_interleaved_queue
 
 
 def test_free_picking_options_unrestricted():

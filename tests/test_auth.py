@@ -4,14 +4,15 @@ Unit tests for auth_store.py — Functional authentication & security.
 
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
 import pytest
+
 from auth_store import (
     AuthStore,
-    hash_password,
-    verify_password,
-    hash_token,
-    init_auth_db,
     get_db_connection,
+    hash_password,
+    hash_token,
+    verify_password,
 )
 
 
@@ -117,6 +118,7 @@ def test_create_account_unconfigured_smtp_regression(auth_store: AuthStore, monk
     4. Repeated create_pending_profile with same email produces friendly 'already exists' message without exception.
     """
     import os
+
     from auth_store import send_smtp_email
 
     # Clear SMTP environment variables

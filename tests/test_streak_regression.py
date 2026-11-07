@@ -6,7 +6,9 @@ Verifies Task 2.3 requirement:
 """
 
 import tempfile
+
 import pytest
+
 from coach.store import CoachStore
 
 

@@ -6,7 +6,6 @@ Verifies Task 3.1 requirements:
 - Tail fallback when only single topic remains.
 """
 
-import pytest
 from coach.interleaving import build_interleaved_queue, is_first_exposure
 
 
