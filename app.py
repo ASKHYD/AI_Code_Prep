@@ -1,5 +1,5 @@
 """
-AI Coding Prep Coach — Topbar Workbench Implementation.
+AI Prep Coach — Topbar Workbench Implementation.
 Zero-cost, local-only coding interview preparation platform.
 The judge is CODE, not AI.
 """
