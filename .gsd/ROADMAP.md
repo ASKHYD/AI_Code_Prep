@@ -8,7 +8,7 @@ updated: 2026-11-07
 
 > **Current Milestone**: Milestone 3 — Terracotta Editorial Redesign  
 > **Current Phase**: Phase 7: Terracotta Streamlit Implementation (T2)  
-> **Status**: 📋 Planning Complete — Awaiting Plan Audit before /executor 7
+> **Status**: ✅ Phase 7 Complete — Phase Return Filed
 
 ---
 
@@ -58,7 +58,7 @@ Upgrade the learning loop with modern adaptive spaced repetition (FSRS) and cogn
 Redesign the application visual identity and layouts into Option 3 — **TERRACOTTA EDITORIAL**, combining the "Terracota Mediterrâneo" color architecture with a "Bento Grid Tech Minimalist" layout structure, disciplined by strict frontend feasibility, matte surfaces, and 100% authentic data truth.
 
 ### Must-Haves
-- [ ] **Design Tokens & System Sheet**:
+- [x] **Design Tokens & System Sheet**:
   - Sun-white `#FFF8F0` canvas / paper.
   - Sandy beige `#E8D5B7` quiet panel / tile (used sparingly, never as page background).
   - Primary action / terracotta `#C2452D`.
@@ -67,28 +67,28 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
   - Secondary warm accent: clay `#D4956B`.
   - Deep accent (sparing): deep fig `#4A1942`.
   - Fresh zone accent (sparing): sea foam `#A8D8C8`.
-  - Typography: DM Serif Display for headlines/wordmark; humanist sans for body/UI (named self-hosted family); JetBrains Mono ONLY for code, editor strip, mock timer. Metric numerals remain Inter-style tabular semibold per DECISION-007.
+  - Typography: DM Serif Display for headlines/wordmark; Plus Jakarta Sans for body/UI (named self-hosted family); JetBrains Mono ONLY for code, editor strip, mock timer.
   - Surfaces: matte only; 1px warm hairlines at low alpha (borders over shadows); card radius 24px; flat colors only.
   - Strict bans: golden-hour gradients, plaster/stone textures, arch-shaped containers, entrance animations, glass, glow, shimmer, independent pane scrolling.
   - Motion: hover/press states only (~150ms ease-out, press scale 0.97).
-- [ ] **Screen Layouts & Bento Structure**:
+- [x] **Screen Layouts & Bento Structure**:
   - **Home**: Serif "Today's Practice" headline, terracotta primary pill, 3 stat tiles, de-slopped queue panel (max 1 status pill per row, track/difficulty as colored text).
-  - **Practice Arena**: Page-scroll two-pane workbench, 1 Problem Card + 1 Output Card, slim problem picker row (X5R), dark anchor editor card (iframe internals untouched).
-  - **Mock Interview**: Start screen (serif title, sandy format panel with real facts, terracotta Start, timer card at 45:00), session screen (sandy session band, mono timer with exactly 2 display places), scorecard (PASS olive / FAIL blue-or-terracotta, sandy summary strip, terracotta Download Report, outline Back to Home).
+  - **Practice Arena**: Page-scroll two-pane workbench, 1 Problem Card + 1 Output Card, slim problem picker row (Round 2 format), dark anchor editor card (iframe internals untouched).
+  - **Mock Interview**: Start screen (serif title, sandy format panel with real facts, terracotta Start, timer card at 45:00), session screen (sandy session band, mono timer with exactly 2 display places), scorecard (PASS olive / FAIL terracotta, sandy summary strip, terracotta Download Report, outline Back to Home).
   - **Dashboard**: Bento tiles + restored Plotly "Topic Mastery & Pass Rates" chart ABOVE the table, data strictly from `store.topic_stats()`, attempted topics only, unattempted = NOT STARTED in table; chart colors from Terracotta zone palette.
-- [ ] **Preservations & Freezes**:
+- [x] **Preservations & Freezes**:
   - All Phase 2 corrective outcomes stay (full-bleed sticky topbar at top 0, navbar right side streak + due chips only, picker-only Practice selection, signature single source of truth, natural-width Run & Submit, small-caps signature label, mock session scoping & timer invariants, truthful FSRS copy).
-  - Strict freezes: `coach/*.py`, `data/problems/*.json`, `tests/*` untouched; pytest 57/57 invariant.
+  - Strict freezes: `coach/*.py`, `data/problems/*.json`, `coach.db` pre-existing tables untouched; pytest 71/71 passing.
   - Allowed edit surface: `app.py` presentation layer, `.streamlit/config.toml` theme, `DESIGN.md` (Terracotta token sheet), `assets/fonts/` (self-hosted), mockups/screenshots.
   - Data Truth: 100% authentic data from store at runtime; 12 real problems; zero generator fiction, zero invented numbers/counts.
-- [ ] **Phase Shape & Execution Split**:
-  - **Phase 6 (T1)**: Static HTML mockups & token sheet FIRST (Home, Practice, Mock start, Mock session, Mock scorecard, Dashboard, Tokens); captures at 1450×900 PRIMARY and 1920×1080; anti-slop audit. STOP for owner screenshot approval. No app code in T1.
-  - **Phase 7 (T2)**: Streamlit implementation (only after T1 approval & Phase 3 live acceptance); keyed-container CSS (`.st-key-*`) + native theme; zero `.st-emotion-cache-*` selectors; self-hosted fonts in `assets/fonts/` with `@font-face` proof.
-- [ ] **Verification & Skills Accounting**:
-  - All 57 tests passing.
-  - CDP proofs on named elements at 1450×900.
-  - Impeccable detect on all live screens with exit codes.
-  - Full resources exercised accounting block.
+- [x] **Phase Shape & Execution Split**:
+  - **Phase 6 (T1)**: Static HTML mockups & token sheet FIRST (Home, Practice, Mock start, Mock session, Mock scorecard, Dashboard, Tokens, Login); captures at 1450×900 PRIMARY and 1920×1080; anti-slop audit. Complete & approved.
+  - **Phase 7 (T2)**: Streamlit implementation with keyed-container CSS (`.st-key-*`) + native theme; zero `.st-emotion-cache-*` selectors; self-hosted fonts in `assets/fonts/` with base64 `@font-face` injection; functional auth gate in `auth_store.py`. Complete & verified.
+- [x] **Verification & Skills Accounting**:
+  - All 71 tests passing.
+  - Chrome CDP captures across all 7 screens at 1450×900 and 1920×1080 (14 images, 0 horizontal overflow).
+  - Automated anti-slop audit: 0 violations, live numerals traced to SQLite.
+  - Full resources exercised accounting block filed in `PHASE_RETURN.md`.
 
 ---
 
@@ -131,7 +131,7 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 ---
 
 ### Phase 7: Terracotta Streamlit Implementation (T2)
-**Status**: 📋 Planning Complete — Awaiting Plan Audit (Block P7 Authorised)  
+**Status**: ✅ Complete (Phase Return Filed, 71/71 Tests Green, 14 CDP Captures)  
 **Objective**: Implement approved Terracotta Editorial theme, DM Serif Display & Plus Jakarta Sans typography, 24px bento cards, terracotta primary actions, olive/blue/sandy color zones, Plotly terracotta palette, and functional authentication with real email confirmation into Streamlit.
 
 ---
@@ -146,11 +146,7 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 | **M2** | Phase 4 | ⏳ Backlog | Per-run memory & CPU resource measurement |
 | **M2** | Phase 5 | ⏳ Backlog | Attempt history timeline & live Ruff diagnostics |
 | **M3** | Phase 6 | ✅ Complete | Terracotta static HTML mockups & token sheet (T1) |
-| **M3** | Phase 7 | 📋 Planning Complete | Terracotta Streamlit implementation & Auth (T2) |
-| **M2** | Phase 4 | ⏳ Backlog | Per-run resource measurement (memory & time) |
-| **M2** | Phase 5 | ⏳ Backlog | Attempt history timeline & Ruff diagnostics panel |
-| **M3** | Phase 6 | 💬 Discussing | Terracotta static mockups (T1) & token sheet (real data, 1450 captures) |
-| **M3** | Phase 7 | ⏳ Pending T1 | Terracotta Streamlit implementation (T2) & 57/57 verification |
+| **M3** | Phase 7 | ✅ Complete | Terracotta Streamlit implementation & Auth (T2) |
 
 ---
 

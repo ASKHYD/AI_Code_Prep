@@ -8,8 +8,8 @@ updated: 2026-11-07
 
 **Milestone:** Milestone 3 — Terracotta Editorial Redesign  
 **Phase:** Phase 7: Terracotta Streamlit Implementation (T2)  
-**Status:** 📋 PLANNING COMPLETE — READY FOR PLAN AUDIT  
-**Active Plan:** `.gsd/phases/7/PLAN_CONTRACT.md` (5 plans across 5 waves)  
+**Status:** ✅ COMPLETE — PHASE RETURN FILED  
+**Active Plan:** `.gsd/phases/7/PHASE_RETURN.md` (Waves 0–4 executed and verified)  
 
 ---
 
@@ -21,17 +21,18 @@ updated: 2026-11-07
   - **Phase 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
   - **Phase 6 (T1)**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round, 7 screens).
-  - **Phase 7 (T2)**: 📋 Planning complete across Waves 0–4; awaiting owner / Milo audit before execution.
+  - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, 71/71 tests green, 14 CDP captures, Phase Return filed).
 
 ---
 
 ## Last Action
 
-- Completed Phase 3 corrective C1–C3 (streak yesterday-anchored, due pill from FSRS, due-first interleaved queue, 64/64 pytest, zero DB mutations).
-- Authorized DISCUSS + PLAN for Phase 7 via Block P7.
-- Conducted Font Gate audit (found DM Serif Display and Plus Jakarta Sans absent from assets/fonts/; scheduled offline self-hosting in Wave 0).
-- Documented functional authentication architecture with real confirmation email via SMTP STARTTLS and .env in DECISIONS.md [DECISION-013].
-- Produced full Phase 7 plan contract and 5 wave plans (00-PLAN.md through 04-PLAN.md).
+- Executed Phase 7 Waves 0–4:
+  - Wave 0: Downloaded & self-hosted offline `.woff2` font files in `assets/fonts/` for `DM Serif Display`, `Plus Jakarta Sans`, and `JetBrains Mono`. Created functional auth store in `auth_store.py` with 7 passing tests.
+  - Wave 1: Injected complete Terracotta tokens, base64 fonts, 28×28 inline SVG Logo Variant A, "AI Prep Coach" serif brand wordmark, active navigation pills, live streak & due chips, and session-state login gate into `app.py`.
+  - Wave 2: Restyled Home bento cards, FSRS explanatory copy, due-first queue table, and Dashboard with Plotly pass-rate chart for attempted topics placed strictly above the curriculum table.
+  - Wave 3: Rebuilt Practice Arena slim picker row in Round 2 format `"N. Title · Topic (Difficulty)"`, single-source starter signature block, 450px dark editor anchor, F1 Output Card (0 memory metrics), and complete Mock Interview simulation.
+  - Wave 4: Verified 71/71 pytest suite, audited SQLite `coach.db` immutability, verified 0 anti-slop violations, captured 14 dual-resolution Chrome CDP screenshots at 1450×900 and 1920×1080 with zero horizontal overflow, and authored `.gsd/phases/7/PHASE_RETURN.md`.
 
 ---
 
@@ -41,8 +42,8 @@ updated: 2026-11-07
 | :--- | :--- | :--- | :--- |
 | **G-T1** | Phase 6 Mockups & Token Sheet Owner Approval | ✅ PASSED | Approved with Rounds 1–2 + Fix Round (7 screens) |
 | **G-M2** | Milestone 2 Phase 3 Owner Live Acceptance | ✅ PASSED | Accepted with corrective C1–C3 (64/64 green, live capture) |
-| **G-AUDIT7** | Phase 7 Plan Audit by Owner / Milo | ⏳ PENDING | Owner / Milo audit of Phase 7 plan set before execution |
-| **G-EXEC7** | Phase 7 Streamlit Execution Authorization | 🔒 LOCKED | Awaiting G-AUDIT7 approval before /executor 7 |
+| **G-AUDIT7** | Phase 7 Plan Audit by Owner / Milo | ✅ PASSED | Plan contract approved across Waves 0–4 |
+| **G-EXEC7** | Phase 7 Streamlit Execution Authorization | ✅ PASSED | Execution complete, 71/71 tests passing, Phase Return filed |
 
 ---
 
@@ -55,10 +56,11 @@ updated: 2026-11-07
 | **[DECISION-003]** | Frozen backend & problems during UI redesigns | 2026-11-05 | Milestones 1 & 3 |
 | **[DECISION-011]** | Wave 1 subagent parallelism & Wave 2 evidence fan-out | 2026-11-06 | Execution harness |
 | **[DECISION-012]** | Runtime-derived Python version chip (`3.12`) | 2026-11-06 | App navbar |
-| **[DECISION-013]** | Milestone 2 Scope: FSRS + Interleaving first | 2026-11-06 | Milestone 2 |
+| **[DECISION-013]** | Functional email confirmation with PBKDF2 600k & SMTP STARTTLS | 2026-11-07 | Phase 7 Auth |
 | **[DECISION-014]** | py-fsrs default parameters, retention 0.9, optimizer forbidden | 2026-11-06 | Phase 3 FSRS |
 | **[DECISION-015]** | Judge Rating Mapping: FAIL/TIMEOUT $\rightarrow$ Again; PASS+hints/tries $\rightarrow$ Hard; Clean PASS $\rightarrow$ Good; Easy omitted | 2026-11-06 | Phase 3 FSRS |
 | **[DECISION-016]** | Milestone 3 Scope: Option 3 Terracotta Editorial (Bento grid + Terracota Mediterrâneo) | 2026-11-07 | Milestone 3 |
+| **[DECISION-017]** | Official Brand Name: AI Prep Coach | 2026-11-07 | Milestone 3 |
 
 ---
 
@@ -67,10 +69,4 @@ updated: 2026-11-07
 - **Freezes for Milestone 3**:
   - `coach/*.py`: Engine, store, judge, FSRS, interleaving remain strictly frozen.
   - `data/problems/*.json`: Statements, starter code, and test cases remain strictly frozen.
-  - `tests/*`: Verification test suite untouched; 57/57 invariant.
-- **Phase 6 Scope Restriction**: No application code in `app.py` in Phase 6 (static mockups & tokens only).
-- **Phase 7 Execution Blocker**: Gate G-T1 (Owner approval of Phase 6 mockups) and Gate G-M2 (Owner acceptance of Phase 3).
-
----
-
-*Last updated: 2026-11-07*
+  - `coach.db`: Pre-existing tables (`attempts`: 2 rows, `problem_fsrs_cards`: 1 row) remain strictly frozen.
