@@ -5,8 +5,8 @@ address = "127.0.0.1"
 
 [theme]
 base = "light"
-primaryColor = "#15803D"
-backgroundColor = "#FBFAF7"
+primaryColor = "#C2452D"
+backgroundColor = "#FFF8F0"
 secondaryBackgroundColor = "#FFFFFF"
-textColor = "#171712"
+textColor = "#2C1810"
 font = "sans serif"
