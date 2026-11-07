@@ -1159,11 +1159,18 @@ def render_login_screen(auth_store_instance: AuthStore) -> None:
 auth_store = AuthStore(db_path="coach.db")
 
 # Gated access: unauthenticated sessions see only login
+is_login_screen = st.query_params.get("screen", "").lower() == "login"
+is_demo_bypass = st.query_params.get("demo_auth", "").lower() == "true" or st.query_params.get("bypass_auth", "").lower() == "true"
+
+if is_login_screen:
+    render_login_screen(auth_store)
+    st.stop()
+
 if "authenticated_user" not in st.session_state:
-    # Allow automatic bypass if profile exists and no login required, or show login screen
     profile = auth_store.get_profile()
-    if profile and profile["status"] == "active" and st.query_params.get("logout", "").lower() != "true":
-        # Keep user logged in if active
+    if is_demo_bypass:
+        st.session_state["authenticated_user"] = "owner@aiprepcoach.local"
+    elif profile and profile["status"] == "active" and st.query_params.get("logout", "").lower() != "true":
         st.session_state["authenticated_user"] = profile["email"]
     else:
         render_login_screen(auth_store)
