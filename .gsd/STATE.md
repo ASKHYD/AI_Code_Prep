@@ -21,7 +21,7 @@ updated: 2026-11-08
   - **Phases 4 & 5 (Resource Measurement, Attempt History + Ruff)**: Maintained in Milestone 2 backlog.
 - **Milestone 3 (Terracotta Editorial Redesign)**:
   - **Phase 6 (T1)**: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round, 7 screens).
-  - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, Phase Return filed, Fix Round closed, 82/82 tests green, Visual Captures verified).
+  - **Phase 7 (T2)**: ✅ Complete (Terracotta Editorial in Live App, Phase Return filed, Fix Round closed, 82/82 tests green, Visual Captures verified. Note: Login gate removed by owner decision 2026-11-08; auth_store.py dormant; re-enable = restore the gate call in app.py.)
 - **Milestone 4 (Problem Bank Expansion)**:
   - **Phase 8**: ✅ Complete (8 new problems authored: 2 Easy, 3 Medium, 3 Hard; 100% reference pass; full suite 82/82 passing).
 - **Milestone 5 (MCQ Practice, Quizzes & Flashcards)**:
@@ -33,6 +33,7 @@ updated: 2026-11-08
 
 ## Last Action
 
+- Login gate removed by owner decision 2026-11-08; auth_store.py dormant; re-enable = restore the gate call in app.py. App boots directly to Home; 82/82 tests green; verified live with Chrome CDP at 1450×900.
 - Completed Phase 7 Fix Round: Added `import os` to `app.py`, resolved duplicate registration UX with friendly warning and Resend button, restored Home third bento card to "Problems Solved" (`1 / 20`), confirmed signed-in topbar Logout button, verified 82/82 tests, captured visual proofs, and committed (`6822e43`).
 - Registered Milestone 5 (MCQ Practice) per owner instruction Block Q.
 - Amended Milestone 5 with Block R: Added Timed Quiz mode to Phase 10 and Phase 11 Flashcards with FSRS scheduler reuse.

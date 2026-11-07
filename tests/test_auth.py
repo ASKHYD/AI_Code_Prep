@@ -157,13 +157,13 @@ def test_create_account_unconfigured_smtp_regression(auth_store: AuthStore, monk
     assert "already exists" in c_msg2.lower()
 
 
-def test_create_account_apptest_ui_guard(tmp_path):
+def test_unauthenticated_app_boots_to_home(tmp_path):
     """
     UI-layer regression guard using Streamlit AppTest (streamlit.testing.v1):
-    Drives the unauthenticated app up to the login view, switches to Create Account,
-    and submits the form in an isolated process (preventing layout pollution from test_mock_session_scoping).
-    Verifies that the exact path in app.py (including os.environ access) executes without throwing
-    NameError or any unhandled exception, displaying the honest unconfigured SMTP warning.
+    Updated per owner decision 2026-11-08 (Login Gate Removal).
+    Verifies that the unauthenticated app boots directly to Home with no profile present,
+    and that ?screen=login, ?verify=..., ?reset=..., and ?logout=... query parameters
+    are harmless no-ops with zero exceptions.
     """
     import subprocess
     import sys
@@ -177,30 +177,34 @@ import sys
 from streamlit.testing.v1 import AppTest
 
 os.environ['COACH_DB_PATH'] = '{temp_db}'
-os.environ.pop('SMTP_USER', None)
-os.environ.pop('SMTP_APP_PASSWORD', None)
 
+# 1. Unauthenticated bare boot directly to Home
 at = AppTest.from_file('{app_path}')
-at.query_params['screen'] = 'login'
 at.run()
-assert len(at.exception) == 0, f"App crashed on login view: {{at.exception}}"
+assert len(at.exception) == 0, f"App crashed on bare boot: {{at.exception}}"
+assert at.session_state.get('nav_choice') == 'Home', f"Expected Home, got {{at.session_state.get('nav_choice')}}"
 
-at.radio[0].set_value('Create Account').run()
-assert len(at.exception) == 0, f"App crashed on radio switch: {{at.exception}}"
+# 2. ?screen=login is a harmless no-op; app stays on Home
+at_login = AppTest.from_file('{app_path}')
+at_login.query_params['screen'] = 'login'
+at_login.run()
+assert len(at_login.exception) == 0, f"App crashed with ?screen=login: {{at_login.exception}}"
+assert at_login.session_state.get('nav_choice') == 'Home'
 
-at.text_input[0].input('ui_test_user@example.com')
-at.text_input[1].input('ValidPass1234!')
-at.button[0].click().run()
+# 3. Harmless no-op query parameters ?verify= and ?reset=
+at_qp = AppTest.from_file('{app_path}')
+at_qp.query_params['verify'] = 'fake_verification_token'
+at_qp.query_params['reset'] = 'fake_reset_token'
+at_qp.run()
+assert len(at_qp.exception) == 0, f"App crashed with auth query params: {{at_qp.exception}}"
+assert at_qp.session_state.get('nav_choice') == 'Home'
 
-assert len(at.exception) == 0, f"App crashed on submit: {{at.exception}}"
-assert len(at.warning) > 0, "Expected warning for unconfigured SMTP"
-assert "pending" in at.warning[0].value.lower() or "smtp credentials" in at.warning[0].value.lower()
-print("APPTEST_OK")
+print("BOOT_TO_HOME_OK")
 """
 
     res = subprocess.run([sys.executable, "-c", runner_script], capture_output=True, text=True)
     assert res.returncode == 0, f"AppTest UI guard failed (exit {res.returncode}):\nSTDOUT: {res.stdout}\nSTDERR: {res.stderr}"
-    assert "APPTEST_OK" in res.stdout
+    assert "BOOT_TO_HOME_OK" in res.stdout
 
 
 

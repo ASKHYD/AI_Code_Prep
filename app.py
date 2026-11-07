@@ -977,7 +977,6 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
           {cal_svg}
           <span>{due_count} due</span>
         </div>
-        <a href="?logout=true" class="btn-logout" target="_self" title="Log out of current session">Logout</a>
       </div>
     </header>
     """
@@ -1184,26 +1183,11 @@ def render_login_screen(auth_store_instance: AuthStore) -> None:
         )
 
 
-# Initialize auth store
+# Initialize auth store (dormant per owner decision 2026-11-08; re-enable = restore the gate call in app.py)
 auth_store = AuthStore(db_path=os.environ.get("COACH_DB_PATH", "coach.db"))
 
-# Gated access: unauthenticated sessions see only login
-is_login_screen = st.query_params.get("screen", "").lower() == "login"
-is_demo_bypass = st.query_params.get("demo_auth", "").lower() == "true" or st.query_params.get("bypass_auth", "").lower() == "true"
-
-if is_login_screen:
-    render_login_screen(auth_store)
-    st.stop()
-
-if "authenticated_user" not in st.session_state:
-    profile = auth_store.get_profile()
-    if is_demo_bypass:
-        st.session_state["authenticated_user"] = "owner@aiprepcoach.local"
-    elif profile and profile["status"] == "active" and st.query_params.get("logout", "").lower() != "true":
-        st.session_state["authenticated_user"] = profile["email"]
-    else:
-        render_login_screen(auth_store)
-        st.stop()
+# Login gate removed by owner decision 2026-11-08; auth_store.py dormant; re-enable = restore the gate call in app.py.
+# The application boots directly to Home for anyone opening it.
 
 
 

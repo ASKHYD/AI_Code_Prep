@@ -38,7 +38,7 @@ Redesign the application visual identity and layouts into Option 3 — **TERRACO
 
 ### Phases
 - **Phase 6: Terracotta Static Mockups & Token Sheet (T1)** — Status: ✅ Complete (Owner Approved Mockups, Rounds 1–2 + Fix Round)
-- **Phase 7: Terracotta Streamlit Implementation (T2)** — Status: ✅ Complete (Phase Return Filed, Fix Round Closed, 82/82 Tests Green, Visual Captures Verified)
+- **Phase 7: Terracotta Streamlit Implementation (T2)** — Status: ✅ Complete (Phase Return Filed, Fix Round Closed, 82/82 Tests Green, Visual Captures Verified. Note: Login gate removed by owner decision 2026-11-08; auth_store.py dormant; re-enable = restore the gate call in app.py.)
 
 ---
 
