@@ -606,6 +606,7 @@ def get_global_css(active_nav: str = "Home") -> str:
         padding: 8px 16px;
         margin-bottom: 16px;
     }
+    .btn-nav-arrow,
     .st-key-btn_picker_prev button,
     .st-key-btn_picker_next button,
     div[data-testid="stColumn"]:has(.st-key-btn_picker_prev) button,
@@ -616,6 +617,14 @@ def get_global_css(active_nav: str = "Home") -> str:
         min-width: 44px !important;
         white-space: nowrap !important;
         border-radius: 9999px !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(74, 25, 66, 0.12) !important;
+        color: #2C1810 !important;
+    }
+    .st-key-btn_picker_prev button:hover,
+    .st-key-btn_picker_next button:hover {
+        background: #FFFDF9 !important;
+        border-color: rgba(74, 25, 66, 0.25) !important;
     }
     .signature-card {
         margin-top: 14px;
@@ -640,6 +649,138 @@ def get_global_css(active_nav: str = "Home") -> str:
         border: 1px solid rgba(74, 25, 66, 0.10) !important;
         border-radius: 12px !important;
         color: #2C1810 !important;
+    }
+    div.st-key-practice_hint_ladder,
+    div.st-key-mock_hint_ladder {
+        background: #E8D5B7 !important;
+        border: 1px solid rgba(74, 25, 66, 0.12) !important;
+        border-radius: 16px !important;
+        padding: 18px !important;
+        margin-top: 16px !important;
+    }
+    .format-panel {
+        background: #E8D5B7;
+        border: 1px solid rgba(74, 25, 66, 0.12);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+    .format-panel-title {
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 18px;
+        color: #2C1810;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .format-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    .format-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.70);
+        border: 1px solid rgba(74, 25, 66, 0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+    }
+    .format-icon {
+        color: #C2452D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    .format-label {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: #2C1810;
+        margin-bottom: 3px;
+    }
+    .format-desc {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 12.5px;
+        color: #735A50;
+        line-height: 1.45;
+    }
+    .timer-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(74, 25, 66, 0.10);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+    .timer-card-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #735A50;
+        margin-bottom: 8px;
+    }
+    .timer-display {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 48px;
+        font-weight: 700;
+        color: #2C1810;
+        font-variant-numeric: tabular-nums;
+    }
+    .session-band {
+        background: #E8D5B7;
+        border: 1px solid rgba(74, 25, 66, 0.12);
+        border-radius: 16px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .mock-timer-clock {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 24px;
+        font-weight: 700;
+        color: #2C1810;
+        font-variant-numeric: tabular-nums;
+    }
+    .summary-strip {
+        background: #E8D5B7;
+        border: 1px solid rgba(74, 25, 66, 0.12);
+        border-radius: 16px;
+        padding: 20px 24px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .summary-item-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #735A50;
+        margin-bottom: 4px;
+    }
+    .summary-item-val {
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 26px;
+        color: #2C1810;
+    }
+    .outcome-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(74, 25, 66, 0.10);
+        border-radius: 14px;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
     }
     """
     return f"<style>\n{font_css}\n{rules_css}\n</style>"
@@ -728,7 +869,7 @@ def render_problem_statement(problem: dict) -> None:
 
     st.html(
         f"""
-        <div style="margin-top: 12px; font-size: 13px; color: #66635A; font-family: 'Inter', sans-serif;">
+        <div style="margin-top: 12px; font-size: 13px; color: #735A50; font-family: 'Plus Jakarta Sans', sans-serif;">
             Execution timeout: <strong>{problem.get('time_limit_sec', 3.0)}s</strong> · Sandbox isolated
         </div>
         """
@@ -1266,7 +1407,10 @@ elif nav_choice == "Practice Arena":
         current_problem = all_problems[curr_idx]
         st.session_state["selected_problem_id"] = current_problem["id"]
 
-        # ONE slim picker row above Problem Card: Title in Fraunces serif + Prev/Next buttons (X5R, X10)
+        # Round 2 Format: "N. Title · Topic (Difficulty)"
+        picker_label = f"{curr_idx + 1}. {current_problem['title']} · {current_problem['topic'].replace('-', ' ').title()} ({current_problem['difficulty'].title()})"
+
+        # ONE slim picker row above Problem Card (Task 3.1)
         p_prev_col, p_title_col, p_next_col = st.columns([0.8, 8.4, 0.8], vertical_alignment="center")
         with p_prev_col:
             if st.button("←", key="btn_picker_prev", help="Previous Problem", use_container_width=True):
@@ -1280,9 +1424,9 @@ elif nav_choice == "Practice Arena":
         with p_title_col:
             st.html(
                 f"""
-                <div class="problem-picker-row" style="text-align: center; justify-content: center; margin: 0;">
-                    <span class="picker-title" style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: #171712;">
-                        {current_problem['title']}
+                <div class="problem-picker-row" style="text-align: center; justify-content: center; margin: 0; background: #FFFFFF; border: 1px solid rgba(74, 25, 66, 0.10); border-radius: 9999px; padding: 7px 18px;">
+                    <span class="picker-title" style="font-family: 'DM Serif Display', Georgia, serif; font-size: 16px; color: #2C1810; font-weight: 400;">
+                        {picker_label}
                     </span>
                 </div>
                 """
@@ -1297,7 +1441,7 @@ elif nav_choice == "Practice Arena":
                 st.query_params["problem"] = all_problems[new_idx]["id"]
                 st.rerun()
 
-        # ONE Problem Card
+        # ONE Problem Card (Task 3.2)
         with st.container(border=True, key="practice_problem_card"):
             try:
                 curr_pos = all_problems.index(current_problem) + 1
@@ -1305,33 +1449,35 @@ elif nav_choice == "Practice Arena":
                 curr_pos = 1
             total_in_lib = len(all_problems)
 
+            is_curr_due = current_problem["id"] in due_list
+            due_badge = '<span class="stat-badge badge-amber">DUE FOR REVIEW</span>' if is_curr_due else ""
+
             diff_badge_class = (
-                "butter"
-                if current_problem["difficulty"] == "medium"
-                else ("mint" if current_problem["difficulty"] == "easy" else "rose")
+                "badge-olive"
+                if current_problem["difficulty"] == "easy"
+                else ("badge-amber" if current_problem["difficulty"] == "medium" else "badge-terracotta")
             )
-            track_badge_class = "lilac" if current_problem["track"] == "dsa" else "sky"
 
             st.html(
                 f"""
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="display: flex; gap: 8px;">
-                        <span class="stat-badge badge-{track_badge_class}">{current_problem['track'].upper()}</span>
-                        <span class="stat-badge badge-sky">{current_problem['topic'].title()}</span>
-                        <span class="stat-badge badge-{diff_badge_class}">{current_problem['difficulty'].title()}</span>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        {due_badge}
+                        <span class="stat-badge badge-blue">{current_problem['topic'].replace('-', ' ').title()}</span>
+                        <span class="stat-badge {diff_badge_class}">{current_problem['difficulty'].title()}</span>
                     </div>
-                    <span style="font-size: 12px; color: #66635A; font-family: 'Inter', sans-serif;">
+                    <span style="font-size: 12.5px; color: #735A50; font-family: 'Plus Jakarta Sans', sans-serif;">
                         Problem <strong>{curr_pos} of {total_in_lib}</strong>
                     </span>
                 </div>
-                <h1 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0 0 12px 0;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 28px; font-weight: 400; color: #2C1810; line-height: 1.2; margin: 0 0 14px 0;">
                     {current_problem['title']}
                 </h1>
                 """
             )
             render_problem_statement(current_problem)
 
-        # Hint Ladder (Butter Block strictly below Problem Card)
+        # Hint Ladder in Sandy Beige (Task 3.2)
         hint_key = f"hint_level_{current_problem['id']}"
         if hint_key not in st.session_state:
             st.session_state[hint_key] = 0
@@ -1344,11 +1490,11 @@ elif nav_choice == "Practice Arena":
             st.html(
                 f"""
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px;">
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; color: #2C1810; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px;">
                         {sparkle_svg}
                         <span>Progressive Hint Ladder</span>
                     </div>
-                    <span style="font-size: 12px; font-weight: 600; color: #9A3412;">Level {current_level} of {total_hints} Revealed</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #735A50; font-family: 'Plus Jakarta Sans', sans-serif;">Level {current_level} of {total_hints} Revealed</span>
                 </div>
                 """
             )
@@ -1357,8 +1503,8 @@ elif nav_choice == "Practice Arena":
                 for lvl in range(1, current_level + 1):
                     st.html(
                         f"""
-                        <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(154, 52, 18, 0.2); font-size: 13px; color: #9A3412;">
-                            <strong>Hint {lvl}:</strong> {current_problem['hints'][lvl - 1]}
+                        <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(74, 25, 66, 0.10); font-size: 13px; color: #2C1810; font-family: 'Plus Jakarta Sans', sans-serif;">
+                            <strong style="color: #C2452D;">Hint {lvl}:</strong> {current_problem['hints'][lvl - 1]}
                         </div>
                         """
                     )
@@ -1427,7 +1573,7 @@ elif nav_choice == "Practice Arena":
             st.html(
                 f"""
                 <div class="editor-strip">
-                    <span class="editor-strip-title">SOLUTION EDITOR · PYTHON</span>
+                    <span class="editor-strip-title">{current_problem['title']} · PYTHON</span>
                     <span class="editor-strip-right">Sandbox · {current_problem.get('time_limit_sec', 3.0)}s · Python {sys.version_info.major}.{sys.version_info.minor}</span>
                 </div>
                 """
@@ -1436,13 +1582,13 @@ elif nav_choice == "Practice Arena":
             user_code = render_editor(initial_code, key=editor_key, height="450px")
             st.session_state[f"code_{current_problem['id']}"] = user_code
 
-            # Glued Action Row (X8: Natural width button, no 100% full-width expansion)
+            # Glued Action Row
             col_bar_info, col_bar_btn = st.columns([1.5, 1], vertical_alignment="center")
             with col_bar_info:
                 st.html(
                     """
-                    <div style="padding-left: 18px; font-size: 12px; color: #66635A; display: flex; align-items: center; gap: 6px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#66635A" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div style="padding-left: 18px; font-size: 12px; color: #A38C82; display: flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A38C82" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
                         <span>Clean environment · Network disabled</span>
                     </div>
                     """
@@ -1457,17 +1603,17 @@ elif nav_choice == "Practice Arena":
                     st.warning(f"Write your solution first — the judge expected '{current_problem['function_name']}(...)'.")
                     run_submitted = False
 
-        # 2. ONE Output Card (X7-Practice: Neutral pre-run state with 'Run your code to see results')
+        # 2. ONE Output Card (Task 3.3 / F1: Neutral pre-run state, real execution telemetry, NO invented memory)
         with st.container(border=True, key="practice_output_card"):
             if not run_submitted and not is_demo_fail:
                 st.html(
                     """
-                    <div style="padding: 24px; text-align: center; color: #66635A;">
-                        <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: #171712; margin-bottom: 4px;">
+                    <div style="padding: 28px; text-align: center; color: #735A50;">
+                        <div style="font-family: 'DM Serif Display', Georgia, serif; font-size: 18px; font-weight: 400; color: #2C1810; margin-bottom: 6px;">
                             Run your code to see results
                         </div>
-                        <div style="font-size: 13.5px;">
-                            No execution yet. Run your code to test against visible and hidden test cases.
+                        <div style="font-size: 13.5px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                            Test suite results, execution telemetry, and judge feedback will appear here.
                         </div>
                     </div>
                     """
@@ -1504,14 +1650,14 @@ elif nav_choice == "Practice Arena":
                         <div class="verdict-band verdict-band-pass">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="stat-badge badge-mint" style="background: #167B48 !important; color: #FFFFFF !important;">PASS</span>
-                                    <strong style="font-size: 15px; color: #167B48;">
+                                    <span class="stat-badge badge-olive" style="background: #6B7F3B !important; color: #FFF8F0 !important; font-weight: 700;">PASS</span>
+                                    <strong style="font-size: 15px; color: #38451D; font-family: 'Plus Jakarta Sans', sans-serif;">
                                         {current_problem['title']} · PASS · {runtime} ms · Hints {hints_used}
                                     </strong>
                                 </div>
-                                <span style="font-size: 12px; font-weight: 600; color: #167B48;">All Tests Accepted</span>
+                                <span style="font-size: 12px; font-weight: 600; color: #38451D; font-family: 'Plus Jakarta Sans', sans-serif;">All Tests Accepted</span>
                             </div>
-                            <div style="font-size: 12px; display: flex; gap: 16px; margin-top: 4px;">
+                            <div style="font-size: 12px; display: flex; gap: 16px; margin-top: 4px; color: #38451D; font-family: 'Plus Jakarta Sans', sans-serif;">
                                 <span><strong>Runtime:</strong> {runtime} ms</span>
                                 <span><strong>Tests:</strong> {passed} / {total} Passed</span>
                             </div>
@@ -1524,12 +1670,12 @@ elif nav_choice == "Practice Arena":
                         <div class="verdict-band verdict-band-fail">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="stat-badge badge-rose" style="background: #C5221F !important; color: #FFFFFF !important;">FAIL</span>
-                                    <strong style="font-size: 15px; color: #C5221F;">
+                                    <span class="stat-badge badge-terracotta" style="background: #C2452D !important; color: #FFF8F0 !important; font-weight: 700;">FAIL</span>
+                                    <strong style="font-size: 15px; color: #C2452D; font-family: 'Plus Jakarta Sans', sans-serif;">
                                         {current_problem['title']} · FAIL · {runtime} ms · {passed}/{total} Passed
                                     </strong>
                                 </div>
-                                <span style="font-size: 12px; font-weight: 600; color: #C5221F;">Test Mismatch</span>
+                                <span style="font-size: 12px; font-weight: 600; color: #C2452D; font-family: 'Plus Jakarta Sans', sans-serif;">Test Mismatch</span>
                             </div>
                         </div>
                         """
@@ -1540,26 +1686,26 @@ elif nav_choice == "Practice Arena":
                         fc = failed_cases[0]
                         st.html(
                             f"""
-                            <div style="padding: 14px 20px; background: rgba(255, 255, 255, 0.85); border-bottom: 1px solid #E7E1D6; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #171712;">
+                            <div style="padding: 14px 20px; background: rgba(255, 255, 255, 0.85); border-bottom: 1px solid rgba(74, 25, 66, 0.10); font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #2C1810;">
                                 <div><strong>Failed Input:</strong> <code>{fc.get('input_args')}</code></div>
                                 <div style="margin-top: 4px;"><strong>Expected:</strong> <code>{fc.get('expected')}</code></div>
-                                <div style="margin-top: 4px; color: #C5221F;"><strong>Got:</strong> <code>{fc.get('got')}</code></div>
+                                <div style="margin-top: 4px; color: #C2452D;"><strong>Got:</strong> <code>{fc.get('got')}</code></div>
                             </div>
                             """
                         )
 
-                # Visible Test Cases Section
-                st.html('<div style="padding: 16px 20px 8px 20px;"><strong style="font-family: \'Fraunces\', serif; font-size: 15px; color: #171712;">Visible Test Cases</strong></div>')
+                st.html("""<div style="padding: 16px 20px 8px 20px;"><strong style="font-family: 'DM Serif Display', Georgia, serif; font-size: 16px; color: #2C1810;">Visible Test Cases</strong></div>""")
+                st.html("""<div style="padding: 16px 20px 8px 20px;"><strong style="font-family: 'DM Serif Display', Georgia, serif; font-size: 16px; color: #2C1810;">Visible Test Cases</strong></div>""")
                 for i, tc in enumerate(current_problem["visible_tests"], 1):
                     args_repr = ", ".join(repr(arg) for arg in tc["input_args"])
                     st.html(
                         f"""
-                        <div style="margin: 0 20px 12px 20px; background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 12px; padding: 12px 16px;">
+                        <div style="margin: 0 20px 12px 20px; background: #FFFDF9; border: 1px solid rgba(74, 25, 66, 0.10); border-radius: 12px; padding: 12px 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <span style="font-size: 12px; font-weight: 700; color: #167B48; letter-spacing: 0.04em;">TEST CASE #{i}</span>
-                                <span class="stat-badge badge-mint">Provided</span>
+                                <span style="font-size: 11px; font-weight: 700; color: #38451D; letter-spacing: 0.05em; font-family: 'Plus Jakarta Sans', sans-serif;">TEST CASE #{i}</span>
+                                <span class="stat-badge badge-olive" style="font-size: 10.5px; padding: 2px 8px;">Provided</span>
                             </div>
-                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #171712;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #2C1810;">
                                 <div><strong>Input:</strong> <code>{args_repr}</code></div>
                                 <div style="margin-top: 2px;"><strong>Expected:</strong> <code>{tc['expected']}</code></div>
                             </div>
@@ -1612,35 +1758,74 @@ elif nav_choice == "Mock Interview":
 
     # --- STATE 1: UNSTARTED ---
     if st.session_state["mock_state"] == "unstarted":
-        st.markdown(
+        st.html(
             """
-            <div style="margin-bottom: 20px;">
-                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                    Technical Interview Simulation
+            <div style="margin-bottom: 24px;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 34px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
+                    Coding Interview Simulation
                 </h1>
-                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0;">
-                    Two curated algorithmic problems under 45:00 strict countdown constraint.
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #735A50; margin: 0; line-height: 1.5;">
+                    A timed, realistic technical assessment session to evaluate problem-solving under interview conditions.
                 </p>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
         with st.container(border=True, key="mock_ready_card"):
-            st.markdown(
+            st.html(
                 """
-                <div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin-bottom: 6px;">
-                    Ready to Begin Simulation?
+                <div class="format-panel">
+                    <div class="format-panel-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span>Simulation Format &amp; Session Rules</span>
+                    </div>
+                    <div class="format-grid">
+                        <div class="format-item">
+                            <div class="format-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <div>
+                                <div class="format-label">45 Minutes Total Duration</div>
+                                <div class="format-desc">Shared countdown budget for both problems with auto-submit upon expiration.</div>
+                            </div>
+                        </div>
+                        <div class="format-item">
+                            <div class="format-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                            </div>
+                            <div>
+                                <div class="format-label">2 Interleaved Technical Problems</div>
+                                <div class="format-desc">Sampled from distinct core topics to test versatile problem breakdown.</div>
+                            </div>
+                        </div>
+                        <div class="format-item">
+                            <div class="format-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                            </div>
+                            <div>
+                                <div class="format-label">Progressive Hints Allowed</div>
+                                <div class="format-desc">Consulting hints is permitted when stuck; usage is noted on your scorecard.</div>
+                            </div>
+                        </div>
+                        <div class="format-item">
+                            <div class="format-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            </div>
+                            <div>
+                                <div class="format-label">Immediate Performance Report</div>
+                                <div class="format-desc">Comprehensive scorecard with pass verdicts, execution timings and hints used.</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="font-size: 14px; color: #66635A; line-height: 1.5; margin-bottom: 20px;">
-                    A 45-minute timed simulation consisting of 2 algorithmic problems.
-                    The timer runs automatically across synchronized indicators.
-                    Submissions are evaluated against real test suites and recorded on your session scorecard.
+
+                <div class="timer-card">
+                    <div class="timer-card-label">Session Timer Budget</div>
+                    <div class="timer-display">45:00</div>
                 </div>
-                """,
-                unsafe_allow_html=True,
+                """
             )
-            if st.button("Start 45-Minute Mock Interview", type="primary", key="btn_start_mock"):
+            if st.button("Begin Mock Interview", type="primary", key="btn_start_mock", use_container_width=True):
                 mock_pool = build_interleaved_queue(all_problems, topic_stats=store.topic_stats())
                 p1 = mock_pool[0]
                 p2 = mock_pool[1] if len(mock_pool) > 1 else mock_pool[0]
@@ -1651,54 +1836,6 @@ elif nav_choice == "Mock Interview":
                 st.session_state["mock_problems"] = [p1, p2]
                 st.session_state["mock_active_tab"] = 0
                 st.rerun()
-
-        st.html('<div style="height: 16px;"></div>')
-
-        # Simulation Rules Card (Full-width, no void)
-        with st.container(border=True, key="mock_rules_card"):
-            st.markdown(
-                """
-                <div style="margin-bottom: 16px;">
-                    <span class="stat-badge badge-peach" style="margin-bottom: 6px;">Protocol</span>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                        Simulation Rules &amp; Evaluation Protocol
-                    </h2>
-                    <p style="font-size: 14px; color: #66635A; margin: 0;">
-                        Standard technical coding round parameters enforced automatically by local judge.
-                    </p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            r_col1, r_col2 = st.columns(2, gap="medium")
-            with r_col1:
-                st.markdown(
-                    """
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;">
-                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">1. Strict 45-Minute Limit</strong>
-                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">A countdown timer runs in the sub-strip. Submissions lock automatically when time expires.</span>
-                    </div>
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px;">
-                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">2. Two Curated Problems</strong>
-                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Pairs designed to evaluate algorithmic approach, edge cases, and code efficiency under pacing constraints.</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            with r_col2:
-                st.markdown(
-                    """
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;">
-                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">3. Progressive Hint Tracking</strong>
-                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Up to 3 progressive hints available per problem. Every revealed hint is reported on your scorecard.</span>
-                    </div>
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 16px 18px;">
-                        <strong style="font-size: 14px; color: #171712; display: block; margin-bottom: 4px;">4. Authentic Code Execution</strong>
-                        <span style="font-size: 13px; color: #66635A; line-height: 1.5;">Solutions execute in an isolated local subprocess against real test suites. Zero invented scores.</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
 
         # Past Sessions (Render ONLY if mock attempts exist in store)
         with store._get_connection() as conn:
@@ -1715,31 +1852,30 @@ elif nav_choice == "Mock Interview":
         if past_mock_attempts:
             st.html('<div style="height: 16px;"></div>')
             with st.container(border=True, key="mock_past_sessions_card"):
-                st.markdown(
+                st.html(
                     """
                     <div style="margin-bottom: 16px;">
-                        <h2 style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
+                        <h2 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; font-weight: 400; color: #2C1810; margin: 0 0 4px 0;">
                             Past Mock Sessions
                         </h2>
-                        <p style="font-size: 14px; color: #66635A; margin: 0;">
+                        <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #735A50; margin: 0;">
                             Authentic interview simulation attempts recorded in local SQLite database.
                         </p>
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
                 past_rows = []
                 for a in past_mock_attempts:
-                    status_badge = '<span class="stat-badge badge-mint">PASS</span>' if a['status'] == 'pass' else '<span class="stat-badge badge-rose">FAIL</span>'
-                    past_rows.append(f"""<tr>
-                        <td><strong>{a['problem_id']}</strong></td>
-                        <td>{a['topic']}</td>
+                    status_badge = '<span class="stat-badge badge-olive">PASS</span>' if a['status'] == 'pass' else '<span class="stat-badge badge-terracotta">FAIL</span>'
+                    past_rows.append(f"""<tr class="queue-row">
+                        <td><strong style="color: #2C1810;">{a['problem_id']}</strong></td>
+                        <td><span class="stat-badge badge-blue">{a['topic'].replace('-', ' ').title()}</span></td>
                         <td>{status_badge}</td>
                         <td style="font-variant-numeric: tabular-nums;">{a['runtime_ms']} ms</td>
                         <td>{a['hints_used']}</td>
-                        <td style="color: #66635A; font-size: 13px;">{a['attempt_date']}</td>
+                        <td style="color: #735A50; font-size: 13px;">{a['attempt_date']}</td>
                     </tr>""")
-                st.markdown(
+                st.html(
                     f"""<table class="queue-table">
                         <thead>
                             <tr>
@@ -1754,8 +1890,7 @@ elif nav_choice == "Mock Interview":
                         <tbody>
                             {"".join(past_rows)}
                         </tbody>
-                    </table>""",
-                    unsafe_allow_html=True,
+                    </table>"""
                 )
 
     # --- STATE 2: RUNNING ---
@@ -1763,7 +1898,7 @@ elif nav_choice == "Mock Interview":
         p_list = st.session_state["mock_problems"]
         active_tab_idx = st.session_state.get("mock_active_tab", 0)
 
-        # Place 1: Sub-strip Countdown Timer via @st.fragment
+        # Place 1: Sub-strip Countdown Timer via @st.fragment (strict two-place MM:SS)
         @st.fragment(run_every=1.0)
         def render_mock_substrip_timer():
             start = st.session_state.get("mock_start_time", time.time())
@@ -1774,7 +1909,7 @@ elif nav_choice == "Mock Interview":
                 st.session_state["mock_time_expired"] = True
                 st.html(
                     f"""
-                    <div class="mock-timer-pill" style="color: #C5221F; border-color: rgba(197, 34, 31, 0.25);">
+                    <div class="mock-timer-clock" style="color: #C2452D; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         {timer_icon}
                         <span>00:00 Expired</span>
                     </div>
@@ -1783,7 +1918,7 @@ elif nav_choice == "Mock Interview":
             else:
                 st.html(
                     f"""
-                    <div class="mock-timer-pill">
+                    <div class="mock-timer-clock" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                         {timer_icon}
                         <span>{mins:02d}:{secs:02d}</span>
                     </div>
@@ -1794,15 +1929,15 @@ elif nav_choice == "Mock Interview":
         with st.container(border=True, key="mock_substrip_container"):
             col_tabs, col_time, col_end = st.columns([6, 3, 3], vertical_alignment="center")
             with col_tabs:
-                t1_active = "active" if active_tab_idx == 0 else ""
-                t2_active = "active" if active_tab_idx == 1 else ""
                 col_t1, col_t2 = st.columns(2)
                 with col_t1:
-                    if st.button(f"1: {p_list[0]['title']}", key="btn_tab_0", use_container_width=True):
+                    p1_label = f"1: {p_list[0]['title']}" + (" (Active)" if active_tab_idx == 0 else "")
+                    if st.button(p1_label, key="btn_tab_0", use_container_width=True):
                         st.session_state["mock_active_tab"] = 0
                         st.rerun()
                 with col_t2:
-                    if st.button(f"2: {p_list[1]['title']}", key="btn_tab_1", use_container_width=True):
+                    p2_label = f"2: {p_list[1]['title']}" + (" (Active)" if active_tab_idx == 1 else "")
+                    if st.button(p2_label, key="btn_tab_1", use_container_width=True):
                         st.session_state["mock_active_tab"] = 1
                         st.rerun()
 
@@ -1822,14 +1957,19 @@ elif nav_choice == "Mock Interview":
         with col_m_left:
             # ONE Problem Card
             with st.container(border=True, key="mock_problem_card"):
+                m_diff_class = (
+                    "badge-olive"
+                    if active_problem["difficulty"] == "easy"
+                    else ("badge-amber" if active_problem["difficulty"] == "medium" else "badge-terracotta")
+                )
                 st.html(
                     f"""
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                        <span class="stat-badge badge-peach">Problem {active_tab_idx + 1} of 2</span>
-                        <span class="stat-badge badge-sky">{active_problem['track'].upper()}</span>
-                        <span class="stat-badge badge-mint">{active_problem['difficulty'].title()}</span>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                        <span class="stat-badge badge-blue">Problem {active_tab_idx + 1} of 2</span>
+                        <span class="stat-badge badge-blue">{active_problem['topic'].replace('-', ' ').title()}</span>
+                        <span class="stat-badge {m_diff_class}">{active_problem['difficulty'].title()}</span>
                     </div>
-                    <h1 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0 0 12px 0;">
+                    <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 28px; font-weight: 400; color: #2C1810; line-height: 1.2; margin: 0 0 14px 0;">
                         {active_problem['title']}
                     </h1>
                     """
@@ -1848,7 +1988,7 @@ elif nav_choice == "Mock Interview":
                 st.html(
                     f"""
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span style="font-size: 13px; font-weight: 700; color: #9A3412; text-transform: uppercase; letter-spacing: 0.04em;">
+                        <span style="font-size: 12px; font-weight: 700; color: #2C1810; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Plus Jakarta Sans', sans-serif;">
                             Hint Ladder ({m_level} of {m_total_hints} Revealed)
                         </span>
                     </div>
@@ -1858,8 +1998,8 @@ elif nav_choice == "Mock Interview":
                     for lvl in range(1, m_level + 1):
                         st.html(
                             f"""
-                            <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(154, 52, 18, 0.2); font-size: 13px; color: #9A3412;">
-                                <strong>Hint {lvl}:</strong> {active_problem['hints'][lvl - 1]}
+                            <div style="margin-top: 8px; margin-bottom: 8px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid rgba(74, 25, 66, 0.10); font-size: 13px; color: #2C1810; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                <strong style="color: #C2452D;">Hint {lvl}:</strong> {active_problem['hints'][lvl - 1]}
                             </div>
                             """
                         )
@@ -1896,7 +2036,7 @@ elif nav_choice == "Mock Interview":
                 st.html(
                     f"""
                     <div class="editor-strip">
-                        <span class="editor-strip-title">MOCK INTERVIEW EDITOR · PYTHON</span>
+                        <span class="editor-strip-title">{active_problem['title']} · PYTHON</span>
                         <span class="editor-strip-right">Sandbox · Python {sys.version_info.major}.{sys.version_info.minor}</span>
                     </div>
                     """
@@ -1906,7 +2046,7 @@ elif nav_choice == "Mock Interview":
 
                 col_b_info, col_b_btn = st.columns([1, 1], vertical_alignment="center")
                 with col_b_info:
-                    st.html('<div style="padding-left: 18px; font-size: 12px; color: #66635A;">Timed environment · Scoped run</div>')
+                    st.html('<div style="padding-left: 18px; font-size: 12px; color: #A38C82; font-family: \'Plus Jakarta Sans\', sans-serif;">Timed environment · Scoped run</div>')
                 with col_b_btn:
                     m_submit = st.button("Submit Problem Solution", type="primary", key=f"btn_msub_{active_problem['id']}", use_container_width=True)
 
@@ -1931,11 +2071,11 @@ elif nav_choice == "Mock Interview":
                 if not saved_m_res:
                     st.html(
                         """
-                        <div style="padding: 24px; text-align: center; color: #66635A;">
-                            <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: #171712; margin-bottom: 4px;">
+                        <div style="padding: 28px; text-align: center; color: #735A50;">
+                            <div style="font-family: 'DM Serif Display', Georgia, serif; font-size: 18px; font-weight: 400; color: #2C1810; margin-bottom: 6px;">
                                 Mock Execution Output
                             </div>
-                            <div style="font-size: 13.5px;">
+                            <div style="font-size: 13.5px; font-family: 'Plus Jakarta Sans', sans-serif;">
                                 Submit your solution to evaluate against authentic interview test cases.
                             </div>
                         </div>
@@ -1952,8 +2092,8 @@ elif nav_choice == "Mock Interview":
                             f"""
                             <div class="verdict-band verdict-band-pass">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span class="stat-badge badge-mint" style="background: #167B48 !important; color: #FFFFFF !important;">PASS</span>
-                                    <strong style="font-size: 15px; color: #167B48;">All {m_pass}/{m_tot} Tests Accepted ({m_rt} ms)</strong>
+                                    <span class="stat-badge badge-olive" style="background: #6B7F3B !important; color: #FFF8F0 !important; font-weight: 700;">PASS</span>
+                                    <strong style="font-size: 15px; color: #38451D; font-family: 'Plus Jakarta Sans', sans-serif;">All {m_pass}/{m_tot} Tests Accepted ({m_rt} ms)</strong>
                                 </div>
                             </div>
                             """
@@ -1963,8 +2103,8 @@ elif nav_choice == "Mock Interview":
                             f"""
                             <div class="verdict-band verdict-band-fail">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span class="stat-badge badge-rose" style="background: #C5221F !important; color: #FFFFFF !important;">FAIL</span>
-                                    <strong style="font-size: 15px; color: #C5221F;">{m_pass}/{m_tot} Tests Passed ({m_rt} ms)</strong>
+                                    <span class="stat-badge badge-terracotta" style="background: #C2452D !important; color: #FFF8F0 !important; font-weight: 700;">FAIL</span>
+                                    <strong style="font-size: 15px; color: #C2452D; font-family: 'Plus Jakarta Sans', sans-serif;">{m_pass}/{m_tot} Tests Passed ({m_rt} ms)</strong>
                                 </div>
                             </div>
                             """
@@ -1972,22 +2112,23 @@ elif nav_choice == "Mock Interview":
 
     # --- STATE 3: COMPLETED (SCORECARD) ---
     elif st.session_state["mock_state"] == "completed":
-        st.markdown(
+        st.html(
             """
-            <div style="margin-bottom: 20px;">
-                <h1 style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: #171712; margin: 0 0 4px 0;">
-                    Simulation Completed
+            <div style="margin-bottom: 24px;">
+                <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size: 34px; font-weight: 400; color: #2C1810; margin: 0 0 6px 0; line-height: 1.15;">
+                    Interview Performance Scorecard
                 </h1>
-                <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: #66635A; margin: 0;">
-                    Authentic evaluation verified against local judge test suites.
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #735A50; margin: 0; line-height: 1.5;">
+                    Assessment generated automatically from executed test suites and timer telemetry.
                 </p>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
         with st.container(border=True, key="mock_scorecard_card"):
-            total_time_min = round((st.session_state.get("mock_finish_time", time.time()) - st.session_state.get("mock_start_time", time.time())) / 60, 1)
+            elapsed_sec = max(0, int(st.session_state.get("mock_finish_time", time.time()) - st.session_state.get("mock_start_time", time.time())))
+            elapsed_min = elapsed_sec // 60
+            elapsed_rem_sec = elapsed_sec % 60
             p_list = st.session_state["mock_problems"]
             session_start_iso = st.session_state.get("mock_start_iso")
 
@@ -2006,104 +2147,112 @@ elif nav_choice == "Mock Interview":
                 store,
             )
             score = (1 if p1_eval["is_pass"] else 0) + (1 if p2_eval["is_pass"] else 0)
+            total_hints = p1_eval["hints_used"] + p2_eval["hints_used"]
 
-            # Place 2: Scorecard elapsed time display
-            @st.fragment(run_every=1.0)
-            def render_scorecard_timer():
-                st.markdown(
-                    f"""
-                    <div style="text-align: right;">
-                        <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #167B48; font-variant-numeric: tabular-nums;">
-                            {score} / 2 Solved
-                        </div>
-                        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #66635A;">
-                            Session Duration: {total_time_min} min
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            sc_hdr_left, sc_hdr_right = st.columns([8, 4], vertical_alignment="center")
-            with sc_hdr_left:
-                st.markdown(
+            # Verdict Banner
+            if score == 2:
+                st.html(
                     """
-                    <span class="stat-badge badge-mint" style="margin-bottom: 6px;">Official Record</span>
-                    <h2 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: #171712; line-height: 1.25; margin: 0;">
-                        Final Interview Scorecard
-                    </h2>
-                    """,
-                    unsafe_allow_html=True,
+                    <div style="background: #EFF4E4; border: 1px solid rgba(107, 127, 59, 0.35); border-radius: 16px; padding: 22px 28px; margin-bottom: 20px;">
+                        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #435225; margin-bottom: 4px;">Overall Assessment Result</div>
+                        <div style="font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; color: #38451D; margin-bottom: 4px;">PASS — Interview Benchmark Met</div>
+                        <div style="font-size: 13.5px; color: #435225; font-family: 'Plus Jakarta Sans', sans-serif;">Both problems successfully solved within the 45-minute budget with verified test coverage.</div>
+                    </div>
+                    """
                 )
-            with sc_hdr_right:
-                render_scorecard_timer()
+            else:
+                st.html(
+                    f"""
+                    <div style="background: #FDECE9; border: 1px solid rgba(194, 69, 45, 0.35); border-radius: 16px; padding: 22px 28px; margin-bottom: 20px;">
+                        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8F2815; margin-bottom: 4px;">Overall Assessment Result</div>
+                        <div style="font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; color: #C2452D; margin-bottom: 4px;">FAIL — Benchmark Not Met</div>
+                        <div style="font-size: 13.5px; color: #8F2815; font-family: 'Plus Jakarta Sans', sans-serif;">{score}/2 problems solved. Review test failure telemetry and algorithmic patterns.</div>
+                    </div>
+                    """
+                )
+
+            # Sandy Summary Strip in #E8D5B7
+            st.html(
+                f"""
+                <div class="summary-strip">
+                    <div>
+                        <div class="summary-item-label">Time Consumed</div>
+                        <div class="summary-item-val">{elapsed_min}m {elapsed_rem_sec}s <span style="font-size: 14px; font-weight: 500; color: #735A50;">/ 45m</span></div>
+                    </div>
+                    <div>
+                        <div class="summary-item-label">Problems Solved</div>
+                        <div class="summary-item-val">{score} / 2</div>
+                    </div>
+                    <div>
+                        <div class="summary-item-label">Hints Consulted</div>
+                        <div class="summary-item-val">{total_hints} Hint{'s' if total_hints != 1 else ''}</div>
+                    </div>
+                </div>
+                """
+            )
+
+            # Problem-by-problem outcome breakdown
+            st.html("""<div style="font-family: 'DM Serif Display', Georgia, serif; font-size: 18px; color: #2C1810; margin-bottom: 12px;">Problem Breakdown</div>""")
+
+            # Problem 1 outcome card
+            p1_badge = '<span class="stat-badge badge-olive">PASS</span>' if p1_eval["status"] == "pass" else ('<span class="stat-badge badge-terracotta">FAIL</span>' if p1_eval["status"] == "fail" else '<span class="stat-badge" style="background: rgba(115, 90, 80, 0.12); color: #735A50;">NOT ATTEMPTED</span>')
+            p1_rt = f"{p1_eval['runtime_ms']} ms" if p1_eval["runtime_ms"] is not None else "—"
+
+            st.html(
+                f"""
+                <div class="outcome-card">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #735A50;">01</span>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 700; color: #2C1810; font-family: 'Plus Jakarta Sans', sans-serif;">{p_list[0]['title']}</div>
+                            <div style="font-size: 12px; color: #735A50; margin-top: 2px;">
+                                <span style="color: #C2452D; font-weight: 600;">{p_list[0]['topic'].replace('-', ' ').title()}</span> · {p_list[0]['difficulty'].title()}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="text-align: right; font-size: 13px; color: #735A50; font-variant-numeric: tabular-nums;">
+                            <div>Runtime: <strong>{p1_rt}</strong></div>
+                            <div>Hints: <strong>{p1_eval['hints_used']}</strong></div>
+                        </div>
+                        {p1_badge}
+                    </div>
+                </div>
+                """
+            )
+
+            # Problem 2 outcome card
+            p2_badge = '<span class="stat-badge badge-olive">PASS</span>' if p2_eval["status"] == "pass" else ('<span class="stat-badge badge-terracotta">FAIL</span>' if p2_eval["status"] == "fail" else '<span class="stat-badge" style="background: rgba(115, 90, 80, 0.12); color: #735A50;">NOT ATTEMPTED</span>')
+            p2_rt = f"{p2_eval['runtime_ms']} ms" if p2_eval["runtime_ms"] is not None else "—"
+
+            st.html(
+                f"""
+                <div class="outcome-card">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #735A50;">02</span>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 700; color: #2C1810; font-family: 'Plus Jakarta Sans', sans-serif;">{p_list[1]['title']}</div>
+                            <div style="font-size: 12px; color: #735A50; margin-top: 2px;">
+                                <span style="color: #C2452D; font-weight: 600;">{p_list[1]['topic'].replace('-', ' ').title()}</span> · {p_list[1]['difficulty'].title()}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="text-align: right; font-size: 13px; color: #735A50; font-variant-numeric: tabular-nums;">
+                            <div>Runtime: <strong>{p2_rt}</strong></div>
+                            <div>Hints: <strong>{p2_eval['hints_used']}</strong></div>
+                        </div>
+                        {p2_badge}
+                    </div>
+                </div>
+                """
+            )
 
             st.html('<div style="height: 16px;"></div>')
 
-            col_sc1, col_sc2 = st.columns(2, gap="medium")
-            with col_sc1:
-                prob1_title = p_list[0]["title"]
-                if p1_eval["status"] == "pass":
-                    p1_badge = '<span class="stat-badge badge-mint">PASS</span>'
-                    p1_rt = f"{p1_eval['runtime_ms']} ms"
-                elif p1_eval["status"] == "fail":
-                    p1_badge = '<span class="stat-badge badge-rose">FAIL</span>'
-                    p1_rt = f"{p1_eval['runtime_ms']} ms"
-                else:
-                    p1_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT ATTEMPTED</span>'
-                    p1_rt = "—"
-
-                st.markdown(
-                    f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 18px 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <strong style="font-size: 15px; color: #171712;">Problem 1: {prob1_title}</strong>
-                            {p1_badge}
-                        </div>
-                        <div style="font-size: 12px; color: #66635A; margin-bottom: 10px;">Track: {p_list[0]['track'].upper()} · Topic: {p_list[0]['topic']}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px;">
-                            <span><strong>Runtime:</strong> {p1_rt}</span>
-                            <span><strong>Hints Used:</strong> {p1_eval['hints_used']}</span>
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            with col_sc2:
-                prob2_title = p_list[1]["title"]
-                if p2_eval["status"] == "pass":
-                    p2_badge = '<span class="stat-badge badge-mint">PASS</span>'
-                    p2_rt = f"{p2_eval['runtime_ms']} ms"
-                elif p2_eval["status"] == "fail":
-                    p2_badge = '<span class="stat-badge badge-rose">FAIL</span>'
-                    p2_rt = f"{p2_eval['runtime_ms']} ms"
-                else:
-                    p2_badge = '<span class="stat-badge" style="background: rgba(102, 99, 90, 0.12); color: #66635A;">NOT ATTEMPTED</span>'
-                    p2_rt = "—"
-
-                st.markdown(
-                    f"""
-                    <div style="background: #FBFAF7; border: 1px solid #E7E1D6; border-radius: 14px; padding: 18px 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <strong style="font-size: 15px; color: #171712;">Problem 2: {prob2_title}</strong>
-                            {p2_badge}
-                        </div>
-                        <div style="font-size: 12px; color: #66635A; margin-bottom: 10px;">Track: {p_list[1]['track'].upper()} · Topic: {p_list[1]['topic']}</div>
-                        <div style="font-size: 13px; color: #171712; display: flex; gap: 16px;">
-                            <span><strong>Runtime:</strong> {p2_rt}</span>
-                            <span><strong>Hints Used:</strong> {p2_eval['hints_used']}</span>
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            st.html('<div style="height: 16px;"></div>')
-
-            scorecard_md = f"""# Mock Interview Scorecard — AI Coding Prep Coach
+            scorecard_md = f"""# Mock Interview Scorecard — AI Prep Coach
 Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}
-Total Time: {total_time_min} minutes
+Total Time: {elapsed_min}m {elapsed_rem_sec}s
 Overall Score: {score}/2 Solved
 
 ## Details
@@ -2116,7 +2265,7 @@ Overall Score: {score}/2 Solved
   - Runtime: {f"{p2_eval['runtime_ms']} ms" if p2_eval['runtime_ms'] is not None else "—"}
   - Hints Used: {p2_eval['hints_used']}
 
-*Generated locally by AI Coding Prep Coach (Judge: Code, not AI).*
+*Generated locally by AI Prep Coach (Judge: Code, not AI).*
 """
             sc_act1, sc_act2 = st.columns([6, 6], vertical_alignment="center")
             with sc_act1:
@@ -2133,9 +2282,6 @@ Overall Score: {score}/2 Solved
                     st.rerun()
 
 
-# ==============================================================================
-# SCREEN 4: DASHBOARD / PERFORMANCE ANALYTICS
-# ==============================================================================
 elif nav_choice == "Dashboard":
     render_topbar("Dashboard", streak_count, len(due_list))
 
