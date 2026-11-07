@@ -106,3 +106,99 @@ def test_password_reset_flow(auth_store: AuthStore):
     assert ok_old is False
     ok_new, _, _ = auth_store.authenticate_user("owner@example.com", "BrandNewPassword456!")
     assert ok_new is True
+
+
+def test_create_account_unconfigured_smtp_regression(auth_store: AuthStore, monkeypatch):
+    """
+    Regression test for Phase 7 Create Account flow:
+    1. Ensures account creation succeeds without exception on unconfigured SMTP.
+    2. Profile lands in pending status.
+    3. send_smtp_email reports failure honestly (returns False with friendly message, does not raise).
+    4. Repeated create_pending_profile with same email produces friendly 'already exists' message without exception.
+    """
+    import os
+    from auth_store import send_smtp_email
+
+    # Clear SMTP environment variables
+    monkeypatch.delenv("SMTP_USER", raising=False)
+    monkeypatch.delenv("SMTP_APP_PASSWORD", raising=False)
+
+    test_email = "newuser@example.com"
+    pwd = "ValidPassword123!"
+
+    # 1. Drive create_pending_profile
+    c_ok, raw_tok, c_msg = auth_store.create_pending_profile(test_email, pwd)
+    assert c_ok is True
+    assert len(raw_tok) > 20
+
+    # 2. Verify pending status
+    prof = auth_store.get_profile()
+    assert prof is not None
+    assert prof["email"] == test_email
+    assert prof["status"] == "pending"
+
+    # 3. Simulate the UI email send step
+    app_url = os.environ.get("APP_BASE_URL", "http://localhost:8501")
+    link = f"{app_url}/?verify={raw_tok}"
+    s_ok, s_msg = send_smtp_email(
+        to_email=test_email,
+        subject="Confirm your AI Prep Coach account",
+        text_content=f"Activate: {link}",
+    )
+    # Must report failure honestly, not raise
+    assert s_ok is False
+    assert "not configured" in s_msg.lower() or "failed" in s_msg.lower()
+
+    # 4. Duplicate creation check: friendly message, no crash or IntegrityError
+    c_ok2, _, c_msg2 = auth_store.create_pending_profile(test_email, "AnotherPassword789!")
+    assert c_ok2 is False
+    assert "already exists" in c_msg2.lower()
+
+
+def test_create_account_apptest_ui_guard(tmp_path):
+    """
+    UI-layer regression guard using Streamlit AppTest (streamlit.testing.v1):
+    Drives the unauthenticated app up to the login view, switches to Create Account,
+    and submits the form in an isolated process (preventing layout pollution from test_mock_session_scoping).
+    Verifies that the exact path in app.py (including os.environ access) executes without throwing
+    NameError or any unhandled exception, displaying the honest unconfigured SMTP warning.
+    """
+    import subprocess
+    import sys
+
+    temp_db = str(tmp_path / "apptest_coach.db").replace("\\", "/")
+    app_path = (Path(__file__).parent.parent / "app.py").resolve().as_posix()
+
+    runner_script = f"""
+import os
+import sys
+from streamlit.testing.v1 import AppTest
+
+os.environ['COACH_DB_PATH'] = '{temp_db}'
+os.environ.pop('SMTP_USER', None)
+os.environ.pop('SMTP_APP_PASSWORD', None)
+
+at = AppTest.from_file('{app_path}')
+at.query_params['screen'] = 'login'
+at.run()
+assert len(at.exception) == 0, f"App crashed on login view: {{at.exception}}"
+
+at.radio[0].set_value('Create Account').run()
+assert len(at.exception) == 0, f"App crashed on radio switch: {{at.exception}}"
+
+at.text_input[0].input('ui_test_user@example.com')
+at.text_input[1].input('ValidPass1234!')
+at.button[0].click().run()
+
+assert len(at.exception) == 0, f"App crashed on submit: {{at.exception}}"
+assert len(at.warning) > 0, "Expected warning for unconfigured SMTP"
+assert "pending" in at.warning[0].value.lower() or "smtp credentials" in at.warning[0].value.lower()
+print("APPTEST_OK")
+"""
+
+    res = subprocess.run([sys.executable, "-c", runner_script], capture_output=True, text=True)
+    assert res.returncode == 0, f"AppTest UI guard failed (exit {res.returncode}):\nSTDOUT: {res.stdout}\nSTDERR: {res.stderr}"
+    assert "APPTEST_OK" in res.stdout
+
+
+

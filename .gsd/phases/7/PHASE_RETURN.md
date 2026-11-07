@@ -168,3 +168,68 @@ Captured at **1450×900** (Primary Viewport) and **1920×1080** (Desktop Viewpor
 ## 8. Gate Conclusion
 
 Phase 7 (Terracotta Streamlit Implementation, T2) is **COMPLETE and ACCEPTED**. All approved mockups from Phase 6 have been faithfully and robustly translated into the live Streamlit application with 100% test passing, 0 regressions, 0 database disruptions, and comprehensive empirical capture proof.
+
+---
+
+## 9. Fix Round (2026-11-08) — Create Account Crash & Closure Confirmations
+
+### 9.1 Root Cause & Scope
+On the live login screen, submitting Create Account with an email and password triggered `NameError: name 'os' is not defined` on `app.py` line 1086 (`os.environ.get("APP_BASE_URL", ...)`). While `auth_store.py` imported `os`, `app.py` used `os.environ` in three auth paths (lines 1086, 1110, 1134) without importing `os`.
+
+### 9.2 Lines Changed
+- `app.py`:
+  - Line 9: Added missing `import os`.
+  - Line 820 & 1183: Bound `db_path = os.environ.get("COACH_DB_PATH", "coach.db")` to enable hermetic testing isolation.
+  - Lines 1256–1295: Restored the third Home stat bento card from "Target Retention" to "Problems Solved" (`{solved_count} / {total_problems}` with description `Across {total_problems} catalog problems in 11 topics.`).
+  - Lines 1124–1140: Added inline Resend Confirmation button when Create Account receives an "already exists" response.
+- `auth_store.py`:
+  - Lines 145–151: Added explicit pre-check in `create_pending_profile` for existing email, returning `(False, "", "An account already exists for this email — check your email or resend confirmation.")` instead of throwing raw IntegrityError.
+- `tests/test_auth.py`:
+  - Lines 105–190: Added function-level test `test_create_account_unconfigured_smtp_regression` and isolated UI-layer AppTest guard `test_create_account_apptest_ui_guard`.
+
+### 9.3 F821 Static Analysis Net
+Static net executed across both auth files for undefined names:
+```text
+.venv\Scripts\ruff.exe check --select F821 app.py auth_store.py
+All checks passed!
+```
+Zero undefined names remain across `app.py` and `auth_store.py`.
+
+### 9.4 Partial-Write Audit
+The crashed registration attempt on 2026-11-07 occurred after `create_pending_profile` inserted the row but before the confirmation email dispatch line:
+```text
+SELECT email, status, created_at FROM user_profile;
+{'email': 'nanora2906@drtall.com', 'status': 'pending', 'created_at': '2026-11-07T20:12:43.618563+00:00'}
+```
+The record is preserved intact. Repeated Create Account attempts with `nanora2906@drtall.com` cleanly output the friendly error:
+`"An account already exists for this email — check your email or resend confirmation."`
+alongside a visible **Resend confirmation email** button. Zero crashes, zero database exceptions.
+
+### 9.5 Closure Confirmations
+1. **Home Third Tile**: Inspected live Home view. Replaced "Target Retention" with **Problems Solved** (`1 / 20`), matching `mockups/terracotta/home.html`.
+   - Rendered Stat Labels: `['ACTIVE STREAK', 'PROBLEMS DUE TODAY', 'PROBLEMS SOLVED']`
+   - Rendered Stat Values: `['0 days', '1 due', '1 / 20']`
+2. **Topbar Logout Button**: Confirmed present. In signed-in state (`?screen=home&demo_auth=true`), the right end of the topbar renders the text link `<a href="?logout=true" class="btn-logout">Logout</a>` per DECISION-013.
+
+### 9.6 Regression Tests & Verification Suite
+- Function-level test: `test_create_account_unconfigured_smtp_regression`
+- UI-layer guard: `test_create_account_apptest_ui_guard` (executes Streamlit `AppTest.from_file` through login form submit)
+- Coverage boundary analysis: Both tests fail on pre-fix code (`NameError: name 'os' is not defined` on line 1086) and pass now.
+- Full Pytest Suite:
+```text
+============================= 82 passed in 19.85s =============================
+```
+Suite Composition: 64 baseline + 9 Milestone 4 bank expansion + 9 auth (7 baseline + 2 new regression).
+
+### 9.7 Fix Visual Captures
+- `docs/screenshots/phase7_fix/fix_create_account_1450x900.png` (49,602 B): Shows Create Account submission with friendly duplicate warning and Resend button; zero tracebacks.
+- `docs/screenshots/phase7_fix/fix_home_tiles_topbar_1450x900.png` (115,381 B): Shows signed-in topbar with text Logout button and restored 3 Home tiles (`Active Streak`, `Problems Due Today`, `Problems Solved`).
+
+### 9.8 Resources Exercised Accounting (Fix Round)
+
+| Resource / Skill | Status | Evidence & Contribution in Fix Round |
+| :--- | :--- | :--- |
+| `agency-minimal-change-engineer` | **USED** | Enforced minimal diff discipline: added `import os` to `app.py`, handled duplicate account edge case in `auth_store.py`, and avoided any unsolicited refactoring or styling changes. |
+| `verification-before-completion` | **USED** | Verified fix via Ruff F821 static check (`All checks passed!`), 82/82 full pytest battery, and headless Chrome CDP captures of both error state and signed-in topbar/tiles. |
+
+

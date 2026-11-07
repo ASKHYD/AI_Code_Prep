@@ -1,0 +1,210 @@
+{
+  "id": "word-ladder",
+  "title": "Word Ladder",
+  "topic": "string-parsing",
+  "difficulty": "hard",
+  "track": "dsa",
+  "statement_md": "A transformation sequence from word `begin_word` to word `end_word` using a dictionary `word_list` is a sequence `begin_word -> s1 -> s2 -> ... -> sk` such that:\n- Every adjacent pair of words differs by exactly one letter.\n- Every word `si` for $1 \\le i \\le k$ is in `word_list` (begin_word does not need to be in word_list).\n- `sk == end_word`.\n\nGiven `begin_word`, `end_word`, and `word_list`, return the number of words in the shortest transformation sequence, or `0` if no such transformation is possible.\n\n### Function Signature\n```python\ndef ladder_length(begin_word: str, end_word: str, word_list: list) -> int:\n```\n**Inputs**:\n- `begin_word` (`str`): Starting word.\n- `end_word` (`str`): Target word.\n- `word_list` (`list`): Allowed intermediate dictionary words.\n\n**Output**:\n- `int`: Length of shortest word ladder sequence, or `0`.",
+  "function_name": "ladder_length",
+  "starter_code": "def ladder_length(begin_word: str, end_word: str, word_list: list) -> int:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log",
+          "cog"
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "input_args": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log"
+        ]
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        "a",
+        "c",
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "input_args": [
+        "cold",
+        "warm",
+        [
+          "cold",
+          "cord",
+          "card",
+          "ward",
+          "warm"
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "input_args": [
+        "lead",
+        "gold",
+        [
+          "load",
+          "goad",
+          "gold",
+          "lead"
+        ]
+      ],
+      "expected": 4
+    },
+    {
+      "input_args": [
+        "qa",
+        "sq",
+        [
+          "si",
+          "go",
+          "se",
+          "cm",
+          "so",
+          "ph",
+          "mt",
+          "db",
+          "mb",
+          "sb",
+          "kr",
+          "ln",
+          "tm",
+          "le",
+          "av",
+          "sm",
+          "ar",
+          "ci",
+          "ca",
+          "br",
+          "ti",
+          "ba",
+          "to",
+          "ra",
+          "fa",
+          "yo",
+          "ow",
+          "sn",
+          "ya",
+          "cr",
+          "po",
+          "fe",
+          "ho",
+          "ma",
+          "re",
+          "or",
+          "rn",
+          "au",
+          "ur",
+          "rh",
+          "sr",
+          "tc",
+          "lt",
+          "lo",
+          "as",
+          "fr",
+          "nb",
+          "yb",
+          "if",
+          "pb",
+          "ge",
+          "th",
+          "pm",
+          "rb",
+          "sh",
+          "co",
+          "ga",
+          "li",
+          "ha",
+          "hz",
+          "no",
+          "bi",
+          "di",
+          "hi",
+          "qa",
+          "pi",
+          "os",
+          "uh",
+          "wm",
+          "an",
+          "me",
+          "mo",
+          "na",
+          "la",
+          "st",
+          "er",
+          "sc",
+          "ne",
+          "mn",
+          "mi",
+          "am",
+          "ex",
+          "pt",
+          "io",
+          "be",
+          "fm",
+          "ta",
+          "tb",
+          "ni",
+          "mr",
+          "pa",
+          "he",
+          "lr",
+          "sq",
+          "ye"
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "input_args": [
+        "red",
+        "tax",
+        [
+          "ted",
+          "tex",
+          "red",
+          "tax",
+          "tad",
+          "den",
+          "rex",
+          "pee"
+        ]
+      ],
+      "expected": 4
+    }
+  ],
+  "hints": [
+    "This problem models unweighted shortest path on an implicit graph: BFS finds the shortest path.",
+    "To avoid checking all word pairs, pre-process words into generic intermediate wildcard patterns (e.g., h*t, *ot, ho*).",
+    "Queue (word, level), mark visited words to avoid cycles, and return level when end_word is reached."
+  ],
+  "reference_solution": "def ladder_length(begin_word: str, end_word: str, word_list: list) -> int:\n    from collections import deque, defaultdict\n    if end_word not in word_list:\n        return 0\n    l = len(begin_word)\n    all_combo_dict = defaultdict(list)\n    for word in word_list:\n        for i in range(l):\n            all_combo_dict[word[:i] + '*' + word[i+1:]].append(word)\n    queue = deque([(begin_word, 1)])\n    visited = {begin_word}\n    while queue:\n        current_word, level = queue.popleft()\n        for i in range(l):\n            intermediate_word = current_word[:i] + '*' + current_word[i+1:]\n            for word in all_combo_dict[intermediate_word]:\n                if word == end_word:\n                    return level + 1\n                if word not in visited:\n                    visited.add(word)\n                    queue.append((word, level + 1))\n            all_combo_dict[intermediate_word] = []\n    return 0\n",
+  "time_limit_sec": 3.0
+}

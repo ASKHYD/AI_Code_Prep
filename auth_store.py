@@ -142,6 +142,12 @@ class AuthStore:
         pwd_hash, salt = hash_password(password)
 
         with get_db_connection(self.db_path) as conn:
+            # Check if an account already exists with this exact email
+            cur_same = conn.execute("SELECT email, status FROM user_profile WHERE email = ?", (clean_email,))
+            same_user = cur_same.fetchone()
+            if same_user:
+                return False, "", "An account already exists for this email — check your email or resend confirmation."
+
             # Check if any profile already exists (single user application)
             cur = conn.execute("SELECT email, status FROM user_profile WHERE email != ?", (clean_email,))
             existing_other = cur.fetchone()
@@ -360,3 +366,4 @@ def send_smtp_email(
         err_msg = str(e)
         # Avoid leaking raw exception if it contains secrets
         return False, f"Email delivery failed: {type(e).__name__} ({err_msg[:60]})"
+

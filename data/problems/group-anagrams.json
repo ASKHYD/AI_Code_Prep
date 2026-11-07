@@ -1,0 +1,141 @@
+{
+  "id": "group-anagrams",
+  "title": "Group Anagrams",
+  "topic": "strings",
+  "difficulty": "medium",
+  "track": "dsa",
+  "statement_md": "Given an array of strings `strs`, group the anagrams together.\n\nTo guarantee deterministic evaluation across test cases, each anagram group must be sorted lexicographically, and the outer list of groups must be sorted by group length ascending, breaking ties by the first word lexicographically.\n\n### Function Signature\n```python\ndef group_anagrams(strs: list) -> list:\n```\n**Inputs**:\n- `strs` (`list`): List of lowercase English word strings.\n\n**Output**:\n- `list`: Grouped anagrams sorted deterministically.",
+  "function_name": "group_anagrams",
+  "starter_code": "def group_anagrams(strs: list) -> list:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        [
+          "eat",
+          "tea",
+          "tan",
+          "ate",
+          "nat",
+          "bat"
+        ]
+      ],
+      "expected": [
+        [
+          "bat"
+        ],
+        [
+          "nat",
+          "tan"
+        ],
+        [
+          "ate",
+          "eat",
+          "tea"
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        [
+          ""
+        ]
+      ],
+      "expected": [
+        [
+          ""
+        ]
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        [
+          "a"
+        ]
+      ],
+      "expected": [
+        [
+          "a"
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        [
+          "ab",
+          "ba",
+          "abc",
+          "cba",
+          "bca",
+          "cab"
+        ]
+      ],
+      "expected": [
+        [
+          "ab",
+          "ba"
+        ],
+        [
+          "abc",
+          "bca",
+          "cab",
+          "cba"
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        [
+          "hello",
+          "world",
+          "drowl"
+        ]
+      ],
+      "expected": [
+        [
+          "hello"
+        ],
+        [
+          "drowl",
+          "world"
+        ]
+      ]
+    },
+    {
+      "input_args": [
+        []
+      ],
+      "expected": []
+    },
+    {
+      "input_args": [
+        [
+          "listen",
+          "silent",
+          "enlist",
+          "google",
+          "gogole"
+        ]
+      ],
+      "expected": [
+        [
+          "gogole",
+          "google"
+        ],
+        [
+          "enlist",
+          "listen",
+          "silent"
+        ]
+      ]
+    }
+  ],
+  "hints": [
+    "Two strings are anagrams if and only if their sorted character sequences are equal.",
+    "Use a hash map where the canonical key is the sorted string and values are lists of original words.",
+    "After collecting groups into lists, sort each group, then sort the groups by (len(group), group[0])."
+  ],
+  "reference_solution": "def group_anagrams(strs: list) -> list:\n    from collections import defaultdict\n    groups = defaultdict(list)\n    for s in strs:\n        key = ''.join(sorted(s))\n        groups[key].append(s)\n    result = [sorted(g) for g in groups.values()]\n    return sorted(result, key=lambda x: (len(x), x[0] if x else ''))\n",
+  "time_limit_sec": 3.0
+}

@@ -12,9 +12,9 @@ from coach.interleaving import is_first_exposure, build_interleaved_queue
 
 
 def test_free_picking_options_unrestricted():
-    """Confirms that all 12 problems are available for free selection in the problem bank."""
+    """Confirms that all 20 problems are available for free selection in the problem bank."""
     all_problems = [p.model_dump() for p in load_all_problems()]
-    assert len(all_problems) == 12
+    assert len(all_problems) == 20
 
     # Problem IDs and titles are fully intact
     problem_ids = [p["id"] for p in all_problems]

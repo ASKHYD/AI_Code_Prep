@@ -1,0 +1,148 @@
+{
+  "id": "course-schedule",
+  "title": "Course Schedule",
+  "topic": "recursion",
+  "difficulty": "medium",
+  "track": "dsa",
+  "statement_md": "There are a total of `num_courses` courses you have to take, labeled from `0` to `num_courses - 1`. You are given an array `prerequisites` where `prerequisites[i] = [a, b]` indicates that you must take course `b` before taking course `a`.\n\nReturn `True` if you can finish all courses (i.e. no cyclic dependencies exist), or `False` otherwise.\n\n### Function Signature\n```python\ndef can_finish(num_courses: int, prerequisites: list) -> bool:\n```\n**Inputs**:\n- `num_courses` (`int`): Total count of courses.\n- `prerequisites` (`list`): List of directed edge pairs `[course, prerequisite]`.\n\n**Output**:\n- `bool`: `True` if topological ordering exists, `False` if circular.",
+  "function_name": "can_finish",
+  "starter_code": "def can_finish(num_courses: int, prerequisites: list) -> bool:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        2,
+        [
+          [
+            1,
+            0
+          ]
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        2,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": false
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        3,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        4,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "expected": false
+    },
+    {
+      "input_args": [
+        1,
+        []
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        5,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "input_args": [
+        3,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "expected": false
+    }
+  ],
+  "hints": [
+    "Model the courses as a directed graph where an edge u -> v means course u depends on course v.",
+    "A valid sequence exists if and only if the directed graph contains zero cycles (DAG).",
+    "Use Kahn's algorithm with an in-degree array and queue, or a 3-state DFS recursion (unvisited, visiting, visited)."
+  ],
+  "reference_solution": "def can_finish(num_courses: int, prerequisites: list) -> bool:\n    from collections import deque\n    adj = [[] for _ in range(num_courses)]\n    indegree = [0] * num_courses\n    for dest, src in prerequisites:\n        adj[src].append(dest)\n        indegree[dest] += 1\n    queue = deque([i for i in range(num_courses) if indegree[i] == 0])\n    visited = 0\n    while queue:\n        node = queue.popleft()\n        visited += 1\n        for neighbor in adj[node]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                queue.append(neighbor)\n    return visited == num_courses\n",
+  "time_limit_sec": 3.0
+}

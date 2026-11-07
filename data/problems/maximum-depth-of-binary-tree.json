@@ -1,0 +1,151 @@
+{
+  "id": "maximum-depth-of-binary-tree",
+  "title": "Maximum Depth of Binary Tree",
+  "topic": "tree-traversal",
+  "difficulty": "easy",
+  "track": "dsa",
+  "statement_md": "Given the `root` of a binary tree represented as nested dictionaries with keys `'val'`, `'left'`, and `'right'` (or `None` for empty nodes), return its maximum depth.\n\nA binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.\n\n### Function Signature\n```python\ndef max_depth(root: dict | None) -> int:\n```\n**Inputs**:\n- `root` (`dict` or `None`): Root node containing `'val'`, `'left'`, and `'right'`.\n\n**Output**:\n- `int`: Maximum depth of the binary tree.",
+  "function_name": "max_depth",
+  "starter_code": "def max_depth(root: dict | None) -> int:\n    # Write your solution here\n    pass\n",
+  "visible_tests": [
+    {
+      "input_args": [
+        {
+          "val": 3,
+          "left": {
+            "val": 9,
+            "left": null,
+            "right": null
+          },
+          "right": {
+            "val": 20,
+            "left": {
+              "val": 15,
+              "left": null,
+              "right": null
+            },
+            "right": {
+              "val": 7,
+              "left": null,
+              "right": null
+            }
+          }
+        }
+      ],
+      "expected": 3
+    },
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": null,
+          "right": {
+            "val": 2,
+            "left": null,
+            "right": null
+          }
+        }
+      ],
+      "expected": 2
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input_args": [
+        null
+      ],
+      "expected": 0
+    },
+    {
+      "input_args": [
+        {
+          "val": 0,
+          "left": null,
+          "right": null
+        }
+      ],
+      "expected": 1
+    },
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": {
+            "val": 2,
+            "left": {
+              "val": 3,
+              "left": {
+                "val": 4,
+                "left": null,
+                "right": null
+              },
+              "right": null
+            },
+            "right": null
+          },
+          "right": null
+        }
+      ],
+      "expected": 4
+    },
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": {
+            "val": 2,
+            "left": null,
+            "right": null
+          },
+          "right": {
+            "val": 3,
+            "left": null,
+            "right": null
+          }
+        }
+      ],
+      "expected": 2
+    },
+    {
+      "input_args": [
+        {
+          "val": 1,
+          "left": {
+            "val": 2,
+            "left": {
+              "val": 4,
+              "left": null,
+              "right": null
+            },
+            "right": {
+              "val": 5,
+              "left": {
+                "val": 7,
+                "left": null,
+                "right": null
+              },
+              "right": null
+            }
+          },
+          "right": {
+            "val": 3,
+            "left": null,
+            "right": {
+              "val": 6,
+              "left": null,
+              "right": null
+            }
+          }
+        }
+      ],
+      "expected": 4
+    }
+  ],
+  "hints": [
+    "Consider the base case: what is the depth of an empty tree (None)?",
+    "Recursively calculate the depth of the left subtree and right subtree.",
+    "The maximum depth of the current node is 1 + max(depth(left), depth(right))."
+  ],
+  "reference_solution": "def max_depth(root: dict | None) -> int:\n    if not root:\n        return 0\n    left_depth = max_depth(root.get('left'))\n    right_depth = max_depth(root.get('right'))\n    return 1 + max(left_depth, right_depth)\n",
+  "time_limit_sec": 3.0
+}

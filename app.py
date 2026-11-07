@@ -7,6 +7,7 @@ The judge is CODE, not AI.
 from __future__ import annotations
 
 import base64
+import os
 import re
 import sys
 import time
@@ -816,7 +817,8 @@ def get_svg_icon(
 # Initialize database store
 @st.cache_resource
 def get_store() -> CoachStore:
-    s = CoachStore(db_path="coach.db")
+    db_path = os.environ.get("COACH_DB_PATH", "coach.db")
+    s = CoachStore(db_path=db_path)
     s.migrate_history_to_fsrs()
     return s
 
@@ -1122,6 +1124,28 @@ def render_login_screen(auth_store_instance: AuthStore) -> None:
                             st.info(f"Local confirmation token (for offline activation): ?verify={raw_tok}")
                     else:
                         st.error(c_msg)
+                        if "resend confirmation" in c_msg.lower():
+                            st.session_state["resend_email"] = reg_email
+
+            if st.session_state.get("resend_email") and mode == "Create Account":
+                r_email = st.session_state["resend_email"]
+                if st.button("Resend confirmation email", key="btn_resend_confirm_create"):
+                    r_ok, raw_tok, r_msg = auth_store_instance.resend_verification(r_email)
+                    if r_ok:
+                        app_url = os.environ.get("APP_BASE_URL", "http://localhost:8501")
+                        link = f"{app_url}/?verify={raw_tok}"
+                        s_ok, s_msg = send_smtp_email(
+                            to_email=r_email,
+                            subject="Confirm your AI Prep Coach account",
+                            text_content=f"Click the link to activate your account: {link}\n\nLink valid for 24 hours.",
+                            html_content=f"<p>Click the link to activate your AI Prep Coach account:</p><p><a href='{link}'>{link}</a></p><p>Link valid for 24 hours.</p>",
+                        )
+                        if s_ok:
+                            st.success("Fresh confirmation link sent! Please check your inbox.")
+                        else:
+                            st.error(f"Could not send email: {s_msg}. (Token generated for testing: ?verify={raw_tok})")
+                    else:
+                        st.error(r_msg)
 
         elif mode == "Forgot Password":
             with st.form("forgot_pwd_form"):
@@ -1156,7 +1180,7 @@ def render_login_screen(auth_store_instance: AuthStore) -> None:
 
 
 # Initialize auth store
-auth_store = AuthStore(db_path="coach.db")
+auth_store = AuthStore(db_path=os.environ.get("COACH_DB_PATH", "coach.db"))
 
 # Gated access: unauthenticated sessions see only login
 is_login_screen = st.query_params.get("screen", "").lower() == "login"
@@ -1232,7 +1256,14 @@ if nav_choice == "Home":
 
     st.html('<div style="height: 8px;"></div>')
 
-    # Stat Bento Cards Row: Active Streak, Problems Due Today, Target Retention
+    with store._get_connection() as conn:
+        cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
+        solved_set = {row[0] for row in cur.fetchall()}
+
+    solved_count = len(solved_set)
+    total_problems = len(all_problems)
+
+    # Stat Bento Cards Row: Active Streak, Problems Due Today, Problems Solved
     c1, c2, c3 = st.columns(3)
     with c1:
         with st.container(border=True, key="home_card_streak"):
@@ -1273,15 +1304,16 @@ if nav_choice == "Home":
             )
 
     with c3:
-        with st.container(border=True, key="home_card_retention"):
+        with st.container(border=True, key="home_card_solved"):
+            solved_badge = f'<span class="stat-badge badge-olive">{solved_count} SOLVED</span>' if solved_count > 0 else '<span class="stat-badge badge-quiet">0 SOLVED</span>'
             st.markdown(
-                """
+                f"""
                 <div class="stat-head">
-                    <span class="stat-label">Target Retention</span>
-                    <span class="stat-badge badge-olive">90.0%</span>
+                    <span class="stat-label">Problems Solved</span>
+                    {solved_badge}
                 </div>
-                <div class="stat-value">90.0%</div>
-                <p class="stat-desc">Adaptive spaced repetition retention optimizer.</p>
+                <div class="stat-value">{solved_count} / {total_problems}</div>
+                <p class="stat-desc">Across {total_problems} catalog problems in 11 topics.</p>
                 """,
                 unsafe_allow_html=True,
             )
@@ -1290,11 +1322,6 @@ if nav_choice == "Home":
 
     # Recommended Practice Queue Bento Card
     with st.container(border=True, key="home_queue_card"):
-        with store._get_connection() as conn:
-            cur = conn.execute("SELECT DISTINCT problem_id FROM attempts WHERE status = 'pass'")
-            solved_set = {row[0] for row in cur.fetchall()}
-
-        solved_count = len(solved_set)
         st.markdown(
             f"""
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
