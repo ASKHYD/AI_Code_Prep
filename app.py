@@ -334,33 +334,140 @@ def get_global_css(active_nav: str = "Home") -> str:
         font-size: 13.5px;
     }
     .topbar-center {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
     }
-    .nav-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 16px;
-        font-size: 13.5px;
-        font-weight: 500;
-        color: #735A50;
-        text-decoration: none;
-        border-radius: 9999px;
-        transition: background-color 150ms ease-out, color 150ms ease-out;
-        white-space: nowrap;
+    /* Strip anchor default browser blue & underline everywhere inside topbar & markdown wrappers */
+    .topbar a,
+    .topbar a:visited,
+    .topbar-center a,
+    .topbar-center a:visited,
+    div[data-testid="stMarkdownContainer"] .topbar a,
+    div[data-testid="stMarkdownContainer"] .topbar a:visited,
+    div[data-testid="stMarkdownContainer"] .topbar-center a,
+    div[data-testid="stMarkdownContainer"] .topbar-center a:visited,
+    div.stMarkdown .topbar a,
+    div.stMarkdown .topbar-center a {
+        color: inherit !important;
+        text-decoration: none !important;
     }
-    .nav-pill:hover {
-        background-color: rgba(74, 25, 66, 0.05);
-        color: #2C1810;
+    .topbar a:hover,
+    .topbar a:focus,
+    .topbar a:active,
+    .topbar-center a:hover,
+    .topbar-center a:focus,
+    .topbar-center a:active,
+    div[data-testid="stMarkdownContainer"] .topbar a:hover,
+    div[data-testid="stMarkdownContainer"] .topbar-center a:hover {
+        text-decoration: none !important;
+        outline: none !important;
     }
-    .nav-pill.active {
-        background-color: #FDECE9;
-        color: #C2452D;
-        font-weight: 700;
-        border: 1px solid rgba(194, 69, 45, 0.25);
+
+    /* Topbar Navigation Pills (Approved Terracotta Mockup Spec) */
+    .nav-pill,
+    .topbar-nav-item,
+    .topbar-center a,
+    div[data-testid="stMarkdownContainer"] .nav-pill,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item,
+    div[data-testid="stMarkdownContainer"] .topbar-center a,
+    div.stMarkdown .nav-pill,
+    div.stMarkdown .topbar-center a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 8px 16px !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #3E2723 !important; /* Ink-coloured text (#3E2723 family per DESIGN.md) */
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: 9999px !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+        cursor: pointer !important;
+        transition: all 150ms ease-out !important;
+        box-sizing: border-box !important;
+    }
+    .nav-pill:hover,
+    .topbar-nav-item:hover,
+    .topbar-center a:hover,
+    div[data-testid="stMarkdownContainer"] .nav-pill:hover,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item:hover,
+    div[data-testid="stMarkdownContainer"] .topbar-center a:hover,
+    div.stMarkdown .nav-pill:hover,
+    div.stMarkdown .topbar-center a:hover {
+        background-color: #F4EAD9 !important; /* Light warm wash per mockup */
+        color: #2C1810 !important; /* Text stays ink */
+        border-color: transparent !important;
+        text-decoration: none !important;
+    }
+    .nav-pill:active,
+    .topbar-nav-item:active,
+    .topbar-center a:active,
+    div[data-testid="stMarkdownContainer"] .nav-pill:active,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item:active,
+    div[data-testid="stMarkdownContainer"] .topbar-center a:active,
+    div.stMarkdown .nav-pill:active,
+    div.stMarkdown .topbar-center a:active {
+        transform: scale(0.97) !important; /* 150ms scale-0.97 press restraint */
+        text-decoration: none !important;
+    }
+    .nav-pill:focus,
+    .topbar-nav-item:focus,
+    .topbar-center a:focus,
+    div[data-testid="stMarkdownContainer"] .nav-pill:focus,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item:focus,
+    div[data-testid="stMarkdownContainer"] .topbar-center a:focus {
+        text-decoration: none !important;
+        outline: none !important;
+    }
+
+    /* Active Nav Pill State */
+    .nav-pill.active,
+    .topbar-nav-item.active,
+    .topbar-center a.active,
+    div[data-testid="stMarkdownContainer"] .nav-pill.active,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item.active,
+    div[data-testid="stMarkdownContainer"] .topbar-center a.active,
+    div.stMarkdown .nav-pill.active,
+    div.stMarkdown .topbar-center a.active {
+        background-color: #FDECE9 !important; /* Soft terracotta-tinted wash */
+        color: #C2452D !important; /* Terracotta semibold */
+        font-weight: 600 !important;
+        border: 1px solid #F3B5A9 !important; /* Terracotta border */
+        text-decoration: none !important;
+    }
+    .nav-pill.active:hover,
+    .topbar-nav-item.active:hover,
+    .topbar-center a.active:hover,
+    div[data-testid="stMarkdownContainer"] .nav-pill.active:hover,
+    div[data-testid="stMarkdownContainer"] .topbar-nav-item.active:hover,
+    div[data-testid="stMarkdownContainer"] .topbar-center a.active:hover,
+    div.stMarkdown .nav-pill.active:hover,
+    div.stMarkdown .topbar-center a.active:hover {
+        background-color: #FDECE9 !important;
+        color: #C2452D !important;
+        border: 1px solid #F3B5A9 !important;
+        text-decoration: none !important;
+    }
+
+    /* CTA pill anchors protection against Streamlit default link styling */
+    a.btn-primary-pill,
+    .btn-primary-pill,
+    div[data-testid="stMarkdownContainer"] a.btn-primary-pill {
+        color: #FFF8F0 !important;
+        text-decoration: none !important;
+    }
+    a.btn-primary-pill:hover,
+    .btn-primary-pill:hover,
+    div[data-testid="stMarkdownContainer"] a.btn-primary-pill:hover {
+        color: #FFF8F0 !important;
+        background-color: #A83822 !important;
+        text-decoration: none !important;
     }
     .topbar-right {
         display: flex;
@@ -995,10 +1102,10 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
         </a>
       </div>
       <nav class="topbar-center" aria-label="Main Navigation">
-        <a href="?screen=home" class="nav-pill {active_home}" target="_self">Home</a>
-        <a href="?screen=practice" class="nav-pill {active_practice}" target="_self">Practice Arena</a>
-        <a href="?screen=mock" class="nav-pill {active_mock}" target="_self">Mock Interview</a>
-        <a href="?screen=dashboard" class="nav-pill {active_dash}" target="_self">Dashboard</a>
+        <a href="?screen=home" class="nav-pill topbar-nav-item {active_home}" target="_self">Home</a>
+        <a href="?screen=practice" class="nav-pill topbar-nav-item {active_practice}" target="_self">Practice Arena</a>
+        <a href="?screen=mock" class="nav-pill topbar-nav-item {active_mock}" target="_self">Mock Interview</a>
+        <a href="?screen=dashboard" class="nav-pill topbar-nav-item {active_dash}" target="_self">Dashboard</a>
       </nav>
       <div class="topbar-right">
         <div class="status-chip status-chip-streak" title="Active Streak (yesterday-anchored)">

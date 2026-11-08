@@ -325,5 +325,67 @@ The following fresh dual captures were recorded at 1450×900:
 | `developing-with-streamlit` | **USED** | Resolved Streamlit `st.html` SVG sanitization limitation by migrating the topbar header to `st.markdown(..., unsafe_allow_html=True)`, ensuring the inline SVG logo renders reliably across all view states. |
 | `/agency-ui-finish-gate-reviewer` | **USED** | Executed element-by-element deviation sweep against `mockups/terracotta/home.html` and `dashboard.html`. Ran automated Chrome CDP DOM audit verifying 0 anti-slop violations. |
 
+---
+
+### 10.9 Topbar Navigation Pills Restoration (Owner Live Review 2026-11-08)
+
+#### 1. Problem Diagnosis
+Live testing showed topbar navigation anchors (`Home`, `Practice Arena`, `Mock Interview`, `Dashboard`) falling back to browser default styling (`color: rgb(0, 84, 163)`, `text-decoration: underline`, `border-radius: 0px`, `padding: 0px`) due to Streamlit container rules (`div[data-testid="stMarkdownContainer"] a`) overriding custom CSS.
+
+#### 2. Pill Treatment & Specification
+- **Inactive State**:
+  - Full pill radius: `border-radius: 9999px !important;`
+  - Comfortable padding: `padding: 8px 16px !important;`
+  - Background: `background-color: transparent !important;`
+  - Typography: `font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 14px !important; font-weight: 500 !important; color: #3E2723 !important;` (ink-coloured per DESIGN.md).
+  - Hover: `background-color: #F4EAD9 !important; color: #2C1810 !important;` (soft warm wash).
+  - Press: `transform: scale(0.97) !important; transition: all 150ms ease-out !important;`
+- **Active State**:
+  - Background: `background-color: #FDECE9 !important;` (soft terracotta-tinted wash).
+  - Text: `color: #C2452D !important; font-weight: 600 !important;` (terracotta semibold).
+  - Border: `border: 1px solid #F3B5A9 !important;` (terracotta border).
+  - Zero browser blue (`#1565C0` / `#0054A3` completely banished).
+  - Zero underlines in any state (`text-decoration: none !important;` across default, hover, focus, and active).
+
+#### 3. Implementation & Global Anchor Protection
+- In `app.py`:
+  - Added comprehensive anchor reset across all topbar wrappers: `.topbar a`, `.topbar-center a`, `div[data-testid="stMarkdownContainer"] .topbar a`, `div.stMarkdown .topbar a` with `color: inherit !important; text-decoration: none !important;`.
+  - Added `.nav-pill.topbar-nav-item` classes to every topbar nav link inside `render_topbar()`.
+  - Enforced full pill styling with `!important` declarations in `get_global_css()`.
+  - Added explicit anchor protections for primary CTA pill buttons (`a.btn-primary-pill`) to prevent any browser underline leakage.
+
+#### 4. App-Wide Anchor Sweep
+- Swept all anchor elements across `app.py`:
+  - Topbar brand anchor (`.topbar-brand`): protected with `text-decoration: none !important; color: inherit !important;`.
+  - Hero and dashboard CTA buttons (`.btn-primary-pill`): protected with `text-decoration: none !important; color: #FFF8F0 !important;`.
+  - Queue row action links (`.btn-row-action`): protected with `text-decoration: none !important; color: #C2452D !important;`.
+  - Zero default-styled anchors remain leaking browser blue or underlines.
+
+#### 5. Headless Chrome CDP Verification Across All 4 Screens
+Headless Chrome CDP DOM audit executed across `?screen=home`, `?screen=practice`, `?screen=mock`, and `?screen=dashboard`:
+- `allPillsHaveRadius`: **True** (all 4 items render with `border-radius: 9999px`)
+- `allPillsNoUnderline`: **True** (all 4 items render with `text-decoration: none`)
+- `noBlueColorInPills`: **True** (zero browser blue on any nav item)
+- Active pill transitions accurately per screen:
+  - **Home**: `Home` active (`color: rgb(194, 69, 45)`, `background: rgb(253, 236, 233)`, `border: 1px solid rgb(243, 181, 169)`, `font-weight: 600`).
+  - **Practice Arena**: `Practice Arena` active (`color: rgb(194, 69, 45)`, `background: rgb(253, 236, 233)`, `border: 1px solid rgb(243, 181, 169)`, `font-weight: 600`).
+  - **Mock Interview**: `Mock Interview` active (`color: rgb(194, 69, 45)`, `background: rgb(253, 236, 233)`, `border: 1px solid rgb(243, 181, 169)`, `font-weight: 600`).
+  - **Dashboard**: `Dashboard` active (`color: rgb(194, 69, 45)`, `background: rgb(253, 236, 233)`, `border: 1px solid rgb(243, 181, 169)`, `font-weight: 600`).
+
+#### 6. Verification Captures (1450×900)
+- `docs/screenshots/live_terracotta/nav_pills_home_1450x900.png` & `nav_pills_topbar_home_1450x900.png`
+- `docs/screenshots/live_terracotta/nav_pills_practice_1450x900.png` & `nav_pills_topbar_practice_1450x900.png`
+- `docs/screenshots/live_terracotta/nav_pills_mock_1450x900.png` & `nav_pills_topbar_mock_1450x900.png`
+- `docs/screenshots/live_terracotta/nav_pills_dashboard_1450x900.png` & `nav_pills_topbar_dashboard_1450x900.png`
+
+#### 7. Verification Invariants & Suite Result
+- **Database Immutability**:
+  - `coach.db` SHA256: `125b3d4c5c914ff8937fd14940292e8af36263dd8f1b7b2ffada62471fb8ce37` (identical, 0 mutations).
+  - Row counts: `attempts = 3`, `problem_fsrs_cards = 1`, `user_profile = 1`.
+- **Ruff Static Analysis**: `All checks passed!`
+- **Pytest Full Battery**: `82 passed in 76.48s` (100% green).
+- **Resources Exercised**: `/ui-styling`, `/design-system`, `developing-with-streamlit`.
+
+
 
 
