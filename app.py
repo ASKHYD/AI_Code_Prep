@@ -1081,6 +1081,11 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
     active_mock = "active" if current_nav == "Mock Interview" else ""
     active_dash = "active" if current_nav == "Dashboard" else ""
 
+    cur_home = ' aria-current="page"' if current_nav == "Home" else ""
+    cur_practice = ' aria-current="page"' if current_nav == "Practice Arena" else ""
+    cur_mock = ' aria-current="page"' if current_nav == "Mock Interview" else ""
+    cur_dash = ' aria-current="page"' if current_nav == "Dashboard" else ""
+
     streak_str = f"{streak_count}d" if streak_count > 0 else "0d"
 
     # Logo Variant A (28x28 inline SVG): terracotta tile #C2452D, sun-white serif "A", olive dot #6B7F3B
@@ -1102,10 +1107,10 @@ def render_topbar(current_nav: str, streak_count: int, due_count: int):
         </a>
       </div>
       <nav class="topbar-center" aria-label="Main Navigation">
-        <a href="?screen=home" class="nav-pill topbar-nav-item {active_home}" target="_self">Home</a>
-        <a href="?screen=practice" class="nav-pill topbar-nav-item {active_practice}" target="_self">Practice Arena</a>
-        <a href="?screen=mock" class="nav-pill topbar-nav-item {active_mock}" target="_self">Mock Interview</a>
-        <a href="?screen=dashboard" class="nav-pill topbar-nav-item {active_dash}" target="_self">Dashboard</a>
+        <a href="?screen=home" class="nav-pill topbar-nav-item {active_home}"{cur_home} target="_self">Home</a>
+        <a href="?screen=practice" class="nav-pill topbar-nav-item {active_practice}"{cur_practice} target="_self">Practice Arena</a>
+        <a href="?screen=mock" class="nav-pill topbar-nav-item {active_mock}"{cur_mock} target="_self">Mock Interview</a>
+        <a href="?screen=dashboard" class="nav-pill topbar-nav-item {active_dash}"{cur_dash} target="_self">Dashboard</a>
       </nav>
       <div class="topbar-right">
         <div class="status-chip status-chip-streak" title="Active Streak (yesterday-anchored)">
