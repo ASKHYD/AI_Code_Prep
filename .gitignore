@@ -1,8 +1,63 @@
-.venv/
-__pycache__/
-*.pyc
-.pytest_cache/
-coach.db
-agent-resources/
-.env
+# ==============================================================================
+# Git Ignore Configuration - AI Coding Prep Coach (Production)
+# ==============================================================================
 
+# Databases & Local State (Strictly Ignored)
+*.db
+*.sqlite
+*.sqlite3
+coach.db
+test_owner_flow.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Environment & Credentials
+.env
+.env.*
+!.env.example
+
+# Python Runtime & Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Tooling, Testing & Linting Caches
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Scratchpad & Temporary Development Artifacts
+scratch/
+tmp/
+temp/
+agent-resources/
+*.log
+screenshot_test.png
+
+# Internal Agent Frameworks, Workflows & Meta-prompts (Private)
+.agent/
+.agents/
+.gemini/
+.gsd/
+.impeccable/
+adapters/
+specs/
+scripts/
+design-system/
+PROJECT_RULES.md
+GSD-STYLE.md
+model_capabilities.yaml
+skills-lock.json
+
+# Operating System & IDE Artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
